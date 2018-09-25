@@ -1,0 +1,658 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 4
+  10              		.eabi_attribute 18, 4
+  11              		.file	"cyfx_rtos_eg.c"
+  12              		.section	.text.Thread4_Entry,"ax",%progbits
+  13              		.align	2
+  14              		.global	Thread4_Entry
+  16              	Thread4_Entry:
+  17              		@ args = 0, pretend = 0, frame = 8
+  18              		@ frame_needed = 0, uses_anonymous_args = 0
+  19 0000 1F402DE9 		stmfd	sp!, {r0, r1, r2, r3, r4, lr}
+  20              	.L6:
+  21 0004 0140A0E3 		mov	r4, #1
+  22              	.L5:
+  23 0008 50009FE5 		ldr	r0, .L7
+  24 000c FEFFFFEB 		bl	_tx_thread_sleep
+  25 0010 000054E3 		cmp	r4, #0
+  26 0014 0500000A 		beq	.L3
+  27 0018 44009FE5 		ldr	r0, .L7+4
+  28 001c 0110A0E3 		mov	r1, #1
+  29 0020 0020A0E3 		mov	r2, #0
+  30 0024 FEFFFFEB 		bl	_txe_event_flags_set
+  31 0028 0040A0E3 		mov	r4, #0
+  32 002c F5FFFFEA 		b	.L5
+  33              	.L3:
+  34 0030 0030E0E3 		mvn	r3, #0
+  35 0034 00308DE5 		str	r3, [sp, #0]
+  36 0038 0110A0E3 		mov	r1, #1
+  37 003c 0320A0E3 		mov	r2, #3
+  38 0040 0C308DE2 		add	r3, sp, #12
+  39 0044 18009FE5 		ldr	r0, .L7+4
+  40 0048 FEFFFFEB 		bl	_txe_event_flags_get
+  41 004c 14109FE5 		ldr	r1, .L7+8
+  42 0050 0C209DE5 		ldr	r2, [sp, #12]
+  43 0054 0200A0E3 		mov	r0, #2
+  44 0058 FEFFFFEB 		bl	CyU3PDebugPrint
+  45 005c E8FFFFEA 		b	.L6
+  46              	.L8:
+  47              		.align	2
+  48              	.L7:
+  49 0060 B80B0000 		.word	3000
+  50 0064 00000000 		.word	AppEvent
+  51 0068 00000000 		.word	.LC0
+  53              		.section	.text.Thread3_Entry,"ax",%progbits
+  54              		.align	2
+  55              		.global	Thread3_Entry
+  57              	Thread3_Entry:
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  60 0000 10402DE9 		stmfd	sp!, {r4, lr}
+  61              	.L15:
+  62 0004 0440A0E3 		mov	r4, #4
+  63              	.L14:
+  64 0008 FA0FA0E3 		mov	r0, #1000
+  65 000c FEFFFFEB 		bl	_tx_thread_sleep
+  66 0010 000054E3 		cmp	r4, #0
+  67 0014 0400000A 		beq	.L11
+  68 0018 0010E0E3 		mvn	r1, #0
+  69 001c 2C009FE5 		ldr	r0, .L16
+  70 0020 014044E2 		sub	r4, r4, #1
+  71 0024 FEFFFFEB 		bl	_txe_semaphore_get
+  72 0028 F6FFFFEA 		b	.L14
+  73              	.L11:
+  74 002c 0440A0E3 		mov	r4, #4
+  75              	.L13:
+  76 0030 18009FE5 		ldr	r0, .L16
+  77 0034 FEFFFFEB 		bl	_txe_semaphore_put
+  78 0038 014054E2 		subs	r4, r4, #1
+  79 003c FBFFFF1A 		bne	.L13
+  80 0040 0C109FE5 		ldr	r1, .L16+4
+  81 0044 0200A0E3 		mov	r0, #2
+  82 0048 FEFFFFEB 		bl	CyU3PDebugPrint
+  83 004c ECFFFFEA 		b	.L15
+  84              	.L17:
+  85              		.align	2
+  86              	.L16:
+  87 0050 00000000 		.word	AppSema
+  88 0054 13000000 		.word	.LC1
+  90              		.section	.text.Thread2_Entry,"ax",%progbits
+  91              		.align	2
+  92              		.global	Thread2_Entry
+  94              	Thread2_Entry:
+  95              		@ args = 0, pretend = 0, frame = 0
+  96              		@ frame_needed = 0, uses_anonymous_args = 0
+  97 0000 F7402DE9 		stmfd	sp!, {r0, r1, r2, r4, r5, r6, r7, lr}
+  98              	.L23:
+  99 0004 0140A0E3 		mov	r4, #1
+ 100              	.L22:
+ 101 0008 7D0EA0E3 		mov	r0, #2000
+ 102 000c FEFFFFEB 		bl	_tx_thread_sleep
+ 103 0010 FEFFFFEB 		bl	CyU3PDeviceGetCpuLoad
+ 104 0014 0060A0E1 		mov	r6, r0
+ 105 0018 58009FE5 		ldr	r0, .L24
+ 106 001c FEFFFFEB 		bl	CyU3PDeviceGetThreadLoad
+ 107 0020 0050A0E1 		mov	r5, r0
+ 108 0024 50009FE5 		ldr	r0, .L24+4
+ 109 0028 FEFFFFEB 		bl	CyU3PDeviceGetThreadLoad
+ 110 002c 0070A0E1 		mov	r7, r0
+ 111 0030 FEFFFFEB 		bl	CyU3PDeviceGetDriverLoad
+ 112 0034 44109FE5 		ldr	r1, .L24+8
+ 113 0038 0620A0E1 		mov	r2, r6
+ 114 003c 0530A0E1 		mov	r3, r5
+ 115 0040 00708DE5 		str	r7, [sp, #0]
+ 116 0044 04008DE5 		str	r0, [sp, #4]
+ 117 0048 0200A0E3 		mov	r0, #2
+ 118 004c FEFFFFEB 		bl	CyU3PDebugPrint
+ 119 0050 000054E3 		cmp	r4, #0
+ 120 0054 0400000A 		beq	.L20
+ 121 0058 24009FE5 		ldr	r0, .L24+12
+ 122 005c 0010E0E3 		mvn	r1, #0
+ 123 0060 FEFFFFEB 		bl	_txe_mutex_get
+ 124 0064 0040A0E3 		mov	r4, #0
+ 125 0068 E6FFFFEA 		b	.L22
+ 126              	.L20:
+ 127 006c 10009FE5 		ldr	r0, .L24+12
+ 128 0070 FEFFFFEB 		bl	_txe_mutex_put
+ 129 0074 E2FFFFEA 		b	.L23
+ 130              	.L25:
+ 131              		.align	2
+ 132              	.L24:
+ 133 0078 00000000 		.word	Thread1
+ 134 007c 00000000 		.word	Thread2
+ 135 0080 1D000000 		.word	.LC2
+ 136 0084 00000000 		.word	AppMutex
+ 138              		.section	.text.CyFxDebugInit,"ax",%progbits
+ 139              		.align	2
+ 140              		.global	CyFxDebugInit
+ 142              	CyFxDebugInit:
+ 143              		@ args = 0, pretend = 0, frame = 24
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145 0000 10402DE9 		stmfd	sp!, {r4, lr}
+ 146 0004 18D04DE2 		sub	sp, sp, #24
+ 147 0008 FEFFFFEB 		bl	CyU3PUartInit
+ 148 000c 004050E2 		subs	r4, r0, #0
+ 149 0010 1B00001A 		bne	.L27
+ 150 0014 0410A0E1 		mov	r1, r4
+ 151 0018 0D00A0E1 		mov	r0, sp
+ 152 001c 1820A0E3 		mov	r2, #24
+ 153 0020 FEFFFFEB 		bl	CyU3PMemSet
+ 154 0024 64309FE5 		ldr	r3, .L28
+ 155 0028 0410A0E1 		mov	r1, r4
+ 156 002c 10308DE5 		str	r3, [sp, #16]
+ 157 0030 0D00A0E1 		mov	r0, sp
+ 158 0034 0130A0E3 		mov	r3, #1
+ 159 0038 1540CDE5 		strb	r4, [sp, #21]
+ 160 003c 04408DE5 		str	r4, [sp, #4]
+ 161 0040 08408DE5 		str	r4, [sp, #8]
+ 162 0044 1430CDE5 		strb	r3, [sp, #20]
+ 163 0048 00308DE5 		str	r3, [sp, #0]
+ 164 004c 0C308DE5 		str	r3, [sp, #12]
+ 165 0050 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 166 0054 004050E2 		subs	r4, r0, #0
+ 167 0058 0900001A 		bne	.L27
+ 168 005c 0000E0E3 		mvn	r0, #0
+ 169 0060 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 170 0064 004050E2 		subs	r4, r0, #0
+ 171 0068 0500001A 		bne	.L27
+ 172 006c 030080E2 		add	r0, r0, #3
+ 173 0070 0810A0E3 		mov	r1, #8
+ 174 0074 FEFFFFEB 		bl	CyU3PDebugInit
+ 175 0078 004050E2 		subs	r4, r0, #0
+ 176 007c 0000001A 		bne	.L27
+ 177 0080 FEFFFFEB 		bl	CyU3PDebugPreamble
+ 178              	.L27:
+ 179 0084 0400A0E1 		mov	r0, r4
+ 180 0088 18D08DE2 		add	sp, sp, #24
+ 181 008c 1080BDE8 		ldmfd	sp!, {r4, pc}
+ 182              	.L29:
+ 183              		.align	2
+ 184              	.L28:
+ 185 0090 00C20100 		.word	115200
+ 187              		.section	.text.Thread1_Entry,"ax",%progbits
+ 188              		.align	2
+ 189              		.global	Thread1_Entry
+ 191              	Thread1_Entry:
+ 192              		@ args = 0, pretend = 0, frame = 32
+ 193              		@ frame_needed = 0, uses_anonymous_args = 0
+ 194 0000 10402DE9 		stmfd	sp!, {r4, lr}
+ 195 0004 20D04DE2 		sub	sp, sp, #32
+ 196 0008 FEFFFFEB 		bl	CyFxDebugInit
+ 197 000c 00E050E2 		subs	lr, r0, #0
+ 198 0010 0400000A 		beq	.L31
+ 199 0014 0400A0E3 		mov	r0, #4
+ 200 0018 80119FE5 		ldr	r1, .L39
+ 201 001c 0E20A0E1 		mov	r2, lr
+ 202 0020 FEFFFFEB 		bl	CyU3PDebugPrint
+ 203              	.L32:
+ 204 0024 FEFFFFEA 		b	.L32
+ 205              	.L31:
+ 206 0028 74419FE5 		ldr	r4, .L39+4
+ 207 002c 0DC0A0E1 		mov	ip, sp
+ 208 0030 0F00B4E8 		ldmia	r4!, {r0, r1, r2, r3}
+ 209 0034 18E08DE5 		str	lr, [sp, #24]
+ 210 0038 0F00ACE8 		stmia	ip!, {r0, r1, r2, r3}
+ 211 003c 003094E5 		ldr	r3, [r4, #0]
+ 212 0040 0E10A0E1 		mov	r1, lr
+ 213 0044 00308CE5 		str	r3, [ip, #0]
+ 214 0048 0240A0E3 		mov	r4, #2
+ 215 004c 2030A0E3 		mov	r3, #32
+ 216 0050 14008DE2 		add	r0, sp, #20
+ 217 0054 1530CDE5 		strb	r3, [sp, #21]
+ 218 0058 1440CDE5 		strb	r4, [sp, #20]
+ 219 005c 1C40CDE5 		strb	r4, [sp, #28]
+ 220 0060 1D40CDE5 		strb	r4, [sp, #29]
+ 221 0064 FEFFFFEB 		bl	CyU3PGpioInit
+ 222 0068 0110A0E3 		mov	r1, #1
+ 223 006c 3600A0E3 		mov	r0, #54
+ 224 0070 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 225 0074 0D10A0E1 		mov	r1, sp
+ 226 0078 3600A0E3 		mov	r0, #54
+ 227 007c FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 228 0080 0110A0E3 		mov	r1, #1
+ 229 0084 3500A0E3 		mov	r0, #53
+ 230 0088 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 231 008c 0D10A0E1 		mov	r1, sp
+ 232 0090 3500A0E3 		mov	r0, #53
+ 233 0094 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 234 0098 0110A0E3 		mov	r1, #1
+ 235 009c 3400A0E3 		mov	r0, #52
+ 236 00a0 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 237 00a4 0D10A0E1 		mov	r1, sp
+ 238 00a8 3400A0E3 		mov	r0, #52
+ 239 00ac FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 240 00b0 0110A0E3 		mov	r1, #1
+ 241 00b4 3300A0E3 		mov	r0, #51
+ 242 00b8 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 243 00bc 0D10A0E1 		mov	r1, sp
+ 244 00c0 3300A0E3 		mov	r0, #51
+ 245 00c4 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 246 00c8 D8009FE5 		ldr	r0, .L39+8
+ 247 00cc 3610A0E3 		mov	r1, #54
+ 248 00d0 FEFFFFEB 		bl	tx_thread_set_profile_gpio
+ 249 00d4 002050E2 		subs	r2, r0, #0
+ 250 00d8 0200000A 		beq	.L33
+ 251 00dc 0400A0E1 		mov	r0, r4
+ 252 00e0 C4109FE5 		ldr	r1, .L39+12
+ 253 00e4 FEFFFFEB 		bl	CyU3PDebugPrint
+ 254              	.L33:
+ 255 00e8 C0009FE5 		ldr	r0, .L39+16
+ 256 00ec 3510A0E3 		mov	r1, #53
+ 257 00f0 FEFFFFEB 		bl	tx_mutex_set_profile_gpio
+ 258 00f4 002050E2 		subs	r2, r0, #0
+ 259 00f8 0200000A 		beq	.L34
+ 260 00fc 0200A0E3 		mov	r0, #2
+ 261 0100 AC109FE5 		ldr	r1, .L39+20
+ 262 0104 FEFFFFEB 		bl	CyU3PDebugPrint
+ 263              	.L34:
+ 264 0108 A8009FE5 		ldr	r0, .L39+24
+ 265 010c 3410A0E3 		mov	r1, #52
+ 266 0110 FEFFFFEB 		bl	tx_semaphore_set_profile_gpio
+ 267 0114 002050E2 		subs	r2, r0, #0
+ 268 0118 0200000A 		beq	.L35
+ 269 011c 0200A0E3 		mov	r0, #2
+ 270 0120 94109FE5 		ldr	r1, .L39+28
+ 271 0124 FEFFFFEB 		bl	CyU3PDebugPrint
+ 272              	.L35:
+ 273 0128 90009FE5 		ldr	r0, .L39+32
+ 274 012c 3310A0E3 		mov	r1, #51
+ 275 0130 FEFFFFEB 		bl	tx_event_flags_set_profile_gpio
+ 276 0134 002050E2 		subs	r2, r0, #0
+ 277 0138 0200000A 		beq	.L36
+ 278 013c 0200A0E3 		mov	r0, #2
+ 279 0140 7C109FE5 		ldr	r1, .L39+36
+ 280 0144 FEFFFFEB 		bl	CyU3PDebugPrint
+ 281              	.L36:
+ 282 0148 0040A0E3 		mov	r4, #0
+ 283              	.L38:
+ 284 014c 014084E2 		add	r4, r4, #1
+ 285 0150 0448A0E1 		mov	r4, r4, asl #16
+ 286 0154 2448A0E1 		mov	r4, r4, lsr #16
+ 287 0158 7D0FA0E3 		mov	r0, #500
+ 288 015c FEFFFFEB 		bl	_tx_thread_sleep
+ 289 0160 0F0014E3 		tst	r4, #15
+ 290 0164 0420A0E1 		mov	r2, r4
+ 291 0168 0900001A 		bne	.L37
+ 292 016c 014084E2 		add	r4, r4, #1
+ 293 0170 0448A0E1 		mov	r4, r4, asl #16
+ 294 0174 2448A0E1 		mov	r4, r4, lsr #16
+ 295 0178 0200A0E3 		mov	r0, #2
+ 296 017c 44109FE5 		ldr	r1, .L39+40
+ 297 0180 FEFFFFEB 		bl	CyU3PDebugPrint
+ 298 0184 000054E3 		cmp	r4, #0
+ 299 0188 0100001A 		bne	.L37
+ 300 018c 0400A0E1 		mov	r0, r4
+ 301 0190 FEFFFFEB 		bl	CyU3PDeviceReset
+ 302              	.L37:
+ 303 0194 30009FE5 		ldr	r0, .L39+44
+ 304 0198 FEFFFFEB 		bl	CyU3PBusyWait
+ 305 019c EAFFFFEA 		b	.L38
+ 306              	.L40:
+ 307              		.align	2
+ 308              	.L39:
+ 309 01a0 58000000 		.word	.LC3
+ 310 01a4 00000000 		.word	.LANCHOR0
+ 311 01a8 00000000 		.word	Thread1
+ 312 01ac 8F000000 		.word	.LC4
+ 313 01b0 00000000 		.word	AppMutex
+ 314 01b4 CF000000 		.word	.LC5
+ 315 01b8 00000000 		.word	AppSema
+ 316 01bc 0E010000 		.word	.LC6
+ 317 01c0 00000000 		.word	AppEvent
+ 318 01c4 51010000 		.word	.LC7
+ 319 01c8 96010000 		.word	.LC8
+ 320 01cc 60EA0000 		.word	60000
+ 322              		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 323              		.align	2
+ 324              		.global	CyFxApplicationDefine
+ 326              	CyFxApplicationDefine:
+ 327              		@ args = 0, pretend = 0, frame = 0
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 329 0000 0010A0E3 		mov	r1, #0
+ 330 0004 F0412DE9 		stmfd	sp!, {r4, r5, r6, r7, r8, lr}
+ 331 0008 78019FE5 		ldr	r0, .L44
+ 332 000c 0120A0E1 		mov	r2, r1
+ 333 0010 20D04DE2 		sub	sp, sp, #32
+ 334 0014 5430A0E3 		mov	r3, #84
+ 335 0018 FEFFFFEB 		bl	_txe_mutex_create
+ 336 001c 001050E2 		subs	r1, r0, #0
+ 337 0020 5200001A 		bne	.L42
+ 338 0024 60019FE5 		ldr	r0, .L44+4
+ 339 0028 0420A0E3 		mov	r2, #4
+ 340 002c 2430A0E3 		mov	r3, #36
+ 341 0030 FEFFFFEB 		bl	_txe_semaphore_create
+ 342 0034 001050E2 		subs	r1, r0, #0
+ 343 0038 4C00001A 		bne	.L42
+ 344 003c 4C019FE5 		ldr	r0, .L44+8
+ 345 0040 3C20A0E3 		mov	r2, #60
+ 346 0044 FEFFFFEB 		bl	_txe_event_flags_create
+ 347 0048 008050E2 		subs	r8, r0, #0
+ 348 004c 4700001A 		bne	.L42
+ 349 0050 020C80E2 		add	r0, r0, #512
+ 350 0054 FEFFFFEB 		bl	CyU3PMemAlloc
+ 351 0058 000050E3 		cmp	r0, #0
+ 352 005c 4300000A 		beq	.L42
+ 353 0060 00008DE5 		str	r0, [sp, #0]
+ 354 0064 0850A0E3 		mov	r5, #8
+ 355 0068 0830A0E1 		mov	r3, r8
+ 356 006c 024CA0E3 		mov	r4, #512
+ 357 0070 0170A0E3 		mov	r7, #1
+ 358 0074 D460A0E3 		mov	r6, #212
+ 359 0078 14019FE5 		ldr	r0, .L44+12
+ 360 007c 14119FE5 		ldr	r1, .L44+16
+ 361 0080 14219FE5 		ldr	r2, .L44+20
+ 362 0084 10808DE5 		str	r8, [sp, #16]
+ 363 0088 30008DE9 		stmib	sp, {r4, r5}	@ phole stm
+ 364 008c 0C508DE5 		str	r5, [sp, #12]
+ 365 0090 14708DE5 		str	r7, [sp, #20]
+ 366 0094 18608DE5 		str	r6, [sp, #24]
+ 367 0098 FEFFFFEB 		bl	_txe_thread_create
+ 368 009c 008050E2 		subs	r8, r0, #0
+ 369 00a0 3200001A 		bne	.L42
+ 370 00a4 0400A0E1 		mov	r0, r4
+ 371 00a8 FEFFFFEB 		bl	CyU3PMemAlloc
+ 372 00ac 000050E3 		cmp	r0, #0
+ 373 00b0 2E00000A 		beq	.L42
+ 374 00b4 00008DE5 		str	r0, [sp, #0]
+ 375 00b8 0830A0E1 		mov	r3, r8
+ 376 00bc DC009FE5 		ldr	r0, .L44+24
+ 377 00c0 DC109FE5 		ldr	r1, .L44+28
+ 378 00c4 DC209FE5 		ldr	r2, .L44+32
+ 379 00c8 10808DE5 		str	r8, [sp, #16]
+ 380 00cc 30008DE9 		stmib	sp, {r4, r5}	@ phole stm
+ 381 00d0 0C508DE5 		str	r5, [sp, #12]
+ 382 00d4 14708DE5 		str	r7, [sp, #20]
+ 383 00d8 18608DE5 		str	r6, [sp, #24]
+ 384 00dc FEFFFFEB 		bl	_txe_thread_create
+ 385 00e0 008050E2 		subs	r8, r0, #0
+ 386 00e4 2100001A 		bne	.L42
+ 387 00e8 0400A0E1 		mov	r0, r4
+ 388 00ec FEFFFFEB 		bl	CyU3PMemAlloc
+ 389 00f0 000050E3 		cmp	r0, #0
+ 390 00f4 1D00000A 		beq	.L42
+ 391 00f8 00008DE5 		str	r0, [sp, #0]
+ 392 00fc A8109FE5 		ldr	r1, .L44+36
+ 393 0100 A8009FE5 		ldr	r0, .L44+40
+ 394 0104 A8209FE5 		ldr	r2, .L44+44
+ 395 0108 0830A0E1 		mov	r3, r8
+ 396 010c 30008DE9 		stmib	sp, {r4, r5}	@ phole stm
+ 397 0110 0C508DE5 		str	r5, [sp, #12]
+ 398 0114 10808DE5 		str	r8, [sp, #16]
+ 399 0118 14708DE5 		str	r7, [sp, #20]
+ 400 011c 18608DE5 		str	r6, [sp, #24]
+ 401 0120 FEFFFFEB 		bl	_txe_thread_create
+ 402 0124 000050E3 		cmp	r0, #0
+ 403 0128 1000001A 		bne	.L42
+ 404 012c 0400A0E1 		mov	r0, r4
+ 405 0130 FEFFFFEB 		bl	CyU3PMemAlloc
+ 406 0134 000050E3 		cmp	r0, #0
+ 407 0138 0C00000A 		beq	.L42
+ 408 013c 00008DE5 		str	r0, [sp, #0]
+ 409 0140 0030A0E3 		mov	r3, #0
+ 410 0144 6C009FE5 		ldr	r0, .L44+48
+ 411 0148 6C109FE5 		ldr	r1, .L44+52
+ 412 014c 6C209FE5 		ldr	r2, .L44+56
+ 413 0150 30008DE9 		stmib	sp, {r4, r5}	@ phole stm
+ 414 0154 0C508DE5 		str	r5, [sp, #12]
+ 415 0158 10308DE5 		str	r3, [sp, #16]
+ 416 015c 14708DE5 		str	r7, [sp, #20]
+ 417 0160 18608DE5 		str	r6, [sp, #24]
+ 418 0164 FEFFFFEB 		bl	_txe_thread_create
+ 419 0168 000050E3 		cmp	r0, #0
+ 420 016c 0300000A 		beq	.L41
+ 421              	.L42:
+ 422 0170 0000A0E3 		mov	r0, #0
+ 423 0174 20D08DE2 		add	sp, sp, #32
+ 424 0178 F041BDE8 		ldmfd	sp!, {r4, r5, r6, r7, r8, lr}
+ 425 017c FEFFFFEA 		b	CyU3PDeviceReset
+ 426              	.L41:
+ 427 0180 20D08DE2 		add	sp, sp, #32
+ 428 0184 F081BDE8 		ldmfd	sp!, {r4, r5, r6, r7, r8, pc}
+ 429              	.L45:
+ 430              		.align	2
+ 431              	.L44:
+ 432 0188 00000000 		.word	AppMutex
+ 433 018c 00000000 		.word	AppSema
+ 434 0190 00000000 		.word	AppEvent
+ 435 0194 00000000 		.word	Thread1
+ 436 0198 AA010000 		.word	.LC9
+ 437 019c 00000000 		.word	Thread1_Entry
+ 438 01a0 00000000 		.word	Thread2
+ 439 01a4 BA010000 		.word	.LC10
+ 440 01a8 00000000 		.word	Thread2_Entry
+ 441 01ac CA010000 		.word	.LC11
+ 442 01b0 00000000 		.word	Thread3
+ 443 01b4 00000000 		.word	Thread3_Entry
+ 444 01b8 00000000 		.word	Thread4
+ 445 01bc DA010000 		.word	.LC12
+ 446 01c0 00000000 		.word	Thread4_Entry
+ 448              		.section	.text.main,"ax",%progbits
+ 449              		.align	2
+ 450              		.global	main
+ 452              	main:
+ 453              		@ args = 0, pretend = 0, frame = 40
+ 454              		@ frame_needed = 0, uses_anonymous_args = 0
+ 455 0000 10402DE9 		stmfd	sp!, {r4, lr}
+ 456 0004 0000A0E3 		mov	r0, #0
+ 457 0008 28D04DE2 		sub	sp, sp, #40
+ 458 000c FEFFFFEB 		bl	CyU3PDeviceInit
+ 459 0010 000050E3 		cmp	r0, #0
+ 460 0014 1E00001A 		bne	.L47
+ 461 0018 010080E2 		add	r0, r0, #1
+ 462 001c 0010A0E1 		mov	r1, r0
+ 463 0020 0020A0E1 		mov	r2, r0
+ 464 0024 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 465 0028 004050E2 		subs	r4, r0, #0
+ 466 002c 1800001A 		bne	.L47
+ 467 0030 0410A0E1 		mov	r1, r4
+ 468 0034 0D00A0E1 		mov	r0, sp
+ 469 0038 2820A0E3 		mov	r2, #40
+ 470 003c FEFFFFEB 		bl	CyU3PMemSet
+ 471 0040 0130A0E3 		mov	r3, #1
+ 472 0044 0D00A0E1 		mov	r0, sp
+ 473 0048 00408DE5 		str	r4, [sp, #0]
+ 474 004c 1440CDE5 		strb	r4, [sp, #20]
+ 475 0050 1540CDE5 		strb	r4, [sp, #21]
+ 476 0054 08408DE5 		str	r4, [sp, #8]
+ 477 0058 0C408DE5 		str	r4, [sp, #12]
+ 478 005c 10408DE5 		str	r4, [sp, #16]
+ 479 0060 18408DE5 		str	r4, [sp, #24]
+ 480 0064 1C408DE5 		str	r4, [sp, #28]
+ 481 0068 20408DE5 		str	r4, [sp, #32]
+ 482 006c 24408DE5 		str	r4, [sp, #36]
+ 483 0070 04308DE5 		str	r3, [sp, #4]
+ 484 0074 1630CDE5 		strb	r3, [sp, #22]
+ 485 0078 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 486 007c 004050E2 		subs	r4, r0, #0
+ 487 0080 0300001A 		bne	.L47
+ 488 0084 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 489 0088 0400A0E1 		mov	r0, r4
+ 490 008c 28D08DE2 		add	sp, sp, #40
+ 491 0090 1080BDE8 		ldmfd	sp!, {r4, pc}
+ 492              	.L47:
+ 493 0094 FEFFFFEA 		b	.L47
+ 495              		.comm	Thread1,212,4
+ 496              		.comm	Thread2,212,4
+ 497              		.comm	Thread3,212,4
+ 498              		.comm	Thread4,212,4
+ 499              		.comm	AppMutex,84,4
+ 500              		.comm	AppSema,36,4
+ 501              		.comm	AppEvent,60,4
+ 502              		.section	.rodata.C.2.8151,"a",%progbits
+ 503              		.align	2
+ 504              		.set	.LANCHOR0,. + 0
+ 507              	C.2.8151:
+ 508 0000 00000000 		.word	0
+ 509 0004 01000000 		.word	1
+ 510 0008 01000000 		.word	1
+ 511 000c 00000000 		.word	0
+ 512 0010 00       		.byte	0
+ 513 0011 000000   		.space	3
+ 514              		.section	.rodata.str1.1,"aMS",%progbits,1
+ 515              	.LC0:
+ 516 0000 54687265 		.ascii	"Thread4: flag=%d\015\012\000"
+ 516      6164343A 
+ 516      20666C61 
+ 516      673D2564 
+ 516      0D0A00
+ 517              	.LC1:
+ 518 0013 54687265 		.ascii	"Thread3\015\012\000"
+ 518      6164330D 
+ 518      0A00
+ 519              	.LC2:
+ 520 001d 54687265 		.ascii	"Thread2: CPU load=%d, thread1=%d, thread2=%d, drive"
+ 520      6164323A 
+ 520      20435055 
+ 520      206C6F61 
+ 520      643D2564 
+ 521 0050 72733D25 		.ascii	"rs=%d\015\012\000"
+ 521      640D0A00 
+ 522              	.LC3:
+ 523 0058 25783A20 		.ascii	"%x: Application failed to initialize. Error code: %"
+ 523      4170706C 
+ 523      69636174 
+ 523      696F6E20 
+ 523      6661696C 
+ 524 008b 642E0A00 		.ascii	"d.\012\000"
+ 525              	.LC4:
+ 526 008f 4572726F 		.ascii	"Error: Failed to register thread monitoring GPIO, s"
+ 526      723A2046 
+ 526      61696C65 
+ 526      6420746F 
+ 526      20726567 
+ 527 00c2 74617475 		.ascii	"tatus = %d\015\012\000"
+ 527      73203D20 
+ 527      25640D0A 
+ 527      00
+ 528              	.LC5:
+ 529 00cf 4572726F 		.ascii	"Error: Failed to register mutex monitoring GPIO, st"
+ 529      723A2046 
+ 529      61696C65 
+ 529      6420746F 
+ 529      20726567 
+ 530 0102 61747573 		.ascii	"atus = %d\015\012\000"
+ 530      203D2025 
+ 530      640D0A00 
+ 531              	.LC6:
+ 532 010e 4572726F 		.ascii	"Error: Failed to register semaphore monitoring GPIO"
+ 532      723A2046 
+ 532      61696C65 
+ 532      6420746F 
+ 532      20726567 
+ 533 0141 2C207374 		.ascii	", status = %d\015\012\000"
+ 533      61747573 
+ 533      203D2025 
+ 533      640D0A00 
+ 534              	.LC7:
+ 535 0151 4572726F 		.ascii	"Error: Failed to register event group monitoring GP"
+ 535      723A2046 
+ 535      61696C65 
+ 535      6420746F 
+ 535      20726567 
+ 536 0184 494F2C20 		.ascii	"IO, status = %d\015\012\000"
+ 536      73746174 
+ 536      7573203D 
+ 536      2025640D 
+ 536      0A00
+ 537              	.LC8:
+ 538 0196 54687265 		.ascii	"Thread1: count=%d\015\012\000"
+ 538      6164313A 
+ 538      20636F75 
+ 538      6E743D25 
+ 538      640D0A00 
+ 539              	.LC9:
+ 540 01aa 32313A41 		.ascii	"21:App Thread 1\000"
+ 540      70702054 
+ 540      68726561 
+ 540      64203100 
+ 541              	.LC10:
+ 542 01ba 32323A41 		.ascii	"22:App Thread 2\000"
+ 542      70702054 
+ 542      68726561 
+ 542      64203200 
+ 543              	.LC11:
+ 544 01ca 32333A41 		.ascii	"23:App Thread 3\000"
+ 544      70702054 
+ 544      68726561 
+ 544      64203300 
+ 545              	.LC12:
+ 546 01da 32343A41 		.ascii	"24:App Thread 4\000"
+ 546      70702054 
+ 546      68726561 
+ 546      64203400 
+ 547              		.ident	"GCC: (Sourcery G++ Lite 2011.03-42) 4.5.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 cyfx_rtos_eg.c
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:13     .text.Thread4_Entry:00000000 $a
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:16     .text.Thread4_Entry:00000000 Thread4_Entry
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:49     .text.Thread4_Entry:00000060 $d
+                            *COM*:0000003c AppEvent
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:54     .text.Thread3_Entry:00000000 $a
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:57     .text.Thread3_Entry:00000000 Thread3_Entry
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:87     .text.Thread3_Entry:00000050 $d
+                            *COM*:00000024 AppSema
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:91     .text.Thread2_Entry:00000000 $a
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:94     .text.Thread2_Entry:00000000 Thread2_Entry
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:133    .text.Thread2_Entry:00000078 $d
+                            *COM*:000000d4 Thread1
+                            *COM*:000000d4 Thread2
+                            *COM*:00000054 AppMutex
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:139    .text.CyFxDebugInit:00000000 $a
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:142    .text.CyFxDebugInit:00000000 CyFxDebugInit
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:185    .text.CyFxDebugInit:00000090 $d
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:188    .text.Thread1_Entry:00000000 $a
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:191    .text.Thread1_Entry:00000000 Thread1_Entry
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:309    .text.Thread1_Entry:000001a0 $d
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:323    .text.CyFxApplicationDefine:00000000 $a
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:326    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:432    .text.CyFxApplicationDefine:00000188 $d
+                            *COM*:000000d4 Thread3
+                            *COM*:000000d4 Thread4
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:449    .text.main:00000000 $a
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:452    .text.main:00000000 main
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:503    .rodata.C.2.8151:00000000 $d
+C:\DOCUME~1\kys\LOCALS~1\Temp\ccbhitHj.s:507    .rodata.C.2.8151:00000000 C.2.8151
+
+UNDEFINED SYMBOLS
+_tx_thread_sleep
+_txe_event_flags_set
+_txe_event_flags_get
+CyU3PDebugPrint
+_txe_semaphore_get
+_txe_semaphore_put
+CyU3PDeviceGetCpuLoad
+CyU3PDeviceGetThreadLoad
+CyU3PDeviceGetDriverLoad
+_txe_mutex_get
+_txe_mutex_put
+CyU3PUartInit
+CyU3PMemSet
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble
+CyU3PGpioInit
+CyU3PDeviceGpioOverride
+CyU3PGpioSetSimpleConfig
+tx_thread_set_profile_gpio
+tx_mutex_set_profile_gpio
+tx_semaphore_set_profile_gpio
+tx_event_flags_set_profile_gpio
+CyU3PDeviceReset
+CyU3PBusyWait
+_txe_mutex_create
+_txe_semaphore_create
+_txe_event_flags_create
+CyU3PMemAlloc
+_txe_thread_create
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

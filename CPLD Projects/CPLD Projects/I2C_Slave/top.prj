@@ -1,0 +1,2 @@
+verilog work "i2c_module_mod.v"
+verilog work "top.v"

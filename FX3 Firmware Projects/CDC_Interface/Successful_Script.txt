@@ -1,0 +1,1741 @@
+  
+ConsoleOutEnabled Successful
+CyU3PUartRxSetBlockXfer Successful
+CreateDebugRxDmaChannel Successful
+ConsoleInEnabled Successful
+Debug Console Initialized Successful
+Start USB Driver Successful
+Event received = VBUS_VALID
+SET_SS_DEVICE_DESCR Successful
+SET_HS_DEVICE_DESCR Successful
+SET_SS_BOS_DESCR Successful
+SET_DEVQUAL_DESCR Successful
+SET_SS_CONFIG_DESCR Successful
+SET_HS_CONFIG_DESCR Successful
+SET_FS_CONFIG_DESCR Successful
+SET_STRING0_DESCR Successful
+SET_STRING1_DESCR Successful
+SET_STRING2_DESCR Successful
+Set USB Descriptors Successful
+Connect USB Successful
+USB Initialized Successful
+Event received = SUSPEND
+Application started with 42
+
+Event received = CONNECT
+Event received = RESET
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE0, 
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE1, 
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE2, 
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE3, 
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE4, 5, 6, 7, 8, 9, 10, 11, 12, 
+13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful23, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful24, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful25, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED26, 
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED27, 
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful28, 
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful29, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED30, 
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful31, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED32, 
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful33, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED34, 
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful35, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful36, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful37, 
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful38, 
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE
+Event received = USER_EP0_XFER_COMPLETE39, 40, 41, 42, 43, 44, 45, 46
+, 47, 48, 49, 50, 51, 52, 
+Received: j53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 165, 66, 6
+7, 68, 69, 70, 71, 72, 73, 74, He75, llo 76, Jo77, hn78, 79, 80, 81, 
+82, 83, 
+Received: H
+Received: o
+Received: w
+Received:  84, 85, 
+Received: a
+Received: r
+Received: e
+Received:  86, 
+Received: y
+Received: o
+Received: u87, 
+Received: ?88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 
+102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115,
+ 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129
+, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 14
+3, 144, 
+Received: P145, 
+Received: r
+Received: e
+Received: t
+Received: t146, 
+Received: y147, 
+Received:  148, 
+Received: A
+Received: m
+Received: z149, 
+Received: i150, 
+Received: n
+Received: g151, 
+Received: !
+Received: !152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163
+, 164, 165, 166, 167, 168, 169, 170, 
+Received: 1171, 172, 173, 
+Received: 2174, 175, 
+Received: a176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187
+, 188, 189, 190, 191, 192, 193, 194, 195, m196, 197, oo198, 199, n200
+, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 21
+4, 215, 216, 217, 
+Received: g218, 219, 
+Received: o220, 
+Received: o221, 222, 
+Received: d223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234
+, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 
+Event received = USER_EP0_XFER_COMPLETE
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED245, 
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful
+Event received = RESET
+Disable Consumer Endpoint Successful
+Disable Producer Endpoint Successful
+Disable Interrupt Endpoint Successful
+Close USBtoCPU DMA Channel Successful
+Close CPUtoUSB DMA Channel Successful
+Event received = SPEED
+Event received = SET_CONFIGURATION
+Running at High Speed
+Setup Consumer Endpoint Successful
+Setup Producer Endpoint Successful
+Setup Interrupt Endpoint Successful
+CreateUSBtoCPUdmaChannel Successful
+USBtoCPUdmaChannelSetXfer Successful
+CreateCPUtoUSBdmaChannel Successful
+Get UserBuffer Successful246, 247, 248, 249, 250, 251, 252, 253, 254,
+ 255, 

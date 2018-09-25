@@ -1,0 +1,88 @@
+# This file defines the pin assignments for the CPLD board
+# First define the 32-bit GPIF bus
+NET "DQ[0]"  		LOC = P50;
+NET "DQ[1]"  		LOC = P49;
+NET "DQ[2]"  		LOC = P46;
+NET "DQ[3]"  		LOC = P43;
+NET "DQ[4]"  		LOC = P41;
+NET "DQ[5]"  		LOC = P39;
+NET "DQ[6]"  		LOC = P36;
+NET "DQ[7]"  		LOC = P34;
+NET "DQ[8]"  		LOC = P32;
+NET "DQ[9]"  		LOC = P28;
+NET "DQ[10]" 		LOC = P23;
+NET "DQ[11]" 		LOC = P11;
+NET "DQ[12]" 		LOC = P9;
+NET "DQ[13]" 		LOC = P7;
+NET "DQ[14]" 		LOC = P4;
+NET "DQ[15]" 		LOC = P2;
+NET "DQ[16]" 		LOC = P52;
+NET "DQ[17]" 		LOC = P53;
+NET "DQ[18]" 		LOC = P54;
+NET "DQ[19]" 		LOC = P55;
+NET "DQ[20]" 		LOC = P56;
+NET "DQ[21]" 		LOC = P58;
+NET "DQ[22]" 		LOC = P59;
+NET "DQ[23]" 		LOC = P60;
+NET "DQ[24]" 		LOC = P61;
+NET "DQ[25]" 		LOC = P63;
+NET "DQ[26]" 		LOC = P92;
+NET "DQ[27]" 		LOC = P93;
+NET "DQ[28]" 		LOC = P94;
+NET "DQ[29]" 		LOC = P95;
+NET "DQ[30]" 		LOC = P96;
+NET "DQ[31]" 		LOC = P97;
+#Now the GPIF Control Sigansl
+NET "CTRL[0]"   	LOC = P44 | PULLUP;
+NET "CTRL[1]"   	LOC = P42 | PULLUP;
+NET "CTRL[2]"   	LOC = P40 | PULLUP;
+NET "CTRL[3]"   	LOC = P37 | PULLUP;
+NET "CTRL[4]"   	LOC = P35 | PULLUP;
+NET "CTRL[5]"   	LOC = P33 | PULLUP;
+NET "CTRL[6]"   	LOC = P27 | PULLUP;
+NET "CTRL[7]"   	LOC = P24 | PULLUP;
+NET "CTRL[8]"   	LOC = P10 | PULLUP;
+NET "CTRL[9]"   	LOC = P8 | PULLUP;
+NET "CTRL[10]"  	LOC = P6 | PULLUP;
+NET "CTRL[11]"  	LOC = P3 | PULLUP;
+NET "CTRL[12]"  	LOC = P1 | PULLUP;
+NET "INT"				LOC = P99 | PULLUP;
+NET "PCLK"				LOC = P22;		# This is up to 100 MHz
+# Now the Low Speed IO
+NET "I2C_SDA"		LOC = P29;
+NET "I2C_SCL"		LOC = P30;
+NET "RX_MOSI"		LOC = P78;			# FX3 can congigure as UART or SPI
+NET "TX_MISO" 		LOC = P77; 			# FX3 can congigure as UART or SPI
+NET "SPI_SCK"		LOC = P76;
+NET "SPI_SSN"		LOC = P74;			# Explorer board LED too
+NET "FlashCS_n"		LOC = P73;
+NET "GPIO45_n"		LOC = P79 | SCHMITT_TRIGGER;	# User Pushbutton
+NET "TP_2"				LOC = P80;			# Spare inout Signal
+# User LEDs
+NET "LED[0]"		LOC = P81;
+NET "LED[1]"		LOC = P82;
+NET "LED[2]"		LOC = P85;
+NET "LED[3]"		LOC = P86;
+NET "LED[4]"		LOC = P87;
+NET "LED[5]"		LOC = P89;
+NET "LED[6]"		LOC = P90;
+NET "LED[7]"		LOC = P91;
+# User Buttons (switches)
+NET "Button[0]"	LOC = P72 | PULLUP;
+NET "Button[1]"	LOC = P71 | PULLUP;
+NET "Button[2]"	LOC = P70 | PULLUP;
+NET "Button[3]"	LOC = P68 | PULLUP;
+NET "Button[4]"	LOC = P67 | PULLUP;
+NET "Button[5]"	LOC = P66 | PULLUP;
+NET "Button[6]"	LOC = P65 | PULLUP;
+NET "Button[7]"	LOC = P64 | PULLUP;
+# Uncommited User Port
+NET "User[0]"		LOC = P12 | PULLUP;
+NET "User[1]"		LOC = P13 | PULLUP;
+NET "User[2]"		LOC = P14 | PULLUP;
+NET "User[3]"		LOC = P15 | PULLUP;
+NET "User[4]"		LOC = P16 | PULLUP;
+NET "User[5]"		LOC = P17 | PULLUP;
+NET "User[6]"		LOC = P18 | PULLUP;
+NET "User[7]"		LOC = P19 | PULLUP;
+

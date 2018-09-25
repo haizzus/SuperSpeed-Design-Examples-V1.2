@@ -1,0 +1,76 @@
+Pin Freeze File:  version P.15xf
+
+2C128100 XC2C128-6-VQ100
+Button<0> S:PIN72
+Button<1> S:PIN71
+Button<2> S:PIN70
+Button<3> S:PIN68
+Button<4> S:PIN67
+Button<5> S:PIN66
+Button<6> S:PIN65
+Button<7> S:PIN64
+CTRL<8> S:PIN10
+CTRL<9> S:PIN8
+CTRL<10> S:PIN6
+I2C_SCL S:PIN30
+RX_MOSI S:PIN78
+SPI_SCK S:PIN76
+SPI_SSN S:PIN74
+FlashCS_n S:PIN73
+INT S:PIN99
+LED<0> S:PIN81
+LED<1> S:PIN82
+LED<2> S:PIN85
+LED<3> S:PIN86
+LED<4> S:PIN87
+LED<5> S:PIN89
+LED<6> S:PIN90
+LED<7> S:PIN91
+TX_MISO S:PIN77
+User<0> S:PIN12
+User<1> S:PIN13
+User<2> S:PIN14
+User<3> S:PIN15
+User<4> S:PIN16
+User<5> S:PIN17
+User<6> S:PIN18
+User<7> S:PIN19
+I2C_SDA S:PIN29
+
+
+;The remaining section of the .gyd file is for documentation purposes only.
+;It shows where your internal equations were placed in the last successful fit.
+
+PARTITION FB1_1 User<1> spi_slave/miso_r<0> User<0> spi_slave/mosi_r<7>
+		 spi_slave/mosi_r<6> spi_slave/mosi_r<5> spi_slave/miso_r<6> spi_slave/miso_r<5>
+		 spi_slave/miso_r<3> spi_slave/miso_r<4> spi_slave/mosi_r<4> spi_slave/mosi_r<3>
+		 spi_slave/mosi_r<2> spi_slave/miso_r<2> spi_slave/mosi_r<1> spi_slave/miso_r<1>
+		
+PARTITION FB2_1 i2c_slave/index<0> User<2> User<3> User<4>
+		 User<5> User<6> i2c_slave/index<3> i2c_slave/index<1>
+		 i2c_slave/index<2> i2c_slave/start_rst User<7> spi_slave/mosi_r<8>
+		
+PARTITION FB2_14 i2c_slave/out_en_not0001 i2c_slave/present_state_FSM_FFd2 out_en
+PARTITION FB3_1 i2c_slave/shift_data_in_not0001
+PARTITION FB3_4 INT
+PARTITION FB3_8 ack_out i2c_slave/present_state_FSM_FFd1 i2c_slave/shift_data_in
+PARTITION FB3_12 i2c_slave/latch_data_out
+PARTITION FB3_14 sda_out LED<7> LED<6>
+PARTITION FB4_2 i2c_slave/data_in<5> i2c_slave/data_in<4> i2c_slave/data_in<0> i2c_slave/start
+		
+PARTITION FB4_8 i2c_slave/data_in<3> i2c_slave/data_in<2> i2c_slave/data_in<1>
+PARTITION FB4_15 i2c_slave/data_in<7> i2c_slave/data_in<6>
+PARTITION FB5_1 i2c_slave/gpio_input<6> i2c_slave/gpio_input<5> i2c_slave/gpio_input<4>
+PARTITION FB5_5 i2c_slave/gpio_input<3>
+PARTITION FB5_7 i2c_slave/gpio_input<2>
+PARTITION FB5_11 i2c_slave/gpio_input<1> i2c_slave/gpio_input<0> FlashCS_n
+
+PARTITION FB6_1 i2c_slave/gpio_input<7>
+
+PARTITION FB7_1 TX_MISO spi_slave/mosi_r<0>
+PARTITION FB7_6 LED<0>
+PARTITION FB7_11 LED<1>
+PARTITION FB7_13 LED<2> LED<3> LED<4> LED<5>
+		
+
+

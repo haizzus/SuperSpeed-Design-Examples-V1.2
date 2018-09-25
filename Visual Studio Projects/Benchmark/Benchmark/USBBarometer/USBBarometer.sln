@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBBarometer", "USBBarometer.csproj", "{A64861CF-A713-47E9-80AA-CFF65E25E504}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "..\Engine\Engine.vcxproj", "{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|Win32.Build.0 = Debug|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|x64.ActiveCfg = Debug|x64
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Debug|x64.Build.0 = Debug|x64
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Release|Win32.ActiveCfg = Release|Any CPU
+		{A64861CF-A713-47E9-80AA-CFF65E25E504}.Release|x64.ActiveCfg = Release|x64
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Debug|Win32.Build.0 = Debug|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Debug|x64.ActiveCfg = Debug|x64
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Debug|x64.Build.0 = Debug|x64
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Release|Win32.ActiveCfg = Release|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Release|Win32.Build.0 = Release|Win32
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Release|x64.ActiveCfg = Release|x64
+		{8578D3BA-E1A8-496D-A99F-E55D46B9E62B}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

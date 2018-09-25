@@ -1,0 +1,5 @@
+set -tmpdir "C:/Users/savj/Desktop/CPLD Projects/Counter1/xst/projnav.tmp"
+set -xsthdpdir "C:/Users/savj/Desktop/CPLD Projects/Counter1/xst"
+elaborate
+-ifn BasicCounter.prj
+-ifmt mixed

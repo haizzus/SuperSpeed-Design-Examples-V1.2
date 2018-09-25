@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE ibis [
+<!ELEMENT ibis (part, pin+)>
+<!ELEMENT part EMPTY>
+<!ELEMENT pin EMPTY>
+<!ATTLIST part
+  arch   CDATA #REQUIRED
+  device CDATA #REQUIRED
+  spg    CDATA #REQUIRED
+  pkg    CDATA #REQUIRED>
+<!ATTLIST pin
+  nm     CDATA #REQUIRED
+  no     CDATA #REQUIRED
+  iostd  (LVTTL|SSTL3_I|LVCMOS33|LVCMOS25|SSTL2_I|LVCMOS18|LVCMOS15|HSTL_I|NA) "NA"
+  sr     (SLOW|FAST|slow|fast) "SLOW"
+  dir    (BIDIR|bidir|INPUT|input|OUTPUT|output) "BIDIR">
+]>
+<ibis><part arch="xbr" device="XC2C128" pkg="VQ100" spg="-6"/><pin dir="input" iostd="LVCMOS18" nm="CTRL&lt;10&gt;" no="6"/><pin dir="input" iostd="LVCMOS18" nm="CTRL&lt;8&gt;" no="10"/><pin dir="input" iostd="LVCMOS18" nm="CTRL&lt;9&gt;" no="8"/><pin dir="input" iostd="LVCMOS18" nm="SPI_SSN" no="74"/><pin dir="input" iostd="LVCMOS18" nm="RX_MOSI" no="78"/><pin dir="input" iostd="LVCMOS18" nm="SPI_SCK" no="76"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;0&gt;" no="72"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;7&gt;" no="64"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;1&gt;" no="71"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;2&gt;" no="70"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;3&gt;" no="68"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;4&gt;" no="67"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;5&gt;" no="66"/><pin dir="input" iostd="LVCMOS18" nm="Button&lt;6&gt;" no="65"/><pin dir="input" iostd="LVCMOS18" nm="I2C_SCL" no="30"/><pin dir="output" iostd="LVCMOS18" nm="FlashCS_n" no="73" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="INT" no="99" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;0&gt;" no="81" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;1&gt;" no="82" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;2&gt;" no="85" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;3&gt;" no="86" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;4&gt;" no="87" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;5&gt;" no="89" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;6&gt;" no="90" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="LED&lt;7&gt;" no="91" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="TX_MISO" no="77" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;0&gt;" no="12" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;1&gt;" no="13" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;2&gt;" no="14" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;3&gt;" no="15" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;4&gt;" no="16" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;5&gt;" no="17" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;6&gt;" no="18" sr="fast"/><pin dir="output" iostd="LVCMOS18" nm="User&lt;7&gt;" no="19" sr="fast"/><pin dir="bidir" iostd="LVCMOS18" nm="I2C_SDA" no="29" sr="fast"/></ibis>

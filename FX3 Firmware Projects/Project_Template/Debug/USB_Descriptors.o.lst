@@ -1,0 +1,18 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"USB_Descriptors.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 USB_Descriptors.c
+
+NO UNDEFINED SYMBOLS

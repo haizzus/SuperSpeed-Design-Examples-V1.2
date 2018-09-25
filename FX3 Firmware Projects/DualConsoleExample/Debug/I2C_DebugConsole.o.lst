@@ -1,0 +1,1305 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"I2C_DebugConsole.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.bss.I2C_DebugThread,"aw",%nobits
+  22              		.align	2
+  25              	I2C_DebugThread:
+  26 0000 00000000 		.space	168
+  26      00000000 
+  26      00000000 
+  26      00000000 
+  26      00000000 
+  27              		.section	.bss.I2C_DebugLock,"aw",%nobits
+  28              		.align	2
+  31              	I2C_DebugLock:
+  32 0000 00000000 		.space	56
+  32      00000000 
+  32      00000000 
+  32      00000000 
+  32      00000000 
+  33              		.section	.bss.I2C_DebugQueue,"aw",%nobits
+  34              		.align	2
+  37              	I2C_DebugQueue:
+  38 0000 00000000 		.space	60
+  38      00000000 
+  38      00000000 
+  38      00000000 
+  38      00000000 
+  39              		.section	.bss.I2C_DebugTXHandle,"aw",%nobits
+  40              		.align	2
+  43              	I2C_DebugTXHandle:
+  44 0000 00000000 		.space	160
+  44      00000000 
+  44      00000000 
+  44      00000000 
+  44      00000000 
+  45              		.section	.bss.I2C_DebugRXHandle,"aw",%nobits
+  46              		.align	2
+  49              	I2C_DebugRXHandle:
+  50 0000 00000000 		.space	160
+  50      00000000 
+  50      00000000 
+  50      00000000 
+  50      00000000 
+  51              		.section	.bss.I2C_DebugEnabled,"aw",%nobits
+  52              		.align	2
+  55              	I2C_DebugEnabled:
+  56 0000 00000000 		.space	4
+  57              		.section	.bss.Queue,"aw",%nobits
+  58              		.align	2
+  61              	Queue:
+  62 0000 00000000 		.space	96
+  62      00000000 
+  62      00000000 
+  62      00000000 
+  62      00000000 
+  63              		.section	.bss.I2C_DebugTraceLevel,"aw",%nobits
+  66              	I2C_DebugTraceLevel:
+  67 0000 00       		.space	1
+  68              		.section	.rodata
+  69              		.align	2
+  70              	.LC0:
+  71 0000 43795533 		.ascii	"CyU3PDmaBufferAlloc\000"
+  71      50446D61 
+  71      42756666 
+  71      6572416C 
+  71      6C6F6300 
+  72              		.align	2
+  73              	.LC1:
+  74 0014 257300   		.ascii	"%s\000"
+  75 0017 00       		.align	2
+  76              	.LC2:
+  77 0018 51756575 		.ascii	"QueueSend\000"
+  77      6553656E 
+  77      6400
+  78              		.section	.text.I2C_DebugPrint,"ax",%progbits
+  79              		.align	2
+  80              		.global	I2C_DebugPrint
+  82              	I2C_DebugPrint:
+  83              	.LFB0:
+  84              		.file 1 "../I2C_DebugConsole.c"
+   1:../I2C_DebugConsole.c **** /*
+   2:../I2C_DebugConsole.c ****  * I2C_DebugConsole.c
+   3:../I2C_DebugConsole.c ****  *
+   4:../I2C_DebugConsole.c ****  *  This module implements the DebugPrint portion of cyu3debug.c for an I2C-based console
+   5:../I2C_DebugConsole.c ****  *    The LOG function is not implemented which makes this code simpler
+   6:../I2C_DebugConsole.c ****  */
+   7:../I2C_DebugConsole.c **** 
+   8:../I2C_DebugConsole.c **** #include "Application.h"
+   9:../I2C_DebugConsole.c **** #include <stdarg.h>        // For argument processing
+  10:../I2C_DebugConsole.c **** #include <string.h>
+  11:../I2C_DebugConsole.c **** 
+  12:../I2C_DebugConsole.c **** // Declare external functions
+  13:../I2C_DebugConsole.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  14:../I2C_DebugConsole.c **** extern void GotConsoleInput(uint8_t Source, char InputChar);
+  15:../I2C_DebugConsole.c **** extern CyU3PReturnStatus_t MyDebugSNPrint(uint8_t *debugMsg, uint16_t *length, char *message, va_li
+  16:../I2C_DebugConsole.c **** 
+  17:../I2C_DebugConsole.c **** // Variables static to this module
+  18:../I2C_DebugConsole.c **** static CyU3PThread      I2C_DebugThread;
+  19:../I2C_DebugConsole.c **** static CyU3PMutex       I2C_DebugLock;
+  20:../I2C_DebugConsole.c **** static CyU3PQueue       I2C_DebugQueue;
+  21:../I2C_DebugConsole.c **** static CyU3PDmaChannel  I2C_DebugTXHandle;
+  22:../I2C_DebugConsole.c **** static CyU3PDmaChannel  I2C_DebugRXHandle;
+  23:../I2C_DebugConsole.c **** static CyBool_t         I2C_DebugEnabled;       // Debug Init has been called or not
+  24:../I2C_DebugConsole.c **** static CyU3PDmaBuffer_t Queue[CY_U3P_DEBUG_DMA_BUFFER_COUNT];
+  25:../I2C_DebugConsole.c **** static uint8_t          I2C_DebugTraceLevel;
+  26:../I2C_DebugConsole.c **** 
+  27:../I2C_DebugConsole.c **** CyU3PReturnStatus_t I2C_DebugPrint(uint8_t Priority, char* Message, ...)
+  28:../I2C_DebugConsole.c **** {
+  85              		.loc 1 28 0
+  86              		.cfi_startproc
+  87              		@ args = 4, pretend = 12, frame = 32
+  88              		@ frame_needed = 1, uses_anonymous_args = 1
+  89 0000 0E002DE9 		stmfd	sp!, {r1, r2, r3}
+  90              	.LCFI0:
+  91              		.cfi_def_cfa_offset 12
+  92 0004 00482DE9 		stmfd	sp!, {fp, lr}
+  93              	.LCFI1:
+  94              		.cfi_def_cfa_offset 20
+  95 0008 04B08DE2 		add	fp, sp, #4
+  96              		.cfi_offset 14, -16
+  97              		.cfi_offset 11, -20
+  98              		.cfi_offset 3, -4
+  99              		.cfi_offset 2, -8
+ 100              		.cfi_offset 1, -12
+ 101              	.LCFI2:
+ 102              		.cfi_def_cfa 11, 16
+ 103 000c 24D04DE2 		sub	sp, sp, #36
+ 104 0010 0030A0E1 		mov	r3, r0
+ 105 0014 21304BE5 		strb	r3, [fp, #-33]
+  29:../I2C_DebugConsole.c ****     // This takes the same parameters as CyU3PDebugPrint and my code is modeled on CyU3PDebugPrint
+  30:../I2C_DebugConsole.c ****     // I format Message, including any parameters, into a DMA Buffer then Queue this buffer for I2C
+  31:../I2C_DebugConsole.c ****     // I check for Console Input after every Console Output
+  32:../I2C_DebugConsole.c ****     // A Queue timeout is used to ensure that Console Input is called at least once a second
+  33:../I2C_DebugConsole.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 106              		.loc 1 33 0
+ 107 0018 0030A0E3 		mov	r3, #0
+ 108 001c 0C300BE5 		str	r3, [fp, #-12]
+  34:../I2C_DebugConsole.c ****     va_list argp;
+  35:../I2C_DebugConsole.c ****     CyU3PDmaBuffer_t CurrentDMABuffer;
+  36:../I2C_DebugConsole.c **** 
+  37:../I2C_DebugConsole.c ****     // First do some error checking
+  38:../I2C_DebugConsole.c ****     if (!I2C_DebugEnabled) return CY_U3P_ERROR_NOT_STARTED;
+ 109              		.loc 1 38 0
+ 110 0020 64319FE5 		ldr	r3, .L10
+ 111 0024 003093E5 		ldr	r3, [r3, #0]
+ 112 0028 000053E3 		cmp	r3, #0
+ 113 002c 0100001A 		bne	.L2
+ 114              		.loc 1 38 0 is_stmt 0 discriminator 1
+ 115 0030 4230A0E3 		mov	r3, #66
+ 116 0034 4F0000EA 		b	.L3
+ 117              	.L2:
+  39:../I2C_DebugConsole.c ****     if (Priority > glDebugTraceLevel) return CY_U3P_SUCCESS;
+ 118              		.loc 1 39 0 is_stmt 1
+ 119 0038 50319FE5 		ldr	r3, .L10+4
+ 120 003c 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 121 0040 21205BE5 		ldrb	r2, [fp, #-33]	@ zero_extendqisi2
+ 122 0044 030052E1 		cmp	r2, r3
+ 123 0048 0100009A 		bls	.L4
+ 124              		.loc 1 39 0 is_stmt 0 discriminator 1
+ 125 004c 0030A0E3 		mov	r3, #0
+ 126 0050 480000EA 		b	.L3
+ 127              	.L4:
+  40:../I2C_DebugConsole.c ****     if (CyU3PThreadIdentify() == NULL) return CY_U3P_ERROR_INVALID_CALLER;    // This function can 
+ 128              		.loc 1 40 0 is_stmt 1
+ 129 0054 FEFFFFEB 		bl	_tx_thread_identify
+ 130 0058 0030A0E1 		mov	r3, r0
+ 131 005c 000053E3 		cmp	r3, #0
+ 132 0060 0100001A 		bne	.L5
+ 133              		.loc 1 40 0 is_stmt 0 discriminator 1
+ 134 0064 1330A0E3 		mov	r3, #19
+ 135 0068 420000EA 		b	.L3
+ 136              	.L5:
+  41:../I2C_DebugConsole.c **** 
+  42:../I2C_DebugConsole.c ****     // OK to proceed, get a buffer then use a Cypress routine to do the Message interpretation
+  43:../I2C_DebugConsole.c ****     CyU3PMutexGet(&I2C_DebugLock, CYU3P_WAIT_FOREVER);
+ 137              		.loc 1 43 0 is_stmt 1
+ 138 006c 20019FE5 		ldr	r0, .L10+8
+ 139 0070 0010E0E3 		mvn	r1, #0
+ 140 0074 FEFFFFEB 		bl	_txe_mutex_get
+  44:../I2C_DebugConsole.c **** 
+  45:../I2C_DebugConsole.c ****     // Allocate the buffer for formatting the string.
+  46:../I2C_DebugConsole.c ****     CurrentDMABuffer.buffer = CyU3PDmaBufferAlloc(CY_U3P_DEBUG_DMA_BUFFER_SIZE);
+ 141              		.loc 1 46 0
+ 142 0078 010CA0E3 		mov	r0, #256
+ 143 007c FEFFFFEB 		bl	CyU3PDmaBufferAlloc
+ 144 0080 0030A0E1 		mov	r3, r0
+ 145 0084 1C300BE5 		str	r3, [fp, #-28]
+  47:../I2C_DebugConsole.c ****     if (CurrentDMABuffer.buffer == NULL) CheckStatus("CyU3PDmaBufferAlloc", CY_U3P_ERROR_MEMORY_ERR
+ 146              		.loc 1 47 0
+ 147 0088 1C301BE5 		ldr	r3, [fp, #-28]
+ 148 008c 000053E3 		cmp	r3, #0
+ 149 0090 0200001A 		bne	.L6
+ 150              		.loc 1 47 0 is_stmt 0 discriminator 1
+ 151 0094 FC009FE5 		ldr	r0, .L10+12
+ 152 0098 1010A0E3 		mov	r1, #16
+ 153 009c FEFFFFEB 		bl	CheckStatus
+ 154              	.L6:
+  48:../I2C_DebugConsole.c **** 
+  49:../I2C_DebugConsole.c ****     if (Status == CY_U3P_SUCCESS)   
+ 155              		.loc 1 49 0 is_stmt 1
+ 156 00a0 0C301BE5 		ldr	r3, [fp, #-12]
+ 157 00a4 000053E3 		cmp	r3, #0
+ 158 00a8 1500001A 		bne	.L7
+  50:../I2C_DebugConsole.c ****     {
+  51:../I2C_DebugConsole.c ****         CurrentDMABuffer.count = CurrentDMABuffer.size = CY_U3P_DEBUG_DMA_BUFFER_SIZE;
+ 159              		.loc 1 51 0
+ 160 00ac 013CA0E3 		mov	r3, #256
+ 161 00b0 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+ 162 00b4 B6315BE1 		ldrh	r3, [fp, #-22]
+ 163 00b8 B8314BE1 		strh	r3, [fp, #-24]	@ movhi
+  52:../I2C_DebugConsole.c ****         CurrentDMABuffer.status = 0;
+ 164              		.loc 1 52 0
+ 165 00bc 0030A0E3 		mov	r3, #0
+ 166 00c0 B4314BE1 		strh	r3, [fp, #-20]	@ movhi
+  53:../I2C_DebugConsole.c ****         va_start(argp, Message);
+ 167              		.loc 1 53 0
+ 168 00c4 08308BE2 		add	r3, fp, #8
+ 169 00c8 10300BE5 		str	r3, [fp, #-16]
+  54:../I2C_DebugConsole.c ****         // MyDebugSNPrint updates CurrentDMABuffer.count
+  55:../I2C_DebugConsole.c ****         Status = MyDebugSNPrint(CurrentDMABuffer.buffer, &CurrentDMABuffer.count, Message, argp);
+ 170              		.loc 1 55 0
+ 171 00cc 1C201BE5 		ldr	r2, [fp, #-28]
+ 172 00d0 1C304BE2 		sub	r3, fp, #28
+ 173 00d4 043083E2 		add	r3, r3, #4
+ 174 00d8 0200A0E1 		mov	r0, r2
+ 175 00dc 0310A0E1 		mov	r1, r3
+ 176 00e0 04209BE5 		ldr	r2, [fp, #4]
+ 177 00e4 10301BE5 		ldr	r3, [fp, #-16]
+ 178 00e8 FEFFFFEB 		bl	MyDebugSNPrint
+ 179 00ec 0C000BE5 		str	r0, [fp, #-12]
+  56:../I2C_DebugConsole.c ****         va_end(argp);
+  57:../I2C_DebugConsole.c ****         // Increment the count to include the NULL character also.
+  58:../I2C_DebugConsole.c ****         CurrentDMABuffer.count++;
+ 180              		.loc 1 58 0
+ 181 00f0 B8315BE1 		ldrh	r3, [fp, #-24]
+ 182 00f4 013083E2 		add	r3, r3, #1
+ 183 00f8 0338A0E1 		mov	r3, r3, asl #16
+ 184 00fc 2338A0E1 		mov	r3, r3, lsr #16
+ 185 0100 B8314BE1 		strh	r3, [fp, #-24]	@ movhi
+ 186              	.L7:
+  59:../I2C_DebugConsole.c ****     }
+  60:../I2C_DebugConsole.c ****     if (Status == CY_U3P_SUCCESS)   
+ 187              		.loc 1 60 0
+ 188 0104 0C301BE5 		ldr	r3, [fp, #-12]
+ 189 0108 000053E3 		cmp	r3, #0
+ 190 010c 0D00001A 		bne	.L8
+  61:../I2C_DebugConsole.c ****     {
+  62:../I2C_DebugConsole.c ****     	// Copy the output to the UART Console also for this dual console example
+  63:../I2C_DebugConsole.c ****     	CyU3PDebugPrint(4, "%s", CurrentDMABuffer.buffer);
+ 191              		.loc 1 63 0
+ 192 0110 1C301BE5 		ldr	r3, [fp, #-28]
+ 193 0114 0400A0E3 		mov	r0, #4
+ 194 0118 7C109FE5 		ldr	r1, .L10+16
+ 195 011c 0320A0E1 		mov	r2, r3
+ 196 0120 FEFFFFEB 		bl	CyU3PDebugPrint
+  64:../I2C_DebugConsole.c ****         // Now queue this message to be displayed on the I2C console
+  65:../I2C_DebugConsole.c ****         Status = CyU3PQueueSend(&I2C_DebugQueue, &CurrentDMABuffer, CYU3P_WAIT_FOREVER);
+ 197              		.loc 1 65 0
+ 198 0124 1C304BE2 		sub	r3, fp, #28
+ 199 0128 70009FE5 		ldr	r0, .L10+20
+ 200 012c 0310A0E1 		mov	r1, r3
+ 201 0130 0020E0E3 		mvn	r2, #0
+ 202 0134 FEFFFFEB 		bl	_txe_queue_send
+ 203 0138 0C000BE5 		str	r0, [fp, #-12]
+  66:../I2C_DebugConsole.c ****         CheckStatus("QueueSend", Status);
+ 204              		.loc 1 66 0
+ 205 013c 60009FE5 		ldr	r0, .L10+24
+ 206 0140 0C101BE5 		ldr	r1, [fp, #-12]
+ 207 0144 FEFFFFEB 		bl	CheckStatus
+ 208              	.L8:
+  67:../I2C_DebugConsole.c ****     }
+  68:../I2C_DebugConsole.c ****     if ((Status != CY_U3P_SUCCESS) && (CurrentDMABuffer.buffer != NULL))
+ 209              		.loc 1 68 0
+ 210 0148 0C301BE5 		ldr	r3, [fp, #-12]
+ 211 014c 000053E3 		cmp	r3, #0
+ 212 0150 0500000A 		beq	.L9
+ 213              		.loc 1 68 0 is_stmt 0 discriminator 1
+ 214 0154 1C301BE5 		ldr	r3, [fp, #-28]
+ 215 0158 000053E3 		cmp	r3, #0
+ 216 015c 0200000A 		beq	.L9
+  69:../I2C_DebugConsole.c ****     {
+  70:../I2C_DebugConsole.c ****         CyU3PDmaBufferFree(CurrentDMABuffer.buffer);
+ 217              		.loc 1 70 0 is_stmt 1
+ 218 0160 1C301BE5 		ldr	r3, [fp, #-28]
+ 219 0164 0300A0E1 		mov	r0, r3
+ 220 0168 FEFFFFEB 		bl	CyU3PDmaBufferFree
+ 221              	.L9:
+  71:../I2C_DebugConsole.c ****     }
+  72:../I2C_DebugConsole.c ****     CyU3PMutexPut(&I2C_DebugLock);
+ 222              		.loc 1 72 0
+ 223 016c 20009FE5 		ldr	r0, .L10+8
+ 224 0170 FEFFFFEB 		bl	_txe_mutex_put
+  73:../I2C_DebugConsole.c ****     return Status;
+ 225              		.loc 1 73 0
+ 226 0174 0C301BE5 		ldr	r3, [fp, #-12]
+ 227              	.L3:
+  74:../I2C_DebugConsole.c **** }
+ 228              		.loc 1 74 0
+ 229 0178 0300A0E1 		mov	r0, r3
+ 230 017c 04D04BE2 		sub	sp, fp, #4
+ 231 0180 0048BDE8 		ldmfd	sp!, {fp, lr}
+ 232 0184 0CD08DE2 		add	sp, sp, #12
+ 233 0188 1EFF2FE1 		bx	lr
+ 234              	.L11:
+ 235              		.align	2
+ 236              	.L10:
+ 237 018c 00000000 		.word	I2C_DebugEnabled
+ 238 0190 00000000 		.word	glDebugTraceLevel
+ 239 0194 00000000 		.word	I2C_DebugLock
+ 240 0198 00000000 		.word	.LC0
+ 241 019c 14000000 		.word	.LC1
+ 242 01a0 00000000 		.word	I2C_DebugQueue
+ 243 01a4 18000000 		.word	.LC2
+ 244              		.cfi_endproc
+ 245              	.LFE0:
+ 247              		.section	.rodata
+ 248 0022 0000     		.align	2
+ 249              	.LC3:
+ 250 0024 49326349 		.ascii	"I2cInit\000"
+ 250      6E697400 
+ 251              		.align	2
+ 252              	.LC4:
+ 253 002c 49326353 		.ascii	"I2cSetConfig\000"
+ 253      6574436F 
+ 253      6E666967 
+ 253      00
+ 254              		.section	.text.Restart_I2C,"ax",%progbits
+ 255              		.align	2
+ 256              		.global	Restart_I2C
+ 258              	Restart_I2C:
+ 259              	.LFB1:
+  75:../I2C_DebugConsole.c **** 
+  76:../I2C_DebugConsole.c **** CyU3PReturnStatus_t Restart_I2C()
+  77:../I2C_DebugConsole.c **** {
+ 260              		.loc 1 77 0
+ 261              		.cfi_startproc
+ 262              		@ args = 0, pretend = 0, frame = 24
+ 263              		@ frame_needed = 1, uses_anonymous_args = 0
+ 264 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 265              	.LCFI3:
+ 266              		.cfi_def_cfa_offset 8
+ 267 0004 04B08DE2 		add	fp, sp, #4
+ 268              		.cfi_offset 14, -4
+ 269              		.cfi_offset 11, -8
+ 270              	.LCFI4:
+ 271              		.cfi_def_cfa 11, 4
+ 272 0008 18D04DE2 		sub	sp, sp, #24
+  78:../I2C_DebugConsole.c ****     CyU3PReturnStatus_t Status;
+  79:../I2C_DebugConsole.c ****     CyU3PI2cConfig_t i2cConfig;
+  80:../I2C_DebugConsole.c **** 
+  81:../I2C_DebugConsole.c ****     CyU3PI2cDeInit();           // Turn it off if it is on
+ 273              		.loc 1 81 0
+ 274 000c FEFFFFEB 		bl	CyU3PI2cDeInit
+  82:../I2C_DebugConsole.c ****     Status = CyU3PI2cInit();    // Start the I2C driver
+ 275              		.loc 1 82 0
+ 276 0010 FEFFFFEB 		bl	CyU3PI2cInit
+ 277 0014 08000BE5 		str	r0, [fp, #-8]
+  83:../I2C_DebugConsole.c ****     CheckStatus("I2cInit", Status);
+ 278              		.loc 1 83 0
+ 279 0018 64009FE5 		ldr	r0, .L13
+ 280 001c 08101BE5 		ldr	r1, [fp, #-8]
+ 281 0020 FEFFFFEB 		bl	CheckStatus
+  84:../I2C_DebugConsole.c **** 
+  85:../I2C_DebugConsole.c ****     i2cConfig.bitRate    = CY_FX_USBI2C_I2C_BITRATE;
+ 282              		.loc 1 85 0
+ 283 0024 5C309FE5 		ldr	r3, .L13+4
+ 284 0028 18300BE5 		str	r3, [fp, #-24]
+  86:../I2C_DebugConsole.c ****     i2cConfig.busTimeout = -1;
+ 285              		.loc 1 86 0
+ 286 002c 0030E0E3 		mvn	r3, #0
+ 287 0030 10300BE5 		str	r3, [fp, #-16]
+  87:../I2C_DebugConsole.c ****     i2cConfig.dmaTimeout = -1;
+ 288              		.loc 1 87 0
+ 289 0034 0030E0E3 		mvn	r3, #0
+ 290 0038 BC304BE1 		strh	r3, [fp, #-12]	@ movhi
+  88:../I2C_DebugConsole.c ****     i2cConfig.isDma      = CyTrue;
+ 291              		.loc 1 88 0
+ 292 003c 0130A0E3 		mov	r3, #1
+ 293 0040 14300BE5 		str	r3, [fp, #-20]
+  89:../I2C_DebugConsole.c ****     Status = CyU3PI2cSetConfig(&i2cConfig, NULL);
+ 294              		.loc 1 89 0
+ 295 0044 18304BE2 		sub	r3, fp, #24
+ 296 0048 0300A0E1 		mov	r0, r3
+ 297 004c 0010A0E3 		mov	r1, #0
+ 298 0050 FEFFFFEB 		bl	CyU3PI2cSetConfig
+ 299 0054 08000BE5 		str	r0, [fp, #-8]
+  90:../I2C_DebugConsole.c ****     CheckStatus("I2cSetConfig", Status);
+ 300              		.loc 1 90 0
+ 301 0058 2C009FE5 		ldr	r0, .L13+8
+ 302 005c 08101BE5 		ldr	r1, [fp, #-8]
+ 303 0060 FEFFFFEB 		bl	CheckStatus
+  91:../I2C_DebugConsole.c **** 
+  92:../I2C_DebugConsole.c ****     CyU3PDmaChannelReset(&I2C_DebugRXHandle);
+ 304              		.loc 1 92 0
+ 305 0064 24009FE5 		ldr	r0, .L13+12
+ 306 0068 FEFFFFEB 		bl	CyU3PDmaChannelReset
+  93:../I2C_DebugConsole.c ****     CyU3PDmaChannelReset(&I2C_DebugTXHandle);
+ 307              		.loc 1 93 0
+ 308 006c 20009FE5 		ldr	r0, .L13+16
+ 309 0070 FEFFFFEB 		bl	CyU3PDmaChannelReset
+  94:../I2C_DebugConsole.c **** 
+  95:../I2C_DebugConsole.c ****     return Status;
+ 310              		.loc 1 95 0
+ 311 0074 08301BE5 		ldr	r3, [fp, #-8]
+  96:../I2C_DebugConsole.c **** }
+ 312              		.loc 1 96 0
+ 313 0078 0300A0E1 		mov	r0, r3
+ 314 007c 04D04BE2 		sub	sp, fp, #4
+ 315 0080 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 316              	.L14:
+ 317              		.align	2
+ 318              	.L13:
+ 319 0084 24000000 		.word	.LC3
+ 320 0088 801A0600 		.word	400000
+ 321 008c 2C000000 		.word	.LC4
+ 322 0090 00000000 		.word	I2C_DebugRXHandle
+ 323 0094 00000000 		.word	I2C_DebugTXHandle
+ 324              		.cfi_endproc
+ 325              	.LFE1:
+ 327              		.section	.rodata
+ 328 0039 000000   		.align	2
+ 329              	.LC5:
+ 330 003c 5369676E 		.ascii	"Signal Thread Ready\000"
+ 330      616C2054 
+ 330      68726561 
+ 330      64205265 
+ 330      61647900 
+ 331              		.align	2
+ 332              	.LC6:
+ 333 0050 43795533 		.ascii	"CyU3PI2cSendCommand\000"
+ 333      50493263 
+ 333      53656E64 
+ 333      436F6D6D 
+ 333      616E6400 
+ 334              		.align	2
+ 335              	.LC7:
+ 336 0064 43795533 		.ascii	"CyU3PDmaChannelSetupRecvBuffer\000"
+ 336      50446D61 
+ 336      4368616E 
+ 336      6E656C53 
+ 336      65747570 
+ 337 0083 00       		.align	2
+ 338              	.LC8:
+ 339 0084 43795533 		.ascii	"CyU3PDmaChannelSetupSendBuffer\000"
+ 339      50446D61 
+ 339      4368616E 
+ 339      6E656C53 
+ 339      65747570 
+ 340 00a3 00       		.align	2
+ 341              	.LC9:
+ 342 00a4 4932435F 		.ascii	"I2C_Write\000"
+ 342      57726974 
+ 342      6500
+ 343 00ae 0000     		.align	2
+ 344              	.LC10:
+ 345 00b0 556E6162 		.ascii	"Unable to re-queue data buffer\000"
+ 345      6C652074 
+ 345      6F207265 
+ 345      2D717565 
+ 345      75652064 
+ 346              		.section	.text.I2C_ConsoleThread,"ax",%progbits
+ 347              		.align	2
+ 348              		.global	I2C_ConsoleThread
+ 350              	I2C_ConsoleThread:
+ 351              	.LFB2:
+  97:../I2C_DebugConsole.c **** 
+  98:../I2C_DebugConsole.c **** void I2C_ConsoleThread(uint32_t Value)
+  99:../I2C_DebugConsole.c **** {
+ 352              		.loc 1 99 0
+ 353              		.cfi_startproc
+ 354              		@ args = 0, pretend = 0, frame = 64
+ 355              		@ frame_needed = 1, uses_anonymous_args = 0
+ 356 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 357              	.LCFI5:
+ 358              		.cfi_def_cfa_offset 8
+ 359 0004 04B08DE2 		add	fp, sp, #4
+ 360              		.cfi_offset 14, -4
+ 361              		.cfi_offset 11, -8
+ 362              	.LCFI6:
+ 363              		.cfi_def_cfa 11, 4
+ 364 0008 40D04DE2 		sub	sp, sp, #64
+ 365 000c 40000BE5 		str	r0, [fp, #-64]
+ 100:../I2C_DebugConsole.c ****     // Value passed to this thread is a Semaphore that thread should signal once it is ready proces
+ 101:../I2C_DebugConsole.c ****     CyU3PReturnStatus_t Status, Q_Status;
+ 102:../I2C_DebugConsole.c ****     CyU3PDmaBuffer_t FilledBuffer, ConsoleIn;
+ 103:../I2C_DebugConsole.c ****     CyU3PI2cPreamble_t Preamble;
+ 104:../I2C_DebugConsole.c ****     int32_t retryCount = I2C_RETRY_COUNT;
+ 366              		.loc 1 104 0
+ 367 0010 1430A0E3 		mov	r3, #20
+ 368 0014 0C300BE5 		str	r3, [fp, #-12]
+ 105:../I2C_DebugConsole.c **** 
+ 106:../I2C_DebugConsole.c ****     // Get an aligned buffer to collect I2C Console Input
+ 107:../I2C_DebugConsole.c ****     ConsoleIn.buffer = CyU3PDmaBufferAlloc(I2C_READ_SIZE);
+ 369              		.loc 1 107 0
+ 370 0018 4000A0E3 		mov	r0, #64
+ 371 001c FEFFFFEB 		bl	CyU3PDmaBufferAlloc
+ 372 0020 0030A0E1 		mov	r3, r0
+ 373 0024 2C300BE5 		str	r3, [fp, #-44]
+ 108:../I2C_DebugConsole.c ****     ConsoleIn.size = I2C_READ_SIZE;
+ 374              		.loc 1 108 0
+ 375 0028 4030A0E3 		mov	r3, #64
+ 376 002c B6324BE1 		strh	r3, [fp, #-38]	@ movhi
+ 109:../I2C_DebugConsole.c ****     // Preset fixed data
+ 110:../I2C_DebugConsole.c ****     Preamble.buffer[0] = CY7C65215_DeviceAddress<<1;
+ 377              		.loc 1 110 0
+ 378 0030 7B30E0E3 		mvn	r3, #123
+ 379 0034 38304BE5 		strb	r3, [fp, #-56]
+ 111:../I2C_DebugConsole.c ****     Preamble.length = 1;
+ 380              		.loc 1 111 0
+ 381 0038 0130A0E3 		mov	r3, #1
+ 382 003c 30304BE5 		strb	r3, [fp, #-48]
+ 112:../I2C_DebugConsole.c ****     Preamble.ctrlMask = 0;
+ 383              		.loc 1 112 0
+ 384 0040 0030A0E3 		mov	r3, #0
+ 385 0044 BE324BE1 		strh	r3, [fp, #-46]	@ movhi
+ 113:../I2C_DebugConsole.c **** 
+ 114:../I2C_DebugConsole.c ****     // Tell InitDebug that the thread is ready for work
+ 115:../I2C_DebugConsole.c ****     Status = CyU3PSemaphorePut((CyU3PSemaphore*)Value);
+ 386              		.loc 1 115 0
+ 387 0048 40301BE5 		ldr	r3, [fp, #-64]
+ 388 004c 0300A0E1 		mov	r0, r3
+ 389 0050 FEFFFFEB 		bl	_txe_semaphore_put
+ 390 0054 08000BE5 		str	r0, [fp, #-8]
+ 116:../I2C_DebugConsole.c ****     CheckStatus("Signal Thread Ready", Status);
+ 391              		.loc 1 116 0
+ 392 0058 68029FE5 		ldr	r0, .L35
+ 393 005c 08101BE5 		ldr	r1, [fp, #-8]
+ 394 0060 FEFFFFEB 		bl	CheckStatus
+ 395 0064 040000EA 		b	.L30
+ 396              	.L32:
+ 117:../I2C_DebugConsole.c **** 
+ 118:../I2C_DebugConsole.c ****     // Now wait for filled buffers to be send to the Queue and forward them to the I2C Block
+ 119:../I2C_DebugConsole.c ****     while (1)
+ 120:../I2C_DebugConsole.c ****     {
+ 121:../I2C_DebugConsole.c ****         Q_Status = CyU3PQueueReceive(&I2C_DebugQueue, &FilledBuffer, 100);
+ 122:../I2C_DebugConsole.c **** 
+ 123:../I2C_DebugConsole.c ****         // It is recommended to read from the I2C device before transmitting anything.
+ 124:../I2C_DebugConsole.c ****         if ((Q_Status == CY_U3P_ERROR_QUEUE_EMPTY) || (Q_Status == CY_U3P_SUCCESS))
+ 125:../I2C_DebugConsole.c ****         {
+ 126:../I2C_DebugConsole.c ****             // Poll I2C for console in
+ 127:../I2C_DebugConsole.c ****             Preamble.buffer[0] |= 1;		// For a Read
+ 128:../I2C_DebugConsole.c ****             Status = CyU3PI2cSendCommand(&Preamble, I2C_READ_SIZE, CyTrue);
+ 129:../I2C_DebugConsole.c ****             CheckStatus("CyU3PI2cSendCommand", Status);
+ 130:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS)
+ 131:../I2C_DebugConsole.c ****             {
+ 132:../I2C_DebugConsole.c ****                 CyU3PMemSet (ConsoleIn.buffer, 0xFF, I2C_READ_SIZE);
+ 133:../I2C_DebugConsole.c ****                 ConsoleIn.count = ConsoleIn.status = 0;
+ 134:../I2C_DebugConsole.c ****                 Status = CyU3PDmaChannelSetupRecvBuffer(&I2C_DebugRXHandle, &ConsoleIn);
+ 135:../I2C_DebugConsole.c ****                 CheckStatus("CyU3PDmaChannelSetupRecvBuffer", Status);
+ 136:../I2C_DebugConsole.c ****             }
+ 137:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS)
+ 138:../I2C_DebugConsole.c ****             {
+ 139:../I2C_DebugConsole.c ****                 Status = CyU3PDmaChannelWaitForCompletion(&I2C_DebugRXHandle, 100);
+ 140:../I2C_DebugConsole.c **** //                CheckStatus("CyU3PDmaChannelWaitForCompletion(RX)", Status);
+ 141:../I2C_DebugConsole.c ****             }
+ 142:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS)
+ 143:../I2C_DebugConsole.c ****             {
+ 144:../I2C_DebugConsole.c ****                 uint32_t i;
+ 145:../I2C_DebugConsole.c ****                 for (i = 0; i < I2C_READ_SIZE; i++)
+ 146:../I2C_DebugConsole.c ****                 {
+ 147:../I2C_DebugConsole.c ****                     if (ConsoleIn.buffer[i] != 0xFF) GotConsoleInput(1, ConsoleIn.buffer[i]);
+ 148:../I2C_DebugConsole.c ****                     else break;
+ 149:../I2C_DebugConsole.c ****                 }
+ 150:../I2C_DebugConsole.c ****             }
+ 151:../I2C_DebugConsole.c ****             else Restart_I2C ();		// Read failed, recover the I2C Channel
+ 152:../I2C_DebugConsole.c ****             CyU3PThreadSleep(50); 		// Short sleep after an I2C operation is recommended.
+ 153:../I2C_DebugConsole.c ****         }
+ 154:../I2C_DebugConsole.c **** 
+ 155:../I2C_DebugConsole.c ****         if (Q_Status == CY_U3P_SUCCESS)
+ 156:../I2C_DebugConsole.c ****         {
+ 157:../I2C_DebugConsole.c ****             // There was a buffer waiting, send it to the I2C Block
+ 158:../I2C_DebugConsole.c ****             Status = CyU3PDmaChannelSetupSendBuffer (&I2C_DebugTXHandle, &FilledBuffer);
+ 159:../I2C_DebugConsole.c ****             CheckStatus("CyU3PDmaChannelSetupSendBuffer", Status);
+ 160:../I2C_DebugConsole.c ****             // Now tell the I2C Block what to do with this buffer of data
+ 161:../I2C_DebugConsole.c ****             Preamble.buffer[0] &= 0xFE;	// Clear LSb = Write
+ 162:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS) CyU3PI2cSendCommand(&Preamble, FilledBuffer.count, CyFals
+ 163:../I2C_DebugConsole.c ****             // Wait for the I2C transfer to be done
+ 164:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS) Status = CyU3PI2cWaitForBlockXfer(CyFalse);
+ 165:../I2C_DebugConsole.c ****             if (Status != CY_U3P_SUCCESS)
+ 166:../I2C_DebugConsole.c ****             {
+ 167:../I2C_DebugConsole.c ****             	CheckStatus("I2C_Write", Status);
+ 168:../I2C_DebugConsole.c ****                 Restart_I2C();
+ 169:../I2C_DebugConsole.c ****                 CyU3PThreadSleep (50);
+ 170:../I2C_DebugConsole.c ****                 if (retryCount > 0)
+ 171:../I2C_DebugConsole.c ****                 {
+ 172:../I2C_DebugConsole.c ****                     retryCount--;
+ 173:../I2C_DebugConsole.c ****                     // Put this buffer at the start of the Queue
+ 174:../I2C_DebugConsole.c ****                     Status = CyU3PQueuePrioritySend(&I2C_DebugQueue, &FilledBuffer, CYU3P_NO_WAIT);
+ 175:../I2C_DebugConsole.c ****                     if (Status != CY_U3P_SUCCESS) CyU3PDebugPrint(4, "Unable to re-queue data buffe
+ 176:../I2C_DebugConsole.c ****                 }
+ 177:../I2C_DebugConsole.c ****             }
+ 178:../I2C_DebugConsole.c ****             else	// Successfully displayed the message, wrap up
+ 179:../I2C_DebugConsole.c ****             {
+ 180:../I2C_DebugConsole.c ****             	retryCount = I2C_RETRY_COUNT;				// Reset Retry Count
+ 181:../I2C_DebugConsole.c ****             	CyU3PDmaBufferFree(FilledBuffer.buffer);	// Give back the original buffer
+ 182:../I2C_DebugConsole.c ****             }
+ 183:../I2C_DebugConsole.c ****         }
+ 184:../I2C_DebugConsole.c ****     }
+ 397              		.loc 1 184 0
+ 398 0068 0000A0E1 		mov	r0, r0	@ nop
+ 399 006c 020000EA 		b	.L30
+ 400              	.L33:
+ 401 0070 0000A0E1 		mov	r0, r0	@ nop
+ 402 0074 000000EA 		b	.L30
+ 403              	.L34:
+ 404 0078 0000A0E1 		mov	r0, r0	@ nop
+ 405              	.L30:
+ 121:../I2C_DebugConsole.c ****         Q_Status = CyU3PQueueReceive(&I2C_DebugQueue, &FilledBuffer, 100);
+ 406              		.loc 1 121 0
+ 407 007c 20304BE2 		sub	r3, fp, #32
+ 408 0080 44029FE5 		ldr	r0, .L35+4
+ 409 0084 0310A0E1 		mov	r1, r3
+ 410 0088 6420A0E3 		mov	r2, #100
+ 411 008c FEFFFFEB 		bl	_txe_queue_receive
+ 412 0090 14000BE5 		str	r0, [fp, #-20]
+ 124:../I2C_DebugConsole.c ****         if ((Q_Status == CY_U3P_ERROR_QUEUE_EMPTY) || (Q_Status == CY_U3P_SUCCESS))
+ 413              		.loc 1 124 0
+ 414 0094 14301BE5 		ldr	r3, [fp, #-20]
+ 415 0098 0A0053E3 		cmp	r3, #10
+ 416 009c 0200000A 		beq	.L16
+ 124:../I2C_DebugConsole.c ****         if ((Q_Status == CY_U3P_ERROR_QUEUE_EMPTY) || (Q_Status == CY_U3P_SUCCESS))
+ 417              		.loc 1 124 0 is_stmt 0 discriminator 1
+ 418 00a0 14301BE5 		ldr	r3, [fp, #-20]
+ 419 00a4 000053E3 		cmp	r3, #0
+ 420 00a8 4600001A 		bne	.L17
+ 421              	.L16:
+ 127:../I2C_DebugConsole.c ****             Preamble.buffer[0] |= 1;		// For a Read
+ 422              		.loc 1 127 0 is_stmt 1
+ 423 00ac 38305BE5 		ldrb	r3, [fp, #-56]	@ zero_extendqisi2
+ 424 00b0 013083E3 		orr	r3, r3, #1
+ 425 00b4 FF3003E2 		and	r3, r3, #255
+ 426 00b8 38304BE5 		strb	r3, [fp, #-56]
+ 128:../I2C_DebugConsole.c ****             Status = CyU3PI2cSendCommand(&Preamble, I2C_READ_SIZE, CyTrue);
+ 427              		.loc 1 128 0
+ 428 00bc 38304BE2 		sub	r3, fp, #56
+ 429 00c0 0300A0E1 		mov	r0, r3
+ 430 00c4 4010A0E3 		mov	r1, #64
+ 431 00c8 0120A0E3 		mov	r2, #1
+ 432 00cc FEFFFFEB 		bl	CyU3PI2cSendCommand
+ 433 00d0 08000BE5 		str	r0, [fp, #-8]
+ 129:../I2C_DebugConsole.c ****             CheckStatus("CyU3PI2cSendCommand", Status);
+ 434              		.loc 1 129 0
+ 435 00d4 F4019FE5 		ldr	r0, .L35+8
+ 436 00d8 08101BE5 		ldr	r1, [fp, #-8]
+ 437 00dc FEFFFFEB 		bl	CheckStatus
+ 130:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS)
+ 438              		.loc 1 130 0
+ 439 00e0 08301BE5 		ldr	r3, [fp, #-8]
+ 440 00e4 000053E3 		cmp	r3, #0
+ 441 00e8 1000001A 		bne	.L18
+ 132:../I2C_DebugConsole.c ****                 CyU3PMemSet (ConsoleIn.buffer, 0xFF, I2C_READ_SIZE);
+ 442              		.loc 1 132 0
+ 443 00ec 2C301BE5 		ldr	r3, [fp, #-44]
+ 444 00f0 0300A0E1 		mov	r0, r3
+ 445 00f4 FF10A0E3 		mov	r1, #255
+ 446 00f8 4020A0E3 		mov	r2, #64
+ 447 00fc FEFFFFEB 		bl	CyU3PMemSet
+ 133:../I2C_DebugConsole.c ****                 ConsoleIn.count = ConsoleIn.status = 0;
+ 448              		.loc 1 133 0
+ 449 0100 0030A0E3 		mov	r3, #0
+ 450 0104 B4324BE1 		strh	r3, [fp, #-36]	@ movhi
+ 451 0108 B4325BE1 		ldrh	r3, [fp, #-36]
+ 452 010c B8324BE1 		strh	r3, [fp, #-40]	@ movhi
+ 134:../I2C_DebugConsole.c ****                 Status = CyU3PDmaChannelSetupRecvBuffer(&I2C_DebugRXHandle, &ConsoleIn);
+ 453              		.loc 1 134 0
+ 454 0110 2C304BE2 		sub	r3, fp, #44
+ 455 0114 B8019FE5 		ldr	r0, .L35+12
+ 456 0118 0310A0E1 		mov	r1, r3
+ 457 011c FEFFFFEB 		bl	CyU3PDmaChannelSetupRecvBuffer
+ 458 0120 08000BE5 		str	r0, [fp, #-8]
+ 135:../I2C_DebugConsole.c ****                 CheckStatus("CyU3PDmaChannelSetupRecvBuffer", Status);
+ 459              		.loc 1 135 0
+ 460 0124 AC019FE5 		ldr	r0, .L35+16
+ 461 0128 08101BE5 		ldr	r1, [fp, #-8]
+ 462 012c FEFFFFEB 		bl	CheckStatus
+ 463              	.L18:
+ 137:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS)
+ 464              		.loc 1 137 0
+ 465 0130 08301BE5 		ldr	r3, [fp, #-8]
+ 466 0134 000053E3 		cmp	r3, #0
+ 467 0138 0300001A 		bne	.L19
+ 139:../I2C_DebugConsole.c ****                 Status = CyU3PDmaChannelWaitForCompletion(&I2C_DebugRXHandle, 100);
+ 468              		.loc 1 139 0
+ 469 013c 90019FE5 		ldr	r0, .L35+12
+ 470 0140 6410A0E3 		mov	r1, #100
+ 471 0144 FEFFFFEB 		bl	CyU3PDmaChannelWaitForCompletion
+ 472 0148 08000BE5 		str	r0, [fp, #-8]
+ 473              	.L19:
+ 142:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS)
+ 474              		.loc 1 142 0
+ 475 014c 08301BE5 		ldr	r3, [fp, #-8]
+ 476 0150 000053E3 		cmp	r3, #0
+ 477 0154 1600001A 		bne	.L20
+ 478              	.LBB2:
+ 145:../I2C_DebugConsole.c ****                 for (i = 0; i < I2C_READ_SIZE; i++)
+ 479              		.loc 1 145 0
+ 480 0158 0030A0E3 		mov	r3, #0
+ 481 015c 10300BE5 		str	r3, [fp, #-16]
+ 482 0160 0F0000EA 		b	.L21
+ 483              	.L24:
+ 147:../I2C_DebugConsole.c ****                     if (ConsoleIn.buffer[i] != 0xFF) GotConsoleInput(1, ConsoleIn.buffer[i]);
+ 484              		.loc 1 147 0
+ 485 0164 2C201BE5 		ldr	r2, [fp, #-44]
+ 486 0168 10301BE5 		ldr	r3, [fp, #-16]
+ 487 016c 033082E0 		add	r3, r2, r3
+ 488 0170 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 489 0174 FF0053E3 		cmp	r3, #255
+ 490 0178 0F00000A 		beq	.L31
+ 147:../I2C_DebugConsole.c ****                     if (ConsoleIn.buffer[i] != 0xFF) GotConsoleInput(1, ConsoleIn.buffer[i]);
+ 491              		.loc 1 147 0 is_stmt 0 discriminator 1
+ 492 017c 2C201BE5 		ldr	r2, [fp, #-44]
+ 493 0180 10301BE5 		ldr	r3, [fp, #-16]
+ 494 0184 033082E0 		add	r3, r2, r3
+ 495 0188 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 496 018c 0100A0E3 		mov	r0, #1
+ 497 0190 0310A0E1 		mov	r1, r3
+ 498 0194 FEFFFFEB 		bl	GotConsoleInput
+ 145:../I2C_DebugConsole.c ****                 for (i = 0; i < I2C_READ_SIZE; i++)
+ 499              		.loc 1 145 0 is_stmt 1 discriminator 1
+ 500 0198 10301BE5 		ldr	r3, [fp, #-16]
+ 501 019c 013083E2 		add	r3, r3, #1
+ 502 01a0 10300BE5 		str	r3, [fp, #-16]
+ 503              	.L21:
+ 504 01a4 10301BE5 		ldr	r3, [fp, #-16]
+ 505 01a8 3F0053E3 		cmp	r3, #63
+ 506 01ac ECFFFF9A 		bls	.L24
+ 145:../I2C_DebugConsole.c ****                 for (i = 0; i < I2C_READ_SIZE; i++)
+ 507              		.loc 1 145 0 is_stmt 0
+ 508 01b0 020000EA 		b	.L25
+ 509              	.L20:
+ 510              	.LBE2:
+ 151:../I2C_DebugConsole.c ****             else Restart_I2C ();		// Read failed, recover the I2C Channel
+ 511              		.loc 1 151 0 is_stmt 1
+ 512 01b4 FEFFFFEB 		bl	Restart_I2C
+ 513 01b8 000000EA 		b	.L25
+ 514              	.L31:
+ 515              	.LBB3:
+ 148:../I2C_DebugConsole.c ****                     else break;
+ 516              		.loc 1 148 0
+ 517 01bc 0000A0E1 		mov	r0, r0	@ nop
+ 518              	.L25:
+ 519              	.LBE3:
+ 152:../I2C_DebugConsole.c ****             CyU3PThreadSleep(50); 		// Short sleep after an I2C operation is recommended.
+ 520              		.loc 1 152 0
+ 521 01c0 3200A0E3 		mov	r0, #50
+ 522 01c4 FEFFFFEB 		bl	_tx_thread_sleep
+ 523              	.L17:
+ 155:../I2C_DebugConsole.c ****         if (Q_Status == CY_U3P_SUCCESS)
+ 524              		.loc 1 155 0
+ 525 01c8 14301BE5 		ldr	r3, [fp, #-20]
+ 526 01cc 000053E3 		cmp	r3, #0
+ 527 01d0 A4FFFF1A 		bne	.L32
+ 158:../I2C_DebugConsole.c ****             Status = CyU3PDmaChannelSetupSendBuffer (&I2C_DebugTXHandle, &FilledBuffer);
+ 528              		.loc 1 158 0
+ 529 01d4 20304BE2 		sub	r3, fp, #32
+ 530 01d8 FC009FE5 		ldr	r0, .L35+20
+ 531 01dc 0310A0E1 		mov	r1, r3
+ 532 01e0 FEFFFFEB 		bl	CyU3PDmaChannelSetupSendBuffer
+ 533 01e4 08000BE5 		str	r0, [fp, #-8]
+ 159:../I2C_DebugConsole.c ****             CheckStatus("CyU3PDmaChannelSetupSendBuffer", Status);
+ 534              		.loc 1 159 0
+ 535 01e8 F0009FE5 		ldr	r0, .L35+24
+ 536 01ec 08101BE5 		ldr	r1, [fp, #-8]
+ 537 01f0 FEFFFFEB 		bl	CheckStatus
+ 161:../I2C_DebugConsole.c ****             Preamble.buffer[0] &= 0xFE;	// Clear LSb = Write
+ 538              		.loc 1 161 0
+ 539 01f4 38305BE5 		ldrb	r3, [fp, #-56]	@ zero_extendqisi2
+ 540 01f8 0130C3E3 		bic	r3, r3, #1
+ 541 01fc FF3003E2 		and	r3, r3, #255
+ 542 0200 38304BE5 		strb	r3, [fp, #-56]
+ 162:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS) CyU3PI2cSendCommand(&Preamble, FilledBuffer.count, CyFals
+ 543              		.loc 1 162 0
+ 544 0204 08301BE5 		ldr	r3, [fp, #-8]
+ 545 0208 000053E3 		cmp	r3, #0
+ 546 020c 0500001A 		bne	.L27
+ 162:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS) CyU3PI2cSendCommand(&Preamble, FilledBuffer.count, CyFals
+ 547              		.loc 1 162 0 is_stmt 0 discriminator 1
+ 548 0210 BC315BE1 		ldrh	r3, [fp, #-28]
+ 549 0214 38204BE2 		sub	r2, fp, #56
+ 550 0218 0200A0E1 		mov	r0, r2
+ 551 021c 0310A0E1 		mov	r1, r3
+ 552 0220 0020A0E3 		mov	r2, #0
+ 553 0224 FEFFFFEB 		bl	CyU3PI2cSendCommand
+ 554              	.L27:
+ 164:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS) Status = CyU3PI2cWaitForBlockXfer(CyFalse);
+ 555              		.loc 1 164 0 is_stmt 1
+ 556 0228 08301BE5 		ldr	r3, [fp, #-8]
+ 557 022c 000053E3 		cmp	r3, #0
+ 558 0230 0200001A 		bne	.L28
+ 164:../I2C_DebugConsole.c ****             if (Status == CY_U3P_SUCCESS) Status = CyU3PI2cWaitForBlockXfer(CyFalse);
+ 559              		.loc 1 164 0 is_stmt 0 discriminator 1
+ 560 0234 0000A0E3 		mov	r0, #0
+ 561 0238 FEFFFFEB 		bl	CyU3PI2cWaitForBlockXfer
+ 562 023c 08000BE5 		str	r0, [fp, #-8]
+ 563              	.L28:
+ 165:../I2C_DebugConsole.c ****             if (Status != CY_U3P_SUCCESS)
+ 564              		.loc 1 165 0 is_stmt 1
+ 565 0240 08301BE5 		ldr	r3, [fp, #-8]
+ 566 0244 000053E3 		cmp	r3, #0
+ 567 0248 1800000A 		beq	.L29
+ 167:../I2C_DebugConsole.c ****             	CheckStatus("I2C_Write", Status);
+ 568              		.loc 1 167 0
+ 569 024c 90009FE5 		ldr	r0, .L35+28
+ 570 0250 08101BE5 		ldr	r1, [fp, #-8]
+ 571 0254 FEFFFFEB 		bl	CheckStatus
+ 168:../I2C_DebugConsole.c ****                 Restart_I2C();
+ 572              		.loc 1 168 0
+ 573 0258 FEFFFFEB 		bl	Restart_I2C
+ 169:../I2C_DebugConsole.c ****                 CyU3PThreadSleep (50);
+ 574              		.loc 1 169 0
+ 575 025c 3200A0E3 		mov	r0, #50
+ 576 0260 FEFFFFEB 		bl	_tx_thread_sleep
+ 170:../I2C_DebugConsole.c ****                 if (retryCount > 0)
+ 577              		.loc 1 170 0
+ 578 0264 0C301BE5 		ldr	r3, [fp, #-12]
+ 579 0268 000053E3 		cmp	r3, #0
+ 580 026c 7FFFFFDA 		ble	.L33
+ 172:../I2C_DebugConsole.c ****                     retryCount--;
+ 581              		.loc 1 172 0
+ 582 0270 0C301BE5 		ldr	r3, [fp, #-12]
+ 583 0274 013043E2 		sub	r3, r3, #1
+ 584 0278 0C300BE5 		str	r3, [fp, #-12]
+ 174:../I2C_DebugConsole.c ****                     Status = CyU3PQueuePrioritySend(&I2C_DebugQueue, &FilledBuffer, CYU3P_NO_WAIT);
+ 585              		.loc 1 174 0
+ 586 027c 20304BE2 		sub	r3, fp, #32
+ 587 0280 44009FE5 		ldr	r0, .L35+4
+ 588 0284 0310A0E1 		mov	r1, r3
+ 589 0288 0020A0E3 		mov	r2, #0
+ 590 028c FEFFFFEB 		bl	_txe_queue_front_send
+ 591 0290 08000BE5 		str	r0, [fp, #-8]
+ 175:../I2C_DebugConsole.c ****                     if (Status != CY_U3P_SUCCESS) CyU3PDebugPrint(4, "Unable to re-queue data buffe
+ 592              		.loc 1 175 0
+ 593 0294 08301BE5 		ldr	r3, [fp, #-8]
+ 594 0298 000053E3 		cmp	r3, #0
+ 595 029c 75FFFF0A 		beq	.L34
+ 175:../I2C_DebugConsole.c ****                     if (Status != CY_U3P_SUCCESS) CyU3PDebugPrint(4, "Unable to re-queue data buffe
+ 596              		.loc 1 175 0 is_stmt 0 discriminator 1
+ 597 02a0 0400A0E3 		mov	r0, #4
+ 598 02a4 3C109FE5 		ldr	r1, .L35+32
+ 599 02a8 FEFFFFEB 		bl	CyU3PDebugPrint
+ 600              		.loc 1 184 0 is_stmt 1 discriminator 1
+ 601 02ac 72FFFFEA 		b	.L30
+ 602              	.L29:
+ 180:../I2C_DebugConsole.c ****             	retryCount = I2C_RETRY_COUNT;				// Reset Retry Count
+ 603              		.loc 1 180 0
+ 604 02b0 1430A0E3 		mov	r3, #20
+ 605 02b4 0C300BE5 		str	r3, [fp, #-12]
+ 181:../I2C_DebugConsole.c ****             	CyU3PDmaBufferFree(FilledBuffer.buffer);	// Give back the original buffer
+ 606              		.loc 1 181 0
+ 607 02b8 20301BE5 		ldr	r3, [fp, #-32]
+ 608 02bc 0300A0E1 		mov	r0, r3
+ 609 02c0 FEFFFFEB 		bl	CyU3PDmaBufferFree
+ 610              		.loc 1 184 0
+ 611 02c4 6CFFFFEA 		b	.L30
+ 612              	.L36:
+ 613              		.align	2
+ 614              	.L35:
+ 615 02c8 3C000000 		.word	.LC5
+ 616 02cc 00000000 		.word	I2C_DebugQueue
+ 617 02d0 50000000 		.word	.LC6
+ 618 02d4 00000000 		.word	I2C_DebugRXHandle
+ 619 02d8 64000000 		.word	.LC7
+ 620 02dc 00000000 		.word	I2C_DebugTXHandle
+ 621 02e0 84000000 		.word	.LC8
+ 622 02e4 A4000000 		.word	.LC9
+ 623 02e8 B0000000 		.word	.LC10
+ 624              		.cfi_endproc
+ 625              	.LFE2:
+ 627              		.section	.rodata
+ 628 00cf 00       		.align	2
+ 629              	.LC11:
+ 630 00d0 43795533 		.ascii	"CyU3PI2cInit\000"
+ 630      50493263 
+ 630      496E6974 
+ 630      00
+ 631 00dd 000000   		.align	2
+ 632              	.LC12:
+ 633 00e0 53657420 		.ascii	"Set I2C Config\000"
+ 633      49324320 
+ 633      436F6E66 
+ 633      696700
+ 634 00ef 00       		.align	2
+ 635              	.LC13:
+ 636 00f0 43795533 		.ascii	"CyU3PDmaChannelCreate(I2C_TX)\000"
+ 636      50446D61 
+ 636      4368616E 
+ 636      6E656C43 
+ 636      72656174 
+ 637 010e 0000     		.align	2
+ 638              	.LC14:
+ 639 0110 43795533 		.ascii	"CyU3PDmaChannelCreate(I2C_RX)\000"
+ 639      50446D61 
+ 639      4368616E 
+ 639      6E656C43 
+ 639      72656174 
+ 640 012e 0000     		.align	2
+ 641              	.LC15:
+ 642 0130 4932435F 		.ascii	"I2C_Debug Mutex\000"
+ 642      44656275 
+ 642      67204D75 
+ 642      74657800 
+ 643              		.align	2
+ 644              	.LC16:
+ 645 0140 4932435F 		.ascii	"I2C_Debug Queue\000"
+ 645      44656275 
+ 645      67205175 
+ 645      65756500 
+ 646              		.align	2
+ 647              	.LC17:
+ 648 0150 54687265 		.ascii	"ThreadSignal SemaphoreCreate\000"
+ 648      61645369 
+ 648      676E616C 
+ 648      2053656D 
+ 648      6170686F 
+ 649 016d 000000   		.align	2
+ 650              	.LC18:
+ 651 0170 33303A49 		.ascii	"30:I2C_Debug_Thread\000"
+ 651      32435F44 
+ 651      65627567 
+ 651      5F546872 
+ 651      65616400 
+ 652              		.align	2
+ 653              	.LC19:
+ 654 0184 43726561 		.ascii	"Create I2C_Debug_Thread\000"
+ 654      74652049 
+ 654      32435F44 
+ 654      65627567 
+ 654      5F546872 
+ 655              		.section	.text.I2C_DebugInit,"ax",%progbits
+ 656              		.align	2
+ 657              		.global	I2C_DebugInit
+ 659              	I2C_DebugInit:
+ 660              	.LFB3:
+ 185:../I2C_DebugConsole.c **** }
+ 186:../I2C_DebugConsole.c **** 
+ 187:../I2C_DebugConsole.c **** CyU3PReturnStatus_t I2C_DebugInit(uint8_t TraceLevel)
+ 188:../I2C_DebugConsole.c **** {
+ 661              		.loc 1 188 0
+ 662              		.cfi_startproc
+ 663              		@ args = 0, pretend = 0, frame = 96
+ 664              		@ frame_needed = 1, uses_anonymous_args = 0
+ 665 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 666              	.LCFI7:
+ 667              		.cfi_def_cfa_offset 8
+ 668 0004 04B08DE2 		add	fp, sp, #4
+ 669              		.cfi_offset 14, -4
+ 670              		.cfi_offset 11, -8
+ 671              	.LCFI8:
+ 672              		.cfi_def_cfa 11, 4
+ 673 0008 80D04DE2 		sub	sp, sp, #128
+ 674 000c 0030A0E1 		mov	r3, r0
+ 675 0010 5D304BE5 		strb	r3, [fp, #-93]
+ 189:../I2C_DebugConsole.c ****     CyU3PI2cConfig_t i2cConfig;
+ 190:../I2C_DebugConsole.c ****     CyU3PDmaChannelConfig_t dmaConfig;
+ 191:../I2C_DebugConsole.c ****     CyU3PReturnStatus_t Status;
+ 192:../I2C_DebugConsole.c ****     CyU3PSemaphore ThreadSignal;
+ 193:../I2C_DebugConsole.c ****     void* StackPtr;
+ 194:../I2C_DebugConsole.c **** 
+ 195:../I2C_DebugConsole.c ****     if (I2C_DebugEnabled) return CY_U3P_ERROR_ALREADY_STARTED;
+ 676              		.loc 1 195 0
+ 677 0014 2C329FE5 		ldr	r3, .L40
+ 678 0018 003093E5 		ldr	r3, [r3, #0]
+ 679 001c 000053E3 		cmp	r3, #0
+ 680 0020 0100000A 		beq	.L38
+ 681              		.loc 1 195 0 is_stmt 0 discriminator 1
+ 682 0024 4330A0E3 		mov	r3, #67
+ 683 0028 830000EA 		b	.L39
+ 684              	.L38:
+ 196:../I2C_DebugConsole.c **** 
+ 197:../I2C_DebugConsole.c ****     Status = CyU3PI2cInit();    // Start the I2C driver
+ 685              		.loc 1 197 0 is_stmt 1
+ 686 002c FEFFFFEB 		bl	CyU3PI2cInit
+ 687 0030 08000BE5 		str	r0, [fp, #-8]
+ 198:../I2C_DebugConsole.c ****     CheckStatus("CyU3PI2cInit", Status);
+ 688              		.loc 1 198 0
+ 689 0034 10029FE5 		ldr	r0, .L40+4
+ 690 0038 08101BE5 		ldr	r1, [fp, #-8]
+ 691 003c FEFFFFEB 		bl	CheckStatus
+ 199:../I2C_DebugConsole.c **** 
+ 200:../I2C_DebugConsole.c ****     i2cConfig.bitRate    = CY_FX_USBI2C_I2C_BITRATE;
+ 692              		.loc 1 200 0
+ 693 0040 08329FE5 		ldr	r3, .L40+8
+ 694 0044 1C300BE5 		str	r3, [fp, #-28]
+ 201:../I2C_DebugConsole.c ****     i2cConfig.busTimeout = -1;
+ 695              		.loc 1 201 0
+ 696 0048 0030E0E3 		mvn	r3, #0
+ 697 004c 14300BE5 		str	r3, [fp, #-20]
+ 202:../I2C_DebugConsole.c ****     i2cConfig.dmaTimeout = -1;
+ 698              		.loc 1 202 0
+ 699 0050 0030E0E3 		mvn	r3, #0
+ 700 0054 B0314BE1 		strh	r3, [fp, #-16]	@ movhi
+ 203:../I2C_DebugConsole.c ****     i2cConfig.isDma      = CyTrue;
+ 701              		.loc 1 203 0
+ 702 0058 0130A0E3 		mov	r3, #1
+ 703 005c 18300BE5 		str	r3, [fp, #-24]
+ 204:../I2C_DebugConsole.c ****     Status = CyU3PI2cSetConfig(&i2cConfig, NULL);
+ 704              		.loc 1 204 0
+ 705 0060 1C304BE2 		sub	r3, fp, #28
+ 706 0064 0300A0E1 		mov	r0, r3
+ 707 0068 0010A0E3 		mov	r1, #0
+ 708 006c FEFFFFEB 		bl	CyU3PI2cSetConfig
+ 709 0070 08000BE5 		str	r0, [fp, #-8]
+ 205:../I2C_DebugConsole.c ****     CheckStatus("Set I2C Config", Status);
+ 710              		.loc 1 205 0
+ 711 0074 D8019FE5 		ldr	r0, .L40+12
+ 712 0078 08101BE5 		ldr	r1, [fp, #-8]
+ 713 007c FEFFFFEB 		bl	CheckStatus
+ 206:../I2C_DebugConsole.c **** 
+ 207:../I2C_DebugConsole.c ****     // Create MANUAL DMA channels to send and receive data from the I2C IO block
+ 208:../I2C_DebugConsole.c ****     CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 714              		.loc 1 208 0
+ 715 0080 38304BE2 		sub	r3, fp, #56
+ 716 0084 0300A0E1 		mov	r0, r3
+ 717 0088 0010A0E3 		mov	r1, #0
+ 718 008c 1C20A0E3 		mov	r2, #28
+ 719 0090 FEFFFFEB 		bl	CyU3PMemSet
+ 209:../I2C_DebugConsole.c ****     // Get a set of buffers to output debug messages
+ 210:../I2C_DebugConsole.c ****     dmaConfig.size = CY_U3P_DEBUG_DMA_BUFFER_SIZE;
+ 720              		.loc 1 210 0
+ 721 0094 013CA0E3 		mov	r3, #256
+ 722 0098 B8334BE1 		strh	r3, [fp, #-56]	@ movhi
+ 211:../I2C_DebugConsole.c ****     dmaConfig.count = 0;
+ 723              		.loc 1 211 0
+ 724 009c 0030A0E3 		mov	r3, #0
+ 725 00a0 B6334BE1 		strh	r3, [fp, #-54]	@ movhi
+ 212:../I2C_DebugConsole.c ****     dmaConfig.prodSckId = CY_U3P_CPU_SOCKET_PROD;
+ 726              		.loc 1 212 0
+ 727 00a4 AC319FE5 		ldr	r3, .L40+16
+ 728 00a8 B4334BE1 		strh	r3, [fp, #-52]	@ movhi
+ 213:../I2C_DebugConsole.c ****     dmaConfig.consSckId = CY_U3P_LPP_SOCKET_I2C_CONS;
+ 729              		.loc 1 213 0
+ 730 00ac 0230A0E3 		mov	r3, #2
+ 731 00b0 B2334BE1 		strh	r3, [fp, #-50]	@ movhi
+ 214:../I2C_DebugConsole.c ****     dmaConfig.dmaMode = CY_U3P_DMA_MODE_BYTE;
+ 732              		.loc 1 214 0
+ 733 00b4 0030A0E3 		mov	r3, #0
+ 734 00b8 28304BE5 		strb	r3, [fp, #-40]
+ 215:../I2C_DebugConsole.c ****     Status = CyU3PDmaChannelCreate(&I2C_DebugTXHandle, CY_U3P_DMA_TYPE_MANUAL_OUT, &dmaConfig);
+ 735              		.loc 1 215 0
+ 736 00bc 38304BE2 		sub	r3, fp, #56
+ 737 00c0 94019FE5 		ldr	r0, .L40+20
+ 738 00c4 0410A0E3 		mov	r1, #4
+ 739 00c8 0320A0E1 		mov	r2, r3
+ 740 00cc FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 741 00d0 08000BE5 		str	r0, [fp, #-8]
+ 216:../I2C_DebugConsole.c ****     CheckStatus("CyU3PDmaChannelCreate(I2C_TX)", Status);
+ 742              		.loc 1 216 0
+ 743 00d4 84019FE5 		ldr	r0, .L40+24
+ 744 00d8 08101BE5 		ldr	r1, [fp, #-8]
+ 745 00dc FEFFFFEB 		bl	CheckStatus
+ 217:../I2C_DebugConsole.c ****     // Console In Buffer will be assigned manually
+ 218:../I2C_DebugConsole.c ****     dmaConfig.size = I2C_CONSOLEIN_BUFFER_SIZE; // 0 should work here, but CyU3PDmaChannelCreate sa
+ 746              		.loc 1 218 0
+ 747 00e0 1030A0E3 		mov	r3, #16
+ 748 00e4 B8334BE1 		strh	r3, [fp, #-56]	@ movhi
+ 219:../I2C_DebugConsole.c ****     dmaConfig.count = 0;
+ 749              		.loc 1 219 0
+ 750 00e8 0030A0E3 		mov	r3, #0
+ 751 00ec B6334BE1 		strh	r3, [fp, #-54]	@ movhi
+ 220:../I2C_DebugConsole.c ****     dmaConfig.prodSckId = CY_U3P_LPP_SOCKET_I2C_PROD;
+ 752              		.loc 1 220 0
+ 753 00f0 0530A0E3 		mov	r3, #5
+ 754 00f4 B4334BE1 		strh	r3, [fp, #-52]	@ movhi
+ 221:../I2C_DebugConsole.c ****     dmaConfig.consSckId = CY_U3P_CPU_SOCKET_CONS;
+ 755              		.loc 1 221 0
+ 756 00f8 3F3CA0E3 		mov	r3, #16128
+ 757 00fc B2334BE1 		strh	r3, [fp, #-50]	@ movhi
+ 222:../I2C_DebugConsole.c ****     Status = CyU3PDmaChannelCreate(&I2C_DebugRXHandle, CY_U3P_DMA_TYPE_MANUAL_IN, &dmaConfig);
+ 758              		.loc 1 222 0
+ 759 0100 38304BE2 		sub	r3, fp, #56
+ 760 0104 58019FE5 		ldr	r0, .L40+28
+ 761 0108 0310A0E3 		mov	r1, #3
+ 762 010c 0320A0E1 		mov	r2, r3
+ 763 0110 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 764 0114 08000BE5 		str	r0, [fp, #-8]
+ 223:../I2C_DebugConsole.c ****     CheckStatus("CyU3PDmaChannelCreate(I2C_RX)", Status);
+ 765              		.loc 1 223 0
+ 766 0118 48019FE5 		ldr	r0, .L40+32
+ 767 011c 08101BE5 		ldr	r1, [fp, #-8]
+ 768 0120 FEFFFFEB 		bl	CheckStatus
+ 224:../I2C_DebugConsole.c **** 
+ 225:../I2C_DebugConsole.c ****     // Create a Mutex and a Queue for the I2C_Console to use
+ 226:../I2C_DebugConsole.c ****     Status = CyU3PMutexCreate(&I2C_DebugLock, CYU3P_NO_INHERIT);
+ 769              		.loc 1 226 0
+ 770 0124 40019FE5 		ldr	r0, .L40+36
+ 771 0128 0010A0E3 		mov	r1, #0
+ 772 012c 0020A0E3 		mov	r2, #0
+ 773 0130 3830A0E3 		mov	r3, #56
+ 774 0134 FEFFFFEB 		bl	_txe_mutex_create
+ 775 0138 08000BE5 		str	r0, [fp, #-8]
+ 227:../I2C_DebugConsole.c ****     CheckStatus("I2C_Debug Mutex", Status);
+ 776              		.loc 1 227 0
+ 777 013c 2C019FE5 		ldr	r0, .L40+40
+ 778 0140 08101BE5 		ldr	r1, [fp, #-8]
+ 779 0144 FEFFFFEB 		bl	CheckStatus
+ 228:../I2C_DebugConsole.c ****     Status = CyU3PQueueCreate(&I2C_DebugQueue, sizeof (CyU3PDmaBuffer_t), Queue, sizeof(Queue));
+ 780              		.loc 1 228 0
+ 781 0148 6030A0E3 		mov	r3, #96
+ 782 014c 00308DE5 		str	r3, [sp, #0]
+ 783 0150 3C30A0E3 		mov	r3, #60
+ 784 0154 04308DE5 		str	r3, [sp, #4]
+ 785 0158 14019FE5 		ldr	r0, .L40+44
+ 786 015c 0010A0E3 		mov	r1, #0
+ 787 0160 0C20A0E3 		mov	r2, #12
+ 788 0164 0C319FE5 		ldr	r3, .L40+48
+ 789 0168 FEFFFFEB 		bl	_txe_queue_create
+ 790 016c 08000BE5 		str	r0, [fp, #-8]
+ 229:../I2C_DebugConsole.c ****     CheckStatus("I2C_Debug Queue", Status);
+ 791              		.loc 1 229 0
+ 792 0170 04019FE5 		ldr	r0, .L40+52
+ 793 0174 08101BE5 		ldr	r1, [fp, #-8]
+ 794 0178 FEFFFFEB 		bl	CheckStatus
+ 230:../I2C_DebugConsole.c **** 
+ 231:../I2C_DebugConsole.c ****     // I need to create a thread that will manage the Queue
+ 232:../I2C_DebugConsole.c ****     // I also need a signal to let me know that this thread is running
+ 233:../I2C_DebugConsole.c ****     Status = CyU3PSemaphoreCreate(&ThreadSignal, 0);
+ 795              		.loc 1 233 0
+ 796 017c 58304BE2 		sub	r3, fp, #88
+ 797 0180 0300A0E1 		mov	r0, r3
+ 798 0184 0010A0E3 		mov	r1, #0
+ 799 0188 0020A0E3 		mov	r2, #0
+ 800 018c 2030A0E3 		mov	r3, #32
+ 801 0190 FEFFFFEB 		bl	_txe_semaphore_create
+ 802 0194 08000BE5 		str	r0, [fp, #-8]
+ 234:../I2C_DebugConsole.c ****     CheckStatus("ThreadSignal SemaphoreCreate", Status);
+ 803              		.loc 1 234 0
+ 804 0198 E0009FE5 		ldr	r0, .L40+56
+ 805 019c 08101BE5 		ldr	r1, [fp, #-8]
+ 806 01a0 FEFFFFEB 		bl	CheckStatus
+ 235:../I2C_DebugConsole.c ****     StackPtr = CyU3PMemAlloc(DEBUG_THREAD_STACK_SIZE);
+ 807              		.loc 1 235 0
+ 808 01a4 020BA0E3 		mov	r0, #2048
+ 809 01a8 FEFFFFEB 		bl	CyU3PMemAlloc
+ 810 01ac 0C000BE5 		str	r0, [fp, #-12]
+ 236:../I2C_DebugConsole.c ****     Status = CyU3PThreadCreate(&I2C_DebugThread,        // Handle to my Application Thread
+ 811              		.loc 1 236 0
+ 812 01b0 58304BE2 		sub	r3, fp, #88
+ 813 01b4 0C201BE5 		ldr	r2, [fp, #-12]
+ 814 01b8 00208DE5 		str	r2, [sp, #0]
+ 815 01bc 022BA0E3 		mov	r2, #2048
+ 816 01c0 04208DE5 		str	r2, [sp, #4]
+ 817 01c4 0620A0E3 		mov	r2, #6
+ 818 01c8 08208DE5 		str	r2, [sp, #8]
+ 819 01cc 0620A0E3 		mov	r2, #6
+ 820 01d0 0C208DE5 		str	r2, [sp, #12]
+ 821 01d4 0020A0E3 		mov	r2, #0
+ 822 01d8 10208DE5 		str	r2, [sp, #16]
+ 823 01dc 0120A0E3 		mov	r2, #1
+ 824 01e0 14208DE5 		str	r2, [sp, #20]
+ 825 01e4 A820A0E3 		mov	r2, #168
+ 826 01e8 18208DE5 		str	r2, [sp, #24]
+ 827 01ec 90009FE5 		ldr	r0, .L40+60
+ 828 01f0 90109FE5 		ldr	r1, .L40+64
+ 829 01f4 90209FE5 		ldr	r2, .L40+68
+ 830 01f8 FEFFFFEB 		bl	_txe_thread_create
+ 831 01fc 08000BE5 		str	r0, [fp, #-8]
+ 237:../I2C_DebugConsole.c ****             "30:I2C_Debug_Thread",                      // Thread ID and name
+ 238:../I2C_DebugConsole.c ****             I2C_ConsoleThread,                          // Thread entry function
+ 239:../I2C_DebugConsole.c ****             (uint32_t)&ThreadSignal,                    // Parameter passed to Thread
+ 240:../I2C_DebugConsole.c ****             StackPtr,                                   // Pointer to the allocated thread stack
+ 241:../I2C_DebugConsole.c ****             DEBUG_THREAD_STACK_SIZE,                    // Allocated thread stack size
+ 242:../I2C_DebugConsole.c ****             DEBUG_THREAD_PRIORITY,                      // Thread priority
+ 243:../I2C_DebugConsole.c ****             DEBUG_THREAD_PRIORITY,                      // = Thread priority so no preemption
+ 244:../I2C_DebugConsole.c ****             CYU3P_NO_TIME_SLICE,                        // Time slice no supported
+ 245:../I2C_DebugConsole.c ****             CYU3P_AUTO_START                            // Start the thread immediately
+ 246:../I2C_DebugConsole.c ****             );
+ 247:../I2C_DebugConsole.c ****     CheckStatus("Create I2C_Debug_Thread", Status);
+ 832              		.loc 1 247 0
+ 833 0200 88009FE5 		ldr	r0, .L40+72
+ 834 0204 08101BE5 		ldr	r1, [fp, #-8]
+ 835 0208 FEFFFFEB 		bl	CheckStatus
+ 248:../I2C_DebugConsole.c **** 
+ 249:../I2C_DebugConsole.c ****     // Wait for the thread to be set up
+ 250:../I2C_DebugConsole.c ****     Status = CyU3PSemaphoreGet(&ThreadSignal, CYU3P_WAIT_FOREVER);
+ 836              		.loc 1 250 0
+ 837 020c 58304BE2 		sub	r3, fp, #88
+ 838 0210 0300A0E1 		mov	r0, r3
+ 839 0214 0010E0E3 		mvn	r1, #0
+ 840 0218 FEFFFFEB 		bl	_txe_semaphore_get
+ 841 021c 08000BE5 		str	r0, [fp, #-8]
+ 251:../I2C_DebugConsole.c **** 
+ 252:../I2C_DebugConsole.c ****     I2C_DebugTraceLevel = TraceLevel;
+ 842              		.loc 1 252 0
+ 843 0220 6C309FE5 		ldr	r3, .L40+76
+ 844 0224 5D205BE5 		ldrb	r2, [fp, #-93]
+ 845 0228 0020C3E5 		strb	r2, [r3, #0]
+ 253:../I2C_DebugConsole.c **** 
+ 254:../I2C_DebugConsole.c ****     I2C_DebugEnabled = CyTrue;
+ 846              		.loc 1 254 0
+ 847 022c 14309FE5 		ldr	r3, .L40
+ 848 0230 0120A0E3 		mov	r2, #1
+ 849 0234 002083E5 		str	r2, [r3, #0]
+ 255:../I2C_DebugConsole.c **** 
+ 256:../I2C_DebugConsole.c ****     return Status;
+ 850              		.loc 1 256 0
+ 851 0238 08301BE5 		ldr	r3, [fp, #-8]
+ 852              	.L39:
+ 257:../I2C_DebugConsole.c **** }
+ 853              		.loc 1 257 0
+ 854 023c 0300A0E1 		mov	r0, r3
+ 855 0240 04D04BE2 		sub	sp, fp, #4
+ 856 0244 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 857              	.L41:
+ 858              		.align	2
+ 859              	.L40:
+ 860 0248 00000000 		.word	I2C_DebugEnabled
+ 861 024c D0000000 		.word	.LC11
+ 862 0250 801A0600 		.word	400000
+ 863 0254 E0000000 		.word	.LC12
+ 864 0258 013F0000 		.word	16129
+ 865 025c 00000000 		.word	I2C_DebugTXHandle
+ 866 0260 F0000000 		.word	.LC13
+ 867 0264 00000000 		.word	I2C_DebugRXHandle
+ 868 0268 10010000 		.word	.LC14
+ 869 026c 00000000 		.word	I2C_DebugLock
+ 870 0270 30010000 		.word	.LC15
+ 871 0274 00000000 		.word	I2C_DebugQueue
+ 872 0278 00000000 		.word	Queue
+ 873 027c 40010000 		.word	.LC16
+ 874 0280 50010000 		.word	.LC17
+ 875 0284 00000000 		.word	I2C_DebugThread
+ 876 0288 70010000 		.word	.LC18
+ 877 028c 00000000 		.word	I2C_ConsoleThread
+ 878 0290 84010000 		.word	.LC19
+ 879 0294 00000000 		.word	I2C_DebugTraceLevel
+ 880              		.cfi_endproc
+ 881              	.LFE3:
+ 883              		.text
+ 884              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 I2C_DebugConsole.c
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:22     .bss.I2C_DebugThread:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:25     .bss.I2C_DebugThread:00000000 I2C_DebugThread
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:28     .bss.I2C_DebugLock:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:31     .bss.I2C_DebugLock:00000000 I2C_DebugLock
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:34     .bss.I2C_DebugQueue:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:37     .bss.I2C_DebugQueue:00000000 I2C_DebugQueue
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:40     .bss.I2C_DebugTXHandle:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:43     .bss.I2C_DebugTXHandle:00000000 I2C_DebugTXHandle
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:46     .bss.I2C_DebugRXHandle:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:49     .bss.I2C_DebugRXHandle:00000000 I2C_DebugRXHandle
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:52     .bss.I2C_DebugEnabled:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:55     .bss.I2C_DebugEnabled:00000000 I2C_DebugEnabled
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:58     .bss.Queue:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:61     .bss.Queue:00000000 Queue
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:66     .bss.I2C_DebugTraceLevel:00000000 I2C_DebugTraceLevel
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:67     .bss.I2C_DebugTraceLevel:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:69     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:79     .text.I2C_DebugPrint:00000000 $a
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:82     .text.I2C_DebugPrint:00000000 I2C_DebugPrint
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:237    .text.I2C_DebugPrint:0000018c $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:255    .text.Restart_I2C:00000000 $a
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:258    .text.Restart_I2C:00000000 Restart_I2C
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:319    .text.Restart_I2C:00000084 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:347    .text.I2C_ConsoleThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:350    .text.I2C_ConsoleThread:00000000 I2C_ConsoleThread
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:615    .text.I2C_ConsoleThread:000002c8 $d
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:656    .text.I2C_DebugInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:659    .text.I2C_DebugInit:00000000 I2C_DebugInit
+C:\Users\John\AppData\Local\Temp\cctriJWv.s:860    .text.I2C_DebugInit:00000248 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+_tx_thread_identify
+_txe_mutex_get
+CyU3PDmaBufferAlloc
+CheckStatus
+MyDebugSNPrint
+CyU3PDebugPrint
+_txe_queue_send
+CyU3PDmaBufferFree
+_txe_mutex_put
+glDebugTraceLevel
+CyU3PI2cDeInit
+CyU3PI2cInit
+CyU3PI2cSetConfig
+CyU3PDmaChannelReset
+_txe_semaphore_put
+_txe_queue_receive
+CyU3PI2cSendCommand
+CyU3PMemSet
+CyU3PDmaChannelSetupRecvBuffer
+CyU3PDmaChannelWaitForCompletion
+GotConsoleInput
+_tx_thread_sleep
+CyU3PDmaChannelSetupSendBuffer
+CyU3PI2cWaitForBlockXfer
+_txe_queue_front_send
+CyU3PDmaChannelCreate
+_txe_mutex_create
+_txe_queue_create
+_txe_semaphore_create
+CyU3PMemAlloc
+_txe_thread_create
+_txe_semaphore_get

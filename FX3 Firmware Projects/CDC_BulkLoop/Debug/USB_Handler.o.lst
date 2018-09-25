@@ -1,0 +1,571 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"USB_Handler.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.comm	glUartConfig,24,4
+  17              		.global	LineCoding
+  18              		.section	.data.LineCoding,"aw",%progbits
+  19              		.align	2
+  22              	LineCoding:
+  23 0000 00C20100 		.word	115200
+  24 0004 01       		.byte	1
+  25 0005 00       		.byte	0
+  26 0006 08       		.byte	8
+  27 0007 00       		.space	1
+  28              		.comm	glEP0Buffer,32,32
+  29              		.section	.rodata
+  30              		.align	2
+  31              	.LC0:
+  32 0000 5265706F 		.ascii	"Report UART Configuration\000"
+  32      72742055 
+  32      41525420 
+  32      436F6E66 
+  32      69677572 
+  33              		.section	.text.USBSetup_Callback,"ax",%progbits
+  34              		.align	2
+  35              		.global	USBSetup_Callback
+  37              	USBSetup_Callback:
+  38              	.LFB0:
+  39              		.file 1 "../USB_Handler.c"
+   1:../USB_Handler.c **** /*
+   2:../USB_Handler.c ****  * USB Handler.c
+   3:../USB_Handler.c ****  *
+   4:../USB_Handler.c ****  *      Author: john@USB-By-Example.com
+   5:../USB_Handler.c ****  */
+   6:../USB_Handler.c **** 
+   7:../USB_Handler.c **** #include "Application.h"
+   8:../USB_Handler.c **** 
+   9:../USB_Handler.c **** // Declare external functions
+  10:../USB_Handler.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  11:../USB_Handler.c **** extern CyU3PReturnStatus_t SetUSBdescriptors(void);
+  12:../USB_Handler.c **** extern void StartApplication(void);
+  13:../USB_Handler.c **** extern void StopApplication(void);
+  14:../USB_Handler.c **** 
+  15:../USB_Handler.c **** // Declare external data
+  16:../USB_Handler.c **** extern CyBool_t glIsApplicationActive;			// Set true once device is enumerated
+  17:../USB_Handler.c **** extern CyU3PEvent DisplayEvent;					// Used to display events
+  18:../USB_Handler.c **** 
+  19:../USB_Handler.c **** CyU3PUartConfig_t glUartConfig;
+  20:../USB_Handler.c **** struct { uint32_t DTE_Rate; uint8_t StopBits; uint8_t Parity; uint8_t DataLength; } LineCoding = { 
+  21:../USB_Handler.c **** 
+  22:../USB_Handler.c **** uint8_t glEP0Buffer[32] __attribute__ ((aligned(32)));
+  23:../USB_Handler.c **** 
+  24:../USB_Handler.c **** // Declare the callbacks needed to support the USB device driver
+  25:../USB_Handler.c **** CyBool_t USBSetup_Callback(uint32_t setupdat0, uint32_t setupdat1)
+  26:../USB_Handler.c **** {
+  40              		.loc 1 26 0
+  41              		.cfi_startproc
+  42              		@ args = 0, pretend = 0, frame = 24
+  43              		@ frame_needed = 1, uses_anonymous_args = 0
+  44 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  45              	.LCFI0:
+  46              		.cfi_def_cfa_offset 8
+  47              		.cfi_offset 11, -8
+  48              		.cfi_offset 14, -4
+  49 0004 04B08DE2 		add	fp, sp, #4
+  50              	.LCFI1:
+  51              		.cfi_def_cfa 11, 4
+  52 0008 18D04DE2 		sub	sp, sp, #24
+  53 000c 18000BE5 		str	r0, [fp, #-24]
+  54 0010 1C100BE5 		str	r1, [fp, #-28]
+  27:../USB_Handler.c **** 	CyU3PReturnStatus_t Status;
+  28:../USB_Handler.c **** 	union { uint32_t SetupData[2];
+  29:../USB_Handler.c **** 			uint8_t RawBytes[8];
+  30:../USB_Handler.c **** 			struct { uint8_t Target:5; uint8_t Type:2; uint8_t Direction:1;
+  31:../USB_Handler.c **** 				 	 uint8_t Request; uint16_t Value; uint16_t Index; uint16_t Length; };
+  32:../USB_Handler.c **** 		  } Setup;
+  33:../USB_Handler.c **** 	uint16_t ReadCount;
+  34:../USB_Handler.c **** 
+  35:../USB_Handler.c **** 	// Copy the incoming Setup Packet into my Setup union which will "unpack" the variables
+  36:../USB_Handler.c **** 	Setup.SetupData[0] = setupdat0;
+  55              		.loc 1 36 0
+  56 0014 18301BE5 		ldr	r3, [fp, #-24]
+  57 0018 10300BE5 		str	r3, [fp, #-16]
+  37:../USB_Handler.c **** 	Setup.SetupData[1] = setupdat1;
+  58              		.loc 1 37 0
+  59 001c 1C301BE5 		ldr	r3, [fp, #-28]
+  60 0020 0C300BE5 		str	r3, [fp, #-12]
+  38:../USB_Handler.c **** #if (0)
+  39:../USB_Handler.c **** 	// Included for DEBUG to display each sub field in the USB Command if needed
+  40:../USB_Handler.c **** 	// Note that we are in a Callback so shouldn't really using DebugPrint
+  41:../USB_Handler.c **** 	uint32_t i;
+  42:../USB_Handler.c **** //	DebugPrint(4, "\nSetup Input %X,%X", setupdat0, setupdat1);
+  43:../USB_Handler.c **** //	DebugPrint(4, "\nRaw Bytes: ");
+  44:../USB_Handler.c **** //	for (i=0; i<8; i++) DebugPrint(4, "%x,", Setup.RawBytes[i]);
+  45:../USB_Handler.c **** 	DebugPrint(4, "\nDirection:%d", Setup.Direction);
+  46:../USB_Handler.c **** 	DebugPrint(4, ", Type:%d", Setup.Type);
+  47:../USB_Handler.c **** 	DebugPrint(4, ", Target:%d", Setup.Target);
+  48:../USB_Handler.c **** 	DebugPrint(4, ", Request:%X", Setup.Request);
+  49:../USB_Handler.c **** 	DebugPrint(4, "\nValue:%X", Setup.Value);
+  50:../USB_Handler.c **** 	DebugPrint(4, ", Index:%d", Setup.Index);
+  51:../USB_Handler.c **** 	DebugPrint(4, ", Length:%d", Setup.Length);
+  52:../USB_Handler.c **** #endif
+  53:../USB_Handler.c **** 	// USB Driver will send me Class and Vendor requests to handle
+  54:../USB_Handler.c **** 	// I only have to handle three class requests for a CDC Device
+  55:../USB_Handler.c ****     if (Setup.Target == CLASS_REQUEST)
+  61              		.loc 1 55 0
+  62 0024 10305BE5 		ldrb	r3, [fp, #-16]
+  63 0028 1F3003E2 		and	r3, r3, #31
+  64 002c FF3003E2 		and	r3, r3, #255
+  65 0030 010053E3 		cmp	r3, #1
+  66 0034 3400001A 		bne	.L2
+  56:../USB_Handler.c ****     {
+  57:../USB_Handler.c ****     	if (Setup.Request == SET_LINE_CODING)
+  67              		.loc 1 57 0
+  68 0038 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+  69 003c 200053E3 		cmp	r3, #32
+  70 0040 0C00001A 		bne	.L3
+  58:../USB_Handler.c ****     	{
+  59:../USB_Handler.c ****     		Status = CyU3PUsbGetEP0Data(sizeof(LineCoding), (uint8_t*)&LineCoding, &ReadCount);
+  71              		.loc 1 59 0
+  72 0044 12304BE2 		sub	r3, fp, #18
+  73 0048 0800A0E3 		mov	r0, #8
+  74 004c C8109FE5 		ldr	r1, .L9
+  75 0050 0320A0E1 		mov	r2, r3
+  76 0054 FEFFFFEB 		bl	CyU3PUsbGetEP0Data
+  77 0058 08000BE5 		str	r0, [fp, #-8]
+  60:../USB_Handler.c **** 			// 'Set Line Coding' moved to char* EventName[30]
+  61:../USB_Handler.c ****     		Status = CyU3PEventSet(&DisplayEvent, 1<<30, CYU3P_EVENT_OR);
+  78              		.loc 1 61 0
+  79 005c BC009FE5 		ldr	r0, .L9+4
+  80 0060 0111A0E3 		mov	r1, #1073741824
+  81 0064 0020A0E3 		mov	r2, #0
+  82 0068 FEFFFFEB 		bl	_txe_event_flags_set
+  83 006c 08000BE5 		str	r0, [fp, #-8]
+  62:../USB_Handler.c **** #if (DirectConnect)
+  63:../USB_Handler.c ****     		{
+  64:../USB_Handler.c ****     			glUartConfig.baudRate = LineCoding.DTE_Rate;
+  65:../USB_Handler.c ****     			// Update other parameters only if I can support them
+  66:../USB_Handler.c ****     			if (LineCoding.StopBits == 0) glUartConfig.stopBit = CY_U3P_UART_ONE_STOP_BIT;
+  67:../USB_Handler.c ****     			if (LineCoding.StopBits == 2) glUartConfig.stopBit = CY_U3P_UART_TWO_STOP_BIT;
+  68:../USB_Handler.c ****     			if (LineCoding.Parity == 0) glUartConfig.parity = CY_U3P_UART_NO_PARITY;
+  69:../USB_Handler.c ****     			if (LineCoding.Parity == 1) glUartConfig.parity = CY_U3P_UART_ODD_PARITY;
+  70:../USB_Handler.c ****     			if (LineCoding.Parity == 2) glUartConfig.parity = CY_U3P_UART_EVEN_PARITY;
+  71:../USB_Handler.c ****     			Status = CyU3PUartSetConfig(&glUartConfig, NULL);
+  72:../USB_Handler.c ****     			CheckStatus("Change UART Configuration", Status);
+  73:../USB_Handler.c **** 
+  74:../USB_Handler.c ****     		}
+  75:../USB_Handler.c **** #endif
+  76:../USB_Handler.c ****     		return CyTrue;
+  84              		.loc 1 76 0
+  85 0070 0130A0E3 		mov	r3, #1
+  86 0074 250000EA 		b	.L8
+  87              	.L3:
+  77:../USB_Handler.c ****     	}
+  78:../USB_Handler.c ****     	else if (Setup.Request == GET_LINE_CODING)
+  88              		.loc 1 78 0
+  89 0078 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+  90 007c 210053E3 		cmp	r3, #33
+  91 0080 0D00001A 		bne	.L5
+  79:../USB_Handler.c ****     	{
+  80:../USB_Handler.c **** 			// 'Get Line Coding' moved to char* EventName[29]
+  81:../USB_Handler.c ****     		Status = CyU3PEventSet(&DisplayEvent, 1<<29, CYU3P_EVENT_OR);
+  92              		.loc 1 81 0
+  93 0084 94009FE5 		ldr	r0, .L9+4
+  94 0088 0212A0E3 		mov	r1, #536870912
+  95 008c 0020A0E3 		mov	r2, #0
+  96 0090 FEFFFFEB 		bl	_txe_event_flags_set
+  97 0094 08000BE5 		str	r0, [fp, #-8]
+  82:../USB_Handler.c **** #if (DirectConnect)
+  83:../USB_Handler.c ****     		LineCoding.DTE_Rate = glUartConfig.baudRate;
+  84:../USB_Handler.c ****     		if (glUartConfig.stopBit == CY_U3P_UART_ONE_STOP_BIT) LineCoding.StopBits = 0;
+  85:../USB_Handler.c ****     		if (glUartConfig.stopBit == CY_U3P_UART_TWO_STOP_BIT) LineCoding.StopBits = 2;
+  86:../USB_Handler.c ****     		if (glUartConfig.parity == CY_U3P_UART_NO_PARITY) LineCoding.Parity = 0;
+  87:../USB_Handler.c ****     		if (glUartConfig.parity == CY_U3P_UART_ODD_PARITY) LineCoding.Parity = 1;
+  88:../USB_Handler.c ****     		if (glUartConfig.parity == CY_U3P_UART_EVEN_PARITY) LineCoding.Parity = 2;
+  89:../USB_Handler.c **** #endif
+  90:../USB_Handler.c ****     		Status = CyU3PUsbSendEP0Data(sizeof(LineCoding), (uint8_t*)&LineCoding);
+  98              		.loc 1 90 0
+  99 0098 0800A0E3 		mov	r0, #8
+ 100 009c 78109FE5 		ldr	r1, .L9
+ 101 00a0 FEFFFFEB 		bl	CyU3PUsbSendEP0Data
+ 102 00a4 08000BE5 		str	r0, [fp, #-8]
+  91:../USB_Handler.c **** 			CheckStatus("Report UART Configuration", Status);
+ 103              		.loc 1 91 0
+ 104 00a8 74009FE5 		ldr	r0, .L9+8
+ 105 00ac 08101BE5 		ldr	r1, [fp, #-8]
+ 106 00b0 FEFFFFEB 		bl	CheckStatus
+  92:../USB_Handler.c **** 			return CyTrue;
+ 107              		.loc 1 92 0
+ 108 00b4 0130A0E3 		mov	r3, #1
+ 109 00b8 140000EA 		b	.L8
+ 110              	.L5:
+  93:../USB_Handler.c ****     	}
+  94:../USB_Handler.c ****     	else if (Setup.Request == SET_CONTROL_LINE_STATE)
+ 111              		.loc 1 94 0
+ 112 00bc 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 113 00c0 220053E3 		cmp	r3, #34
+ 114 00c4 1000001A 		bne	.L2
+  95:../USB_Handler.c ****     	{
+  96:../USB_Handler.c **** 			// 'Set Control Line State' moved to char* EventName[28]
+  97:../USB_Handler.c ****     		Status = CyU3PEventSet(&DisplayEvent, 1<<28, CYU3P_EVENT_OR);
+ 115              		.loc 1 97 0
+ 116 00c8 50009FE5 		ldr	r0, .L9+4
+ 117 00cc 0112A0E3 		mov	r1, #268435456
+ 118 00d0 0020A0E3 		mov	r2, #0
+ 119 00d4 FEFFFFEB 		bl	_txe_event_flags_set
+ 120 00d8 08000BE5 		str	r0, [fp, #-8]
+  98:../USB_Handler.c ****     		if (glIsApplicationActive) CyU3PUsbAckSetup();
+ 121              		.loc 1 98 0
+ 122 00dc 44309FE5 		ldr	r3, .L9+12
+ 123 00e0 003093E5 		ldr	r3, [r3]
+ 124 00e4 000053E3 		cmp	r3, #0
+ 125 00e8 0100000A 		beq	.L6
+ 126              		.loc 1 98 0 is_stmt 0 discriminator 1
+ 127 00ec FEFFFFEB 		bl	CyU3PUsbAckSetup
+ 128 00f0 030000EA 		b	.L7
+ 129              	.L6:
+  99:../USB_Handler.c ****     		else CyU3PUsbStall(0, CyTrue, CyFalse);
+ 130              		.loc 1 99 0 is_stmt 1
+ 131 00f4 0000A0E3 		mov	r0, #0
+ 132 00f8 0110A0E3 		mov	r1, #1
+ 133 00fc 0020A0E3 		mov	r2, #0
+ 134 0100 FEFFFFEB 		bl	CyU3PUsbStall
+ 135              	.L7:
+ 100:../USB_Handler.c ****     		return CyTrue;
+ 136              		.loc 1 100 0
+ 137 0104 0130A0E3 		mov	r3, #1
+ 138 0108 000000EA 		b	.L8
+ 139              	.L2:
+ 101:../USB_Handler.c ****     	}
+ 102:../USB_Handler.c ****     }
+ 103:../USB_Handler.c **** 	return CyFalse;
+ 140              		.loc 1 103 0
+ 141 010c 0030A0E3 		mov	r3, #0
+ 142              	.L8:
+ 104:../USB_Handler.c **** }
+ 143              		.loc 1 104 0
+ 144 0110 0300A0E1 		mov	r0, r3
+ 145 0114 04D04BE2 		sub	sp, fp, #4
+ 146              		@ sp needed
+ 147 0118 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 148              	.L10:
+ 149              		.align	2
+ 150              	.L9:
+ 151 011c 00000000 		.word	LineCoding
+ 152 0120 00000000 		.word	DisplayEvent
+ 153 0124 00000000 		.word	.LC0
+ 154 0128 00000000 		.word	glIsApplicationActive
+ 155              		.cfi_endproc
+ 156              	.LFE0:
+ 158              		.section	.text.USBEvent_Callback,"ax",%progbits
+ 159              		.align	2
+ 160              		.global	USBEvent_Callback
+ 162              	USBEvent_Callback:
+ 163              	.LFB1:
+ 105:../USB_Handler.c **** 
+ 106:../USB_Handler.c **** void USBEvent_Callback(CyU3PUsbEventType_t Event, uint16_t EventData )
+ 107:../USB_Handler.c **** {
+ 164              		.loc 1 107 0
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 8
+ 167              		@ frame_needed = 1, uses_anonymous_args = 0
+ 168 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 169              	.LCFI2:
+ 170              		.cfi_def_cfa_offset 8
+ 171              		.cfi_offset 11, -8
+ 172              		.cfi_offset 14, -4
+ 173 0004 04B08DE2 		add	fp, sp, #4
+ 174              	.LCFI3:
+ 175              		.cfi_def_cfa 11, 4
+ 176 0008 08D04DE2 		sub	sp, sp, #8
+ 177 000c 0020A0E1 		mov	r2, r0
+ 178 0010 0130A0E1 		mov	r3, r1
+ 179 0014 05204BE5 		strb	r2, [fp, #-5]
+ 180 0018 B8304BE1 		strh	r3, [fp, #-8]	@ movhi
+ 108:../USB_Handler.c **** //	Don't user DebugPrint in a Callback, set an event and this will be displayed later
+ 109:../USB_Handler.c **** //	DebugPrint(4, "\nEvent received = %s", EventName[Event]);
+ 110:../USB_Handler.c **** 	CyU3PEventSet(&DisplayEvent, 1<<Event, CYU3P_EVENT_OR);
+ 181              		.loc 1 110 0
+ 182 001c 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 183 0020 0120A0E3 		mov	r2, #1
+ 184 0024 1233A0E1 		mov	r3, r2, asl r3
+ 185 0028 78009FE5 		ldr	r0, .L20
+ 186 002c 0310A0E1 		mov	r1, r3
+ 187 0030 0020A0E3 		mov	r2, #0
+ 188 0034 FEFFFFEB 		bl	_txe_event_flags_set
+ 111:../USB_Handler.c ****     switch (Event)
+ 189              		.loc 1 111 0
+ 190 0038 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 191 003c 050053E3 		cmp	r3, #5
+ 192 0040 03F19F97 		ldrls	pc, [pc, r3, asl #2]
+ 193 0044 140000EA 		b	.L19
+ 194              	.L14:
+ 195 0048 7C000000 		.word	.L13
+ 196 004c 7C000000 		.word	.L13
+ 197 0050 9C000000 		.word	.L19
+ 198 0054 9C000000 		.word	.L19
+ 199 0058 7C000000 		.word	.L13
+ 200 005c 60000000 		.word	.L15
+ 201              	.L15:
+ 112:../USB_Handler.c ****     {
+ 113:../USB_Handler.c ****         case CY_U3P_USB_EVENT_SETCONF:
+ 114:../USB_Handler.c ****             /* Stop the application before re-starting. */
+ 115:../USB_Handler.c ****             if (glIsApplicationActive) StopApplication();
+ 202              		.loc 1 115 0
+ 203 0060 44309FE5 		ldr	r3, .L20+4
+ 204 0064 003093E5 		ldr	r3, [r3]
+ 205 0068 000053E3 		cmp	r3, #0
+ 206 006c 0000000A 		beq	.L16
+ 207              		.loc 1 115 0 is_stmt 0 discriminator 1
+ 208 0070 FEFFFFEB 		bl	StopApplication
+ 209              	.L16:
+ 116:../USB_Handler.c ****             StartApplication();
+ 210              		.loc 1 116 0 is_stmt 1
+ 211 0074 FEFFFFEB 		bl	StartApplication
+ 117:../USB_Handler.c ****             break;
+ 212              		.loc 1 117 0
+ 213 0078 080000EA 		b	.L11
+ 214              	.L13:
+ 118:../USB_Handler.c **** 
+ 119:../USB_Handler.c ****         case CY_U3P_USB_EVENT_RESET:
+ 120:../USB_Handler.c ****         case CY_U3P_USB_EVENT_CONNECT:
+ 121:../USB_Handler.c ****         case CY_U3P_USB_EVENT_DISCONNECT:
+ 122:../USB_Handler.c ****             if (glIsApplicationActive)
+ 215              		.loc 1 122 0
+ 216 007c 28309FE5 		ldr	r3, .L20+4
+ 217 0080 003093E5 		ldr	r3, [r3]
+ 218 0084 000053E3 		cmp	r3, #0
+ 219 0088 0200000A 		beq	.L18
+ 123:../USB_Handler.c ****             {
+ 124:../USB_Handler.c ****                 CyU3PUsbLPMEnable();
+ 220              		.loc 1 124 0
+ 221 008c FEFFFFEB 		bl	CyU3PUsbLPMEnable
+ 125:../USB_Handler.c ****                 StopApplication();
+ 222              		.loc 1 125 0
+ 223 0090 FEFFFFEB 		bl	StopApplication
+ 126:../USB_Handler.c ****             }
+ 127:../USB_Handler.c ****             break;
+ 224              		.loc 1 127 0
+ 225 0094 010000EA 		b	.L11
+ 226              	.L18:
+ 227 0098 000000EA 		b	.L11
+ 228              	.L19:
+ 128:../USB_Handler.c **** 
+ 129:../USB_Handler.c ****         default:
+ 130:../USB_Handler.c ****             break;
+ 229              		.loc 1 130 0
+ 230 009c 0000A0E1 		mov	r0, r0	@ nop
+ 231              	.L11:
+ 131:../USB_Handler.c ****     }
+ 132:../USB_Handler.c **** }
+ 232              		.loc 1 132 0
+ 233 00a0 04D04BE2 		sub	sp, fp, #4
+ 234              		@ sp needed
+ 235 00a4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 236              	.L21:
+ 237              		.align	2
+ 238              	.L20:
+ 239 00a8 00000000 		.word	DisplayEvent
+ 240 00ac 00000000 		.word	glIsApplicationActive
+ 241              		.cfi_endproc
+ 242              	.LFE1:
+ 244              		.section	.text.LPMRequest_Callback,"ax",%progbits
+ 245              		.align	2
+ 246              		.global	LPMRequest_Callback
+ 248              	LPMRequest_Callback:
+ 249              	.LFB2:
+ 133:../USB_Handler.c **** 
+ 134:../USB_Handler.c **** CyBool_t LPMRequest_Callback(CyU3PUsbLinkPowerMode link_mode)
+ 135:../USB_Handler.c **** {
+ 250              		.loc 1 135 0
+ 251              		.cfi_startproc
+ 252              		@ args = 0, pretend = 0, frame = 8
+ 253              		@ frame_needed = 1, uses_anonymous_args = 0
+ 254              		@ link register save eliminated.
+ 255 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 256              	.LCFI4:
+ 257              		.cfi_def_cfa_offset 4
+ 258              		.cfi_offset 11, -4
+ 259 0004 00B08DE2 		add	fp, sp, #0
+ 260              	.LCFI5:
+ 261              		.cfi_def_cfa_register 11
+ 262 0008 0CD04DE2 		sub	sp, sp, #12
+ 263 000c 0030A0E1 		mov	r3, r0
+ 264 0010 05304BE5 		strb	r3, [fp, #-5]
+ 136:../USB_Handler.c **** 	// OK to move into U1/U2 in this application
+ 137:../USB_Handler.c ****     return CyTrue;
+ 265              		.loc 1 137 0
+ 266 0014 0130A0E3 		mov	r3, #1
+ 138:../USB_Handler.c **** }
+ 267              		.loc 1 138 0
+ 268 0018 0300A0E1 		mov	r0, r3
+ 269 001c 00D04BE2 		sub	sp, fp, #0
+ 270              		@ sp needed
+ 271 0020 04B09DE4 		ldr	fp, [sp], #4
+ 272 0024 1EFF2FE1 		bx	lr
+ 273              		.cfi_endproc
+ 274              	.LFE2:
+ 276              		.section	.rodata
+ 277 001a 0000     		.align	2
+ 278              	.LC1:
+ 279 001c 53746172 		.ascii	"Start USB Driver\000"
+ 279      74205553 
+ 279      42204472 
+ 279      69766572 
+ 279      00
+ 280 002d 000000   		.align	2
+ 281              	.LC2:
+ 282 0030 53657420 		.ascii	"Set USB Descriptors\000"
+ 282      55534220 
+ 282      44657363 
+ 282      72697074 
+ 282      6F727300 
+ 283              		.align	2
+ 284              	.LC3:
+ 285 0044 436F6E6E 		.ascii	"Connect USB\000"
+ 285      65637420 
+ 285      55534200 
+ 286              		.section	.text.InitializeUSB,"ax",%progbits
+ 287              		.align	2
+ 288              		.global	InitializeUSB
+ 290              	InitializeUSB:
+ 291              	.LFB3:
+ 139:../USB_Handler.c **** 
+ 140:../USB_Handler.c **** // Spin up USB, let the USB driver handle enumeration
+ 141:../USB_Handler.c **** CyU3PReturnStatus_t InitializeUSB(void)
+ 142:../USB_Handler.c **** {
+ 292              		.loc 1 142 0
+ 293              		.cfi_startproc
+ 294              		@ args = 0, pretend = 0, frame = 8
+ 295              		@ frame_needed = 1, uses_anonymous_args = 0
+ 296 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 297              	.LCFI6:
+ 298              		.cfi_def_cfa_offset 8
+ 299              		.cfi_offset 11, -8
+ 300              		.cfi_offset 14, -4
+ 301 0004 04B08DE2 		add	fp, sp, #4
+ 302              	.LCFI7:
+ 303              		.cfi_def_cfa 11, 4
+ 304 0008 08D04DE2 		sub	sp, sp, #8
+ 143:../USB_Handler.c **** 	CyU3PReturnStatus_t Status;
+ 144:../USB_Handler.c **** 	Status = CyU3PUsbStart();
+ 305              		.loc 1 144 0
+ 306 000c FEFFFFEB 		bl	CyU3PUsbStart
+ 307 0010 08000BE5 		str	r0, [fp, #-8]
+ 145:../USB_Handler.c **** 	CheckStatus("Start USB Driver", Status);
+ 308              		.loc 1 145 0
+ 309 0014 60009FE5 		ldr	r0, .L26
+ 310 0018 08101BE5 		ldr	r1, [fp, #-8]
+ 311 001c FEFFFFEB 		bl	CheckStatus
+ 146:../USB_Handler.c **** 	// Setup callbacks to handle the setup requests, USB Events and LPM Requests (for USB 3.0)
+ 147:../USB_Handler.c ****     CyU3PUsbRegisterSetupCallback(USBSetup_Callback, CyTrue);
+ 312              		.loc 1 147 0
+ 313 0020 58009FE5 		ldr	r0, .L26+4
+ 314 0024 0110A0E3 		mov	r1, #1
+ 315 0028 FEFFFFEB 		bl	CyU3PUsbRegisterSetupCallback
+ 148:../USB_Handler.c ****     CyU3PUsbRegisterEventCallback(USBEvent_Callback);
+ 316              		.loc 1 148 0
+ 317 002c 50009FE5 		ldr	r0, .L26+8
+ 318 0030 FEFFFFEB 		bl	CyU3PUsbRegisterEventCallback
+ 149:../USB_Handler.c ****     CyU3PUsbRegisterLPMRequestCallback(LPMRequest_Callback);
+ 319              		.loc 1 149 0
+ 320 0034 4C009FE5 		ldr	r0, .L26+12
+ 321 0038 FEFFFFEB 		bl	CyU3PUsbRegisterLPMRequestCallback
+ 150:../USB_Handler.c **** 
+ 151:../USB_Handler.c ****     // Driver needs all of the descriptors so it can supply them to the host when requested
+ 152:../USB_Handler.c ****     Status = SetUSBdescriptors();
+ 322              		.loc 1 152 0
+ 323 003c FEFFFFEB 		bl	SetUSBdescriptors
+ 324 0040 08000BE5 		str	r0, [fp, #-8]
+ 153:../USB_Handler.c ****     CheckStatus("Set USB Descriptors", Status);
+ 325              		.loc 1 153 0
+ 326 0044 40009FE5 		ldr	r0, .L26+16
+ 327 0048 08101BE5 		ldr	r1, [fp, #-8]
+ 328 004c FEFFFFEB 		bl	CheckStatus
+ 154:../USB_Handler.c **** 
+ 155:../USB_Handler.c ****     /* Connect the USB Pins with SuperSpeed operation enabled. */
+ 156:../USB_Handler.c ****     ////// I have a problem with my USB 3.0 Descriptors and this does not enumerate at SuperSpeed
+ 157:../USB_Handler.c ****     ////// Get an Ellisys trace and FIX!
+ 158:../USB_Handler.c ****     Status = CyU3PConnectState(CyTrue, CyFalse);
+ 329              		.loc 1 158 0
+ 330 0050 0100A0E3 		mov	r0, #1
+ 331 0054 0010A0E3 		mov	r1, #0
+ 332 0058 FEFFFFEB 		bl	CyU3PConnectState
+ 333 005c 08000BE5 		str	r0, [fp, #-8]
+ 159:../USB_Handler.c ****     CheckStatus("Connect USB", Status);
+ 334              		.loc 1 159 0
+ 335 0060 28009FE5 		ldr	r0, .L26+20
+ 336 0064 08101BE5 		ldr	r1, [fp, #-8]
+ 337 0068 FEFFFFEB 		bl	CheckStatus
+ 160:../USB_Handler.c **** 
+ 161:../USB_Handler.c ****     return Status;
+ 338              		.loc 1 161 0
+ 339 006c 08301BE5 		ldr	r3, [fp, #-8]
+ 162:../USB_Handler.c **** }
+ 340              		.loc 1 162 0
+ 341 0070 0300A0E1 		mov	r0, r3
+ 342 0074 04D04BE2 		sub	sp, fp, #4
+ 343              		@ sp needed
+ 344 0078 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 345              	.L27:
+ 346              		.align	2
+ 347              	.L26:
+ 348 007c 1C000000 		.word	.LC1
+ 349 0080 00000000 		.word	USBSetup_Callback
+ 350 0084 00000000 		.word	USBEvent_Callback
+ 351 0088 00000000 		.word	LPMRequest_Callback
+ 352 008c 30000000 		.word	.LC2
+ 353 0090 44000000 		.word	.LC3
+ 354              		.cfi_endproc
+ 355              	.LFE3:
+ 357              		.text
+ 358              	.Letext0:
+ 359              		.file 2 "c:\\program files (x86)\\cypress\\ez-usb fx3 sdk\\1.3\\arm gcc\\arm-none-eabi\\include\\s
+ 360              		.file 3 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3typ
+ 361              		.file 4 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_port
+ 362              		.file 5 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_api.
+ 363              		.file 6 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3dma
+ 364              		.file 7 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3usb
+ 365              		.file 8 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3uar
+DEFINED SYMBOLS
+                            *ABS*:00000000 USB_Handler.c
+                            *COM*:00000018 glUartConfig
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:22     .data.LineCoding:00000000 LineCoding
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:19     .data.LineCoding:00000000 $d
+                            *COM*:00000020 glEP0Buffer
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:30     .rodata:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:34     .text.USBSetup_Callback:00000000 $a
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:37     .text.USBSetup_Callback:00000000 USBSetup_Callback
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:151    .text.USBSetup_Callback:0000011c $d
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:159    .text.USBEvent_Callback:00000000 $a
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:162    .text.USBEvent_Callback:00000000 USBEvent_Callback
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:195    .text.USBEvent_Callback:00000048 $d
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:203    .text.USBEvent_Callback:00000060 $a
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:239    .text.USBEvent_Callback:000000a8 $d
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:245    .text.LPMRequest_Callback:00000000 $a
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:248    .text.LPMRequest_Callback:00000000 LPMRequest_Callback
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:287    .text.InitializeUSB:00000000 $a
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:290    .text.InitializeUSB:00000000 InitializeUSB
+C:\Users\mddd\AppData\Local\Temp\ccr5hWeT.s:348    .text.InitializeUSB:0000007c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PUsbGetEP0Data
+_txe_event_flags_set
+CyU3PUsbSendEP0Data
+CheckStatus
+CyU3PUsbAckSetup
+CyU3PUsbStall
+DisplayEvent
+glIsApplicationActive
+StopApplication
+StartApplication
+CyU3PUsbLPMEnable
+CyU3PUsbStart
+CyU3PUsbRegisterSetupCallback
+CyU3PUsbRegisterEventCallback
+CyU3PUsbRegisterLPMRequestCallback
+SetUSBdescriptors
+CyU3PConnectState

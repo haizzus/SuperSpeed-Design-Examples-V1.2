@@ -1,0 +1,337 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"StartUp.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.rodata
+  22              		.align	2
+  23              	.LC0:
+  24 0000 0A466174 		.ascii	"\012Fatal Error = %d\000"
+  24      616C2045 
+  24      72726F72 
+  24      203D2025 
+  24      6400
+  25 0012 0000     		.section	.text.IndicateError,"ax",%progbits
+  26              		.align	2
+  27              		.global	IndicateError
+  29              	IndicateError:
+  30              	.LFB0:
+  31              		.file 1 "../StartUp.c"
+   1:../StartUp.c  **** // Startup.c - set up the CPU environment then start the RTOS
+   2:../StartUp.c  **** //
+   3:../StartUp.c  **** // john@usb-by-example.com
+   4:../StartUp.c  **** //
+   5:../StartUp.c  **** 
+   6:../StartUp.c  **** #include "Application.h"
+   7:../StartUp.c  **** 
+   8:../StartUp.c  **** void IndicateError(uint16_t ErrorCode)
+   9:../StartUp.c  **** {
+  32              		.loc 1 9 0
+  33              		.cfi_startproc
+  34              		@ args = 0, pretend = 0, frame = 40
+  35              		@ frame_needed = 1, uses_anonymous_args = 0
+  36 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39 0004 04B08DE2 		add	fp, sp, #4
+  40              		.cfi_offset 14, -4
+  41              		.cfi_offset 11, -8
+  42              	.LCFI1:
+  43              		.cfi_def_cfa 11, 4
+  44 0008 28D04DE2 		sub	sp, sp, #40
+  45 000c 0030A0E1 		mov	r3, r0
+  46 0010 B6324BE1 		strh	r3, [fp, #-38]	@ movhi
+  10:../StartUp.c  **** 	// Setup a PWM to blink the DVK's only user LED at an "error rate"
+  11:../StartUp.c  ****     CyU3PGpioComplexConfig_t gpioConfig;
+  12:../StartUp.c  ****     // Try the console, it may not get through
+  13:../StartUp.c  ****     if (ErrorCode) CyU3PDebugPrint(1, "\nFatal Error = %d", ErrorCode);
+  47              		.loc 1 13 0
+  48 0014 B6325BE1 		ldrh	r3, [fp, #-38]
+  49 0018 000053E3 		cmp	r3, #0
+  50 001c 0400000A 		beq	.L2
+  51              		.loc 1 13 0 is_stmt 0 discriminator 1
+  52 0020 B6325BE1 		ldrh	r3, [fp, #-38]
+  53 0024 0100A0E3 		mov	r0, #1
+  54 0028 A0109FE5 		ldr	r1, .L5
+  55 002c 0320A0E1 		mov	r2, r3
+  56 0030 FEFFFFEB 		bl	CyU3PDebugPrint
+  57              	.L2:
+  14:../StartUp.c  **** 	// LED is on UART_CTS which is currently been assigned to the UART driver, claim it back
+  15:../StartUp.c  ****     CyU3PDeviceGpioOverride(UART_CTS, CyFalse);
+  58              		.loc 1 15 0 is_stmt 1
+  59 0034 3600A0E3 		mov	r0, #54
+  60 0038 0010A0E3 		mov	r1, #0
+  61 003c FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  16:../StartUp.c  ****     // Configure UART_CTS as PWM output
+  17:../StartUp.c  ****     CyU3PMemSet((uint8_t *)&gpioConfig, 0, sizeof(gpioConfig));
+  62              		.loc 1 17 0
+  63 0040 24304BE2 		sub	r3, fp, #36
+  64 0044 0300A0E1 		mov	r0, r3
+  65 0048 0010A0E3 		mov	r1, #0
+  66 004c 2020A0E3 		mov	r2, #32
+  67 0050 FEFFFFEB 		bl	CyU3PMemSet
+  18:../StartUp.c  ****     gpioConfig.outValue = CyTrue;
+  68              		.loc 1 18 0
+  69 0054 0130A0E3 		mov	r3, #1
+  70 0058 24300BE5 		str	r3, [fp, #-36]
+  19:../StartUp.c  **** 	gpioConfig.outValue = CyTrue;
+  71              		.loc 1 19 0
+  72 005c 0130A0E3 		mov	r3, #1
+  73 0060 24300BE5 		str	r3, [fp, #-36]
+  20:../StartUp.c  ****     gpioConfig.driveLowEn = CyTrue;
+  74              		.loc 1 20 0
+  75 0064 0130A0E3 		mov	r3, #1
+  76 0068 20300BE5 		str	r3, [fp, #-32]
+  21:../StartUp.c  ****     gpioConfig.driveHighEn = CyTrue;
+  77              		.loc 1 21 0
+  78 006c 0130A0E3 		mov	r3, #1
+  79 0070 1C300BE5 		str	r3, [fp, #-28]
+  22:../StartUp.c  ****     gpioConfig.pinMode = (ErrorCode == 0) ? CY_U3P_GPIO_MODE_STATIC : CY_U3P_GPIO_MODE_PWM;
+  80              		.loc 1 22 0
+  81 0074 B6325BE1 		ldrh	r3, [fp, #-38]
+  82 0078 000053E3 		cmp	r3, #0
+  83 007c 0100001A 		bne	.L3
+  84              		.loc 1 22 0 is_stmt 0 discriminator 1
+  85 0080 0030A0E3 		mov	r3, #0
+  86 0084 000000EA 		b	.L4
+  87              	.L3:
+  88              		.loc 1 22 0 discriminator 2
+  89 0088 0530A0E3 		mov	r3, #5
+  90              	.L4:
+  91              		.loc 1 22 0 discriminator 3
+  92 008c 14304BE5 		strb	r3, [fp, #-20]
+  23:../StartUp.c  ****     gpioConfig.timerMode = CY_U3P_GPIO_TIMER_HIGH_FREQ;
+  93              		.loc 1 23 0 is_stmt 1 discriminator 3
+  94 0090 0130A0E3 		mov	r3, #1
+  95 0094 12304BE5 		strb	r3, [fp, #-18]
+  24:../StartUp.c  ****     gpioConfig.period = PWM_PERIOD << ErrorCode;
+  96              		.loc 1 24 0 discriminator 3
+  97 0098 B6325BE1 		ldrh	r3, [fp, #-38]
+  98 009c 30209FE5 		ldr	r2, .L5+4
+  99 00a0 1233A0E1 		mov	r3, r2, asl r3
+ 100 00a4 0C300BE5 		str	r3, [fp, #-12]
+  25:../StartUp.c  ****     gpioConfig.threshold = PWM_THRESHOLD << ErrorCode;
+ 101              		.loc 1 25 0 discriminator 3
+ 102 00a8 B6325BE1 		ldrh	r3, [fp, #-38]
+ 103 00ac 24209FE5 		ldr	r2, .L5+8
+ 104 00b0 1233A0E1 		mov	r3, r2, asl r3
+ 105 00b4 08300BE5 		str	r3, [fp, #-8]
+  26:../StartUp.c  ****     CyU3PGpioSetComplexConfig(UART_CTS, &gpioConfig);
+ 106              		.loc 1 26 0 discriminator 3
+ 107 00b8 24304BE2 		sub	r3, fp, #36
+ 108 00bc 3600A0E3 		mov	r0, #54
+ 109 00c0 0310A0E1 		mov	r1, r3
+ 110 00c4 FEFFFFEB 		bl	CyU3PGpioSetComplexConfig
+  27:../StartUp.c  **** }
+ 111              		.loc 1 27 0 discriminator 3
+ 112 00c8 04D04BE2 		sub	sp, fp, #4
+ 113 00cc 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 114              	.L6:
+ 115              		.align	2
+ 116              	.L5:
+ 117 00d0 00000000 		.word	.LC0
+ 118 00d4 002D3101 		.word	20000000
+ 119 00d8 404B4C00 		.word	5000000
+ 120              		.cfi_endproc
+ 121              	.LFE0:
+ 123              		.section	.text.InitGpioClocks,"ax",%progbits
+ 124              		.align	2
+ 125              		.global	InitGpioClocks
+ 127              	InitGpioClocks:
+ 128              	.LFB1:
+  28:../StartUp.c  **** 
+  29:../StartUp.c  **** CyU3PReturnStatus_t InitGpioClocks(void)
+  30:../StartUp.c  **** {
+ 129              		.loc 1 30 0
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 16
+ 132              		@ frame_needed = 1, uses_anonymous_args = 0
+ 133 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 134              	.LCFI2:
+ 135              		.cfi_def_cfa_offset 8
+ 136 0004 04B08DE2 		add	fp, sp, #4
+ 137              		.cfi_offset 14, -4
+ 138              		.cfi_offset 11, -8
+ 139              	.LCFI3:
+ 140              		.cfi_def_cfa 11, 4
+ 141 0008 10D04DE2 		sub	sp, sp, #16
+  31:../StartUp.c  **** 	CyU3PReturnStatus_t Status;
+  32:../StartUp.c  ****     CyU3PGpioClock_t GpioClock;
+  33:../StartUp.c  **** 
+  34:../StartUp.c  ****     // Startup the GPIO module
+  35:../StartUp.c  ****     GpioClock.fastClkDiv = 2;
+ 142              		.loc 1 35 0
+ 143 000c 0230A0E3 		mov	r3, #2
+ 144 0010 14304BE5 		strb	r3, [fp, #-20]
+  36:../StartUp.c  ****     GpioClock.slowClkDiv = 0;
+ 145              		.loc 1 36 0
+ 146 0014 0030A0E3 		mov	r3, #0
+ 147 0018 13304BE5 		strb	r3, [fp, #-19]
+  37:../StartUp.c  ****     GpioClock.simpleDiv = CY_U3P_GPIO_SIMPLE_DIV_BY_2;
+ 148              		.loc 1 37 0
+ 149 001c 0030A0E3 		mov	r3, #0
+ 150 0020 0C304BE5 		strb	r3, [fp, #-12]
+  38:../StartUp.c  ****     GpioClock.clkSrc = CY_U3P_SYS_CLK;
+ 151              		.loc 1 38 0
+ 152 0024 0330A0E3 		mov	r3, #3
+ 153 0028 0B304BE5 		strb	r3, [fp, #-11]
+  39:../StartUp.c  ****     GpioClock.halfDiv = 0;
+ 154              		.loc 1 39 0
+ 155 002c 0030A0E3 		mov	r3, #0
+ 156 0030 10300BE5 		str	r3, [fp, #-16]
+  40:../StartUp.c  ****     Status = CyU3PGpioInit(&GpioClock, 0);
+ 157              		.loc 1 40 0
+ 158 0034 14304BE2 		sub	r3, fp, #20
+ 159 0038 0300A0E1 		mov	r0, r3
+ 160 003c 0010A0E3 		mov	r1, #0
+ 161 0040 FEFFFFEB 		bl	CyU3PGpioInit
+ 162 0044 08000BE5 		str	r0, [fp, #-8]
+  41:../StartUp.c  ****     return Status;
+ 163              		.loc 1 41 0
+ 164 0048 08301BE5 		ldr	r3, [fp, #-8]
+  42:../StartUp.c  **** }
+ 165              		.loc 1 42 0
+ 166 004c 0300A0E1 		mov	r0, r3
+ 167 0050 04D04BE2 		sub	sp, fp, #4
+ 168 0054 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 169              		.cfi_endproc
+ 170              	.LFE1:
+ 172              		.section	.text.main,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	main
+ 176              	main:
+ 177              	.LFB2:
+  43:../StartUp.c  **** 
+  44:../StartUp.c  **** // Main sets up the CPU environment then starts the RTOS
+  45:../StartUp.c  **** int main (void)
+  46:../StartUp.c  **** {
+ 178              		.loc 1 46 0
+ 179              		.cfi_startproc
+ 180              		@ args = 0, pretend = 0, frame = 48
+ 181              		@ frame_needed = 1, uses_anonymous_args = 0
+ 182 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 183              	.LCFI4:
+ 184              		.cfi_def_cfa_offset 8
+ 185 0004 04B08DE2 		add	fp, sp, #4
+ 186              		.cfi_offset 14, -4
+ 187              		.cfi_offset 11, -8
+ 188              	.LCFI5:
+ 189              		.cfi_def_cfa 11, 4
+ 190 0008 30D04DE2 		sub	sp, sp, #48
+  47:../StartUp.c  ****     CyU3PIoMatrixConfig_t ioConfig;
+  48:../StartUp.c  ****     CyU3PReturnStatus_t Status;
+  49:../StartUp.c  **** 
+  50:../StartUp.c  ****  // Start with the default clock at 384 MHz
+  51:../StartUp.c  **** 	Status = CyU3PDeviceInit(0);
+ 191              		.loc 1 51 0
+ 192 000c 0000A0E3 		mov	r0, #0
+ 193 0010 FEFFFFEB 		bl	CyU3PDeviceInit
+ 194 0014 08000BE5 		str	r0, [fp, #-8]
+  52:../StartUp.c  **** 	if (Status == CY_U3P_SUCCESS)
+ 195              		.loc 1 52 0
+ 196 0018 08301BE5 		ldr	r3, [fp, #-8]
+ 197 001c 000053E3 		cmp	r3, #0
+ 198 0020 2000001A 		bne	.L9
+  53:../StartUp.c  ****     {
+  54:../StartUp.c  **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);
+ 199              		.loc 1 54 0
+ 200 0024 0100A0E3 		mov	r0, #1
+ 201 0028 0110A0E3 		mov	r1, #1
+ 202 002c 0120A0E3 		mov	r2, #1
+ 203 0030 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 204 0034 08000BE5 		str	r0, [fp, #-8]
+  55:../StartUp.c  **** 		if (Status == CY_U3P_SUCCESS)
+ 205              		.loc 1 55 0
+ 206 0038 08301BE5 		ldr	r3, [fp, #-8]
+ 207 003c 000053E3 		cmp	r3, #0
+ 208 0040 1800001A 		bne	.L9
+  56:../StartUp.c  **** 		{
+  57:../StartUp.c  **** 			CyU3PMemSet((uint8_t *)&ioConfig, 0, sizeof(ioConfig));
+ 209              		.loc 1 57 0
+ 210 0044 30304BE2 		sub	r3, fp, #48
+ 211 0048 0300A0E1 		mov	r0, r3
+ 212 004c 0010A0E3 		mov	r1, #0
+ 213 0050 2820A0E3 		mov	r2, #40
+ 214 0054 FEFFFFEB 		bl	CyU3PMemSet
+  58:../StartUp.c  **** 			ioConfig.isDQ32Bit = CyTrue;
+ 215              		.loc 1 58 0
+ 216 0058 0130A0E3 		mov	r3, #1
+ 217 005c 30300BE5 		str	r3, [fp, #-48]
+  59:../StartUp.c  **** 			ioConfig.useUart   = true;
+ 218              		.loc 1 59 0
+ 219 0060 0130A0E3 		mov	r3, #1
+ 220 0064 2C300BE5 		str	r3, [fp, #-44]
+  60:../StartUp.c  **** 			ioConfig.useI2C    = CyTrue;
+ 221              		.loc 1 60 0
+ 222 0068 0130A0E3 		mov	r3, #1
+ 223 006c 28300BE5 		str	r3, [fp, #-40]
+  61:../StartUp.c  **** 			ioConfig.lppMode   = CY_U3P_IO_MATRIX_LPP_DEFAULT;
+ 224              		.loc 1 61 0
+ 225 0070 0030A0E3 		mov	r3, #0
+ 226 0074 1A304BE5 		strb	r3, [fp, #-26]
+  62:../StartUp.c  **** 			Status = CyU3PDeviceConfigureIOMatrix(&ioConfig);
+ 227              		.loc 1 62 0
+ 228 0078 30304BE2 		sub	r3, fp, #48
+ 229 007c 0300A0E1 		mov	r0, r3
+ 230 0080 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 231 0084 08000BE5 		str	r0, [fp, #-8]
+  63:../StartUp.c  **** 			if (Status == CY_U3P_SUCCESS)
+ 232              		.loc 1 63 0
+ 233 0088 08301BE5 		ldr	r3, [fp, #-8]
+ 234 008c 000053E3 		cmp	r3, #0
+ 235 0090 0400001A 		bne	.L9
+  64:../StartUp.c  **** 			{
+  65:../StartUp.c  **** 				Status = InitGpioClocks();	// Need GPIO clocks working for Error Indicator
+ 236              		.loc 1 65 0
+ 237 0094 FEFFFFEB 		bl	InitGpioClocks
+ 238 0098 08000BE5 		str	r0, [fp, #-8]
+  66:../StartUp.c  **** 				IndicateError(1);			// Turn on Error Indicator
+ 239              		.loc 1 66 0
+ 240 009c 0100A0E3 		mov	r0, #1
+ 241 00a0 FEFFFFEB 		bl	IndicateError
+  67:../StartUp.c  **** 				// One of the first things RTOS should do (in ApplicationDefine) is turn off ErrorIndicator
+  68:../StartUp.c  **** 				CyU3PKernelEntry();			// Start RTOS, this does not return
+ 242              		.loc 1 68 0
+ 243 00a4 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 244              	.L9:
+  69:../StartUp.c  **** 			}
+  70:../StartUp.c  **** 		}
+  71:../StartUp.c  **** 	}
+  72:../StartUp.c  **** 
+  73:../StartUp.c  ****     while (1);			// Get here on a failure, can't recover, just hang here
+ 245              		.loc 1 73 0 discriminator 1
+ 246 00a8 FEFFFFEA 		b	.L9
+ 247              		.cfi_endproc
+ 248              	.LFE2:
+ 250              		.text
+ 251              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 StartUp.c
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:22     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:26     .text.IndicateError:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:29     .text.IndicateError:00000000 IndicateError
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:117    .text.IndicateError:000000d0 $d
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:124    .text.InitGpioClocks:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:127    .text.InitGpioClocks:00000000 InitGpioClocks
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:173    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc7ACd1x.s:176    .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+CyU3PDeviceGpioOverride
+CyU3PMemSet
+CyU3PGpioSetComplexConfig
+CyU3PGpioInit
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

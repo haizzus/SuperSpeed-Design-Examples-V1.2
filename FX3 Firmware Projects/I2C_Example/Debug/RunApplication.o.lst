@@ -1,0 +1,634 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"RunApplication.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ApplicationThreadHandle,212,4
+  22              		.comm	glIsApplicationActive,4,4
+  23              		.section	.rodata
+  24              		.align	2
+  25              	.LC0:
+  26 0000 0A537461 		.ascii	"\012Start GPIO Module\000"
+  26      72742047 
+  26      50494F20 
+  26      4D6F6475 
+  26      6C6500
+  27 0013 00       		.align	2
+  28              	.LC1:
+  29 0014 0A436C61 		.ascii	"\012Claim CPLD_RESET\000"
+  29      696D2043 
+  29      504C445F 
+  29      52455345 
+  29      5400
+  30              		.section	.text.SetupGPIO,"ax",%progbits
+  31              		.align	2
+  32              		.global	SetupGPIO
+  34              	SetupGPIO:
+  35              	.LFB0:
+  36              		.file 1 "../RunApplication.c"
+   1:../RunApplication.c **** // Keyboard.c - demonstrate USB by enumerating as a keyboard
+   2:../RunApplication.c **** //
+   3:../RunApplication.c **** // john@usb-by-example.com
+   4:../RunApplication.c **** //
+   5:../RunApplication.c **** 
+   6:../RunApplication.c **** #include "Application.h"
+   7:../RunApplication.c **** 
+   8:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(uint8_t TraceLevel);
+   9:../RunApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  10:../RunApplication.c **** 
+  11:../RunApplication.c **** CyU3PThread ApplicationThreadHandle;	// Handle to my Application Thread
+  12:../RunApplication.c **** CyBool_t glIsApplicationActive;			// Set true once device is enumerated
+  13:../RunApplication.c **** 
+  14:../RunApplication.c **** CyU3PReturnStatus_t SetupGPIO(void)
+  15:../RunApplication.c **** {
+  37              		.loc 1 15 0
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 40
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 8
+  44 0004 04B08DE2 		add	fp, sp, #4
+  45              		.cfi_offset 14, -4
+  46              		.cfi_offset 11, -8
+  47              	.LCFI1:
+  48              		.cfi_def_cfa 11, 4
+  49 0008 28D04DE2 		sub	sp, sp, #40
+  16:../RunApplication.c **** 	CyU3PReturnStatus_t Status;
+  17:../RunApplication.c **** 	CyU3PGpioClock_t GpioClock;
+  18:../RunApplication.c ****     CyU3PGpioSimpleConfig_t GpioConfig;
+  19:../RunApplication.c **** 
+  20:../RunApplication.c ****     // Startup the GPIO module
+  21:../RunApplication.c ****     GpioClock.fastClkDiv = 2;
+  50              		.loc 1 21 0
+  51 000c 0230A0E3 		mov	r3, #2
+  52 0010 14304BE5 		strb	r3, [fp, #-20]
+  22:../RunApplication.c ****     GpioClock.slowClkDiv = 0;
+  53              		.loc 1 22 0
+  54 0014 0030A0E3 		mov	r3, #0
+  55 0018 13304BE5 		strb	r3, [fp, #-19]
+  23:../RunApplication.c ****     GpioClock.simpleDiv = CY_U3P_GPIO_SIMPLE_DIV_BY_2;
+  56              		.loc 1 23 0
+  57 001c 0030A0E3 		mov	r3, #0
+  58 0020 0C304BE5 		strb	r3, [fp, #-12]
+  24:../RunApplication.c ****     GpioClock.clkSrc = CY_U3P_SYS_CLK;
+  59              		.loc 1 24 0
+  60 0024 0330A0E3 		mov	r3, #3
+  61 0028 0B304BE5 		strb	r3, [fp, #-11]
+  25:../RunApplication.c ****     GpioClock.halfDiv = 0;
+  62              		.loc 1 25 0
+  63 002c 0030A0E3 		mov	r3, #0
+  64 0030 10300BE5 		str	r3, [fp, #-16]
+  26:../RunApplication.c ****     Status = CyU3PGpioInit(&GpioClock, 0);
+  65              		.loc 1 26 0
+  66 0034 14304BE2 		sub	r3, fp, #20
+  67 0038 0300A0E1 		mov	r0, r3
+  68 003c 0010A0E3 		mov	r1, #0
+  69 0040 FEFFFFEB 		bl	CyU3PGpioInit
+  70 0044 08000BE5 		str	r0, [fp, #-8]
+  27:../RunApplication.c ****     CheckStatus("\nStart GPIO Module", Status);
+  71              		.loc 1 27 0
+  72 0048 70009FE5 		ldr	r0, .L2
+  73 004c 08101BE5 		ldr	r1, [fp, #-8]
+  74 0050 FEFFFFEB 		bl	CheckStatus
+  28:../RunApplication.c **** 
+  29:../RunApplication.c ****     // I have assigned GPIF_CTRL[10] as the CPLD RESET pin
+  30:../RunApplication.c ****     Status = CyU3PDeviceGpioOverride(CPLD_RESET, CyTrue);
+  75              		.loc 1 30 0
+  76 0054 1B00A0E3 		mov	r0, #27
+  77 0058 0110A0E3 		mov	r1, #1
+  78 005c FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  79 0060 08000BE5 		str	r0, [fp, #-8]
+  31:../RunApplication.c ****     CheckStatus("\nClaim CPLD_RESET", Status);
+  80              		.loc 1 31 0
+  81 0064 58009FE5 		ldr	r0, .L2+4
+  82 0068 08101BE5 		ldr	r1, [fp, #-8]
+  83 006c FEFFFFEB 		bl	CheckStatus
+  32:../RunApplication.c ****     CyU3PMemSet((uint8_t *)&GpioConfig, 0, sizeof(GpioConfig));
+  84              		.loc 1 32 0
+  85 0070 28304BE2 		sub	r3, fp, #40
+  86 0074 0300A0E1 		mov	r0, r3
+  87 0078 0010A0E3 		mov	r1, #0
+  88 007c 1420A0E3 		mov	r2, #20
+  89 0080 FEFFFFEB 		bl	CyU3PMemSet
+  33:../RunApplication.c ****     GpioConfig.outValue = 1;
+  90              		.loc 1 33 0
+  91 0084 0130A0E3 		mov	r3, #1
+  92 0088 28300BE5 		str	r3, [fp, #-40]
+  34:../RunApplication.c **** //r	GpioConfig.inputEn = CyFalse;
+  35:../RunApplication.c ****     GpioConfig.driveLowEn = CyTrue;
+  93              		.loc 1 35 0
+  94 008c 0130A0E3 		mov	r3, #1
+  95 0090 24300BE5 		str	r3, [fp, #-36]
+  36:../RunApplication.c ****     GpioConfig.driveHighEn = CyTrue;
+  96              		.loc 1 36 0
+  97 0094 0130A0E3 		mov	r3, #1
+  98 0098 20300BE5 		str	r3, [fp, #-32]
+  37:../RunApplication.c **** //r	GpioConfig.intrMode = CY_U3P_GPIO_NO_INTR;
+  38:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(CPLD_RESET, &GpioConfig);
+  99              		.loc 1 38 0
+ 100 009c 28304BE2 		sub	r3, fp, #40
+ 101 00a0 1B00A0E3 		mov	r0, #27
+ 102 00a4 0310A0E1 		mov	r1, r3
+ 103 00a8 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 104 00ac 08000BE5 		str	r0, [fp, #-8]
+  39:../RunApplication.c **** 
+  40:../RunApplication.c **** 	return Status;
+ 105              		.loc 1 40 0
+ 106 00b0 08301BE5 		ldr	r3, [fp, #-8]
+  41:../RunApplication.c **** }
+ 107              		.loc 1 41 0
+ 108 00b4 0300A0E1 		mov	r0, r3
+ 109 00b8 04D04BE2 		sub	sp, fp, #4
+ 110 00bc 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 111              	.L3:
+ 112              		.align	2
+ 113              	.L2:
+ 114 00c0 00000000 		.word	.LC0
+ 115 00c4 14000000 		.word	.LC1
+ 116              		.cfi_endproc
+ 117              	.LFE0:
+ 119              		.section	.rodata
+ 120 0026 0000     		.align	2
+ 121              	.LC2:
+ 122 0028 43795533 		.ascii	"CyU3PI2cInit\000"
+ 122      50493263 
+ 122      496E6974 
+ 122      00
+ 123 0035 000000   		.align	2
+ 124              	.LC3:
+ 125 0038 43795533 		.ascii	"CyU3PI2cSetConfig\000"
+ 125      50493263 
+ 125      53657443 
+ 125      6F6E6669 
+ 125      6700
+ 126              		.section	.text.I2C_Init,"ax",%progbits
+ 127              		.align	2
+ 128              		.global	I2C_Init
+ 130              	I2C_Init:
+ 131              	.LFB1:
+  42:../RunApplication.c **** 
+  43:../RunApplication.c **** CyU3PReturnStatus_t I2C_Init(void)
+  44:../RunApplication.c **** {
+ 132              		.loc 1 44 0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 24
+ 135              		@ frame_needed = 1, uses_anonymous_args = 0
+ 136 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 137              	.LCFI2:
+ 138              		.cfi_def_cfa_offset 8
+ 139 0004 04B08DE2 		add	fp, sp, #4
+ 140              		.cfi_offset 14, -4
+ 141              		.cfi_offset 11, -8
+ 142              	.LCFI3:
+ 143              		.cfi_def_cfa 11, 4
+ 144 0008 18D04DE2 		sub	sp, sp, #24
+  45:../RunApplication.c **** 	CyU3PI2cConfig_t i2cConfig;
+  46:../RunApplication.c **** 	CyU3PReturnStatus_t Status;
+  47:../RunApplication.c **** 
+  48:../RunApplication.c ****     Status = CyU3PI2cInit();										// Start the I2C driver
+ 145              		.loc 1 48 0
+ 146 000c FEFFFFEB 		bl	CyU3PI2cInit
+ 147 0010 08000BE5 		str	r0, [fp, #-8]
+  49:../RunApplication.c ****     CheckStatus("CyU3PI2cInit", Status);
+ 148              		.loc 1 49 0
+ 149 0014 54009FE5 		ldr	r0, .L5
+ 150 0018 08101BE5 		ldr	r1, [fp, #-8]
+ 151 001c FEFFFFEB 		bl	CheckStatus
+  50:../RunApplication.c **** 
+  51:../RunApplication.c ****     i2cConfig.bitRate    = CY_FX_USBI2C_I2C_BITRATE;
+ 152              		.loc 1 51 0
+ 153 0020 4C309FE5 		ldr	r3, .L5+4
+ 154 0024 18300BE5 		str	r3, [fp, #-24]
+  52:../RunApplication.c ****     i2cConfig.busTimeout = 0xFFFFFFFF;
+ 155              		.loc 1 52 0
+ 156 0028 0030E0E3 		mvn	r3, #0
+ 157 002c 10300BE5 		str	r3, [fp, #-16]
+  53:../RunApplication.c ****     i2cConfig.dmaTimeout = 0xFFFF;
+ 158              		.loc 1 53 0
+ 159 0030 0030E0E3 		mvn	r3, #0
+ 160 0034 BC304BE1 		strh	r3, [fp, #-12]	@ movhi
+  54:../RunApplication.c ****     i2cConfig.isDma      = CyFalse;
+ 161              		.loc 1 54 0
+ 162 0038 0030A0E3 		mov	r3, #0
+ 163 003c 14300BE5 		str	r3, [fp, #-20]
+  55:../RunApplication.c ****     Status = CyU3PI2cSetConfig(&i2cConfig, NULL);
+ 164              		.loc 1 55 0
+ 165 0040 18304BE2 		sub	r3, fp, #24
+ 166 0044 0300A0E1 		mov	r0, r3
+ 167 0048 0010A0E3 		mov	r1, #0
+ 168 004c FEFFFFEB 		bl	CyU3PI2cSetConfig
+ 169 0050 08000BE5 		str	r0, [fp, #-8]
+  56:../RunApplication.c ****     CheckStatus("CyU3PI2cSetConfig", Status);
+ 170              		.loc 1 56 0
+ 171 0054 1C009FE5 		ldr	r0, .L5+8
+ 172 0058 08101BE5 		ldr	r1, [fp, #-8]
+ 173 005c FEFFFFEB 		bl	CheckStatus
+  57:../RunApplication.c **** 
+  58:../RunApplication.c ****     return Status;
+ 174              		.loc 1 58 0
+ 175 0060 08301BE5 		ldr	r3, [fp, #-8]
+  59:../RunApplication.c **** }
+ 176              		.loc 1 59 0
+ 177 0064 0300A0E1 		mov	r0, r3
+ 178 0068 04D04BE2 		sub	sp, fp, #4
+ 179 006c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 180              	.L6:
+ 181              		.align	2
+ 182              	.L5:
+ 183 0070 28000000 		.word	.LC2
+ 184 0074 801A0600 		.word	400000
+ 185 0078 38000000 		.word	.LC3
+ 186              		.cfi_endproc
+ 187              	.LFE1:
+ 189              		.section	.rodata
+ 190 004a 0000     		.align	2
+ 191              	.LC4:
+ 192 004c 4932435F 		.ascii	"I2C_Read\000"
+ 192      52656164 
+ 192      00
+ 193 0055 000000   		.align	2
+ 194              	.LC5:
+ 195 0058 0A427574 		.ascii	"\012Buttons = %x\000"
+ 195      746F6E73 
+ 195      203D2025 
+ 195      7800
+ 196              		.section	.text.ReadButtons,"ax",%progbits
+ 197              		.align	2
+ 198              		.global	ReadButtons
+ 200              	ReadButtons:
+ 201              	.LFB2:
+  60:../RunApplication.c **** 
+  61:../RunApplication.c **** uint8_t ReadButtons(void)
+  62:../RunApplication.c **** {
+ 202              		.loc 1 62 0
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 24
+ 205              		@ frame_needed = 1, uses_anonymous_args = 0
+ 206 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 207              	.LCFI4:
+ 208              		.cfi_def_cfa_offset 8
+ 209 0004 04B08DE2 		add	fp, sp, #4
+ 210              		.cfi_offset 14, -4
+ 211              		.cfi_offset 11, -8
+ 212              	.LCFI5:
+ 213              		.cfi_def_cfa 11, 4
+ 214 0008 18D04DE2 		sub	sp, sp, #24
+  63:../RunApplication.c **** 	CyU3PReturnStatus_t Status;
+  64:../RunApplication.c ****     CyU3PI2cPreamble_t preamble;
+  65:../RunApplication.c ****     uint8_t Value;
+  66:../RunApplication.c ****     preamble.length    = 1;
+ 215              		.loc 1 66 0
+ 216 000c 0130A0E3 		mov	r3, #1
+ 217 0010 0C304BE5 		strb	r3, [fp, #-12]
+  67:../RunApplication.c ****     preamble.buffer[0] = (DeviceAddress<<1) | 1;
+ 218              		.loc 1 67 0
+ 219 0014 5230E0E3 		mvn	r3, #82
+ 220 0018 14304BE5 		strb	r3, [fp, #-20]
+  68:../RunApplication.c ****     preamble.ctrlMask  = 0x0000;
+ 221              		.loc 1 68 0
+ 222 001c 0030A0E3 		mov	r3, #0
+ 223 0020 BA304BE1 		strh	r3, [fp, #-10]	@ movhi
+  69:../RunApplication.c **** 
+  70:../RunApplication.c ****     Status = CyU3PI2cReceiveBytes(&preamble, &Value, 1, 0);
+ 224              		.loc 1 70 0
+ 225 0024 14204BE2 		sub	r2, fp, #20
+ 226 0028 15304BE2 		sub	r3, fp, #21
+ 227 002c 0200A0E1 		mov	r0, r2
+ 228 0030 0310A0E1 		mov	r1, r3
+ 229 0034 0120A0E3 		mov	r2, #1
+ 230 0038 0030A0E3 		mov	r3, #0
+ 231 003c FEFFFFEB 		bl	CyU3PI2cReceiveBytes
+ 232 0040 08000BE5 		str	r0, [fp, #-8]
+  71:../RunApplication.c ****     CheckStatus("I2C_Read", Status);
+ 233              		.loc 1 71 0
+ 234 0044 28009FE5 		ldr	r0, .L8
+ 235 0048 08101BE5 		ldr	r1, [fp, #-8]
+ 236 004c FEFFFFEB 		bl	CheckStatus
+  72:../RunApplication.c ****     CyU3PDebugPrint(4, "\nButtons = %x", Value);
+ 237              		.loc 1 72 0
+ 238 0050 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+ 239 0054 0400A0E3 		mov	r0, #4
+ 240 0058 18109FE5 		ldr	r1, .L8+4
+ 241 005c 0320A0E1 		mov	r2, r3
+ 242 0060 FEFFFFEB 		bl	CyU3PDebugPrint
+  73:../RunApplication.c **** 	return Value;
+ 243              		.loc 1 73 0
+ 244 0064 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+  74:../RunApplication.c **** }
+ 245              		.loc 1 74 0
+ 246 0068 0300A0E1 		mov	r0, r3
+ 247 006c 04D04BE2 		sub	sp, fp, #4
+ 248 0070 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 249              	.L9:
+ 250              		.align	2
+ 251              	.L8:
+ 252 0074 4C000000 		.word	.LC4
+ 253 0078 58000000 		.word	.LC5
+ 254              		.cfi_endproc
+ 255              	.LFE2:
+ 257              		.section	.rodata
+ 258 0066 0000     		.align	2
+ 259              	.LC6:
+ 260 0068 4932435F 		.ascii	"I2C_Write\000"
+ 260      57726974 
+ 260      6500
+ 261 0072 0000     		.align	2
+ 262              	.LC7:
+ 263 0074 4932435F 		.ascii	"I2C_WaitForAck\000"
+ 263      57616974 
+ 263      466F7241 
+ 263      636B00
+ 264              		.section	.text.WriteLEDs,"ax",%progbits
+ 265              		.align	2
+ 266              		.global	WriteLEDs
+ 268              	WriteLEDs:
+ 269              	.LFB3:
+  75:../RunApplication.c **** 
+  76:../RunApplication.c **** void WriteLEDs(uint8_t Value)
+  77:../RunApplication.c **** {
+ 270              		.loc 1 77 0
+ 271              		.cfi_startproc
+ 272              		@ args = 0, pretend = 0, frame = 24
+ 273              		@ frame_needed = 1, uses_anonymous_args = 0
+ 274 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 275              	.LCFI6:
+ 276              		.cfi_def_cfa_offset 8
+ 277 0004 04B08DE2 		add	fp, sp, #4
+ 278              		.cfi_offset 14, -4
+ 279              		.cfi_offset 11, -8
+ 280              	.LCFI7:
+ 281              		.cfi_def_cfa 11, 4
+ 282 0008 18D04DE2 		sub	sp, sp, #24
+ 283 000c 0030A0E1 		mov	r3, r0
+ 284 0010 15304BE5 		strb	r3, [fp, #-21]
+  78:../RunApplication.c **** //	CyU3PDebugPrint(4, "\nLEDs = %d, ", Value);
+  79:../RunApplication.c **** 	CyU3PReturnStatus_t Status;
+  80:../RunApplication.c ****     CyU3PI2cPreamble_t preamble;
+  81:../RunApplication.c **** 	preamble.length    = 1;
+ 285              		.loc 1 81 0
+ 286 0014 0130A0E3 		mov	r3, #1
+ 287 0018 0C304BE5 		strb	r3, [fp, #-12]
+  82:../RunApplication.c ****     preamble.buffer[0] = DeviceAddress<<1;
+ 288              		.loc 1 82 0
+ 289 001c 5330E0E3 		mvn	r3, #83
+ 290 0020 14304BE5 		strb	r3, [fp, #-20]
+  83:../RunApplication.c ****     preamble.ctrlMask  = 0x0000;
+ 291              		.loc 1 83 0
+ 292 0024 0030A0E3 		mov	r3, #0
+ 293 0028 BA304BE1 		strh	r3, [fp, #-10]	@ movhi
+  84:../RunApplication.c **** 
+  85:../RunApplication.c ****     Status = CyU3PI2cTransmitBytes(&preamble, &Value, 1, 0);
+ 294              		.loc 1 85 0
+ 295 002c 14204BE2 		sub	r2, fp, #20
+ 296 0030 15304BE2 		sub	r3, fp, #21
+ 297 0034 0200A0E1 		mov	r0, r2
+ 298 0038 0310A0E1 		mov	r1, r3
+ 299 003c 0120A0E3 		mov	r2, #1
+ 300 0040 0030A0E3 		mov	r3, #0
+ 301 0044 FEFFFFEB 		bl	CyU3PI2cTransmitBytes
+ 302 0048 08000BE5 		str	r0, [fp, #-8]
+  86:../RunApplication.c ****     CheckStatus("I2C_Write", Status);
+ 303              		.loc 1 86 0
+ 304 004c 34009FE5 		ldr	r0, .L11
+ 305 0050 08101BE5 		ldr	r1, [fp, #-8]
+ 306 0054 FEFFFFEB 		bl	CheckStatus
+  87:../RunApplication.c **** 
+  88:../RunApplication.c ****     /* Wait for the write to complete. */
+  89:../RunApplication.c ****     preamble.length = 1;
+ 307              		.loc 1 89 0
+ 308 0058 0130A0E3 		mov	r3, #1
+ 309 005c 0C304BE5 		strb	r3, [fp, #-12]
+  90:../RunApplication.c ****     Status = CyU3PI2cWaitForAck(&preamble, 10);
+ 310              		.loc 1 90 0
+ 311 0060 14304BE2 		sub	r3, fp, #20
+ 312 0064 0300A0E1 		mov	r0, r3
+ 313 0068 0A10A0E3 		mov	r1, #10
+ 314 006c FEFFFFEB 		bl	CyU3PI2cWaitForAck
+ 315 0070 08000BE5 		str	r0, [fp, #-8]
+  91:../RunApplication.c ****     CheckStatus("I2C_WaitForAck", Status);
+ 316              		.loc 1 91 0
+ 317 0074 10009FE5 		ldr	r0, .L11+4
+ 318 0078 08101BE5 		ldr	r1, [fp, #-8]
+ 319 007c FEFFFFEB 		bl	CheckStatus
+  92:../RunApplication.c **** }
+ 320              		.loc 1 92 0
+ 321 0080 04D04BE2 		sub	sp, fp, #4
+ 322 0084 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 323              	.L12:
+ 324              		.align	2
+ 325              	.L11:
+ 326 0088 68000000 		.word	.LC6
+ 327 008c 74000000 		.word	.LC7
+ 328              		.cfi_endproc
+ 329              	.LFE3:
+ 331              		.section	.rodata
+ 332 0083 00       		.align	2
+ 333              	.LC8:
+ 334 0084 4750494F 		.ascii	"GPIO Initialized\000"
+ 334      20496E69 
+ 334      7469616C 
+ 334      697A6564 
+ 334      00
+ 335 0095 000000   		.align	2
+ 336              	.LC9:
+ 337 0098 44656275 		.ascii	"Debug Console Initialized\000"
+ 337      6720436F 
+ 337      6E736F6C 
+ 337      6520496E 
+ 337      69746961 
+ 338 00b2 0000     		.align	2
+ 339              	.LC10:
+ 340 00b4 4932435F 		.ascii	"I2C_Init\000"
+ 340      496E6974 
+ 340      00
+ 341 00bd 000000   		.align	2
+ 342              	.LC11:
+ 343 00c0 0A417070 		.ascii	"\012Application failed to initialize. Error code: %"
+ 343      6C696361 
+ 343      74696F6E 
+ 343      20666169 
+ 343      6C656420 
+ 344 00f0 642E0A00 		.ascii	"d.\012\000"
+ 345              		.section	.text.ApplicationThread,"ax",%progbits
+ 346              		.align	2
+ 347              		.global	ApplicationThread
+ 349              	ApplicationThread:
+ 350              	.LFB4:
+  93:../RunApplication.c **** 
+  94:../RunApplication.c **** void ApplicationThread(uint32_t Value)
+  95:../RunApplication.c **** {
+ 351              		.loc 1 95 0
+ 352              		.cfi_startproc
+ 353              		@ args = 0, pretend = 0, frame = 24
+ 354              		@ frame_needed = 1, uses_anonymous_args = 0
+ 355 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 356              	.LCFI8:
+ 357              		.cfi_def_cfa_offset 8
+ 358 0004 04B08DE2 		add	fp, sp, #4
+ 359              		.cfi_offset 14, -4
+ 360              		.cfi_offset 11, -8
+ 361              	.LCFI9:
+ 362              		.cfi_def_cfa 11, 4
+ 363 0008 18D04DE2 		sub	sp, sp, #24
+ 364 000c 18000BE5 		str	r0, [fp, #-24]
+  96:../RunApplication.c **** 	int32_t Seconds = 0;
+ 365              		.loc 1 96 0
+ 366 0010 0030A0E3 		mov	r3, #0
+ 367 0014 08300BE5 		str	r3, [fp, #-8]
+  97:../RunApplication.c **** 	uint8_t Buttons = 0xAA;
+ 368              		.loc 1 97 0
+ 369 0018 5530E0E3 		mvn	r3, #85
+ 370 001c 09304BE5 		strb	r3, [fp, #-9]
+  98:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+  99:../RunApplication.c **** 
+ 100:../RunApplication.c ****     Status = SetupGPIO();		// Needed for CPLD_Reset = GPIF_CTRL[10]
+ 371              		.loc 1 100 0
+ 372 0020 FEFFFFEB 		bl	SetupGPIO
+ 373 0024 10000BE5 		str	r0, [fp, #-16]
+ 101:../RunApplication.c ****     CheckStatus("GPIO Initialized", Status);
+ 374              		.loc 1 101 0
+ 375 0028 9C009FE5 		ldr	r0, .L17
+ 376 002c 10101BE5 		ldr	r1, [fp, #-16]
+ 377 0030 FEFFFFEB 		bl	CheckStatus
+ 102:../RunApplication.c **** 
+ 103:../RunApplication.c ****     Status = InitializeDebugConsole(9);
+ 378              		.loc 1 103 0
+ 379 0034 0900A0E3 		mov	r0, #9
+ 380 0038 FEFFFFEB 		bl	InitializeDebugConsole
+ 381 003c 10000BE5 		str	r0, [fp, #-16]
+ 104:../RunApplication.c ****     CheckStatus("Debug Console Initialized", Status);
+ 382              		.loc 1 104 0
+ 383 0040 88009FE5 		ldr	r0, .L17+4
+ 384 0044 10101BE5 		ldr	r1, [fp, #-16]
+ 385 0048 FEFFFFEB 		bl	CheckStatus
+ 105:../RunApplication.c **** 
+ 106:../RunApplication.c ****     // Remove Reset from the CPLD
+ 107:../RunApplication.c ****     CyU3PThreadSleep(10);
+ 386              		.loc 1 107 0
+ 387 004c 0A00A0E3 		mov	r0, #10
+ 388 0050 FEFFFFEB 		bl	_tx_thread_sleep
+ 108:../RunApplication.c ****     CyU3PGpioSetValue(CPLD_RESET, 0);
+ 389              		.loc 1 108 0
+ 390 0054 1B00A0E3 		mov	r0, #27
+ 391 0058 0010A0E3 		mov	r1, #0
+ 392 005c FEFFFFEB 		bl	CyU3PGpioSetValue
+ 109:../RunApplication.c **** 
+ 110:../RunApplication.c ****     // Give me time to start up my Ellisys Explorer
+ 111:../RunApplication.c **** //	CyU3PThreadSleep(10000);
+ 112:../RunApplication.c **** 
+ 113:../RunApplication.c ****     if (Status == CY_U3P_SUCCESS)
+ 393              		.loc 1 113 0
+ 394 0060 10301BE5 		ldr	r3, [fp, #-16]
+ 395 0064 000053E3 		cmp	r3, #0
+ 396 0068 1200001A 		bne	.L14
+ 114:../RunApplication.c ****     {
+ 115:../RunApplication.c ****     	Status = I2C_Init();
+ 397              		.loc 1 115 0
+ 398 006c FEFFFFEB 		bl	I2C_Init
+ 399 0070 10000BE5 		str	r0, [fp, #-16]
+ 116:../RunApplication.c ****         CheckStatus("I2C_Init", Status);
+ 400              		.loc 1 116 0
+ 401 0074 58009FE5 		ldr	r0, .L17+8
+ 402 0078 10101BE5 		ldr	r1, [fp, #-16]
+ 403 007c FEFFFFEB 		bl	CheckStatus
+ 404              	.L15:
+ 117:../RunApplication.c **** 
+ 118:../RunApplication.c ****         // Now run forever
+ 119:../RunApplication.c ****     	while (1)
+ 120:../RunApplication.c ****     	{
+ 121:../RunApplication.c ****     		CyU3PThreadSleep(100);
+ 405              		.loc 1 121 0 discriminator 1
+ 406 0080 6400A0E3 		mov	r0, #100
+ 407 0084 FEFFFFEB 		bl	_tx_thread_sleep
+ 122:../RunApplication.c **** 			WriteLEDs(Buttons);
+ 408              		.loc 1 122 0 discriminator 1
+ 409 0088 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 410 008c 0300A0E1 		mov	r0, r3
+ 411 0090 FEFFFFEB 		bl	WriteLEDs
+ 123:../RunApplication.c **** //			CyU3PDebugPrint(4, "%d, %d: ", Seconds, Buttons);
+ 124:../RunApplication.c ****     		CyU3PThreadSleep(100);
+ 412              		.loc 1 124 0 discriminator 1
+ 413 0094 6400A0E3 		mov	r0, #100
+ 414 0098 FEFFFFEB 		bl	_tx_thread_sleep
+ 125:../RunApplication.c **** 			Buttons = ReadButtons();
+ 415              		.loc 1 125 0 discriminator 1
+ 416 009c FEFFFFEB 		bl	ReadButtons
+ 417 00a0 0030A0E1 		mov	r3, r0
+ 418 00a4 09304BE5 		strb	r3, [fp, #-9]
+ 126:../RunApplication.c ****     		Seconds++;
+ 419              		.loc 1 126 0 discriminator 1
+ 420 00a8 08301BE5 		ldr	r3, [fp, #-8]
+ 421 00ac 013083E2 		add	r3, r3, #1
+ 422 00b0 08300BE5 		str	r3, [fp, #-8]
+ 127:../RunApplication.c **** 		}
+ 423              		.loc 1 127 0 discriminator 1
+ 424 00b4 F1FFFFEA 		b	.L15
+ 425              	.L14:
+ 128:../RunApplication.c ****     }
+ 129:../RunApplication.c ****     CyU3PDebugPrint(4, "\nApplication failed to initialize. Error code: %d.\n", Status);
+ 426              		.loc 1 129 0
+ 427 00b8 0400A0E3 		mov	r0, #4
+ 428 00bc 14109FE5 		ldr	r1, .L17+12
+ 429 00c0 10201BE5 		ldr	r2, [fp, #-16]
+ 430 00c4 FEFFFFEB 		bl	CyU3PDebugPrint
+ 431              	.L16:
+ 130:../RunApplication.c ****     while (1);		// Hang here
+ 432              		.loc 1 130 0 discriminator 1
+ 433 00c8 FEFFFFEA 		b	.L16
+ 434              	.L18:
+ 435              		.align	2
+ 436              	.L17:
+ 437 00cc 84000000 		.word	.LC8
+ 438 00d0 98000000 		.word	.LC9
+ 439 00d4 B4000000 		.word	.LC10
+ 440 00d8 C0000000 		.word	.LC11
+ 441              		.cfi_endproc
+ 442              	.LFE4:
+ 444              		.text
+ 445              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 RunApplication.c
+                            *COM*:000000d4 ApplicationThreadHandle
+                            *COM*:00000004 glIsApplicationActive
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:24     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:31     .text.SetupGPIO:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:34     .text.SetupGPIO:00000000 SetupGPIO
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:114    .text.SetupGPIO:000000c0 $d
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:127    .text.I2C_Init:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:130    .text.I2C_Init:00000000 I2C_Init
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:183    .text.I2C_Init:00000070 $d
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:197    .text.ReadButtons:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:200    .text.ReadButtons:00000000 ReadButtons
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:252    .text.ReadButtons:00000074 $d
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:265    .text.WriteLEDs:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:268    .text.WriteLEDs:00000000 WriteLEDs
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:326    .text.WriteLEDs:00000088 $d
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:346    .text.ApplicationThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:349    .text.ApplicationThread:00000000 ApplicationThread
+C:\Users\John\AppData\Local\Temp\ccRgXerG.s:437    .text.ApplicationThread:000000cc $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PGpioInit
+CheckStatus
+CyU3PDeviceGpioOverride
+CyU3PMemSet
+CyU3PGpioSetSimpleConfig
+CyU3PI2cInit
+CyU3PI2cSetConfig
+CyU3PI2cReceiveBytes
+CyU3PDebugPrint
+CyU3PI2cTransmitBytes
+CyU3PI2cWaitForAck
+InitializeDebugConsole
+_tx_thread_sleep
+CyU3PGpioSetValue

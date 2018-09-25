@@ -1,0 +1,122 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"StartUp.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.text.main,"ax",%progbits
+  22              		.align	2
+  23              		.global	main
+  25              	main:
+  26              	.LFB0:
+  27              		.file 1 "../StartUp.c"
+   1:../StartUp.c  **** // StartUp.c - set up the CPU environment then start the RTOS
+   2:../StartUp.c  **** //
+   3:../StartUp.c  **** // john@usb-by-example.com
+   4:../StartUp.c  **** //
+   5:../StartUp.c  **** 
+   6:../StartUp.c  **** #include "Application.h"
+   7:../StartUp.c  **** 
+   8:../StartUp.c  **** 
+   9:../StartUp.c  **** // Main sets up the CPU environment then starts the RTOS
+  10:../StartUp.c  **** int main (void)
+  11:../StartUp.c  **** {
+  28              		.loc 1 11 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 48
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35 0004 04B08DE2 		add	fp, sp, #4
+  36              		.cfi_offset 14, -4
+  37              		.cfi_offset 11, -8
+  38              	.LCFI1:
+  39              		.cfi_def_cfa 11, 4
+  40 0008 30D04DE2 		sub	sp, sp, #48
+  12:../StartUp.c  ****     CyU3PIoMatrixConfig_t ioConfig;
+  13:../StartUp.c  ****     CyU3PReturnStatus_t Status;
+  14:../StartUp.c  **** 
+  15:../StartUp.c  ****  // Start with the default clock at 384 MHz
+  16:../StartUp.c  **** 	Status = CyU3PDeviceInit(0);
+  41              		.loc 1 16 0
+  42 000c 0000A0E3 		mov	r0, #0
+  43 0010 FEFFFFEB 		bl	CyU3PDeviceInit
+  44 0014 08000BE5 		str	r0, [fp, #-8]
+  17:../StartUp.c  **** 	if (Status == CY_U3P_SUCCESS)
+  45              		.loc 1 17 0
+  46 0018 08301BE5 		ldr	r3, [fp, #-8]
+  47 001c 000053E3 		cmp	r3, #0
+  48 0020 1800001A 		bne	.L2
+  18:../StartUp.c  ****     {
+  19:../StartUp.c  **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);
+  49              		.loc 1 19 0
+  50 0024 0100A0E3 		mov	r0, #1
+  51 0028 0110A0E3 		mov	r1, #1
+  52 002c 0120A0E3 		mov	r2, #1
+  53 0030 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+  54 0034 08000BE5 		str	r0, [fp, #-8]
+  20:../StartUp.c  **** 		if (Status == CY_U3P_SUCCESS)
+  55              		.loc 1 20 0
+  56 0038 08301BE5 		ldr	r3, [fp, #-8]
+  57 003c 000053E3 		cmp	r3, #0
+  58 0040 1000001A 		bne	.L2
+  21:../StartUp.c  **** 		{
+  22:../StartUp.c  **** 			CyU3PMemSet((uint8_t *)&ioConfig, 0, sizeof(ioConfig));
+  59              		.loc 1 22 0
+  60 0044 30304BE2 		sub	r3, fp, #48
+  61 0048 0300A0E1 		mov	r0, r3
+  62 004c 0010A0E3 		mov	r1, #0
+  63 0050 2820A0E3 		mov	r2, #40
+  64 0054 FEFFFFEB 		bl	CyU3PMemSet
+  23:../StartUp.c  **** 			ioConfig.useUart = true;
+  65              		.loc 1 23 0
+  66 0058 0130A0E3 		mov	r3, #1
+  67 005c 2C300BE5 		str	r3, [fp, #-44]
+  24:../StartUp.c  **** 			ioConfig.lppMode = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+  68              		.loc 1 24 0
+  69 0060 0130A0E3 		mov	r3, #1
+  70 0064 1A304BE5 		strb	r3, [fp, #-26]
+  25:../StartUp.c  **** 			Status = CyU3PDeviceConfigureIOMatrix(&ioConfig);
+  71              		.loc 1 25 0
+  72 0068 30304BE2 		sub	r3, fp, #48
+  73 006c 0300A0E1 		mov	r0, r3
+  74 0070 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+  75 0074 08000BE5 		str	r0, [fp, #-8]
+  26:../StartUp.c  **** 			if (Status == CY_U3P_SUCCESS) CyU3PKernelEntry();	// Start RTOS, this does not return
+  76              		.loc 1 26 0
+  77 0078 08301BE5 		ldr	r3, [fp, #-8]
+  78 007c 000053E3 		cmp	r3, #0
+  79 0080 0000001A 		bne	.L2
+  80              		.loc 1 26 0 is_stmt 0 discriminator 1
+  81 0084 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+  82              	.L2:
+  27:../StartUp.c  **** 		}
+  28:../StartUp.c  **** 	}
+  29:../StartUp.c  **** 
+  30:../StartUp.c  ****     while (1);			// Get here on a failure, can't recover, just hang here
+  83              		.loc 1 30 0 is_stmt 1 discriminator 1
+  84 0088 FEFFFFEA 		b	.L2
+  85              		.cfi_endproc
+  86              	.LFE0:
+  88              		.text
+  89              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 StartUp.c
+C:\Users\John\AppData\Local\Temp\ccsypUGW.s:22     .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccsypUGW.s:25     .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PMemSet
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

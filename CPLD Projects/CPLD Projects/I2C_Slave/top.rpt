@@ -1,0 +1,966 @@
+ 
+cpldfit:  version P.15xf                            Xilinx Inc.
+                                  Fitter Report
+Design Name: top                                 Date: 10- 5-2015,  6:15PM
+Device Used: XC2C128-6-VQ100
+Fitting Status: Successful
+
+*************************  Mapped Resource Summary  **************************
+
+Macrocells     Product Terms    Function Block   Registers      Pins           
+Used/Tot       Used/Tot         Inps Used/Tot    Used/Tot       Used/Tot       
+41 /128 ( 32%) 107 /448  ( 24%) 63  /320  ( 20%) 38 /128 ( 30%) 22 /80  ( 27%)
+
+** Function Block Resources **
+
+Function Mcells   FB Inps  Pterms   IO       CTC      CTR      CTS      CTE     
+Block    Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot
+FB1      16/16*    28/40    56/56*    0/10    1/1*     1/1*     1/1*     0/1
+FB2       4/16      7/40    10/56     0/10    1/1*     1/1*     0/1      0/1
+FB3       3/16      5/40     7/56     3/11    1/1*     1/1*     1/1*     0/1
+FB4       2/16      8/40     7/56     1/11    1/1*     1/1*     0/1      0/1
+FB5       8/16      3/40     9/56     1/10    1/1*     1/1*     0/1      0/1
+FB6       1/16      3/40     3/56     0/ 9    1/1*     1/1*     0/1      0/1
+FB7       7/16      9/40    15/56     7/10    1/1*     1/1*     1/1*     0/1
+FB8       0/16      0/40     0/56     0/ 9    0/1      0/1      0/1      0/1
+         -----    -------  -------   -----    ---      ---      ---      ---
+Total    41/128    63/320  107/448   12/80    7/8      7/8      3/8      0/8 
+
+CTC - Control Term Clock
+CTR - Control Term Reset
+CTS - Control Term Set
+CTE - Control Term Output Enable
+
+* - Resource is exhausted
+
+** Global Control Resources **
+
+GCK         GSR         GTS         DGE         
+Used/Tot    Used/Tot    Used/Tot    Used/Tot    
+0/3         0/1         0/4         0/1
+
+
+** Pin Resources **
+
+Signal Type    Required     Mapped  |  Pin Type            Used    Total 
+------------------------------------|------------------------------------
+Input         :   10          10    |  I/O              :    21     70
+Output        :   11          11    |  GCK/IO           :     0      3
+Bidirectional :    1           1    |  GTS/IO           :     0      4
+GCK           :    0           0    |  GSR/IO           :     1      1
+GTS           :    0           0    |  CDR/IO           :     0      1
+GSR           :    0           0    |  DGE/IO           :     0      1
+                 ----        ----
+        Total     22          22
+
+End of Mapped Resource Summary
+**************************  Errors and Warnings  ***************************
+
+WARNING:Cpld - Unable to retrieve the path to the iSE Project Repository. Will
+   use the default filename of 'top.ise'.
+INFO:Cpld - Inferring BUFG constraint for signal 'DQ<10>' based upon the LOC
+   constraint 'P23'. It is recommended that you declare this BUFG explicitedly
+   in your design. Note that for certain device families the output of a BUFG
+   constraint can not drive a gated clock, and the BUFG constraint will be
+   ignored.
+INFO:Cpld - Inferring BUFG constraint for signal 'PCLK' based upon the LOC
+   constraint 'P22'. It is recommended that you declare this BUFG explicitedly
+   in your design. Note that for certain device families the output of a BUFG
+   constraint can not drive a gated clock, and the BUFG constraint will be
+   ignored.
+INFO:Cpld - Inferring BUFG constraint for signal 'CTRL<6>' based upon the LOC
+   constraint 'P27'. It is recommended that you declare this BUFG explicitedly
+   in your design. Note that for certain device families the output of a BUFG
+   constraint can not drive a gated clock, and the BUFG constraint will be
+   ignored.
+WARNING:Cpld:936 - The output buffer 'GPIO45_n_OBUF' is missing an input and
+   will be deleted.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<0>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<11>'.  The input(s) are
+   unused after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<12>'.  The input(s) are
+   unused after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<1>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<2>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<3>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<4>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<5>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<6>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<7>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<8>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<9>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<0>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<10>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<11>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<12>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<13>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<14>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<15>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<16>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<17>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<18>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<19>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<1>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<20>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<21>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<22>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<23>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<24>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<25>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<26>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<27>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<28>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<29>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<2>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<30>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<31>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<3>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<4>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<5>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<6>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<7>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<8>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<9>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'PCLK'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'RX_MOSI'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'SPI_SCK'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'SPI_SSN'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'TP_2'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<0>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<1>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<2>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<3>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<4>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<5>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<6>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'User<7>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'INT' is ignored.
+WARNING:Cpld:829 - Signal 'TX_MISO_MC.TRST' has been minimized to 'GND'.
+*************************  Summary of Mapped Logic  ************************
+
+** 12 Outputs **
+
+Signal                               Total Total Bank Loc     Pin   Pin       Pin     I/O      I/O       Slew Reg     Reg Init
+Name                                 Pts   Inps               No.   Type      Use     STD      Style     Rate Use     State
+INT                                  0     0     2    FB3_4   99    GSR/I/O   O       LVCMOS33           FAST         
+LED<7>                               4     4     2    FB3_15  91    I/O       O       LVCMOS33           FAST DEFF    RESET
+LED<6>                               4     4     2    FB3_16  90    I/O       O       LVCMOS33           FAST DEFF    RESET
+I2C_SDA                              5     6     1    FB4_4   29    I/O       I/O     LVCMOS33 PU/OD     FAST DEFF    RESET
+FlashCS_n                            0     0     2    FB5_13  73    I/O       O       LVCMOS33           FAST         
+TX_MISO                              1     0     2    FB7_1   77    I/O       O       LVCMOS33           FAST         
+LED<0>                               4     4     2    FB7_6   81    I/O       O       LVCMOS33           FAST DEFF    RESET
+LED<1>                               4     4     2    FB7_11  82    I/O       O       LVCMOS33           FAST DEFF    RESET
+LED<2>                               4     4     2    FB7_13  85    I/O       O       LVCMOS33           FAST DEFF    RESET
+LED<3>                               4     4     2    FB7_14  86    I/O       O       LVCMOS33           FAST DEFF    RESET
+LED<4>                               4     4     2    FB7_15  87    I/O       O       LVCMOS33           FAST DEFF    RESET
+LED<5>                               4     4     2    FB7_16  89    I/O       O       LVCMOS33           FAST DEFF    RESET
+
+** 29 Buried Nodes **
+
+Signal                               Total Total Loc     Reg     Reg Init
+Name                                 Pts   Inps          Use     State
+i2c_module_0/data_in<3>              4     4     FB1_1   DEFF    RESET
+i2c_module_0/present_state_FSM_FFd1  5     16    FB1_2   DFF     RESET
+i2c_module_0/data_in<2>              4     4     FB1_3   DEFF    RESET
+i2c_module_0/data_in<1>              4     4     FB1_4   DEFF    RESET
+sda_out                              11    15    FB1_5   DFF     RESET
+i2c_module_0/latch_data_in           3     8     FB1_6   DFF     RESET
+i2c_module_0/index<3>                8     16    FB1_7   DFF     RESET
+i2c_module_0/index<2>                7     9     FB1_8   TFF     RESET
+i2c_module_0/index<1>                6     8     FB1_9   DFF     RESET
+i2c_module_0/index<0>                4     7     FB1_10  DFF     RESET
+i2c_module_0/latch_data_out          3     9     FB1_11  DFF     RESET
+ack_out                              4     15    FB1_12  DFF     RESET
+out_en                               5     18    FB1_13  TFF     RESET
+i2c_module_0/start_rst               2     2     FB1_14  DFF     RESET
+i2c_module_0/shift_data_in           8     18    FB1_15  TFF     RESET
+i2c_module_0/present_state_FSM_FFd2  7     17    FB1_16  DFF     RESET
+i2c_module_0/data_in<7>              4     4     FB2_8   DEFF    RESET
+i2c_module_0/data_in<6>              4     4     FB2_9   DEFF    RESET
+i2c_module_0/data_in<5>              4     4     FB2_10  DEFF    RESET
+i2c_module_0/data_in<4>              4     4     FB2_12  DEFF    RESET
+i2c_module_0/start                   2     2     FB4_5   DFF     RESET
+i2c_module_0/gpio_input<6>           3     3     FB5_1   DEFF    RESET
+i2c_module_0/gpio_input<5>           3     3     FB5_2   DEFF    RESET
+i2c_module_0/gpio_input<4>           3     3     FB5_3   DEFF    RESET
+i2c_module_0/gpio_input<3>           3     3     FB5_5   DEFF    RESET
+i2c_module_0/gpio_input<2>           3     3     FB5_7   DEFF    RESET
+i2c_module_0/gpio_input<1>           3     3     FB5_11  DEFF    RESET
+i2c_module_0/gpio_input<0>           3     3     FB5_12  DEFF    RESET
+i2c_module_0/gpio_input<7>           3     3     FB6_1   DEFF    RESET
+
+** 11 Inputs **
+
+Signal                               Bank Loc     Pin   Pin       Pin     I/O      I/O
+Name                                              No.   Type      Use     STD      Style
+CTRL<10>                             2    FB1_13  6     I/O       I       LVCMOS33 PU
+I2C_SDA                              1    FB4_4   29    I/O       I/O     LVCMOS33 
+I2C_SCL                              1    FB4_5   30    I/O       I       LVCMOS33 
+Button<6>                            2    FB5_1   65    I/O       I       LVCMOS33 PU
+Button<5>                            2    FB5_2   66    I/O       I       LVCMOS33 PU
+Button<4>                            2    FB5_3   67    I/O       I       LVCMOS33 PU
+Button<3>                            2    FB5_5   68    I/O       I       LVCMOS33 PU
+Button<2>                            2    FB5_7   70    I/O       I       LVCMOS33 PU
+Button<1>                            2    FB5_11  71    I/O       I       LVCMOS33 PU
+Button<0>                            2    FB5_12  72    I/O       I       LVCMOS33 PU
+Button<7>                            1    FB6_1   64    I/O       I       LVCMOS33 PU
+
+Legend:
+Pin No.   - ~     - User Assigned
+I/O Style - OD    - OpenDrain
+          - PU    - Pullup
+          - KPR   - Keeper
+          - S     - SchmittTrigger
+          - DG    - DataGate
+Reg Use   - LATCH - Transparent latch
+          - DFF   - D-flip-flop
+          - DEFF  - D-flip-flop with clock enable
+          - TFF   - T-flip-flop
+          - TDFF  - Dual-edge-triggered T-flip-flop
+          - DDFF  - Dual-edge-triggered flip-flop
+          - DDEFF - Dual-edge-triggered flip-flop with clock enable
+          /S (after any above flop/latch type) indicates initial state is Set
+**************************  Function Block Details  ************************
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+              VRF - Vref
+Pin No.      - ~  - User Assigned
+*********************************** FB1  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               28/12
+Number of function block control terms used/remaining:        3/1
+Number of PLA product terms used/remaining:                   56/0
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+i2c_module_0/data_in<3>       4     FB1_1   13   I/O     (b)    +   +      
+i2c_module_0/present_state_FSM_FFd1
+                              5     FB1_2        (b)     (b)    +   +      
+i2c_module_0/data_in<2>       4     FB1_3   12   I/O     (b)    +   +      
+i2c_module_0/data_in<1>       4     FB1_4   11   I/O     (b)    +   +      
+sda_out                       11    FB1_5   10   I/O     (b)    +       +  
+i2c_module_0/latch_data_in    3     FB1_6   9    I/O     (b)    +   +      
+i2c_module_0/index<3>         8     FB1_7        (b)     (b)    +   +      
+i2c_module_0/index<2>         7     FB1_8        (b)     (b)    +   +      
+i2c_module_0/index<1>         6     FB1_9        (b)     (b)    +   +      
+i2c_module_0/index<0>         4     FB1_10       (b)     (b)    +       +  
+i2c_module_0/latch_data_out   3     FB1_11  8    I/O     (b)    +   +      
+ack_out                       4     FB1_12  7    I/O     (b)    +   +      
+out_en                        5     FB1_13  6    I/O     I      +   +      
+i2c_module_0/start_rst        2     FB1_14       (b)     (b)    +          
+i2c_module_0/shift_data_in    8     FB1_15  4    GTS/I/O (b)    +   +      
+i2c_module_0/present_state_FSM_FFd2
+                              7     FB1_16  3    GTS/I/O (b)    +   +      
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>                 11: i2c_module_0/gpio_input<0>  20: i2c_module_0/index<1> 
+  2: I2C_SCL                  12: i2c_module_0/gpio_input<1>  21: i2c_module_0/index<2> 
+  3: I2C_SDA                  13: i2c_module_0/gpio_input<2>  22: i2c_module_0/index<3> 
+  4: i2c_module_0/data_in<1>  14: i2c_module_0/gpio_input<3>  23: i2c_module_0/present_state_FSM_FFd1 
+  5: i2c_module_0/data_in<2>  15: i2c_module_0/gpio_input<4>  24: i2c_module_0/present_state_FSM_FFd2 
+  6: i2c_module_0/data_in<3>  16: i2c_module_0/gpio_input<5>  25: i2c_module_0/shift_data_in 
+  7: i2c_module_0/data_in<4>  17: i2c_module_0/gpio_input<6>  26: i2c_module_0/start 
+  8: i2c_module_0/data_in<5>  18: i2c_module_0/gpio_input<7>  27: out_en 
+  9: i2c_module_0/data_in<6>  19: i2c_module_0/index<0>       28: sda_out 
+ 10: i2c_module_0/data_in<7> 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+i2c_module_0/data_in<3> 
+                  XX..X...................X............... 4       
+i2c_module_0/present_state_FSM_FFd1 
+                  XX.XXXXXXX........XXXXXX.X.............. 16      
+i2c_module_0/data_in<2> 
+                  XX.X....................X............... 4       
+i2c_module_0/data_in<1> 
+                  XXX.....................X............... 4       
+sda_out           XX........XXXXXXXXXXX.....XX............ 15      
+i2c_module_0/latch_data_in 
+                  XX................XXXXXX................ 8       
+i2c_module_0/index<3> 
+                  XX.XXXXXXX........XXXXXX.X.............. 16      
+i2c_module_0/index<2> 
+                  XX................XXXXXX.X.............. 9       
+i2c_module_0/index<1> 
+                  XX................XX.XXX.X.............. 8       
+i2c_module_0/index<0> 
+                  XX................X..XXX.X.............. 7       
+i2c_module_0/latch_data_out 
+                  XXX...............XXXXXX................ 9       
+ack_out           XX.XXXXXXX........XXXXXX................ 15      
+out_en            XXXXXXXXXX........XXXXXX.XX............. 18      
+i2c_module_0/start_rst 
+                  .X.......................X.............. 2       
+i2c_module_0/shift_data_in 
+                  XXXXXXXXXX........XXXXXXXX.............. 18      
+i2c_module_0/present_state_FSM_FFd2 
+                  XXXXXXXXXX........XXXXXX.X.............. 17      
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB2  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               7/33
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   10/46
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+(unused)                      0     FB2_1        (b)           
+(unused)                      0     FB2_2   14   I/O           
+(unused)                      0     FB2_3   15   I/O           
+(unused)                      0     FB2_4   16   I/O           
+(unused)                      0     FB2_5   17   I/O           
+(unused)                      0     FB2_6   18   I/O           
+(unused)                      0     FB2_7        (b)           
+i2c_module_0/data_in<7>       4     FB2_8        (b)     (b)    +   +      
+i2c_module_0/data_in<6>       4     FB2_9        (b)     (b)    +   +      
+i2c_module_0/data_in<5>       4     FB2_10       (b)     (b)    +   +      
+(unused)                      0     FB2_11  19   I/O           
+i2c_module_0/data_in<4>       4     FB2_12       (b)     (b)    +   +      
+(unused)                      0     FB2_13  22   GCK/I/O       
+(unused)                      0     FB2_14  23   GCK/I/O       
+(unused)                      0     FB2_15  24   CDR/I/O       
+(unused)                      0     FB2_16  27   GCK/I/O       
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>                  4: i2c_module_0/data_in<4>   6: i2c_module_0/data_in<6> 
+  2: I2C_SCL                   5: i2c_module_0/data_in<5>   7: i2c_module_0/shift_data_in 
+  3: i2c_module_0/data_in<3> 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+i2c_module_0/data_in<7> 
+                  XX...XX................................. 4       
+i2c_module_0/data_in<6> 
+                  XX..X.X................................. 4       
+i2c_module_0/data_in<5> 
+                  XX.X..X................................. 4       
+i2c_module_0/data_in<4> 
+                  XXX...X................................. 4       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB3  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               5/35
+Number of function block control terms used/remaining:        3/1
+Number of PLA product terms used/remaining:                   7/49
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+(unused)                      0     FB3_1        (b)           
+(unused)                      0     FB3_2   2    GTS/I/O       
+(unused)                      0     FB3_3   1    GTS/I/O       
+INT                           0     FB3_4   99   GSR/I/O O                 
+(unused)                      0     FB3_5   97   I/O           
+(unused)                      0     FB3_6   96   I/O           
+(unused)                      0     FB3_7   95   I/O           
+(unused)                      0     FB3_8        (b)           
+(unused)                      0     FB3_9        (b)           
+(unused)                      0     FB3_10       (b)           
+(unused)                      0     FB3_11  94   I/O           
+(unused)                      0     FB3_12       (b)           
+(unused)                      0     FB3_13  93   I/O           
+(unused)                      0     FB3_14  92   I/O           
+LED<7>                        4     FB3_15  91   I/O     O      +       +  
+LED<6>                        4     FB3_16  90   I/O     O      +   +      
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           3: i2c_module_0/data_in<6>   5: i2c_module_0/latch_data_in 
+  2: I2C_SCL            4: i2c_module_0/data_in<7> 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+INT               ........................................ 0       
+LED<7>            XX.XX................................... 4       
+LED<6>            XXX.X................................... 4       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB4  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               8/32
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   7/49
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+(unused)                      0     FB4_1   28   DGE/I/O       
+(unused)                      0     FB4_2        (b)           
+(unused)                      0     FB4_3        (b)           
+I2C_SDA                       5     FB4_4   29   I/O     I/O    +   +      
+i2c_module_0/start            2     FB4_5   30   I/O     I                 
+(unused)                      0     FB4_6   32   I/O           
+(unused)                      0     FB4_7   33   I/O           
+(unused)                      0     FB4_8        (b)           
+(unused)                      0     FB4_9        (b)           
+(unused)                      0     FB4_10       (b)           
+(unused)                      0     FB4_11  34   I/O           
+(unused)                      0     FB4_12  35   I/O           
+(unused)                      0     FB4_13  36   I/O           
+(unused)                      0     FB4_14  37   I/O           
+(unused)                      0     FB4_15  39   I/O           
+(unused)                      0     FB4_16  40   I/O           
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           4: ack_out                      7: out_en 
+  2: I2C_SCL            5: i2c_module_0/shift_data_in   8: sda_out 
+  3: I2C_SDA.PIN        6: i2c_module_0/start_rst     
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+I2C_SDA           XX.XX.XX................................ 6       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB5  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               3/37
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   9/47
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+i2c_module_0/gpio_input<6>    3     FB5_1   65   I/O     I      +   +      
+i2c_module_0/gpio_input<5>    3     FB5_2   66   I/O     I      +   +      
+i2c_module_0/gpio_input<4>    3     FB5_3   67   I/O     I      +   +      
+(unused)                      0     FB5_4        (b)           
+i2c_module_0/gpio_input<3>    3     FB5_5   68   I/O     I      +   +      
+(unused)                      0     FB5_6        (b)           
+i2c_module_0/gpio_input<2>    3     FB5_7   70   I/O     I      +   +      
+(unused)                      0     FB5_8        (b)           
+(unused)                      0     FB5_9        (b)           
+(unused)                      0     FB5_10       (b)           
+i2c_module_0/gpio_input<1>    3     FB5_11  71   I/O     I      +   +      
+i2c_module_0/gpio_input<0>    3     FB5_12  72   I/O     I      +   +      
+FlashCS_n                     0     FB5_13  73   I/O     O                 
+(unused)                      0     FB5_14  74   I/O           
+(unused)                      0     FB5_15  76   I/O           
+(unused)                      0     FB5_16       (b)           
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           2: I2C_SCL            3: i2c_module_0/latch_data_out 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+FlashCS_n         ........................................ 0       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB6  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               3/37
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   3/53
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+i2c_module_0/gpio_input<7>    3     FB6_1   64   I/O     I      +   +      
+(unused)                      0     FB6_2   63   I/O           
+(unused)                      0     FB6_3   61   I/O           
+(unused)                      0     FB6_4   60   I/O           
+(unused)                      0     FB6_5   59   I/O           
+(unused)                      0     FB6_6   58   I/O           
+(unused)                      0     FB6_7        (b)           
+(unused)                      0     FB6_8        (b)           
+(unused)                      0     FB6_9        (b)           
+(unused)                      0     FB6_10       (b)           
+(unused)                      0     FB6_11       (b)           
+(unused)                      0     FB6_12  56   I/O           
+(unused)                      0     FB6_13       (b)           
+(unused)                      0     FB6_14  55   I/O           
+(unused)                      0     FB6_15       (b)           
+(unused)                      0     FB6_16  54   I/O           
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           2: I2C_SCL            3: i2c_module_0/latch_data_out 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB7  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               9/31
+Number of function block control terms used/remaining:        3/1
+Number of PLA product terms used/remaining:                   15/41
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+TX_MISO                       1     FB7_1   77   I/O     O                 
+(unused)                      0     FB7_2   78   I/O           
+(unused)                      0     FB7_3        (b)           
+(unused)                      0     FB7_4   79   I/O           
+(unused)                      0     FB7_5   80   I/O           
+LED<0>                        4     FB7_6   81   I/O     O      +       +  
+(unused)                      0     FB7_7        (b)           
+(unused)                      0     FB7_8        (b)           
+(unused)                      0     FB7_9        (b)           
+(unused)                      0     FB7_10       (b)           
+LED<1>                        4     FB7_11  82   I/O     O      +   +      
+(unused)                      0     FB7_12       (b)           
+LED<2>                        4     FB7_13  85   I/O     O      +       +  
+LED<3>                        4     FB7_14  86   I/O     O      +   +      
+LED<4>                        4     FB7_15  87   I/O     O      +   +      
+LED<5>                        4     FB7_16  89   I/O     O      +       +  
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           4: i2c_module_0/data_in<1>   7: i2c_module_0/data_in<4> 
+  2: I2C_SCL            5: i2c_module_0/data_in<2>   8: i2c_module_0/data_in<5> 
+  3: I2C_SDA            6: i2c_module_0/data_in<3>   9: i2c_module_0/latch_data_in 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+TX_MISO           ........................................ 0       
+LED<0>            XXX.....X............................... 4       
+LED<1>            XX.X....X............................... 4       
+LED<2>            XX..X...X............................... 4       
+LED<3>            XX...X..X............................... 4       
+LED<4>            XX....X.X............................... 4       
+LED<5>            XX.....XX............................... 4       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB8  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+(unused)                      0     FB8_1        (b)           
+(unused)                      0     FB8_2   53   I/O           
+(unused)                      0     FB8_3   52   I/O           
+(unused)                      0     FB8_4   50   I/O           
+(unused)                      0     FB8_5        (b)           
+(unused)                      0     FB8_6   49   I/O           
+(unused)                      0     FB8_7        (b)           
+(unused)                      0     FB8_8        (b)           
+(unused)                      0     FB8_9        (b)           
+(unused)                      0     FB8_10       (b)           
+(unused)                      0     FB8_11       (b)           
+(unused)                      0     FB8_12  46   I/O           
+(unused)                      0     FB8_13  44   I/O           
+(unused)                      0     FB8_14  43   I/O           
+(unused)                      0     FB8_15  42   I/O           
+(unused)                      0     FB8_16  41   I/O           
+*******************************  Equations  ********************************
+
+********** Mapped Logic **********
+
+
+FlashCS_n <= NOT ('0');
+
+
+INT <= '0';
+
+FDCPE_LED0: FDCPE port map (LED(0),i2c_module_0/data_in(0),I2C_SCL,'0',CTRL(10),i2c_module_0/latch_data_in);
+
+FDCPE_LED1: FDCPE port map (LED(1),i2c_module_0/data_in(1),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_in);
+
+FDCPE_LED2: FDCPE port map (LED(2),i2c_module_0/data_in(2),I2C_SCL,'0',CTRL(10),i2c_module_0/latch_data_in);
+
+FDCPE_LED3: FDCPE port map (LED(3),i2c_module_0/data_in(3),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_in);
+
+FDCPE_LED4: FDCPE port map (LED(4),i2c_module_0/data_in(4),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_in);
+
+FDCPE_LED5: FDCPE port map (LED(5),i2c_module_0/data_in(5),I2C_SCL,'0',CTRL(10),i2c_module_0/latch_data_in);
+
+FDCPE_LED6: FDCPE port map (LED(6),i2c_module_0/data_in(6),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_in);
+
+FDCPE_LED7: FDCPE port map (LED(7),i2c_module_0/data_in(7),I2C_SCL,'0',CTRL(10),i2c_module_0/latch_data_in);
+
+
+TX_MISO_I <= '0';
+TX_MISO <= TX_MISO_I when TX_MISO_OE = '1' else 'Z';
+TX_MISO_OE <= '0';
+
+FDCPE_ack_out: FDCPE port map (ack_out,ack_out_D,I2C_SCL,CTRL(10),'0','1');
+ack_out_D <= ((NOT i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/index(0) AND 
+	NOT i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/index(1) AND i2c_module_0/index(3))
+	OR (NOT i2c_module_0/index(2) AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/data_in(1) AND i2c_module_0/data_in(2) AND 
+	i2c_module_0/data_in(3) AND NOT i2c_module_0/data_in(4) AND i2c_module_0/data_in(5) AND 
+	NOT i2c_module_0/data_in(6) AND i2c_module_0/data_in(7) AND NOT i2c_module_0/index(1) AND 
+	i2c_module_0/index(3)));
+
+
+I2C_SDA <= ((NOT out_en AND NOT ack_out)
+	OR (NOT ack_out AND sda_out));FDCPE_i2c_module_0/data_in0: FDCPE port map (i2c_module_0/data_in(0),I2C_SDA.PIN,I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in); -- Open Drain
+
+FDCPE_i2c_module_0/data_in1: FDCPE port map (i2c_module_0/data_in(1),i2c_module_0/data_in(0),I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in);
+
+FDCPE_i2c_module_0/data_in2: FDCPE port map (i2c_module_0/data_in(2),i2c_module_0/data_in(1),I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in);
+
+FDCPE_i2c_module_0/data_in3: FDCPE port map (i2c_module_0/data_in(3),i2c_module_0/data_in(2),I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in);
+
+FDCPE_i2c_module_0/data_in4: FDCPE port map (i2c_module_0/data_in(4),i2c_module_0/data_in(3),I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in);
+
+FDCPE_i2c_module_0/data_in5: FDCPE port map (i2c_module_0/data_in(5),i2c_module_0/data_in(4),I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in);
+
+FDCPE_i2c_module_0/data_in6: FDCPE port map (i2c_module_0/data_in(6),i2c_module_0/data_in(5),I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in);
+
+FDCPE_i2c_module_0/data_in7: FDCPE port map (i2c_module_0/data_in(7),i2c_module_0/data_in(6),I2C_SCL,CTRL(10),'0',i2c_module_0/shift_data_in);
+
+FDCPE_i2c_module_0/gpio_input0: FDCPE port map (i2c_module_0/gpio_input(0),Button(0),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/gpio_input1: FDCPE port map (i2c_module_0/gpio_input(1),Button(1),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/gpio_input2: FDCPE port map (i2c_module_0/gpio_input(2),Button(2),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/gpio_input3: FDCPE port map (i2c_module_0/gpio_input(3),Button(3),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/gpio_input4: FDCPE port map (i2c_module_0/gpio_input(4),Button(4),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/gpio_input5: FDCPE port map (i2c_module_0/gpio_input(5),Button(5),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/gpio_input6: FDCPE port map (i2c_module_0/gpio_input(6),Button(6),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/gpio_input7: FDCPE port map (i2c_module_0/gpio_input(7),Button(7),I2C_SCL,CTRL(10),'0',i2c_module_0/latch_data_out);
+
+FDCPE_i2c_module_0/index0: FDCPE port map (i2c_module_0/index(0),i2c_module_0/index_D(0),I2C_SCL,'0',CTRL(10),'1');
+i2c_module_0/index_D(0) <= NOT (((i2c_module_0/index(0) AND NOT i2c_module_0/start AND 
+	NOT i2c_module_0/index(3))
+	OR (NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	i2c_module_0/index(0) AND NOT i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/start)));
+
+FDCPE_i2c_module_0/index1: FDCPE port map (i2c_module_0/index(1),i2c_module_0/index_D(1),I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/index_D(1) <= ((i2c_module_0/index(0) AND NOT i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start AND NOT i2c_module_0/index(3))
+	OR (NOT i2c_module_0/index(0) AND i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start AND NOT i2c_module_0/index(3))
+	OR (NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	i2c_module_0/index(0) AND NOT i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/index(1) AND NOT i2c_module_0/start)
+	OR (NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	NOT i2c_module_0/index(0) AND NOT i2c_module_0/present_state_FSM_FFd2 AND 
+	i2c_module_0/index(1) AND NOT i2c_module_0/start));
+
+FTCPE_i2c_module_0/index2: FTCPE port map (i2c_module_0/index(2),i2c_module_0/index_T(2),I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/index_T(2) <= ((i2c_module_0/index(2) AND i2c_module_0/start)
+	OR (i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd1 AND i2c_module_0/index(3))
+	OR (i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND i2c_module_0/index(3))
+	OR (i2c_module_0/index(0) AND i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start AND NOT i2c_module_0/index(3))
+	OR (NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	i2c_module_0/index(0) AND NOT i2c_module_0/present_state_FSM_FFd2 AND 
+	i2c_module_0/index(1) AND NOT i2c_module_0/start));
+
+FDCPE_i2c_module_0/index3: FDCPE port map (i2c_module_0/index(3),i2c_module_0/index_D(3),I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/index_D(3) <= ((i2c_module_0/index(2) AND i2c_module_0/index(0) AND 
+	i2c_module_0/index(1) AND NOT i2c_module_0/start AND NOT i2c_module_0/index(3))
+	OR (NOT i2c_module_0/index(2) AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/start AND i2c_module_0/index(3))
+	OR (NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	NOT i2c_module_0/index(0) AND NOT i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/start AND i2c_module_0/index(3))
+	OR (NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	NOT i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/index(1) AND NOT i2c_module_0/start AND 
+	i2c_module_0/index(3))
+	OR (NOT i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/index(0) AND NOT i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start AND i2c_module_0/index(3))
+	OR (NOT i2c_module_0/index(2) AND NOT i2c_module_0/index(0) AND 
+	NOT i2c_module_0/data_in(1) AND i2c_module_0/data_in(2) AND i2c_module_0/data_in(3) AND 
+	NOT i2c_module_0/data_in(4) AND i2c_module_0/data_in(5) AND NOT i2c_module_0/data_in(6) AND 
+	i2c_module_0/data_in(7) AND NOT i2c_module_0/index(1) AND NOT i2c_module_0/start AND 
+	i2c_module_0/index(3)));
+
+FDCPE_i2c_module_0/latch_data_in: FDCPE port map (i2c_module_0/latch_data_in,i2c_module_0/latch_data_in_D,I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/latch_data_in_D <= (i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd1 AND i2c_module_0/index(0) AND 
+	NOT i2c_module_0/present_state_FSM_FFd2 AND i2c_module_0/index(1) AND NOT i2c_module_0/index(3));
+
+FDCPE_i2c_module_0/latch_data_out: FDCPE port map (i2c_module_0/latch_data_out,i2c_module_0/latch_data_out_D,I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/latch_data_out_D <= (i2c_module_0/data_in(0) AND NOT i2c_module_0/index(2) AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/index(1) AND i2c_module_0/index(3));
+
+FDCPE_i2c_module_0/present_state_FSM_FFd1: FDCPE port map (i2c_module_0/present_state_FSM_FFd1,i2c_module_0/present_state_FSM_FFd1_D,I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/present_state_FSM_FFd1_D <= ((i2c_module_0/present_state_FSM_FFd1 AND 
+	NOT i2c_module_0/start AND NOT i2c_module_0/index(3))
+	OR (NOT i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/index(0) AND NOT i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start)
+	OR (NOT i2c_module_0/index(2) AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/data_in(1) AND i2c_module_0/data_in(2) AND 
+	i2c_module_0/data_in(3) AND NOT i2c_module_0/data_in(4) AND i2c_module_0/data_in(5) AND 
+	NOT i2c_module_0/data_in(6) AND i2c_module_0/data_in(7) AND NOT i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start AND i2c_module_0/index(3)));
+
+FDCPE_i2c_module_0/present_state_FSM_FFd2: FDCPE port map (i2c_module_0/present_state_FSM_FFd2,i2c_module_0/present_state_FSM_FFd2_D,I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/present_state_FSM_FFd2_D <= ((i2c_module_0/start)
+	OR (i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/index(3))
+	OR (NOT i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/index(1))
+	OR (NOT i2c_module_0/index(2) AND NOT i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/data_in(1) AND i2c_module_0/data_in(2) AND 
+	i2c_module_0/data_in(3) AND NOT i2c_module_0/data_in(4) AND i2c_module_0/data_in(5) AND 
+	NOT i2c_module_0/data_in(6) AND i2c_module_0/data_in(7) AND NOT i2c_module_0/index(1))
+	OR (i2c_module_0/data_in(0) AND NOT i2c_module_0/index(2) AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/data_in(1) AND i2c_module_0/data_in(2) AND i2c_module_0/data_in(3) AND 
+	NOT i2c_module_0/data_in(4) AND i2c_module_0/data_in(5) AND NOT i2c_module_0/data_in(6) AND 
+	i2c_module_0/data_in(7) AND NOT i2c_module_0/index(1)));
+
+FTCPE_i2c_module_0/shift_data_in: FTCPE port map (i2c_module_0/shift_data_in,i2c_module_0/shift_data_in_T,I2C_SCL,CTRL(10),'0','1');
+i2c_module_0/shift_data_in_T <= ((NOT i2c_module_0/shift_data_in AND 
+	i2c_module_0/present_state_FSM_FFd1 AND i2c_module_0/start)
+	OR (NOT i2c_module_0/shift_data_in AND 
+	NOT i2c_module_0/present_state_FSM_FFd2 AND i2c_module_0/start)
+	OR (i2c_module_0/shift_data_in AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/start)
+	OR (i2c_module_0/shift_data_in AND 
+	NOT i2c_module_0/index(2) AND NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	NOT i2c_module_0/index(0) AND i2c_module_0/present_state_FSM_FFd2 AND 
+	NOT i2c_module_0/index(1) AND i2c_module_0/index(3))
+	OR (i2c_module_0/shift_data_in AND 
+	NOT i2c_module_0/index(2) AND NOT i2c_module_0/index(0) AND 
+	NOT i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/index(1) AND NOT i2c_module_0/start AND 
+	i2c_module_0/index(3))
+	OR (NOT i2c_module_0/data_in(0) AND 
+	NOT i2c_module_0/shift_data_in AND NOT i2c_module_0/index(2) AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/data_in(1) AND i2c_module_0/data_in(2) AND 
+	i2c_module_0/data_in(3) AND NOT i2c_module_0/data_in(4) AND i2c_module_0/data_in(5) AND 
+	NOT i2c_module_0/data_in(6) AND i2c_module_0/data_in(7) AND NOT i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start AND i2c_module_0/index(3)));
+
+FDCPE_i2c_module_0/start: FDCPE port map (i2c_module_0/start,I2C_SCL,I2C_SDA.PIN,i2c_module_0/start_rst,'0','1');
+
+FDCPE_i2c_module_0/start_rst: FDCPE port map (i2c_module_0/start_rst,i2c_module_0/start,I2C_SCL,'0','0','1');
+
+FTCPE_out_en: FTCPE port map (out_en,out_en_T,I2C_SCL,CTRL(10),'0','1');
+out_en_T <= ((NOT i2c_module_0/present_state_FSM_FFd1 AND 
+	NOT i2c_module_0/present_state_FSM_FFd2 AND out_en)
+	OR (NOT i2c_module_0/index(2) AND 
+	i2c_module_0/present_state_FSM_FFd1 AND NOT i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/index(1) AND i2c_module_0/index(3) AND 
+	out_en)
+	OR (i2c_module_0/data_in(0) AND NOT i2c_module_0/index(2) AND 
+	NOT i2c_module_0/present_state_FSM_FFd1 AND i2c_module_0/index(0) AND 
+	i2c_module_0/present_state_FSM_FFd2 AND NOT i2c_module_0/data_in(1) AND i2c_module_0/data_in(2) AND 
+	i2c_module_0/data_in(3) AND NOT i2c_module_0/data_in(4) AND i2c_module_0/data_in(5) AND 
+	NOT i2c_module_0/data_in(6) AND i2c_module_0/data_in(7) AND NOT i2c_module_0/index(1) AND 
+	NOT i2c_module_0/start AND i2c_module_0/index(3) AND NOT out_en));
+
+FDCPE_sda_out: FDCPE port map (sda_out,sda_out_D,I2C_SCL,'0',CTRL(10),'1');
+sda_out_D <= ((NOT out_en AND sda_out)
+	OR (i2c_module_0/index(2) AND i2c_module_0/index(0) AND 
+	i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(0))
+	OR (i2c_module_0/index(2) AND i2c_module_0/index(0) AND 
+	NOT i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(2))
+	OR (i2c_module_0/index(2) AND NOT i2c_module_0/index(0) AND 
+	i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(1))
+	OR (i2c_module_0/index(2) AND NOT i2c_module_0/index(0) AND 
+	NOT i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(3))
+	OR (NOT i2c_module_0/index(2) AND i2c_module_0/index(0) AND 
+	i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(4))
+	OR (NOT i2c_module_0/index(2) AND i2c_module_0/index(0) AND 
+	NOT i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(6))
+	OR (NOT i2c_module_0/index(2) AND NOT i2c_module_0/index(0) AND 
+	i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(5))
+	OR (NOT i2c_module_0/index(2) AND NOT i2c_module_0/index(0) AND 
+	NOT i2c_module_0/index(1) AND out_en AND i2c_module_0/gpio_input(7)));
+
+
+Register Legend:
+ FDCPE (Q,D,C,CLR,PRE,CE); 
+ FDDCPE (Q,D,C,CLR,PRE,CE); 
+ FTCPE (Q,D,C,CLR,PRE,CE); 
+ FTDCPE (Q,D,C,CLR,PRE,CE); 
+ LDCP  (Q,D,G,CLR,PRE); 
+
+******************************  Device Pin Out *****************************
+
+Device : XC2C128-6-VQ100
+
+
+   --------------------------------------------------  
+  /100 98  96  94  92  90  88  86  84  82  80  78  76  \
+ |   99  97  95  93  91  89  87  85  83  81  79  77    |
+ | 1                                               75  | 
+ | 2                                               74  | 
+ | 3                                               73  | 
+ | 4                                               72  | 
+ | 5                                               71  | 
+ | 6                                               70  | 
+ | 7                                               69  | 
+ | 8                                               68  | 
+ | 9                                               67  | 
+ | 10                                              66  | 
+ | 11                                              65  | 
+ | 12                                              64  | 
+ | 13                XC2C128-6-VQ100               63  | 
+ | 14                                              62  | 
+ | 15                                              61  | 
+ | 16                                              60  | 
+ | 17                                              59  | 
+ | 18                                              58  | 
+ | 19                                              57  | 
+ | 20                                              56  | 
+ | 21                                              55  | 
+ | 22                                              54  | 
+ | 23                                              53  | 
+ | 24                                              52  | 
+ | 25                                              51  | 
+ |   27  29  31  33  35  37  39  41  43  45  47  49    |
+  \26  28  30  32  34  36  38  40  42  44  46  48  50  /
+   --------------------------------------------------  
+
+
+Pin Signal                         Pin Signal                        
+No. Name                           No. Name                          
+  1 TIE                              51 VCCIO-3.3                     
+  2 TIE                              52 TIE                           
+  3 TIE                              53 TIE                           
+  4 TIE                              54 TIE                           
+  5 VCCAUX                           55 TIE                           
+  6 CTRL<10>                         56 TIE                           
+  7 TIE                              57 VCC                           
+  8 TIE                              58 TIE                           
+  9 TIE                              59 TIE                           
+ 10 TIE                              60 TIE                           
+ 11 TIE                              61 TIE                           
+ 12 TIE                              62 GND                           
+ 13 TIE                              63 TIE                           
+ 14 TIE                              64 Button<7>                     
+ 15 TIE                              65 Button<6>                     
+ 16 TIE                              66 Button<5>                     
+ 17 TIE                              67 Button<4>                     
+ 18 TIE                              68 Button<3>                     
+ 19 TIE                              69 GND                           
+ 20 VCCIO-3.3                        70 Button<2>                     
+ 21 GND                              71 Button<1>                     
+ 22 TIE                              72 Button<0>                     
+ 23 TIE                              73 FlashCS_n                     
+ 24 TIE                              74 TIE                           
+ 25 GND                              75 GND                           
+ 26 VCC                              76 TIE                           
+ 27 TIE                              77 TX_MISO                       
+ 28 TIE                              78 TIE                           
+ 29 I2C_SDA                          79 TIE                           
+ 30 I2C_SCL                          80 TIE                           
+ 31 GND                              81 LED<0>                        
+ 32 TIE                              82 LED<1>                        
+ 33 TIE                              83 TDO                           
+ 34 TIE                              84 GND                           
+ 35 TIE                              85 LED<2>                        
+ 36 TIE                              86 LED<3>                        
+ 37 TIE                              87 LED<4>                        
+ 38 VCCIO-3.3                        88 VCCIO-3.3                     
+ 39 TIE                              89 LED<5>                        
+ 40 TIE                              90 LED<6>                        
+ 41 TIE                              91 LED<7>                        
+ 42 TIE                              92 TIE                           
+ 43 TIE                              93 TIE                           
+ 44 TIE                              94 TIE                           
+ 45 TDI                              95 TIE                           
+ 46 TIE                              96 TIE                           
+ 47 TMS                              97 TIE                           
+ 48 TCK                              98 VCCIO-3.3                     
+ 49 TIE                              99 INT                           
+ 50 TIE                             100 GND                           
+
+
+Legend :  NC  = Not Connected, unbonded pin
+        PGND  = Unused I/O configured as additional Ground pin
+         KPR  = Unused I/O with weak keeper (leave unconnected)
+         WPU  = Unused I/O with weak pull up (leave unconnected)
+         TIE  = Unused I/O floating -- must tie to VCC, GND or other signal
+         VCC  = Dedicated Power Pin
+      VCCAUX  = Power supply for JTAG pins
+   VCCIO-3.3  = I/O supply voltage for LVTTL, LVCMOS33, SSTL3_I
+   VCCIO-2.5  = I/O supply voltage for LVCMOS25, SSTL2_I
+   VCCIO-1.8  = I/O supply voltage for LVCMOS18
+   VCCIO-1.5  = I/O supply voltage for LVCMOS15, HSTL_I
+        VREF  = Reference voltage for indicated input standard
+       *VREF  = Reference voltage pin selected by software
+         GND  = Dedicated Ground Pin
+         TDI  = Test Data In, JTAG pin
+         TDO  = Test Data Out, JTAG pin
+         TCK  = Test Clock, JTAG pin
+         TMS  = Test Mode Select, JTAG pin
+  PROHIBITED  = User reserved pin
+****************************  Compiler Options  ****************************
+
+Following is a list of all global compiler options used by the fitter run.
+
+Device(s) Specified                         : xc2c128-6-VQ100
+Optimization Method                         : DENSITY
+Multi-Level Logic Optimization              : ON
+Ignore Timing Specifications                : OFF
+Default Register Power Up Value             : LOW
+Keep User Location Constraints              : ON
+What-You-See-Is-What-You-Get                : OFF
+Exhaustive Fitting                          : OFF
+Keep Unused Inputs                          : OFF
+Slew Rate                                   : FAST
+Set Unused I/O Pin Termination              : FLOAT
+Global Clock Optimization                   : ON
+Global Set/Reset Optimization               : ON
+Global Ouput Enable Optimization            : ON
+Enable Input Registers                      : ON
+Function Block Fan-in Limit                 : 38
+Use DATA_GATE Attribute                     : ON
+Set Tristate Outputs to Termination Mode    : FLOAT
+Default Voltage Standard for All Outputs    : LVCMOS33
+Input Limit                                 : 32
+Pterm Limit                                 : 28

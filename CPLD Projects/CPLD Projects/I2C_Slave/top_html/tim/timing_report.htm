@@ -1,0 +1,1644 @@
+<!DOCTYPE HTML PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="Generator" content="Timing Report Generator:  version P.15xf">
+<meta name="Author" content="Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.">
+<meta name="Description" content="Timing report for top">
+<TITLE>Timing report for top</TITLE>
+<script language="Javascript"> 
+<!-- 
+   function popWin(url,w,h,name){ 
+   window.open(url,name,'scrollbars=yes,resizable=Yes,WIDTH='+w+',height='+h); 
+   } 
+//--> 
+</script>
+</HEAD>
+<A NAME="Top"></a>
+<A NAME="TimingReport"></a><h1 ALIGN="center" CLASS="cpldta_text_report_header">Timing Report</h1>
+<CENTER><SPAN CLASS="cpldta_text_normal_bold"><A HREF="cpldta_glossary.htm"><B>Need help reading this report?</B></A></SPAN></CENTER><BR>
+<TABLE  WIDTH="60%" border="1" ALIGN="center">
+ <TR>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal_bold"><B>Design Name</B></TD>
+  <TD WIDTH="65%" CLASS="cpldta_text_normal">top</TD>
+ </TR>
+ <TR>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal_bold"><B>Device, Speed (SpeedFile Version)</B></TD>
+  <TD WIDTH="65%" CLASS="cpldta_text_normal"><A HREF="Javascript:popWin('http://www.xilinx.com/literature/index.htm','800','800','test');">XC2C128</A>, -6 (14.0 Advance Product Specification)</TD>
+ </TR>
+ <TR>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal_bold"><B>Date Created</B></TD>  <TD WIDTH="65%" CLASS="cpldta_text_normal">Mon Oct 05 17:52:45 2015
+</TD>
+ </TR>
+ <TR>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal_bold"><B>Created By</B></TD>  <TD WIDTH="65%" CLASS="cpldta_text_normal">Timing Report Generator:  version P.15xf</TD>
+ </TR>
+ <TR>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal_bold"><B>Copyright</B></TD>  <TD WIDTH="65%" CLASS="cpldta_text_normal">Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.</TD>
+ </TR>
+</TABLE>
+<A NAME="Summary"></a><h2 ALIGN="center" CLASS="cpldta_text_section_header">Summary</h2>
+<TABLE  WIDTH="80%" border="1" ALIGN="center">
+ <TR CLASS="cpldta_warnings_header">
+  <TH BGCOLOR="#FFFFCC" WIDTH="100%">Notes and Warnings</TH>
+ </TR>
+ <TR>
+  <TD WIDTH="100%" CLASS="cpldta_text_normal">Note: This design contains no timing constraints.</TD>
+ </TR>
+ <TR>
+  <TD WIDTH="100%" CLASS="cpldta_text_normal">Note: A default set of constraints using a delay of 0.000ns will be used for analysis.</TD>
+ </TR>
+</TABLE><BR>
+<TABLE WIDTH="80%" border="1" ALIGN="center">
+ <TR CLASS="cpldta_warnings_header">
+  <TH BGCOLOR="#FFFFCC" WIDTH="100%" colspan="2">Performance Summary</TH>
+ </TR>
+ <TR>
+  <TD WIDTH="65%" CLASS="cpldta_text_normal_bold"><B>Min. Clock Period</B></TD>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal">12.000 ns.</TD>
+ </TR>
+ <TR>
+  <TD WIDTH="65%" CLASS="cpldta_text_normal_bold"><B>Max. Clock Frequency </B><A HREF="cpldta_glossary.htm#fSYSTEM">(fSYSTEM)</A></TD>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal">83.333 MHz. </TD>
+ </TR>
+ <TR>
+  <TD WIDTH="100%" colspan="2" CLASS="cpldta_text_normal">Limited by Clock Pulse Width for I2C_SDA</TD>
+ </TR>
+ <TR>
+  <TD WIDTH="65%" CLASS="cpldta_text_normal_bold"><B>Clock to Setup </B><A HREF="cpldta_glossary.htm#tCYC">(tCYC)</A></TD>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal">5.000 ns. </TD>
+ </TR>
+ <TR>
+  <TD WIDTH="65%" CLASS="cpldta_text_normal_bold"><B>Setup to Clock at the Pad </B><A HREF="cpldta_glossary.htm#tSU">(tSU)</A></TD>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal">2.500 ns. </TD>
+ </TR>
+ <TR>
+  <TD WIDTH="65%" CLASS="cpldta_text_normal_bold"><B>Clock Pad to Output Pad Delay </B><A HREF="cpldta_glossary.htm#tCO">(tCO)</A></TD>
+  <TD WIDTH="35%" CLASS="cpldta_text_normal">10.200 ns. </TD>
+ </TR>
+</TABLE>
+<HR>
+<A NAME="TimingConstraints"></a><h2 ALIGN="center" CLASS="cpldta_text_section_header">Timing Constraints</h2>
+<TABLE  WIDTH="80%" border="1" ALIGN="center">
+ <TR>
+  <TH BGCOLOR="#FFFFCC" CLASS="cpldta_constraint_header">Constraint Name</TH>
+  <TH BGCOLOR="#FFFFCC" WIDTH="15%" CLASS="cpldta_time_header">Requirement (ns)</TH>
+  <TH BGCOLOR="#FFFFCC" WIDTH="15%" CLASS="cpldta_time_header">Delay (ns)</TH>
+  <TH BGCOLOR="#FFFFCC" WIDTH="15%" CLASS="cpldta_time_header">Paths</TH>
+  <TH BGCOLOR="#FFFFCC" WIDTH="15%" CLASS="cpldta_time_header">Paths Failing</TH>
+ </TR>
+ <TR>
+  <TD ALIGN="left" CLASS="cpldta_constraint_name"><A HREF="#TS1000">TS1000</A></TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0.0</TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0.0</TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0</TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0</TD>
+ </TR>
+ <TR>
+  <TD ALIGN="left" CLASS="cpldta_constraint_name"><A HREF="#TS1001">TS1001</A></TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0.0</TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0.0</TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0</TD>
+  <TD ALIGN="center" CLASS="cpldta_time_value">0</TD>
+ </TR>
+ <TR>
+  <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error"><A HREF="#AUTO_TS_F2F">AUTO_TS_F2F</A></TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">0.0</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">5.0</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">172</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">172</TD>
+ </TR>
+ <TR>
+  <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error"><A HREF="#AUTO_TS_P2P">AUTO_TS_P2P</A></TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">0.0</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">10.2</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">9</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">9</TD>
+ </TR>
+ <TR>
+  <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error"><A HREF="#AUTO_TS_P2F">AUTO_TS_P2F</A></TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">0.0</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">6.2</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">18</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">18</TD>
+ </TR>
+ <TR>
+  <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error"><A HREF="#AUTO_TS_F2P">AUTO_TS_F2P</A></TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">0.0</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">6.5</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">11</TD>
+  <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error">11</TD>
+ </TR>
+</TABLE>
+</BR>
+</BR>
+<A NAME="TS1000">
+<h3 CLASS="cpldta_text_subsection_header">Constraint: TS1000</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Description: PERIOD:PERIOD_I2C_SDA:0.000 nS</B></CAPTION>
+  <TR CLASS="cpldta_delaytable_header">
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Path</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Requirement (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Slack (ns)</TH>
+  </TR>
+ </TABLE>
+ </BR>
+ </BR>
+<A NAME="TS1001">
+<h3 CLASS="cpldta_text_subsection_header">Constraint: TS1001</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Description: PERIOD:PERIOD_I2C_SCK:0.000 nS</B></CAPTION>
+  <TR CLASS="cpldta_delaytable_header">
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Path</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Requirement (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Slack (ns)</TH>
+  </TR>
+ </TABLE>
+ </BR>
+ </BR>
+<A NAME="AUTO_TS_F2F">
+<h3 CLASS="cpldta_text_subsection_header">Constraint: AUTO_TS_F2F</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Description: MAXDELAY:FROM:FFS(*):TO:FFS(*):0.000 nS</B></CAPTION>
+  <TR CLASS="cpldta_delaytable_header">
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Path</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Requirement (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Slack (ns)</TH>
+  </TR>
+  <TR>
+   <A NAME="_I2C_SDA_Q_to_LED_0__D"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_F2F_I2C_SDA_Q_to_LED_0__D();">I2C_SDA.Q to LED<0>.D</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">5.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-5.000</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_F2F_I2C_SDA_Q_to_LED_0__D() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("I2C_SDA.Q to LED<0>.D")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.400</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/data_in<0></TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tF + tLOGI1 + tLOGI2 + tSUI + skew</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">4.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">LED<0>.D</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_I2C_SDA_Q_to_i2c_module_0_data_in_1__D"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_F2F_I2C_SDA_Q_to_i2c_module_0_data_in_1__D();">I2C_SDA.Q to i2c_module_0/data_in<1>.D</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">5.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-5.000</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_F2F_I2C_SDA_Q_to_i2c_module_0_data_in_1__D() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("I2C_SDA.Q to i2c_module_0/data_in<1>.D")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.400</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/data_in<0></TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tF + tLOGI1 + tLOGI2 + tSUI + skew</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">4.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/data_in<1>.D</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_I2C_SDA_Q_to_i2c_module_0_present_state_FSM_FFd2_D"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_F2F_I2C_SDA_Q_to_i2c_module_0_present_state_FSM_FFd2_D();">I2C_SDA.Q to i2c_module_0/present_state_FSM_FFd2.D</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">5.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-5.000</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_F2F_I2C_SDA_Q_to_i2c_module_0_present_state_FSM_FFd2_D() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("I2C_SDA.Q to i2c_module_0/present_state_FSM_FFd2.D")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.400</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/data_in<0></TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tF + tLOGI1 + tLOGI2 + tSUI + skew</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">4.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/present_state_FSM_FFd2.D</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+ </TABLE>
+ </BR>
+ </BR>
+<A NAME="AUTO_TS_P2P">
+<h3 CLASS="cpldta_text_subsection_header">Constraint: AUTO_TS_P2P</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Description: MAXDELAY:FROM:PADS(*):TO:PADS(*):0.000 nS</B></CAPTION>
+  <TR CLASS="cpldta_delaytable_header">
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Path</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Requirement (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Slack (ns)</TH>
+  </TR>
+  <TR>
+   <A NAME="_I2C_SCK_to_I2C_SDA"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_P2P_I2C_SCK_to_I2C_SDA();">I2C_SCK to I2C_SDA</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">10.200</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-10.200</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_P2P_I2C_SCK_to_I2C_SDA() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("I2C_SCK to I2C_SDA")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">-</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.000</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SCK</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tIN + tIN33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">2.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SCK.ZIA</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCT + tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">1.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">out_en</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tF + tLOGI1 + tLOGI2</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">2.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA.Q</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tOUT + tOUT33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">3.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_I2C_SCK_to_LED_0_"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_P2P_I2C_SCK_to_LED_0_();">I2C_SCK to LED<0></A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">7.600</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-7.600</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_P2P_I2C_SCK_to_LED_0_() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("I2C_SCK to LED<0>")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">-</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.000</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SCK</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tIN + tIN33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">2.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SCK.ZIA</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCT + tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">1.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">LED<0>.Q</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tOUT + tOUT33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">3.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">LED<0></TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_I2C_SCK_to_LED_1_"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_P2P_I2C_SCK_to_LED_1_();">I2C_SCK to LED<1></A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">7.600</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-7.600</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_P2P_I2C_SCK_to_LED_1_() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("I2C_SCK to LED<1>")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">-</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.000</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SCK</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tIN + tIN33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">2.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SCK.ZIA</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCT + tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">1.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">LED<1>.Q</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tOUT + tOUT33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">3.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">LED<1></TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+ </TABLE>
+ </BR>
+ </BR>
+<A NAME="AUTO_TS_P2F">
+<h3 CLASS="cpldta_text_subsection_header">Constraint: AUTO_TS_P2F</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Description: MAXDELAY:FROM:PADS(*):TO:FFS(*):0.000 nS</B></CAPTION>
+  <TR CLASS="cpldta_delaytable_header">
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Path</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Requirement (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Slack (ns)</TH>
+  </TR>
+  <TR>
+   <A NAME="_Button_0__to_i2c_module_0_gpio_input_0__D"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_P2F_Button_0__to_i2c_module_0_gpio_input_0__D();">Button<0> to i2c_module_0/gpio_input<0>.D</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">6.200</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-6.200</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_P2F_Button_0__to_i2c_module_0_gpio_input_0__D() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("Button<0> to i2c_module_0/gpio_input<0>.D")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">-</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.000</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">Button<0></TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tDIN + tIN33 + tSUI + skew</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">6.200</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/gpio_input<0>.D</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_Button_1__to_i2c_module_0_gpio_input_1__D"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_P2F_Button_1__to_i2c_module_0_gpio_input_1__D();">Button<1> to i2c_module_0/gpio_input<1>.D</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">6.200</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-6.200</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_P2F_Button_1__to_i2c_module_0_gpio_input_1__D() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("Button<1> to i2c_module_0/gpio_input<1>.D")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">-</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.000</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">Button<1></TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tDIN + tIN33 + tSUI + skew</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">6.200</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/gpio_input<1>.D</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_Button_2__to_i2c_module_0_gpio_input_2__D"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_P2F_Button_2__to_i2c_module_0_gpio_input_2__D();">Button<2> to i2c_module_0/gpio_input<2>.D</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">6.200</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-6.200</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_P2F_Button_2__to_i2c_module_0_gpio_input_2__D() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("Button<2> to i2c_module_0/gpio_input<2>.D")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">-</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.000</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">Button<2></TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tDIN + tIN33 + tSUI + skew</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">6.200</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">i2c_module_0/gpio_input<2>.D</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+ </TABLE>
+ </BR>
+ </BR>
+<A NAME="AUTO_TS_F2P">
+<h3 CLASS="cpldta_text_subsection_header">Constraint: AUTO_TS_F2P</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Description: MAXDELAY:FROM:FFS(*):TO:PADS(*):0.000 nS</B></CAPTION>
+  <TR CLASS="cpldta_delaytable_header">
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Path</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Requirement (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay (ns)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Slack (ns)</TH>
+  </TR>
+  <TR>
+   <A NAME="_ack_out_Q_to_I2C_SDA"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_F2P_ack_out_Q_to_I2C_SDA();">ack_out.Q to I2C_SDA</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">6.500</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-6.500</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_F2P_ack_out_Q_to_I2C_SDA() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("ack_out.Q to I2C_SDA")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.400</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">ack_out</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tF + tLOGI1 + tLOGI2</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">2.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA.Q</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tOUT + tOUT33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">3.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_out_en_Q_to_I2C_SDA"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_F2P_out_en_Q_to_I2C_SDA();">out_en.Q to I2C_SDA</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">6.500</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-6.500</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_F2P_out_en_Q_to_I2C_SDA() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("out_en.Q to I2C_SDA")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.400</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">out_en</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tF + tLOGI1 + tLOGI2</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">2.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA.Q</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tOUT + tOUT33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">3.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+  <TR>
+   <A NAME="_sda_out_Q_to_I2C_SDA"></A>
+   <TD BGCOLOR="#FFCCCC" ALIGN="left" CLASS="cpldta_constraint_name_error" WIDTH="40%"><A HREF="javascript:AUTO_TS_F2P_sda_out_Q_to_I2C_SDA();">sda_out.Q to I2C_SDA</A></TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">0.000</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">6.500</TD>
+   <TD BGCOLOR="#FFCCCC" ALIGN="center" CLASS="cpldta_time_value_error" WIDTH="10%">-6.500</TD>
+  </TR>
+<SCRIPT language="JavaScript">
+<!--
+function AUTO_TS_F2P_sda_out_Q_to_I2C_SDA() {
+   aWindow=window.open("","thewindow","toolbar=no,WIDTH=350,height=300,status=no,scrollbars=yes,resizable=yes,menubar=no")
+   aWindow.document.writeln("<link type=\"text/css\" rel=\"stylesheet\" href=\"cpldta_style.css\">")
+   aWindow.document.writeln("<H3 CLASS=\"cpldta_text_subsection_header\">Path Trace: ")
+   aWindow.document.writeln("sda_out.Q to I2C_SDA")
+   aWindow.document.writeln("</H3>")
+   aWindow.document.writeln("<TABLE  WIDTH=\"90%\" border=\"1\" ALIGN=\"center\">")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Delay Type</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"20%\" CLASS=\"cpldta_time_header\">Delay (ns)</TH>")
+   aWindow.document.writeln("<TH BGCOLOR=\"#FFFFCC\" WIDTH=\"40%\" CLASS=\"cpldta_constraint_header\">Logical Resource</TH>")
+   aWindow.document.writeln("</TR>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tCOI</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">0.400</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">sda_out</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tF + tLOGI1 + tLOGI2</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">2.600</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA.Q</TD>")
+   aWindow.document.writeln("<TR>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">tOUT + tOUT33</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"20%\" CLASS=\"cpldta_datasheet_time_value\">3.500</TD>")
+   aWindow.document.writeln("<TD WIDTH=\"40%\" CLASS=\"cpldta_datasheet_pathname\">I2C_SDA</TD>")
+   aWindow.document.writeln("</TABLE>")
+   aWindow.document.close()
+}
+//-->
+</SCRIPT>
+ </TABLE>
+ </BR>
+ </BR>
+  <BR><B>Number of constraints not met:</B>&nbsp;4<BR>
+<HR>
+<A NAME="DataSheet"></a>
+<h2 ALIGN="center" CLASS="cpldta_text_section_header">Data Sheet Report</h2>
+ <A NAME="ClockSpeedList"></a>
+ <h3 CLASS="cpldta_text_subsection_header">Maximum External Clock Speeds</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <TR>
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Clock</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">fEXT (MHz)</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Reason</TH>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">83.333</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">Limited by Clock Pulse Width for I2C_SDA</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SCK</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">200.000</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">Limited by Cycle Time for I2C_SCK</TD>
+  </TR>
+ </TABLE>
+ <BR>
+ <A NAME="SetupHoldTimesForClocks"></a>
+ <h3 CLASS="cpldta_text_subsection_header">Setup/Hold Times for Clocks</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Setup/Hold Times for Clock I2C_SDA</B></CAPTION>
+  <TR>
+   <TH BGCOLOR="#FFFFCC" WIDTH="60%" CLASS="cpldta_constraint_header">Source Pad</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Setup to clk (edge) </TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Hold to clk (edge) </TH>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">I2C_SCK</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+ </TABLE><BR>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Setup/Hold Times for Clock I2C_SCK</B></CAPTION>
+  <TR>
+   <TH BGCOLOR="#FFFFCC" WIDTH="60%" CLASS="cpldta_constraint_header">Source Pad</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Setup to clk (edge) </TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Hold to clk (edge) </TH>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<0></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<1></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<2></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<3></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<4></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<5></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<6></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">Button<7></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="60%" CLASS="cpldta_datasheet_pathname">I2C_SDA</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">2.500</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">0.000</TD>
+  </TR>
+ </TABLE><BR>
+ <BR>
+ <A NAME="ClockToPadTiming"></a>
+ <h3 CLASS="cpldta_text_subsection_header">Clock to Pad Timing</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Clock I2C_SCK to Pad</B></CAPTION>
+  <TR>
+   <TH BGCOLOR="#FFFFCC" WIDTH="80%" CLASS="cpldta_constraint_header">Destination Pad</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Clock (edge) to Pad </TH>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">I2C_SDA</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">10.200</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<0></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<1></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<2></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<3></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<4></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<5></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<6></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="80%" CLASS="cpldta_datasheet_pathname">LED<7></TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">7.600</TD>
+  </TR>
+ </TABLE><BR>
+ <BR>
+ <A NAME="ClockToSetupTimesForClocks"></a>
+ <h3 CLASS="cpldta_text_subsection_header">Clock to Setup Times for Clocks</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <CAPTION CLASS="cpldta_text_caption"><B>Clock to Setup for clock I2C_SCK</B></CAPTION>
+  <TR>
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Source</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Destination</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay</TH>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<0>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<1>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<4>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<5>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<6>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<7>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<4>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<5>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<6>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<7>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">ack_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">out_en.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">sda_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">5.000</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<0>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<1>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<2>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<3>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<4>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<5>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<6>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">LED<7>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<0>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<1>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<2>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<3>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<4>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<5>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<6>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/gpio_input<7>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<1>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<2>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<3>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<4>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<5>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<6>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/shift_data_in.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/data_in<7>.CE</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.800</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">I2C_SDA.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<0>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<1>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<2>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/index<3>.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd1.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_in.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+  <TR>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/present_state_FSM_FFd2.Q</TD>
+   <TD WIDTH="40%" CLASS="cpldta_datasheet_pathname">i2c_module_0/latch_data_out.D</TD>
+   <TD WIDTH="20%" CLASS="cpldta_datasheet_time_value">4.700</TD>
+  </TR>
+ </TABLE><BR>
+ <BR>
+ <A NAME="Pad2PadList"></a>
+ <h3 CLASS="cpldta_text_subsection_header">Pad to Pad List</h3>
+ <TABLE  WIDTH="80%" border="1" ALIGN="center">
+  <TR>
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Source Pad</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="40%" CLASS="cpldta_constraint_header">Destination Pad</TH>
+   <TH BGCOLOR="#FFFFCC" WIDTH="20%" CLASS="cpldta_time_header">Delay</TH>
+  </TR>
+ </TABLE>
+ <BR>
+<HR>
+<BR><SPAN CLASS="cpldta_text_normal_bold"><B>Number of paths analyzed:</B></SPAN> 
+<SPAN CLASS="cpldta_text_normal">210</SPAN>
+<BR><SPAN CLASS="cpldta_text_normal_bold"><B>Number of Timing errors:</B></SPAN> 
+<SPAN CLASS="cpldta_text_normal">210</SPAN>
+<BR><SPAN CLASS="cpldta_text_normal_bold"><B>Analysis Completed:</B></SPAN> <SPAN CLASS="cpldta_text_normal">Mon Oct 05 17:52:45 2015
+</SPAN>
+<HR>
+</HTML>

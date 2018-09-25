@@ -1,0 +1,283 @@
+Release 14.1 - xst P.15xf (nt64)
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.11 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.11 secs
+ 
+--> Reading design: top.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "top.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "top"
+Output Format                      : NGC
+Target Device                      : CoolRunner2 CPLDs
+
+---- Source Options
+Top Module Name                    : top
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+
+---- Target Options
+Add IO Buffers                     : YES
+MACRO Preserve                     : YES
+XOR Preserve                       : YES
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : Yes
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Verilog 2001                       : YES
+
+---- Other Options
+Clock Enable                       : YES
+wysiwyg                            : NO
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "FifoMasterCounter.v" in library work
+Compiling verilog file "top.v" in library work
+Module <FifoMasterCounter> compiled
+Module <top> compiled
+No errors in compilation
+Analysis of file <"top.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <top> in library <work>.
+
+Analyzing hierarchy for module <FifoMasterCounter> in library <work> with parameters.
+	DRIVE = "00000100"
+	IDLE = "00000001"
+	PAUSE_R = "01000000"
+	PAUSE_W = "00010000"
+	READ = "00100000"
+	STOP = "10000000"
+	WAIT4DMA = "00000010"
+	WRITE = "00001000"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <top>.
+Module <top> is correct for synthesis.
+ 
+Analyzing module <FifoMasterCounter> in library <work>.
+	DRIVE = 8'b00000100
+	IDLE = 8'b00000001
+	PAUSE_R = 8'b01000000
+	PAUSE_W = 8'b00010000
+	READ = 8'b00100000
+	STOP = 8'b10000000
+	WAIT4DMA = 8'b00000010
+	WRITE = 8'b00001000
+Module <FifoMasterCounter> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+INFO:Xst:2561 - Always blocking tristate driving signal <GPIO45_n> in unit <top> is removed.
+
+Synthesizing Unit <FifoMasterCounter>.
+    Related source file is "FifoMasterCounter.v".
+WARNING:Xst:647 - Input <LastRDData> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found finite state machine <FSM_0> for signal <CurrentState>.
+    -----------------------------------------------------------------------
+    | States             | 8                                              |
+    | Transitions        | 21                                             |
+    | Inputs             | 6                                              |
+    | Outputs            | 9                                              |
+    | Clock              | PCLK                      (rising_edge)        |
+    | Reset              | RESET                     (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | 00000001                                       |
+    | Encoding           | automatic                                      |
+    | Implementation     | automatic                                      |
+    -----------------------------------------------------------------------
+    Found 32-bit tristate buffer for signal <$mux0000>.
+    Found 32-bit up counter for signal <Counter>.
+    Found 1-bit register for signal <RUN>.
+    Found 1-bit register for signal <RUN_Sync>.
+    Found 1-bit register for signal <RUN_Sync0>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 Counter(s).
+	inferred   3 D-type flip-flop(s).
+	inferred  32 Tristate(s).
+Unit <FifoMasterCounter> synthesized.
+
+
+Synthesizing Unit <top>.
+    Related source file is "top.v".
+WARNING:Xst:2565 - Inout <CTRL<11>> is never assigned.
+WARNING:Xst:2565 - Inout <CTRL<12>> is never assigned.
+WARNING:Xst:2565 - Inout <CTRL<8>> is never assigned.
+WARNING:Xst:647 - Input <Button<7>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <Button<5:0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 1-bit tristate buffer for signal <TX_MISO>.
+    Summary:
+	inferred   1 Tristate(s).
+Unit <top> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Counters                                             : 1
+ 32-bit up counter                                     : 1
+# Registers                                            : 3
+ 1-bit register                                        : 3
+# Tristates                                            : 2
+ 1-bit tristate buffer                                 : 1
+ 32-bit tristate buffer                                : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <Counter/CurrentState/FSM> on signal <CurrentState[1:8]> with user encoding.
+----------------------
+ State    | Encoding
+----------------------
+ 00000001 | 00000001
+ 00000010 | 00000010
+ 00000100 | 00000100
+ 00100000 | 00100000
+ 10000000 | 10000000
+ 00001000 | 00001000
+ 00010000 | 00010000
+ 01000000 | 01000000
+----------------------
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 1
+# Counters                                             : 1
+ 32-bit up counter                                     : 1
+# Registers                                            : 3
+ Flip-Flops                                            : 3
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1348 - Unit FifoMasterCounter is merged (output interface has tristates)
+
+Optimizing unit <top> ...
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : top.ngr
+Top Level Output File Name         : top
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : Yes
+Target Technology                  : CoolRunner2 CPLDs
+Macro Preserve                     : YES
+XOR Preserve                       : YES
+Clock Enable                       : YES
+wysiwyg                            : NO
+
+Design Statistics
+# IOs                              : 80
+
+Cell Usage :
+# BELS                             : 200
+#      AND2                        : 87
+#      AND3                        : 3
+#      AND4                        : 1
+#      GND                         : 1
+#      INV                         : 62
+#      OR2                         : 13
+#      OR3                         : 1
+#      VCC                         : 1
+#      XOR2                        : 31
+# FlipFlops/Latches                : 43
+#      FDC                         : 10
+#      FDCE                        : 32
+#      FDP                         : 1
+# IO Buffers                       : 69
+#      IBUF                        : 13
+#      IOBUFE                      : 8
+#      OBUF                        : 23
+#      OBUFE                       : 25
+=========================================================================
+
+
+Total REAL time to Xst completion: 5.00 secs
+Total CPU time to Xst completion: 4.99 secs
+ 
+--> 
+
+Total memory usage is 254028 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    7 (   0 filtered)
+Number of infos    :    1 (   0 filtered)
+

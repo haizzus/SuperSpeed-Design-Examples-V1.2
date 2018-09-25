@@ -1,0 +1,537 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Application.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ApplicationThreadHandle,168,4
+  22              		.comm	Delay,2,2
+  23              		.section	.text.GPIO_InterruptCallback,"ax",%progbits
+  24              		.align	2
+  25              		.global	GPIO_InterruptCallback
+  27              	GPIO_InterruptCallback:
+  28              	.LFB0:
+  29              		.file 1 "../Application.c"
+   1:../Application.c **** // Chapter3Example2 - add Console Out to starter example
+   2:../Application.c **** //
+   3:../Application.c **** // john@usb-by-example.com
+   4:../Application.c **** //
+   5:../Application.c **** 
+   6:../Application.c **** #include "Application.h"
+   7:../Application.c **** 
+   8:../Application.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(void);
+   9:../Application.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  10:../Application.c **** 
+  11:../Application.c **** CyU3PThread ApplicationThreadHandle;	// Handle to my Application Thread
+  12:../Application.c **** uint16_t Delay;							// Determines LED blink rate
+  13:../Application.c **** 
+  14:../Application.c **** 
+  15:../Application.c **** void GPIO_InterruptCallback(uint8_t gpioId)
+  16:../Application.c **** {
+  30              		.loc 1 16 0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 8
+  33              		@ frame_needed = 1, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35 0000 04B02DE5 		str	fp, [sp, #-4]!
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 4
+  38 0004 00B08DE2 		add	fp, sp, #0
+  39              		.cfi_offset 11, -4
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_register 11
+  42 0008 0CD04DE2 		sub	sp, sp, #12
+  43 000c 0030A0E1 		mov	r3, r0
+  44 0010 05304BE5 		strb	r3, [fp, #-5]
+  17:../Application.c **** 	if (gpioId == Button) Delay = (Delay == 1000) ? 100 : 1000;
+  45              		.loc 1 17 0
+  46 0014 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+  47 0018 2D0053E3 		cmp	r3, #45
+  48 001c 0800001A 		bne	.L1
+  49              		.loc 1 17 0 is_stmt 0 discriminator 1
+  50 0020 28309FE5 		ldr	r3, .L5
+  51 0024 B030D3E1 		ldrh	r3, [r3, #0]
+  52 0028 FA0F53E3 		cmp	r3, #1000
+  53 002c 0100001A 		bne	.L3
+  54 0030 6430A0E3 		mov	r3, #100
+  55 0034 000000EA 		b	.L4
+  56              	.L3:
+  57              		.loc 1 17 0 discriminator 2
+  58 0038 FA3FA0E3 		mov	r3, #1000
+  59              	.L4:
+  60              		.loc 1 17 0 discriminator 3
+  61 003c 0C209FE5 		ldr	r2, .L5
+  62 0040 B030C2E1 		strh	r3, [r2, #0]	@ movhi
+  63              	.L1:
+  18:../Application.c **** }
+  64              		.loc 1 18 0 is_stmt 1
+  65 0044 00D08BE2 		add	sp, fp, #0
+  66 0048 04B09DE4 		ldmfd	sp!, {fp}
+  67 004c 1EFF2FE1 		bx	lr
+  68              	.L6:
+  69              		.align	2
+  70              	.L5:
+  71 0050 00000000 		.word	Delay
+  72              		.cfi_endproc
+  73              	.LFE0:
+  75              		.section	.rodata
+  76              		.align	2
+  77              	.LC0:
+  78 0000 53746172 		.ascii	"Start Debug Console\000"
+  78      74204465 
+  78      62756720 
+  78      436F6E73 
+  78      6F6C6500 
+  79              		.align	2
+  80              	.LC1:
+  81 0014 496E6974 		.ascii	"Initialize GPIO\000"
+  81      69616C69 
+  81      7A652047 
+  81      50494F00 
+  82              		.align	2
+  83              	.LC2:
+  84 0024 436F6E66 		.ascii	"Configure LED\000"
+  84      69677572 
+  84      65204C45 
+  84      4400
+  85 0032 0000     		.align	2
+  86              	.LC3:
+  87 0034 436F6E66 		.ascii	"Configure Button\000"
+  87      69677572 
+  87      65204275 
+  87      74746F6E 
+  87      00
+  88 0045 000000   		.align	2
+  89              	.LC4:
+  90 0048 0A4D6169 		.ascii	"\012Main loop now running\012\000"
+  90      6E206C6F 
+  90      6F70206E 
+  90      6F772072 
+  90      756E6E69 
+  91              		.align	2
+  92              	.LC5:
+  93 0060 25642C20 		.ascii	"%d, \000"
+  93      00
+  94              		.section	.text.ApplicationThread,"ax",%progbits
+  95              		.align	2
+  96              		.global	ApplicationThread
+  98              	ApplicationThread:
+  99              	.LFB1:
+  19:../Application.c **** 
+  20:../Application.c **** void ApplicationThread(uint32_t Value)
+  21:../Application.c **** {
+ 100              		.loc 1 21 0
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 48
+ 103              		@ frame_needed = 1, uses_anonymous_args = 0
+ 104 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 105              	.LCFI2:
+ 106              		.cfi_def_cfa_offset 8
+ 107 0004 04B08DE2 		add	fp, sp, #4
+ 108              		.cfi_offset 14, -4
+ 109              		.cfi_offset 11, -8
+ 110              	.LCFI3:
+ 111              		.cfi_def_cfa 11, 4
+ 112 0008 30D04DE2 		sub	sp, sp, #48
+ 113 000c 30000BE5 		str	r0, [fp, #-48]
+  22:../Application.c ****     CyU3PGpioClock_t GpioClock;
+  23:../Application.c ****     CyU3PGpioSimpleConfig_t GpioConfig;
+  24:../Application.c ****     uint32_t Counter = 0;
+ 114              		.loc 1 24 0
+ 115 0010 0030A0E3 		mov	r3, #0
+ 116 0014 08300BE5 		str	r3, [fp, #-8]
+  25:../Application.c ****     CyU3PReturnStatus_t Status;
+  26:../Application.c **** 
+  27:../Application.c ****     // Spin up a Console Out function to display progress message
+  28:../Application.c ****     Status = InitializeDebugConsole();
+ 117              		.loc 1 28 0
+ 118 0018 FEFFFFEB 		bl	InitializeDebugConsole
+ 119 001c 0C000BE5 		str	r0, [fp, #-12]
+  29:../Application.c ****     CheckStatus("Start Debug Console", Status);
+ 120              		.loc 1 29 0
+ 121 0020 34019FE5 		ldr	r0, .L9
+ 122 0024 0C101BE5 		ldr	r1, [fp, #-12]
+ 123 0028 FEFFFFEB 		bl	CheckStatus
+  30:../Application.c **** 
+  31:../Application.c ****     // Since this application uses GPIO then I must start the GPIO clocks
+  32:../Application.c ****     GpioClock.fastClkDiv = 2;
+ 124              		.loc 1 32 0
+ 125 002c 0230A0E3 		mov	r3, #2
+ 126 0030 18304BE5 		strb	r3, [fp, #-24]
+  33:../Application.c ****     GpioClock.slowClkDiv = 0;
+ 127              		.loc 1 33 0
+ 128 0034 0030A0E3 		mov	r3, #0
+ 129 0038 17304BE5 		strb	r3, [fp, #-23]
+  34:../Application.c ****     GpioClock.simpleDiv = CY_U3P_GPIO_SIMPLE_DIV_BY_2;
+ 130              		.loc 1 34 0
+ 131 003c 0030A0E3 		mov	r3, #0
+ 132 0040 10304BE5 		strb	r3, [fp, #-16]
+  35:../Application.c ****     GpioClock.clkSrc = CY_U3P_SYS_CLK;
+ 133              		.loc 1 35 0
+ 134 0044 0330A0E3 		mov	r3, #3
+ 135 0048 0F304BE5 		strb	r3, [fp, #-15]
+  36:../Application.c ****     GpioClock.halfDiv = 0;
+ 136              		.loc 1 36 0
+ 137 004c 0030A0E3 		mov	r3, #0
+ 138 0050 14300BE5 		str	r3, [fp, #-20]
+  37:../Application.c ****     // Initialize the GPIO driver and register a Callback for interrupts
+  38:../Application.c **** 	Status = CyU3PGpioInit(&GpioClock, GPIO_InterruptCallback);
+ 139              		.loc 1 38 0
+ 140 0054 18304BE2 		sub	r3, fp, #24
+ 141 0058 0300A0E1 		mov	r0, r3
+ 142 005c FC109FE5 		ldr	r1, .L9+4
+ 143 0060 FEFFFFEB 		bl	CyU3PGpioInit
+ 144 0064 0C000BE5 		str	r0, [fp, #-12]
+  39:../Application.c **** 	CheckStatus("Initialize GPIO", Status);
+ 145              		.loc 1 39 0
+ 146 0068 F4009FE5 		ldr	r0, .L9+8
+ 147 006c 0C101BE5 		ldr	r1, [fp, #-12]
+ 148 0070 FEFFFFEB 		bl	CheckStatus
+  40:../Application.c **** 
+  41:../Application.c ****     // Configure LED and Button GPIOs
+  42:../Application.c **** 	// LED is on UART_CTS which is currently been assigned to the UART driver, claim it back
+  43:../Application.c ****     CyU3PDeviceGpioOverride(LED, true);
+ 149              		.loc 1 43 0
+ 150 0074 3600A0E3 		mov	r0, #54
+ 151 0078 0110A0E3 		mov	r1, #1
+ 152 007c FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  44:../Application.c ****     CyU3PMemSet((uint8_t *)&GpioConfig, 0, sizeof(GpioConfig));
+ 153              		.loc 1 44 0
+ 154 0080 2C304BE2 		sub	r3, fp, #44
+ 155 0084 0300A0E1 		mov	r0, r3
+ 156 0088 0010A0E3 		mov	r1, #0
+ 157 008c 1420A0E3 		mov	r2, #20
+ 158 0090 FEFFFFEB 		bl	CyU3PMemSet
+  45:../Application.c ****     GpioConfig.driveLowEn = true;
+ 159              		.loc 1 45 0
+ 160 0094 0130A0E3 		mov	r3, #1
+ 161 0098 28300BE5 		str	r3, [fp, #-40]
+  46:../Application.c ****     GpioConfig.driveHighEn = true;
+ 162              		.loc 1 46 0
+ 163 009c 0130A0E3 		mov	r3, #1
+ 164 00a0 24300BE5 		str	r3, [fp, #-36]
+  47:../Application.c ****     CyU3PGpioSetSimpleConfig(LED, &GpioConfig);
+ 165              		.loc 1 47 0
+ 166 00a4 2C304BE2 		sub	r3, fp, #44
+ 167 00a8 3600A0E3 		mov	r0, #54
+ 168 00ac 0310A0E1 		mov	r1, r3
+ 169 00b0 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+  48:../Application.c ****     CheckStatus("Configure LED", Status);
+ 170              		.loc 1 48 0
+ 171 00b4 AC009FE5 		ldr	r0, .L9+12
+ 172 00b8 0C101BE5 		ldr	r1, [fp, #-12]
+ 173 00bc FEFFFFEB 		bl	CheckStatus
+  49:../Application.c ****     CyU3PMemSet((uint8_t *)&GpioConfig, 0, sizeof(GpioConfig));
+ 174              		.loc 1 49 0
+ 175 00c0 2C304BE2 		sub	r3, fp, #44
+ 176 00c4 0300A0E1 		mov	r0, r3
+ 177 00c8 0010A0E3 		mov	r1, #0
+ 178 00cc 1420A0E3 		mov	r2, #20
+ 179 00d0 FEFFFFEB 		bl	CyU3PMemSet
+  50:../Application.c **** 	GpioConfig.inputEn = true;
+ 180              		.loc 1 50 0
+ 181 00d4 0130A0E3 		mov	r3, #1
+ 182 00d8 20300BE5 		str	r3, [fp, #-32]
+  51:../Application.c **** 	GpioConfig.intrMode = CY_U3P_GPIO_INTR_NEG_EDGE;
+ 183              		.loc 1 51 0
+ 184 00dc 0230A0E3 		mov	r3, #2
+ 185 00e0 1C304BE5 		strb	r3, [fp, #-28]
+  52:../Application.c ****     CyU3PGpioSetSimpleConfig(Button, &GpioConfig);
+ 186              		.loc 1 52 0
+ 187 00e4 2C304BE2 		sub	r3, fp, #44
+ 188 00e8 2D00A0E3 		mov	r0, #45
+ 189 00ec 0310A0E1 		mov	r1, r3
+ 190 00f0 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+  53:../Application.c ****     CheckStatus("Configure Button", Status);
+ 191              		.loc 1 53 0
+ 192 00f4 70009FE5 		ldr	r0, .L9+16
+ 193 00f8 0C101BE5 		ldr	r1, [fp, #-12]
+ 194 00fc FEFFFFEB 		bl	CheckStatus
+  54:../Application.c **** 
+  55:../Application.c ****     Delay = 1000;
+ 195              		.loc 1 55 0
+ 196 0100 68309FE5 		ldr	r3, .L9+20
+ 197 0104 FA2FA0E3 		mov	r2, #1000
+ 198 0108 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+  56:../Application.c ****     CyU3PDebugPrint(4, "\nMain loop now running\n");
+ 199              		.loc 1 56 0
+ 200 010c 0400A0E3 		mov	r0, #4
+ 201 0110 5C109FE5 		ldr	r1, .L9+24
+ 202 0114 FEFFFFEB 		bl	CyU3PDebugPrint
+ 203              	.L8:
+  57:../Application.c ****     while (1)
+  58:../Application.c ****     {
+  59:../Application.c ****     	CyU3PThreadSleep(Delay);
+ 204              		.loc 1 59 0 discriminator 1
+ 205 0118 50309FE5 		ldr	r3, .L9+20
+ 206 011c B030D3E1 		ldrh	r3, [r3, #0]
+ 207 0120 0300A0E1 		mov	r0, r3
+ 208 0124 FEFFFFEB 		bl	_tx_thread_sleep
+  60:../Application.c ****     	CyU3PGpioSetValue(LED, (1 & Counter++));
+ 209              		.loc 1 60 0 discriminator 1
+ 210 0128 08301BE5 		ldr	r3, [fp, #-8]
+ 211 012c 013003E2 		and	r3, r3, #1
+ 212 0130 08201BE5 		ldr	r2, [fp, #-8]
+ 213 0134 012082E2 		add	r2, r2, #1
+ 214 0138 08200BE5 		str	r2, [fp, #-8]
+ 215 013c 3600A0E3 		mov	r0, #54
+ 216 0140 0310A0E1 		mov	r1, r3
+ 217 0144 FEFFFFEB 		bl	CyU3PGpioSetValue
+  61:../Application.c ****     	CyU3PDebugPrint(4, "%d, ", Counter);
+ 218              		.loc 1 61 0 discriminator 1
+ 219 0148 0400A0E3 		mov	r0, #4
+ 220 014c 24109FE5 		ldr	r1, .L9+28
+ 221 0150 08201BE5 		ldr	r2, [fp, #-8]
+ 222 0154 FEFFFFEB 		bl	CyU3PDebugPrint
+  62:../Application.c ****     }
+ 223              		.loc 1 62 0 discriminator 1
+ 224 0158 EEFFFFEA 		b	.L8
+ 225              	.L10:
+ 226              		.align	2
+ 227              	.L9:
+ 228 015c 00000000 		.word	.LC0
+ 229 0160 00000000 		.word	GPIO_InterruptCallback
+ 230 0164 14000000 		.word	.LC1
+ 231 0168 24000000 		.word	.LC2
+ 232 016c 34000000 		.word	.LC3
+ 233 0170 00000000 		.word	Delay
+ 234 0174 48000000 		.word	.LC4
+ 235 0178 60000000 		.word	.LC5
+ 236              		.cfi_endproc
+ 237              	.LFE1:
+ 239              		.section	.rodata
+ 240 0065 000000   		.align	2
+ 241              	.LC6:
+ 242 0068 31353A43 		.ascii	"15:Chapter3_Example2\000"
+ 242      68617074 
+ 242      6572335F 
+ 242      4578616D 
+ 242      706C6532 
+ 243 007d 000000   		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 244              		.align	2
+ 245              		.global	CyFxApplicationDefine
+ 247              	CyFxApplicationDefine:
+ 248              	.LFB2:
+  63:../Application.c **** }
+  64:../Application.c **** 
+  65:../Application.c **** // ApplicationDefine function called by RTOS to startup the application
+  66:../Application.c **** void CyFxApplicationDefine(void)
+  67:../Application.c **** {
+ 249              		.loc 1 67 0
+ 250              		.cfi_startproc
+ 251              		@ args = 0, pretend = 0, frame = 8
+ 252              		@ frame_needed = 1, uses_anonymous_args = 0
+ 253 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 254              	.LCFI4:
+ 255              		.cfi_def_cfa_offset 8
+ 256 0004 04B08DE2 		add	fp, sp, #4
+ 257              		.cfi_offset 14, -4
+ 258              		.cfi_offset 11, -8
+ 259              	.LCFI5:
+ 260              		.cfi_def_cfa 11, 4
+ 261 0008 28D04DE2 		sub	sp, sp, #40
+  68:../Application.c ****     void *StackPtr = NULL;
+ 262              		.loc 1 68 0
+ 263 000c 0030A0E3 		mov	r3, #0
+ 264 0010 08300BE5 		str	r3, [fp, #-8]
+  69:../Application.c ****     uint32_t Status;
+  70:../Application.c **** 
+  71:../Application.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACKSIZE);
+ 265              		.loc 1 71 0
+ 266 0014 020BA0E3 		mov	r0, #2048
+ 267 0018 FEFFFFEB 		bl	CyU3PMemAlloc
+ 268 001c 08000BE5 		str	r0, [fp, #-8]
+  72:../Application.c ****     Status = CyU3PThreadCreate (&ApplicationThreadHandle, // Handle to my Application Thread
+ 269              		.loc 1 72 0
+ 270 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 271 0024 00308DE5 		str	r3, [sp, #0]
+ 272 0028 023BA0E3 		mov	r3, #2048
+ 273 002c 04308DE5 		str	r3, [sp, #4]
+ 274 0030 0830A0E3 		mov	r3, #8
+ 275 0034 08308DE5 		str	r3, [sp, #8]
+ 276 0038 0830A0E3 		mov	r3, #8
+ 277 003c 0C308DE5 		str	r3, [sp, #12]
+ 278 0040 0030A0E3 		mov	r3, #0
+ 279 0044 10308DE5 		str	r3, [sp, #16]
+ 280 0048 0130A0E3 		mov	r3, #1
+ 281 004c 14308DE5 		str	r3, [sp, #20]
+ 282 0050 A830A0E3 		mov	r3, #168
+ 283 0054 18308DE5 		str	r3, [sp, #24]
+ 284 0058 28009FE5 		ldr	r0, .L14
+ 285 005c 28109FE5 		ldr	r1, .L14+4
+ 286 0060 28209FE5 		ldr	r2, .L14+8
+ 287 0064 2A30A0E3 		mov	r3, #42
+ 288 0068 FEFFFFEB 		bl	_txe_thread_create
+ 289 006c 0C000BE5 		str	r0, [fp, #-12]
+  73:../Application.c ****             "15:Chapter3_Example2",				// Thread ID and name
+  74:../Application.c ****             ApplicationThread,     				// Thread entry function
+  75:../Application.c ****             42,									// Parameter passed to Thread
+  76:../Application.c ****             StackPtr,							// Pointer to the allocated thread stack
+  77:../Application.c ****             APPLICATION_THREAD_STACKSIZE,		// Allocated thread stack size
+  78:../Application.c ****             APPLICATION_THREAD_PRIORITY,		// Thread priority
+  79:../Application.c ****             APPLICATION_THREAD_PRIORITY,		// = Thread priority so no preemption
+  80:../Application.c ****             CYU3P_NO_TIME_SLICE,				// Time slice not supported in FX3 implementation
+  81:../Application.c ****             CYU3P_AUTO_START					// Start the thread immediately
+  82:../Application.c ****             );
+  83:../Application.c **** 
+  84:../Application.c ****     if (Status != CY_U3P_SUCCESS) while(1);		// Get here on a failure, can't recover, just hang her
+ 290              		.loc 1 84 0
+ 291 0070 0C301BE5 		ldr	r3, [fp, #-12]
+ 292 0074 000053E3 		cmp	r3, #0
+ 293 0078 0000000A 		beq	.L11
+ 294              	.L13:
+ 295              		.loc 1 84 0 is_stmt 0 discriminator 1
+ 296 007c FEFFFFEA 		b	.L13
+ 297              	.L11:
+  85:../Application.c **** 	// Once the programs get more complex we shall do something more elegant here
+  86:../Application.c **** }
+ 298              		.loc 1 86 0 is_stmt 1
+ 299 0080 04D04BE2 		sub	sp, fp, #4
+ 300 0084 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 301              	.L15:
+ 302              		.align	2
+ 303              	.L14:
+ 304 0088 00000000 		.word	ApplicationThreadHandle
+ 305 008c 68000000 		.word	.LC6
+ 306 0090 00000000 		.word	ApplicationThread
+ 307              		.cfi_endproc
+ 308              	.LFE2:
+ 310              		.section	.text.main,"ax",%progbits
+ 311              		.align	2
+ 312              		.global	main
+ 314              	main:
+ 315              	.LFB3:
+  87:../Application.c **** 
+  88:../Application.c **** 
+  89:../Application.c **** // Main sets up the CPU environment the starts the RTOS
+  90:../Application.c **** int main (void)
+  91:../Application.c **** {
+ 316              		.loc 1 91 0
+ 317              		.cfi_startproc
+ 318              		@ args = 0, pretend = 0, frame = 48
+ 319              		@ frame_needed = 1, uses_anonymous_args = 0
+ 320 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 321              	.LCFI6:
+ 322              		.cfi_def_cfa_offset 8
+ 323 0004 04B08DE2 		add	fp, sp, #4
+ 324              		.cfi_offset 14, -4
+ 325              		.cfi_offset 11, -8
+ 326              	.LCFI7:
+ 327              		.cfi_def_cfa 11, 4
+ 328 0008 30D04DE2 		sub	sp, sp, #48
+  92:../Application.c ****     CyU3PIoMatrixConfig_t ioConfig;
+  93:../Application.c ****     CyU3PReturnStatus_t Status;
+  94:../Application.c **** 
+  95:../Application.c ****  // Start with the default clock at 384 MHz
+  96:../Application.c **** 	Status = CyU3PDeviceInit(0);
+ 329              		.loc 1 96 0
+ 330 000c 0000A0E3 		mov	r0, #0
+ 331 0010 FEFFFFEB 		bl	CyU3PDeviceInit
+ 332 0014 08000BE5 		str	r0, [fp, #-8]
+  97:../Application.c **** 	if (Status == CY_U3P_SUCCESS)
+ 333              		.loc 1 97 0
+ 334 0018 08301BE5 		ldr	r3, [fp, #-8]
+ 335 001c 000053E3 		cmp	r3, #0
+ 336 0020 1C00001A 		bne	.L17
+  98:../Application.c ****     {
+  99:../Application.c **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);
+ 337              		.loc 1 99 0
+ 338 0024 0100A0E3 		mov	r0, #1
+ 339 0028 0110A0E3 		mov	r1, #1
+ 340 002c 0120A0E3 		mov	r2, #1
+ 341 0030 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 342 0034 08000BE5 		str	r0, [fp, #-8]
+ 100:../Application.c **** 		if (Status == CY_U3P_SUCCESS)
+ 343              		.loc 1 100 0
+ 344 0038 08301BE5 		ldr	r3, [fp, #-8]
+ 345 003c 000053E3 		cmp	r3, #0
+ 346 0040 1400001A 		bne	.L17
+ 101:../Application.c **** 		{
+ 102:../Application.c **** 			CyU3PMemSet((uint8_t *)&ioConfig, 0, sizeof(ioConfig));
+ 347              		.loc 1 102 0
+ 348 0044 30304BE2 		sub	r3, fp, #48
+ 349 0048 0300A0E1 		mov	r0, r3
+ 350 004c 0010A0E3 		mov	r1, #0
+ 351 0050 2820A0E3 		mov	r2, #40
+ 352 0054 FEFFFFEB 		bl	CyU3PMemSet
+ 103:../Application.c **** 			ioConfig.useUart   = true;							// We'll use this in the next example!
+ 353              		.loc 1 103 0
+ 354 0058 0130A0E3 		mov	r3, #1
+ 355 005c 2C300BE5 		str	r3, [fp, #-44]
+ 104:../Application.c **** 			ioConfig.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+ 356              		.loc 1 104 0
+ 357 0060 0130A0E3 		mov	r3, #1
+ 358 0064 1A304BE5 		strb	r3, [fp, #-26]
+ 105:../Application.c **** 			ioConfig.gpioSimpleEn[0] = 0;						// No GPIOs 0 to 31 are needed
+ 359              		.loc 1 105 0
+ 360 0068 0030A0E3 		mov	r3, #0
+ 361 006c 18300BE5 		str	r3, [fp, #-24]
+ 106:../Application.c **** 			ioConfig.gpioSimpleEn[1] = 1<<(Button-32);			// Button is on GPIO_45
+ 362              		.loc 1 106 0
+ 363 0070 023AA0E3 		mov	r3, #8192
+ 364 0074 14300BE5 		str	r3, [fp, #-20]
+ 107:../Application.c **** 			Status = CyU3PDeviceConfigureIOMatrix(&ioConfig);
+ 365              		.loc 1 107 0
+ 366 0078 30304BE2 		sub	r3, fp, #48
+ 367 007c 0300A0E1 		mov	r0, r3
+ 368 0080 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 369 0084 08000BE5 		str	r0, [fp, #-8]
+ 108:../Application.c **** 			if (Status == CY_U3P_SUCCESS) CyU3PKernelEntry();	// Start RTOS, this does not return
+ 370              		.loc 1 108 0
+ 371 0088 08301BE5 		ldr	r3, [fp, #-8]
+ 372 008c 000053E3 		cmp	r3, #0
+ 373 0090 0000001A 		bne	.L17
+ 374              		.loc 1 108 0 is_stmt 0 discriminator 1
+ 375 0094 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 376              	.L17:
+ 109:../Application.c **** 		}
+ 110:../Application.c **** 	}
+ 111:../Application.c **** 
+ 112:../Application.c ****     while (1);			// Get here on a failure, can't recover, just hang here
+ 377              		.loc 1 112 0 is_stmt 1 discriminator 1
+ 378 0098 FEFFFFEA 		b	.L17
+ 379              		.cfi_endproc
+ 380              	.LFE3:
+ 382              		.text
+ 383              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Application.c
+                            *COM*:000000a8 ApplicationThreadHandle
+                            *COM*:00000002 Delay
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:24     .text.GPIO_InterruptCallback:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:27     .text.GPIO_InterruptCallback:00000000 GPIO_InterruptCallback
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:71     .text.GPIO_InterruptCallback:00000050 $d
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:76     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:95     .text.ApplicationThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:98     .text.ApplicationThread:00000000 ApplicationThread
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:228    .text.ApplicationThread:0000015c $d
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:244    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:247    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:304    .text.CyFxApplicationDefine:00000088 $d
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:311    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc3jaNH0.s:314    .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+InitializeDebugConsole
+CheckStatus
+CyU3PGpioInit
+CyU3PDeviceGpioOverride
+CyU3PMemSet
+CyU3PGpioSetSimpleConfig
+CyU3PDebugPrint
+_tx_thread_sleep
+CyU3PGpioSetValue
+CyU3PMemAlloc
+_txe_thread_create
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

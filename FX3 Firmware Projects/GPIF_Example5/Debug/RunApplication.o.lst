@@ -1,0 +1,888 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"RunApplication.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.comm	ThreadHandle,168,4
+  17              		.comm	glIsApplicationActive,4,4
+  18              		.comm	Counter,48,4
+  19              		.comm	DebounceTimer,44,4
+  20              		.comm	CallbackEvent,40,4
+  21              		.section	.text.DebounceTimerExpired,"ax",%progbits
+  22              		.align	2
+  23              		.global	DebounceTimerExpired
+  25              	DebounceTimerExpired:
+  26              	.LFB0:
+  27              		.file 1 "../RunApplication.c"
+   1:../RunApplication.c **** // Demonstrate GPIF as a Slave FIFO sending and receiving data from the CPLD
+   2:../RunApplication.c **** //
+   3:../RunApplication.c **** // GPIF_Example5 uses SlaveFifoReadWrite.h and CPLD requires CPLDasFifoMaster.xsvf
+   4:../RunApplication.c **** // Preset Button[6] = 1 to WRITE to CPLD
+   5:../RunApplication.c **** //
+   6:../RunApplication.c **** // There are some changes from the implementation described in the first edition of the book:
+   7:../RunApplication.c **** //  1	My development board worked successfully but some production boards did not operate correctly
+   8:../RunApplication.c **** //		The problem was tracked down to mechanical button bounce
+   9:../RunApplication.c **** //		A preferred fix was to put a button debouncer in the CPLD but there were not enough resources
+  10:../RunApplication.c **** //		So now the FX3 debounces the button on the CPLD's behalf and passes a CPLD_PUSH_BUTTON signal t
+  11:../RunApplication.c **** //	2	On a WRITE the FX3 no longer produces a LastRDData signal - this allows the example to be used
+  12:../RunApplication.c **** //  3	I was incorrectly using DebugPrint in several CallBack routines - I now set an Event and use 
+  13:../RunApplication.c **** //	4	If a High Speed USB connection is made then PCLK is reduced to 10MHz and this allows debugging
+  14:../RunApplication.c **** //
+  15:../RunApplication.c **** // john@usb-by-example.com
+  16:../RunApplication.c **** //
+  17:../RunApplication.c **** 
+  18:../RunApplication.c **** #include "Application.h"
+  19:../RunApplication.c **** 
+  20:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(void);
+  21:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeUSB(void);
+  22:../RunApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  23:../RunApplication.c **** extern void DebugPrintEvent(uint32_t ActualEvents);
+  24:../RunApplication.c **** extern void ParseCommand(void);
+  25:../RunApplication.c **** 
+  26:../RunApplication.c **** CyU3PThread ThreadHandle;			// Handle to my Application Thread
+  27:../RunApplication.c **** CyBool_t glIsApplicationActive;		// Set true once device is enumerated
+  28:../RunApplication.c **** uint32_t Counter[12];				// Some DEBUG counters
+  29:../RunApplication.c **** TX_TIMER DebounceTimer;				// Timer used to debounce PushButton
+  30:../RunApplication.c **** CyU3PEvent CallbackEvent;			// Used by Callback to signal Main()
+  31:../RunApplication.c **** 
+  32:../RunApplication.c **** 
+  33:../RunApplication.c **** void DebounceTimerExpired(ULONG NotUsed)
+  34:../RunApplication.c **** {
+  28              		.loc 1 34 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 11, -8
+  36              		.cfi_offset 14, -4
+  37 0004 04B08DE2 		add	fp, sp, #4
+  38              	.LCFI1:
+  39              		.cfi_def_cfa 11, 4
+  40 0008 10D04DE2 		sub	sp, sp, #16
+  41 000c 10000BE5 		str	r0, [fp, #-16]
+  35:../RunApplication.c **** 	// PushButton has finished bouncing, copy its current value to the CPLD
+  36:../RunApplication.c **** 	CyBool_t Value;
+  37:../RunApplication.c **** 	CyU3PGpioSimpleGetValue(PUSH_BUTTON, &Value);
+  42              		.loc 1 37 0
+  43 0010 08304BE2 		sub	r3, fp, #8
+  44 0014 2D00A0E3 		mov	r0, #45
+  45 0018 0310A0E1 		mov	r1, r3
+  46 001c FEFFFFEB 		bl	CyU3PGpioSimpleGetValue
+  38:../RunApplication.c **** 	CyU3PGpioSetValue(CPLD_PUSH_BUTTON, Value);
+  47              		.loc 1 38 0
+  48 0020 08301BE5 		ldr	r3, [fp, #-8]
+  49 0024 1A00A0E3 		mov	r0, #26
+  50 0028 0310A0E1 		mov	r1, r3
+  51 002c FEFFFFEB 		bl	CyU3PGpioSetValue
+  39:../RunApplication.c **** }
+  52              		.loc 1 39 0
+  53 0030 04D04BE2 		sub	sp, fp, #4
+  54              		@ sp needed
+  55 0034 0088BDE8 		ldmfd	sp!, {fp, pc}
+  56              		.cfi_endproc
+  57              	.LFE0:
+  59              		.section	.text.GPIO_CallBack,"ax",%progbits
+  60              		.align	2
+  61              		.global	GPIO_CallBack
+  63              	GPIO_CallBack:
+  64              	.LFB1:
+  40:../RunApplication.c **** 
+  41:../RunApplication.c **** void GPIO_CallBack(uint8_t gpioId)
+  42:../RunApplication.c **** {
+  65              		.loc 1 42 0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 16
+  68              		@ frame_needed = 1, uses_anonymous_args = 0
+  69 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  70              	.LCFI2:
+  71              		.cfi_def_cfa_offset 8
+  72              		.cfi_offset 11, -8
+  73              		.cfi_offset 14, -4
+  74 0004 04B08DE2 		add	fp, sp, #4
+  75              	.LCFI3:
+  76              		.cfi_def_cfa 11, 4
+  77 0008 18D04DE2 		sub	sp, sp, #24
+  78 000c 0030A0E1 		mov	r3, r0
+  79 0010 0D304BE5 		strb	r3, [fp, #-13]
+  43:../RunApplication.c **** 	// At each detected edge of the PushButton restart the Debounce Timer
+  44:../RunApplication.c **** 	UINT Active;
+  45:../RunApplication.c **** 	uint32_t RemainingTicks;
+  46:../RunApplication.c **** 	if (gpioId == PUSH_BUTTON)
+  80              		.loc 1 46 0
+  81 0014 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+  82 0018 2D0053E3 		cmp	r3, #45
+  83 001c 1200001A 		bne	.L2
+  47:../RunApplication.c **** 	{
+  48:../RunApplication.c **** // Resync the Debounce Timer to the change on the PushButton
+  49:../RunApplication.c **** 		tx_timer_info_get(&DebounceTimer, 0, &Active, &RemainingTicks, 0, 0);
+  84              		.loc 1 49 0
+  85 0020 08204BE2 		sub	r2, fp, #8
+  86 0024 0C304BE2 		sub	r3, fp, #12
+  87 0028 0010A0E3 		mov	r1, #0
+  88 002c 00108DE5 		str	r1, [sp]
+  89 0030 0010A0E3 		mov	r1, #0
+  90 0034 04108DE5 		str	r1, [sp, #4]
+  91 0038 34009FE5 		ldr	r0, .L4
+  92 003c 0010A0E3 		mov	r1, #0
+  93 0040 FEFFFFEB 		bl	_txe_timer_info_get
+  50:../RunApplication.c **** 		tx_timer_deactivate(&DebounceTimer);
+  94              		.loc 1 50 0
+  95 0044 28009FE5 		ldr	r0, .L4
+  96 0048 FEFFFFEB 		bl	_txe_timer_deactivate
+  51:../RunApplication.c **** 		tx_timer_change(&DebounceTimer, RemainingTicks+DEBOUNCE_TIME, DEBOUNCE_TIME);
+  97              		.loc 1 51 0
+  98 004c 0C301BE5 		ldr	r3, [fp, #-12]
+  99 0050 143083E2 		add	r3, r3, #20
+ 100 0054 18009FE5 		ldr	r0, .L4
+ 101 0058 0310A0E1 		mov	r1, r3
+ 102 005c 1420A0E3 		mov	r2, #20
+ 103 0060 FEFFFFEB 		bl	_txe_timer_change
+  52:../RunApplication.c **** 		tx_timer_activate(&DebounceTimer);
+ 104              		.loc 1 52 0
+ 105 0064 08009FE5 		ldr	r0, .L4
+ 106 0068 FEFFFFEB 		bl	_txe_timer_activate
+ 107              	.L2:
+  53:../RunApplication.c **** 	}
+  54:../RunApplication.c **** }
+ 108              		.loc 1 54 0
+ 109 006c 04D04BE2 		sub	sp, fp, #4
+ 110              		@ sp needed
+ 111 0070 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 112              	.L5:
+ 113              		.align	2
+ 114              	.L4:
+ 115 0074 00000000 		.word	DebounceTimer
+ 116              		.cfi_endproc
+ 117              	.LFE1:
+ 119              		.section	.rodata
+ 120              		.align	2
+ 121              	.LC0:
+ 122 0000 53746172 		.ascii	"Start GPIO Clocks\000"
+ 122      74204750 
+ 122      494F2043 
+ 122      6C6F636B 
+ 122      7300
+ 123 0012 0000     		.align	2
+ 124              	.LC1:
+ 125 0014 43504C44 		.ascii	"CPLD_RUN_STOP Override\000"
+ 125      5F52554E 
+ 125      5F53544F 
+ 125      50204F76 
+ 125      65727269 
+ 126 002b 00       		.align	2
+ 127              	.LC2:
+ 128 002c 43504C44 		.ascii	"CPLD_RESET Override\000"
+ 128      5F524553 
+ 128      4554204F 
+ 128      76657272 
+ 128      69646500 
+ 129              		.align	2
+ 130              	.LC3:
+ 131 0040 52657365 		.ascii	"Reset CPLD\000"
+ 131      74204350 
+ 131      4C4400
+ 132 004b 00       		.align	2
+ 133              	.LC4:
+ 134 004c 53657420 		.ascii	"Set CPLD_PUSH_BUTTON\000"
+ 134      43504C44 
+ 134      5F505553 
+ 134      485F4255 
+ 134      54544F4E 
+ 135 0061 000000   		.align	2
+ 136              	.LC5:
+ 137 0064 53657475 		.ascii	"Setup PUSH_BUTTON\000"
+ 137      70205055 
+ 137      53485F42 
+ 137      5554544F 
+ 137      4E00
+ 138 0076 0000     		.align	2
+ 139              	.LC6:
+ 140 0078 2C20496E 		.ascii	", Initial Value = %d,\000"
+ 140      69746961 
+ 140      6C205661 
+ 140      6C756520 
+ 140      3D202564 
+ 141              		.section	.text.InitializeCPLD,"ax",%progbits
+ 142              		.align	2
+ 143              		.global	InitializeCPLD
+ 145              	InitializeCPLD:
+ 146              	.LFB2:
+  55:../RunApplication.c **** 
+  56:../RunApplication.c **** void InitializeCPLD(void)
+  57:../RunApplication.c **** // CPLD needs to be RESET for correct operation
+  58:../RunApplication.c **** {
+ 147              		.loc 1 58 0
+ 148              		.cfi_startproc
+ 149              		@ args = 0, pretend = 0, frame = 40
+ 150              		@ frame_needed = 1, uses_anonymous_args = 0
+ 151 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 152              	.LCFI4:
+ 153              		.cfi_def_cfa_offset 8
+ 154              		.cfi_offset 11, -8
+ 155              		.cfi_offset 14, -4
+ 156 0004 04B08DE2 		add	fp, sp, #4
+ 157              	.LCFI5:
+ 158              		.cfi_def_cfa 11, 4
+ 159 0008 28D04DE2 		sub	sp, sp, #40
+  59:../RunApplication.c **** 	CyU3PReturnStatus_t Status;
+  60:../RunApplication.c **** 	CyU3PGpioClock_t GpioClock;
+  61:../RunApplication.c **** 	CyU3PGpioSimpleConfig_t gpioConfig;
+  62:../RunApplication.c **** 	CyBool_t Value;
+  63:../RunApplication.c **** 
+  64:../RunApplication.c ****     // Startup the GPIO module clocks
+  65:../RunApplication.c ****     GpioClock.fastClkDiv = 2;
+ 160              		.loc 1 65 0
+ 161 000c 0230A0E3 		mov	r3, #2
+ 162 0010 14304BE5 		strb	r3, [fp, #-20]
+  66:../RunApplication.c ****     GpioClock.slowClkDiv = 0;
+ 163              		.loc 1 66 0
+ 164 0014 0030A0E3 		mov	r3, #0
+ 165 0018 13304BE5 		strb	r3, [fp, #-19]
+  67:../RunApplication.c ****     GpioClock.simpleDiv = CY_U3P_GPIO_SIMPLE_DIV_BY_2;
+ 166              		.loc 1 67 0
+ 167 001c 0030A0E3 		mov	r3, #0
+ 168 0020 0C304BE5 		strb	r3, [fp, #-12]
+  68:../RunApplication.c ****     GpioClock.clkSrc = CY_U3P_SYS_CLK;
+ 169              		.loc 1 68 0
+ 170 0024 0330A0E3 		mov	r3, #3
+ 171 0028 0B304BE5 		strb	r3, [fp, #-11]
+  69:../RunApplication.c ****     GpioClock.halfDiv = 0;
+ 172              		.loc 1 69 0
+ 173 002c 0030A0E3 		mov	r3, #0
+ 174 0030 10300BE5 		str	r3, [fp, #-16]
+  70:../RunApplication.c ****     Status = CyU3PGpioInit(&GpioClock, 0);
+ 175              		.loc 1 70 0
+ 176 0034 14304BE2 		sub	r3, fp, #20
+ 177 0038 0300A0E1 		mov	r0, r3
+ 178 003c 0010A0E3 		mov	r1, #0
+ 179 0040 FEFFFFEB 		bl	CyU3PGpioInit
+ 180 0044 08000BE5 		str	r0, [fp, #-8]
+  71:../RunApplication.c ****     CheckStatus("Start GPIO Clocks", Status);
+ 181              		.loc 1 71 0
+ 182 0048 2C019FE5 		ldr	r0, .L7
+ 183 004c 08101BE5 		ldr	r1, [fp, #-8]
+ 184 0050 FEFFFFEB 		bl	CheckStatus
+  72:../RunApplication.c **** 
+  73:../RunApplication.c ****     // Need to claim CTRL[9] and CTRL[10] from the GPIF Interface
+  74:../RunApplication.c **** 	Status = CyU3PDeviceGpioOverride(CPLD_PUSH_BUTTON, CyTrue);
+ 185              		.loc 1 74 0
+ 186 0054 1A00A0E3 		mov	r0, #26
+ 187 0058 0110A0E3 		mov	r1, #1
+ 188 005c FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 189 0060 08000BE5 		str	r0, [fp, #-8]
+  75:../RunApplication.c **** 	CheckStatus("CPLD_RUN_STOP Override", Status);
+ 190              		.loc 1 75 0
+ 191 0064 14019FE5 		ldr	r0, .L7+4
+ 192 0068 08101BE5 		ldr	r1, [fp, #-8]
+ 193 006c FEFFFFEB 		bl	CheckStatus
+  76:../RunApplication.c **** 	Status = CyU3PDeviceGpioOverride(CPLD_RESET, CyTrue);
+ 194              		.loc 1 76 0
+ 195 0070 1B00A0E3 		mov	r0, #27
+ 196 0074 0110A0E3 		mov	r1, #1
+ 197 0078 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 198 007c 08000BE5 		str	r0, [fp, #-8]
+  77:../RunApplication.c **** 	CheckStatus("CPLD_RESET Override", Status);
+ 199              		.loc 1 77 0
+ 200 0080 FC009FE5 		ldr	r0, .L7+8
+ 201 0084 08101BE5 		ldr	r1, [fp, #-8]
+ 202 0088 FEFFFFEB 		bl	CheckStatus
+  78:../RunApplication.c **** 
+  79:../RunApplication.c **** 	// Reset by driving CPLD_RESET High
+  80:../RunApplication.c **** 	CyU3PMemSet((uint8_t *)&gpioConfig, 0, sizeof(gpioConfig));
+ 203              		.loc 1 80 0
+ 204 008c 28304BE2 		sub	r3, fp, #40
+ 205 0090 0300A0E1 		mov	r0, r3
+ 206 0094 0010A0E3 		mov	r1, #0
+ 207 0098 1420A0E3 		mov	r2, #20
+ 208 009c FEFFFFEB 		bl	CyU3PMemSet
+  81:../RunApplication.c ****     gpioConfig.outValue = 1;
+ 209              		.loc 1 81 0
+ 210 00a0 0130A0E3 		mov	r3, #1
+ 211 00a4 28300BE5 		str	r3, [fp, #-40]
+  82:../RunApplication.c ****     gpioConfig.driveLowEn = CyTrue;
+ 212              		.loc 1 82 0
+ 213 00a8 0130A0E3 		mov	r3, #1
+ 214 00ac 24300BE5 		str	r3, [fp, #-36]
+  83:../RunApplication.c ****     gpioConfig.driveHighEn = CyTrue;
+ 215              		.loc 1 83 0
+ 216 00b0 0130A0E3 		mov	r3, #1
+ 217 00b4 20300BE5 		str	r3, [fp, #-32]
+  84:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(CPLD_RESET, &gpioConfig);
+ 218              		.loc 1 84 0
+ 219 00b8 28304BE2 		sub	r3, fp, #40
+ 220 00bc 1B00A0E3 		mov	r0, #27
+ 221 00c0 0310A0E1 		mov	r1, r3
+ 222 00c4 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 223 00c8 08000BE5 		str	r0, [fp, #-8]
+  85:../RunApplication.c ****     CheckStatus("Reset CPLD", Status);
+ 224              		.loc 1 85 0
+ 225 00cc B4009FE5 		ldr	r0, .L7+12
+ 226 00d0 08101BE5 		ldr	r1, [fp, #-8]
+ 227 00d4 FEFFFFEB 		bl	CheckStatus
+  86:../RunApplication.c ****     // Initial values for CPLD_PUSH_BUTTON = 0
+  87:../RunApplication.c ****     gpioConfig.outValue = 0;
+ 228              		.loc 1 87 0
+ 229 00d8 0030A0E3 		mov	r3, #0
+ 230 00dc 28300BE5 		str	r3, [fp, #-40]
+  88:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(CPLD_PUSH_BUTTON, &gpioConfig);
+ 231              		.loc 1 88 0
+ 232 00e0 28304BE2 		sub	r3, fp, #40
+ 233 00e4 1A00A0E3 		mov	r0, #26
+ 234 00e8 0310A0E1 		mov	r1, r3
+ 235 00ec FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 236 00f0 08000BE5 		str	r0, [fp, #-8]
+  89:../RunApplication.c ****     CheckStatus("Set CPLD_PUSH_BUTTON", Status);
+ 237              		.loc 1 89 0
+ 238 00f4 90009FE5 		ldr	r0, .L7+16
+ 239 00f8 08101BE5 		ldr	r1, [fp, #-8]
+ 240 00fc FEFFFFEB 		bl	CheckStatus
+  90:../RunApplication.c ****     // Setup PushButton as an input that can generate an interrupt
+  91:../RunApplication.c ****     gpioConfig.outValue = 1;
+ 241              		.loc 1 91 0
+ 242 0100 0130A0E3 		mov	r3, #1
+ 243 0104 28300BE5 		str	r3, [fp, #-40]
+  92:../RunApplication.c ****     gpioConfig.inputEn = CyTrue;
+ 244              		.loc 1 92 0
+ 245 0108 0130A0E3 		mov	r3, #1
+ 246 010c 1C300BE5 		str	r3, [fp, #-28]
+  93:../RunApplication.c ****     gpioConfig.driveLowEn = CyFalse;
+ 247              		.loc 1 93 0
+ 248 0110 0030A0E3 		mov	r3, #0
+ 249 0114 24300BE5 		str	r3, [fp, #-36]
+  94:../RunApplication.c ****     gpioConfig.driveHighEn = CyFalse;
+ 250              		.loc 1 94 0
+ 251 0118 0030A0E3 		mov	r3, #0
+ 252 011c 20300BE5 		str	r3, [fp, #-32]
+  95:../RunApplication.c ****     gpioConfig.intrMode = CY_U3P_GPIO_INTR_BOTH_EDGE;
+ 253              		.loc 1 95 0
+ 254 0120 0330A0E3 		mov	r3, #3
+ 255 0124 18304BE5 		strb	r3, [fp, #-24]
+  96:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(PUSH_BUTTON, &gpioConfig);
+ 256              		.loc 1 96 0
+ 257 0128 28304BE2 		sub	r3, fp, #40
+ 258 012c 2D00A0E3 		mov	r0, #45
+ 259 0130 0310A0E1 		mov	r1, r3
+ 260 0134 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 261 0138 08000BE5 		str	r0, [fp, #-8]
+  97:../RunApplication.c ****     CheckStatus("Setup PUSH_BUTTON", Status);
+ 262              		.loc 1 97 0
+ 263 013c 4C009FE5 		ldr	r0, .L7+20
+ 264 0140 08101BE5 		ldr	r1, [fp, #-8]
+ 265 0144 FEFFFFEB 		bl	CheckStatus
+  98:../RunApplication.c ****     // CPLD can also drive the PushButton, ensure that it isn't (ie check Value = 1)
+  99:../RunApplication.c **** 	CyU3PGpioSimpleGetValue(PUSH_BUTTON, &Value);
+ 266              		.loc 1 99 0
+ 267 0148 2C304BE2 		sub	r3, fp, #44
+ 268 014c 2D00A0E3 		mov	r0, #45
+ 269 0150 0310A0E1 		mov	r1, r3
+ 270 0154 FEFFFFEB 		bl	CyU3PGpioSimpleGetValue
+ 100:../RunApplication.c **** 	DebugPrint(4, ", Initial Value = %d,", Value);
+ 271              		.loc 1 100 0
+ 272 0158 2C301BE5 		ldr	r3, [fp, #-44]
+ 273 015c 0400A0E3 		mov	r0, #4
+ 274 0160 2C109FE5 		ldr	r1, .L7+24
+ 275 0164 0320A0E1 		mov	r2, r3
+ 276 0168 FEFFFFEB 		bl	CyU3PDebugPrint
+ 101:../RunApplication.c ****     // Register a CallBack to deal with PushButton
+ 102:../RunApplication.c ****     CyU3PRegisterGpioCallBack(GPIO_CallBack);
+ 277              		.loc 1 102 0
+ 278 016c 24009FE5 		ldr	r0, .L7+28
+ 279 0170 FEFFFFEB 		bl	CyU3PRegisterGpioCallBack
+ 103:../RunApplication.c **** }
+ 280              		.loc 1 103 0
+ 281 0174 04D04BE2 		sub	sp, fp, #4
+ 282              		@ sp needed
+ 283 0178 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 284              	.L8:
+ 285              		.align	2
+ 286              	.L7:
+ 287 017c 00000000 		.word	.LC0
+ 288 0180 14000000 		.word	.LC1
+ 289 0184 2C000000 		.word	.LC2
+ 290 0188 40000000 		.word	.LC3
+ 291 018c 4C000000 		.word	.LC4
+ 292 0190 64000000 		.word	.LC5
+ 293 0194 78000000 		.word	.LC6
+ 294 0198 00000000 		.word	GPIO_CallBack
+ 295              		.cfi_endproc
+ 296              	.LFE2:
+ 298              		.section	.rodata
+ 299 008e 0000     		.align	2
+ 300              	.LC7:
+ 301 0090 496E6974 		.ascii	"Initialize USB\000"
+ 301      69616C69 
+ 301      7A652055 
+ 301      534200
+ 302 009f 00       		.align	2
+ 303              	.LC8:
+ 304 00a0 0D0A4170 		.ascii	"\015\012Application started with %d\000"
+ 304      706C6963 
+ 304      6174696F 
+ 304      6E207374 
+ 304      61727465 
+ 305 00be 0000     		.align	2
+ 306              	.LC9:
+ 307 00c0 25642C20 		.ascii	"%d, \000"
+ 307      00
+ 308 00c5 000000   		.align	2
+ 309              	.LC10:
+ 310 00c8 0D0A4170 		.ascii	"\015\012Application failed to initialize. Error cod"
+ 310      706C6963 
+ 310      6174696F 
+ 310      6E206661 
+ 310      696C6564 
+ 311 00f5 653A2025 		.ascii	"e: %d.\015\012\000"
+ 311      642E0D0A 
+ 311      00
+ 312              		.section	.text.ApplicationThread,"ax",%progbits
+ 313              		.align	2
+ 314              		.global	ApplicationThread
+ 316              	ApplicationThread:
+ 317              	.LFB3:
+ 104:../RunApplication.c **** 
+ 105:../RunApplication.c **** void ApplicationThread(uint32_t Value)
+ 106:../RunApplication.c **** {
+ 318              		.loc 1 106 0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 24
+ 321              		@ frame_needed = 1, uses_anonymous_args = 0
+ 322 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 323              	.LCFI6:
+ 324              		.cfi_def_cfa_offset 8
+ 325              		.cfi_offset 11, -8
+ 326              		.cfi_offset 14, -4
+ 327 0004 04B08DE2 		add	fp, sp, #4
+ 328              	.LCFI7:
+ 329              		.cfi_def_cfa 11, 4
+ 330 0008 20D04DE2 		sub	sp, sp, #32
+ 331 000c 18000BE5 		str	r0, [fp, #-24]
+ 107:../RunApplication.c **** 	int32_t Seconds = 0;
+ 332              		.loc 1 107 0
+ 333 0010 0030A0E3 		mov	r3, #0
+ 334 0014 08300BE5 		str	r3, [fp, #-8]
+ 108:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+ 109:../RunApplication.c ****     uint32_t ActualEvents, Count;
+ 110:../RunApplication.c **** 
+ 111:../RunApplication.c **** // Insert a delay here if using a USB Bus Spy to give time to start capture after the FX3 firmware 
+ 112:../RunApplication.c **** //    DebugPrint(4, "\r\nReady:");
+ 113:../RunApplication.c **** //    CyU3PThreadSleep(10000);
+ 114:../RunApplication.c **** 
+ 115:../RunApplication.c ****     Status = InitializeUSB();
+ 335              		.loc 1 115 0
+ 336 0018 FEFFFFEB 		bl	InitializeUSB
+ 337 001c 10000BE5 		str	r0, [fp, #-16]
+ 116:../RunApplication.c ****     CheckStatus("Initialize USB", Status);
+ 338              		.loc 1 116 0
+ 339 0020 2C019FE5 		ldr	r0, .L18
+ 340 0024 10101BE5 		ldr	r1, [fp, #-16]
+ 341 0028 FEFFFFEB 		bl	CheckStatus
+ 117:../RunApplication.c **** 
+ 118:../RunApplication.c ****     if (Status == CY_U3P_SUCCESS)
+ 342              		.loc 1 118 0
+ 343 002c 10301BE5 		ldr	r3, [fp, #-16]
+ 344 0030 000053E3 		cmp	r3, #0
+ 345 0034 4000001A 		bne	.L10
+ 119:../RunApplication.c ****     {
+ 120:../RunApplication.c **** 		// Wait for the device to be enumerated and initialized
+ 121:../RunApplication.c **** 		while (!glIsApplicationActive)
+ 346              		.loc 1 121 0
+ 347 0038 0D0000EA 		b	.L11
+ 348              	.L12:
+ 122:../RunApplication.c **** 		{
+ 123:../RunApplication.c **** 			// Wait up to 100msec for USB CallBack Events
+ 124:../RunApplication.c **** 			Status = CyU3PEventGet(&CallbackEvent, USB_EVENTS, CYU3P_EVENT_OR_CLEAR, &ActualEvents, 100);
+ 349              		.loc 1 124 0
+ 350 003c 14304BE2 		sub	r3, fp, #20
+ 351 0040 6420A0E3 		mov	r2, #100
+ 352 0044 00208DE5 		str	r2, [sp]
+ 353 0048 08019FE5 		ldr	r0, .L18+4
+ 354 004c 08119FE5 		ldr	r1, .L18+8
+ 355 0050 0120A0E3 		mov	r2, #1
+ 356 0054 FEFFFFEB 		bl	_txe_event_flags_get
+ 357 0058 10000BE5 		str	r0, [fp, #-16]
+ 125:../RunApplication.c **** 			if (Status == TX_SUCCESS) DebugPrintEvent(ActualEvents);
+ 358              		.loc 1 125 0
+ 359 005c 10301BE5 		ldr	r3, [fp, #-16]
+ 360 0060 000053E3 		cmp	r3, #0
+ 361 0064 0200001A 		bne	.L11
+ 362              		.loc 1 125 0 is_stmt 0 discriminator 1
+ 363 0068 14301BE5 		ldr	r3, [fp, #-20]
+ 364 006c 0300A0E1 		mov	r0, r3
+ 365 0070 FEFFFFEB 		bl	DebugPrintEvent
+ 366              	.L11:
+ 121:../RunApplication.c **** 		{
+ 367              		.loc 1 121 0 is_stmt 1 discriminator 1
+ 368 0074 E4309FE5 		ldr	r3, .L18+12
+ 369 0078 003093E5 		ldr	r3, [r3]
+ 370 007c 000053E3 		cmp	r3, #0
+ 371 0080 EDFFFF0A 		beq	.L12
+ 126:../RunApplication.c **** 		}
+ 127:../RunApplication.c **** 
+ 128:../RunApplication.c **** 		DebugPrint(4, "\r\nApplication started with %d", Value);
+ 372              		.loc 1 128 0
+ 373 0084 0400A0E3 		mov	r0, #4
+ 374 0088 D4109FE5 		ldr	r1, .L18+16
+ 375 008c 18201BE5 		ldr	r2, [fp, #-24]
+ 376 0090 FEFFFFEB 		bl	CyU3PDebugPrint
+ 129:../RunApplication.c ****     	CyU3PGpioSetValue(CPLD_RESET, 0);		// Release CPLD_RESET
+ 377              		.loc 1 129 0
+ 378 0094 1B00A0E3 		mov	r0, #27
+ 379 0098 0010A0E3 		mov	r1, #0
+ 380 009c FEFFFFEB 		bl	CyU3PGpioSetValue
+ 381              	.L17:
+ 130:../RunApplication.c ****     	// Now run forever
+ 131:../RunApplication.c ****     	while (1)
+ 132:../RunApplication.c ****     	{
+ 133:../RunApplication.c ****     		for (Count = 0; Count<10; Count++)
+ 382              		.loc 1 133 0
+ 383 00a0 0030A0E3 		mov	r3, #0
+ 384 00a4 0C300BE5 		str	r3, [fp, #-12]
+ 385 00a8 180000EA 		b	.L13
+ 386              	.L16:
+ 134:../RunApplication.c ****     		{
+ 135:../RunApplication.c **** 				// Check for User Commands (and other CallBack Events) every 100msec
+ 136:../RunApplication.c **** 				CyU3PThreadSleep(100);
+ 387              		.loc 1 136 0
+ 388 00ac 6400A0E3 		mov	r0, #100
+ 389 00b0 FEFFFFEB 		bl	_tx_thread_sleep
+ 137:../RunApplication.c **** 				Status = CyU3PEventGet(&CallbackEvent, ANY_EVENT, CYU3P_EVENT_OR_CLEAR, &ActualEvents, TX_NO_WA
+ 390              		.loc 1 137 0
+ 391 00b4 14304BE2 		sub	r3, fp, #20
+ 392 00b8 0020A0E3 		mov	r2, #0
+ 393 00bc 00208DE5 		str	r2, [sp]
+ 394 00c0 90009FE5 		ldr	r0, .L18+4
+ 395 00c4 0010E0E3 		mvn	r1, #0
+ 396 00c8 0120A0E3 		mov	r2, #1
+ 397 00cc FEFFFFEB 		bl	_txe_event_flags_get
+ 398 00d0 10000BE5 		str	r0, [fp, #-16]
+ 138:../RunApplication.c **** 				if (Status == TX_SUCCESS)
+ 399              		.loc 1 138 0
+ 400 00d4 10301BE5 		ldr	r3, [fp, #-16]
+ 401 00d8 000053E3 		cmp	r3, #0
+ 402 00dc 0800001A 		bne	.L14
+ 139:../RunApplication.c **** 				{
+ 140:../RunApplication.c **** 					if (ActualEvents & USER_COMMAND_AVAILABLE) ParseCommand();
+ 403              		.loc 1 140 0
+ 404 00e0 14301BE5 		ldr	r3, [fp, #-20]
+ 405 00e4 023503E2 		and	r3, r3, #8388608
+ 406 00e8 000053E3 		cmp	r3, #0
+ 407 00ec 0100000A 		beq	.L15
+ 408              		.loc 1 140 0 is_stmt 0 discriminator 1
+ 409 00f0 FEFFFFEB 		bl	ParseCommand
+ 410 00f4 020000EA 		b	.L14
+ 411              	.L15:
+ 141:../RunApplication.c **** 					else DebugPrintEvent(ActualEvents);
+ 412              		.loc 1 141 0 is_stmt 1
+ 413 00f8 14301BE5 		ldr	r3, [fp, #-20]
+ 414 00fc 0300A0E1 		mov	r0, r3
+ 415 0100 FEFFFFEB 		bl	DebugPrintEvent
+ 416              	.L14:
+ 133:../RunApplication.c ****     		{
+ 417              		.loc 1 133 0
+ 418 0104 0C301BE5 		ldr	r3, [fp, #-12]
+ 419 0108 013083E2 		add	r3, r3, #1
+ 420 010c 0C300BE5 		str	r3, [fp, #-12]
+ 421              	.L13:
+ 133:../RunApplication.c ****     		{
+ 422              		.loc 1 133 0 is_stmt 0 discriminator 1
+ 423 0110 0C301BE5 		ldr	r3, [fp, #-12]
+ 424 0114 090053E3 		cmp	r3, #9
+ 425 0118 E3FFFF9A 		bls	.L16
+ 142:../RunApplication.c **** 				}
+ 143:../RunApplication.c ****     		}
+ 144:../RunApplication.c **** 			DebugPrint(4, "%d, ", Seconds++);
+ 426              		.loc 1 144 0 is_stmt 1
+ 427 011c 08301BE5 		ldr	r3, [fp, #-8]
+ 428 0120 012083E2 		add	r2, r3, #1
+ 429 0124 08200BE5 		str	r2, [fp, #-8]
+ 430 0128 0400A0E3 		mov	r0, #4
+ 431 012c 34109FE5 		ldr	r1, .L18+20
+ 432 0130 0320A0E1 		mov	r2, r3
+ 433 0134 FEFFFFEB 		bl	CyU3PDebugPrint
+ 145:../RunApplication.c **** 		}
+ 434              		.loc 1 145 0
+ 435 0138 D8FFFFEA 		b	.L17
+ 436              	.L10:
+ 146:../RunApplication.c ****     }
+ 147:../RunApplication.c ****     DebugPrint(4, "\r\nApplication failed to initialize. Error code: %d.\r\n", Status);
+ 437              		.loc 1 147 0
+ 438 013c 0400A0E3 		mov	r0, #4
+ 439 0140 24109FE5 		ldr	r1, .L18+24
+ 440 0144 10201BE5 		ldr	r2, [fp, #-16]
+ 441 0148 FEFFFFEB 		bl	CyU3PDebugPrint
+ 148:../RunApplication.c ****     // Returning here will stop the Application Thread running - it failed anyway so this is OK
+ 149:../RunApplication.c **** }
+ 442              		.loc 1 149 0
+ 443 014c 04D04BE2 		sub	sp, fp, #4
+ 444              		@ sp needed
+ 445 0150 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 446              	.L19:
+ 447              		.align	2
+ 448              	.L18:
+ 449 0154 90000000 		.word	.LC7
+ 450 0158 00000000 		.word	CallbackEvent
+ 451 015c FFFF7F00 		.word	8388607
+ 452 0160 00000000 		.word	glIsApplicationActive
+ 453 0164 A0000000 		.word	.LC8
+ 454 0168 C0000000 		.word	.LC9
+ 455 016c C8000000 		.word	.LC10
+ 456              		.cfi_endproc
+ 457              	.LFE3:
+ 459              		.section	.rodata
+ 460 00fe 0000     		.align	2
+ 461              	.LC11:
+ 462 0100 496E6974 		.ascii	"Initialize Debug Console\000"
+ 462      69616C69 
+ 462      7A652044 
+ 462      65627567 
+ 462      20436F6E 
+ 463 0119 000000   		.align	2
+ 464              	.LC12:
+ 465 011c 4465626F 		.ascii	"DebounceTimer\000"
+ 465      756E6365 
+ 465      54696D65 
+ 465      7200
+ 466 012a 0000     		.align	2
+ 467              	.LC13:
+ 468 012c 43726561 		.ascii	"Create DebounceTimer\000"
+ 468      74652044 
+ 468      65626F75 
+ 468      6E636554 
+ 468      696D6572 
+ 469 0141 000000   		.align	2
+ 470              	.LC14:
+ 471 0144 43726561 		.ascii	"Create CallbackEvent\000"
+ 471      74652043 
+ 471      616C6C62 
+ 471      61636B45 
+ 471      76656E74 
+ 472 0159 000000   		.align	2
+ 473              	.LC15:
+ 474 015c 31313A47 		.ascii	"11:GPIF_Example5\000"
+ 474      5049465F 
+ 474      4578616D 
+ 474      706C6535 
+ 474      00
+ 475 016d 000000   		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 476              		.align	2
+ 477              		.global	CyFxApplicationDefine
+ 479              	CyFxApplicationDefine:
+ 480              	.LFB4:
+ 150:../RunApplication.c **** 
+ 151:../RunApplication.c **** // ApplicationDefine function called by RTOS to startup the application threads
+ 152:../RunApplication.c **** void CyFxApplicationDefine(void)
+ 153:../RunApplication.c **** {
+ 481              		.loc 1 153 0
+ 482              		.cfi_startproc
+ 483              		@ args = 0, pretend = 0, frame = 8
+ 484              		@ frame_needed = 1, uses_anonymous_args = 0
+ 485 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 486              	.LCFI8:
+ 487              		.cfi_def_cfa_offset 8
+ 488              		.cfi_offset 11, -8
+ 489              		.cfi_offset 14, -4
+ 490 0004 04B08DE2 		add	fp, sp, #4
+ 491              	.LCFI9:
+ 492              		.cfi_def_cfa 11, 4
+ 493 0008 28D04DE2 		sub	sp, sp, #40
+ 154:../RunApplication.c ****     void *StackPtr;
+ 155:../RunApplication.c ****     uint32_t Status;
+ 156:../RunApplication.c **** 
+ 157:../RunApplication.c ****     // Now create any needed resources then the Application thread
+ 158:../RunApplication.c ****     Status = InitializeDebugConsole();
+ 494              		.loc 1 158 0
+ 495 000c FEFFFFEB 		bl	InitializeDebugConsole
+ 496 0010 08000BE5 		str	r0, [fp, #-8]
+ 159:../RunApplication.c ****     CheckStatus("Initialize Debug Console", Status);
+ 497              		.loc 1 159 0
+ 498 0014 E0009FE5 		ldr	r0, .L23
+ 499 0018 08101BE5 		ldr	r1, [fp, #-8]
+ 500 001c FEFFFFEB 		bl	CheckStatus
+ 160:../RunApplication.c **** 
+ 161:../RunApplication.c ****     // GPIO module already started, need to Initialize CPLD
+ 162:../RunApplication.c ****     InitializeCPLD();
+ 501              		.loc 1 162 0
+ 502 0020 FEFFFFEB 		bl	InitializeCPLD
+ 163:../RunApplication.c **** 
+ 164:../RunApplication.c ****     // Need a system timer to debounce the pushbutton
+ 165:../RunApplication.c ****     Status = tx_timer_create(&DebounceTimer, "DebounceTimer", DebounceTimerExpired, 0, DEBOUNCE_TIM
+ 503              		.loc 1 165 0
+ 504 0024 1430A0E3 		mov	r3, #20
+ 505 0028 00308DE5 		str	r3, [sp]
+ 506 002c 1430A0E3 		mov	r3, #20
+ 507 0030 04308DE5 		str	r3, [sp, #4]
+ 508 0034 0130A0E3 		mov	r3, #1
+ 509 0038 08308DE5 		str	r3, [sp, #8]
+ 510 003c 2C30A0E3 		mov	r3, #44
+ 511 0040 0C308DE5 		str	r3, [sp, #12]
+ 512 0044 B4009FE5 		ldr	r0, .L23+4
+ 513 0048 B4109FE5 		ldr	r1, .L23+8
+ 514 004c B4209FE5 		ldr	r2, .L23+12
+ 515 0050 0030A0E3 		mov	r3, #0
+ 516 0054 FEFFFFEB 		bl	_txe_timer_create
+ 517 0058 08000BE5 		str	r0, [fp, #-8]
+ 166:../RunApplication.c ****     CheckStatus("Create DebounceTimer", Status);
+ 518              		.loc 1 166 0
+ 519 005c A8009FE5 		ldr	r0, .L23+16
+ 520 0060 08101BE5 		ldr	r1, [fp, #-8]
+ 521 0064 FEFFFFEB 		bl	CheckStatus
+ 167:../RunApplication.c **** 
+ 168:../RunApplication.c ****     // Create an Event so that alerts from CallBack routines can be monitored
+ 169:../RunApplication.c ****     Status = CyU3PEventCreate(&CallbackEvent);
+ 522              		.loc 1 169 0
+ 523 0068 A0009FE5 		ldr	r0, .L23+20
+ 524 006c 0010A0E3 		mov	r1, #0
+ 525 0070 2820A0E3 		mov	r2, #40
+ 526 0074 FEFFFFEB 		bl	_txe_event_flags_create
+ 527 0078 08000BE5 		str	r0, [fp, #-8]
+ 170:../RunApplication.c ****     CheckStatus("Create CallbackEvent", Status);
+ 528              		.loc 1 170 0
+ 529 007c 90009FE5 		ldr	r0, .L23+24
+ 530 0080 08101BE5 		ldr	r1, [fp, #-8]
+ 531 0084 FEFFFFEB 		bl	CheckStatus
+ 171:../RunApplication.c **** 
+ 172:../RunApplication.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 532              		.loc 1 172 0
+ 533 0088 010AA0E3 		mov	r0, #4096
+ 534 008c FEFFFFEB 		bl	CyU3PMemAlloc
+ 535 0090 0C000BE5 		str	r0, [fp, #-12]
+ 173:../RunApplication.c ****     Status = CyU3PThreadCreate(&ThreadHandle, 	// Handle to my Application Thread
+ 536              		.loc 1 173 0
+ 537 0094 0C301BE5 		ldr	r3, [fp, #-12]
+ 538 0098 00308DE5 		str	r3, [sp]
+ 539 009c 013AA0E3 		mov	r3, #4096
+ 540 00a0 04308DE5 		str	r3, [sp, #4]
+ 541 00a4 0830A0E3 		mov	r3, #8
+ 542 00a8 08308DE5 		str	r3, [sp, #8]
+ 543 00ac 0830A0E3 		mov	r3, #8
+ 544 00b0 0C308DE5 		str	r3, [sp, #12]
+ 545 00b4 0030A0E3 		mov	r3, #0
+ 546 00b8 10308DE5 		str	r3, [sp, #16]
+ 547 00bc 0130A0E3 		mov	r3, #1
+ 548 00c0 14308DE5 		str	r3, [sp, #20]
+ 549 00c4 A830A0E3 		mov	r3, #168
+ 550 00c8 18308DE5 		str	r3, [sp, #24]
+ 551 00cc 44009FE5 		ldr	r0, .L23+28
+ 552 00d0 44109FE5 		ldr	r1, .L23+32
+ 553 00d4 44209FE5 		ldr	r2, .L23+36
+ 554 00d8 2A30A0E3 		mov	r3, #42
+ 555 00dc FEFFFFEB 		bl	_txe_thread_create
+ 556 00e0 08000BE5 		str	r0, [fp, #-8]
+ 174:../RunApplication.c ****             "11:GPIF_Example5",               	// Thread ID and name
+ 175:../RunApplication.c ****             ApplicationThread,     				// Thread entry function
+ 176:../RunApplication.c ****             42,                             	// Parameter passed to Thread
+ 177:../RunApplication.c ****             StackPtr,                       	// Pointer to the allocated thread stack
+ 178:../RunApplication.c ****             APPLICATION_THREAD_STACK,           // Allocated thread stack size
+ 179:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,        // Thread priority
+ 180:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,        // = Thread priority so no preemption
+ 181:../RunApplication.c ****             CYU3P_NO_TIME_SLICE,            	// Time slice not supported
+ 182:../RunApplication.c ****             CYU3P_AUTO_START                	// Start the thread immediately
+ 183:../RunApplication.c ****             );
+ 184:../RunApplication.c **** 
+ 185:../RunApplication.c ****     if (Status != CY_U3P_SUCCESS)
+ 557              		.loc 1 185 0
+ 558 00e4 08301BE5 		ldr	r3, [fp, #-8]
+ 559 00e8 000053E3 		cmp	r3, #0
+ 560 00ec 0000000A 		beq	.L20
+ 561              	.L22:
+ 186:../RunApplication.c ****     {
+ 187:../RunApplication.c ****         // Thread creation failed with the Status = error code
+ 188:../RunApplication.c ****         while(1)
+ 189:../RunApplication.c ****         {
+ 190:../RunApplication.c ****         	// Application cannot continue. Loop indefinitely
+ 191:../RunApplication.c ****         }
+ 562              		.loc 1 191 0 discriminator 1
+ 563 00f0 FEFFFFEA 		b	.L22
+ 564              	.L20:
+ 192:../RunApplication.c ****     }
+ 193:../RunApplication.c **** }
+ 565              		.loc 1 193 0
+ 566 00f4 04D04BE2 		sub	sp, fp, #4
+ 567              		@ sp needed
+ 568 00f8 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 569              	.L24:
+ 570              		.align	2
+ 571              	.L23:
+ 572 00fc 00010000 		.word	.LC11
+ 573 0100 00000000 		.word	DebounceTimer
+ 574 0104 1C010000 		.word	.LC12
+ 575 0108 00000000 		.word	DebounceTimerExpired
+ 576 010c 2C010000 		.word	.LC13
+ 577 0110 00000000 		.word	CallbackEvent
+ 578 0114 44010000 		.word	.LC14
+ 579 0118 00000000 		.word	ThreadHandle
+ 580 011c 5C010000 		.word	.LC15
+ 581 0120 00000000 		.word	ApplicationThread
+ 582              		.cfi_endproc
+ 583              	.LFE4:
+ 585              		.text
+ 586              	.Letext0:
+ 587              		.file 2 "c:\\program files (x86)\\cypress\\ez-usb fx3 sdk\\1.3\\arm gcc\\arm-none-eabi\\include\\s
+ 588              		.file 3 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3typ
+ 589              		.file 4 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_port
+ 590              		.file 5 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_api.
+ 591              		.file 6 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3dma
+ 592              		.file 7 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3sys
+ 593              		.file 8 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3err
+ 594              		.file 9 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3lpp
+ 595              		.file 10 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3gp
+DEFINED SYMBOLS
+                            *ABS*:00000000 RunApplication.c
+                            *COM*:000000a8 ThreadHandle
+                            *COM*:00000004 glIsApplicationActive
+                            *COM*:00000030 Counter
+                            *COM*:0000002c DebounceTimer
+                            *COM*:00000028 CallbackEvent
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:22     .text.DebounceTimerExpired:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:25     .text.DebounceTimerExpired:00000000 DebounceTimerExpired
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:60     .text.GPIO_CallBack:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:63     .text.GPIO_CallBack:00000000 GPIO_CallBack
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:115    .text.GPIO_CallBack:00000074 $d
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:120    .rodata:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:142    .text.InitializeCPLD:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:145    .text.InitializeCPLD:00000000 InitializeCPLD
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:287    .text.InitializeCPLD:0000017c $d
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:313    .text.ApplicationThread:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:316    .text.ApplicationThread:00000000 ApplicationThread
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:449    .text.ApplicationThread:00000154 $d
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:476    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:479    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\dbir\AppData\Local\Temp\ccgGIC4o.s:572    .text.CyFxApplicationDefine:000000fc $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PGpioSimpleGetValue
+CyU3PGpioSetValue
+_txe_timer_info_get
+_txe_timer_deactivate
+_txe_timer_change
+_txe_timer_activate
+CyU3PGpioInit
+CheckStatus
+CyU3PDeviceGpioOverride
+CyU3PMemSet
+CyU3PGpioSetSimpleConfig
+CyU3PDebugPrint
+CyU3PRegisterGpioCallBack
+InitializeUSB
+_txe_event_flags_get
+DebugPrintEvent
+_tx_thread_sleep
+ParseCommand
+InitializeDebugConsole
+_txe_timer_create
+_txe_event_flags_create
+CyU3PMemAlloc
+_txe_thread_create

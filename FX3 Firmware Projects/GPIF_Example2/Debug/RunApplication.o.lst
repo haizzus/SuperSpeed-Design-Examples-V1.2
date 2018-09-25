@@ -1,0 +1,598 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"RunApplication.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.comm	CallbackEvent,40,4
+  17              		.comm	ThreadHandle,168,4
+  18              		.comm	glIsApplicationActive,4,4
+  19              		.comm	Counter,48,4
+  20              		.section	.rodata
+  21              		.align	2
+  22              	.LC0:
+  23 0000 53746172 		.ascii	"Start GPIO Clocks\000"
+  23      74204750 
+  23      494F2043 
+  23      6C6F636B 
+  23      7300
+  24 0012 0000     		.align	2
+  25              	.LC1:
+  26 0014 43504C44 		.ascii	"CPLD_RESET Override\000"
+  26      5F524553 
+  26      4554204F 
+  26      76657272 
+  26      69646500 
+  27              		.align	2
+  28              	.LC2:
+  29 0028 52657365 		.ascii	"Reset CPLD\000"
+  29      74204350 
+  29      4C4400
+  30              		.section	.text.InitializeCPLD,"ax",%progbits
+  31              		.align	2
+  32              		.global	InitializeCPLD
+  34              	InitializeCPLD:
+  35              	.LFB0:
+  36              		.file 1 "../RunApplication.c"
+   1:../RunApplication.c **** //	Demonstrate GPIF sending CPLD data to USB
+   2:../RunApplication.c **** //	Use CollectData to save the CPLD generated data (it removes CPLD Reset, then reasserts it)
+   3:../RunApplication.c **** //
+   4:../RunApplication.c **** // john@usb-by-example.com
+   5:../RunApplication.c **** //
+   6:../RunApplication.c **** 
+   7:../RunApplication.c **** #include "Application.h"
+   8:../RunApplication.c **** 
+   9:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(void);
+  10:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeUSB(void);
+  11:../RunApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  12:../RunApplication.c **** extern void DebugPrintEvent(uint32_t ActualEvents);
+  13:../RunApplication.c **** extern void ParseCommand(void);
+  14:../RunApplication.c **** 
+  15:../RunApplication.c **** 
+  16:../RunApplication.c **** CyU3PEvent CallbackEvent;			// Used by Callback to signal the user
+  17:../RunApplication.c **** CyU3PThread ThreadHandle;			// Handle to my Application Thread
+  18:../RunApplication.c **** CyBool_t glIsApplicationActive;		// Set true once device is enumerated
+  19:../RunApplication.c **** uint32_t Counter[12];
+  20:../RunApplication.c **** 
+  21:../RunApplication.c **** void InitializeCPLD(void)
+  22:../RunApplication.c **** // CPLD needs to be RESET for correct operation
+  23:../RunApplication.c **** {
+  37              		.loc 1 23 0
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 40
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 8
+  44              		.cfi_offset 11, -8
+  45              		.cfi_offset 14, -4
+  46 0004 04B08DE2 		add	fp, sp, #4
+  47              	.LCFI1:
+  48              		.cfi_def_cfa 11, 4
+  49 0008 28D04DE2 		sub	sp, sp, #40
+  24:../RunApplication.c **** 	CyU3PReturnStatus_t Status;
+  25:../RunApplication.c **** 	CyU3PGpioClock_t GpioClock;
+  26:../RunApplication.c **** 	CyU3PGpioSimpleConfig_t gpioConfig;
+  27:../RunApplication.c **** 
+  28:../RunApplication.c ****     // Startup the GPIO module clocks
+  29:../RunApplication.c ****     GpioClock.fastClkDiv = 2;
+  50              		.loc 1 29 0
+  51 000c 0230A0E3 		mov	r3, #2
+  52 0010 14304BE5 		strb	r3, [fp, #-20]
+  30:../RunApplication.c ****     GpioClock.slowClkDiv = 0;
+  53              		.loc 1 30 0
+  54 0014 0030A0E3 		mov	r3, #0
+  55 0018 13304BE5 		strb	r3, [fp, #-19]
+  31:../RunApplication.c ****     GpioClock.simpleDiv = CY_U3P_GPIO_SIMPLE_DIV_BY_2;
+  56              		.loc 1 31 0
+  57 001c 0030A0E3 		mov	r3, #0
+  58 0020 0C304BE5 		strb	r3, [fp, #-12]
+  32:../RunApplication.c ****     GpioClock.clkSrc = CY_U3P_SYS_CLK;
+  59              		.loc 1 32 0
+  60 0024 0330A0E3 		mov	r3, #3
+  61 0028 0B304BE5 		strb	r3, [fp, #-11]
+  33:../RunApplication.c ****     GpioClock.halfDiv = 0;
+  62              		.loc 1 33 0
+  63 002c 0030A0E3 		mov	r3, #0
+  64 0030 10300BE5 		str	r3, [fp, #-16]
+  34:../RunApplication.c ****     Status = CyU3PGpioInit(&GpioClock, 0);
+  65              		.loc 1 34 0
+  66 0034 14304BE2 		sub	r3, fp, #20
+  67 0038 0300A0E1 		mov	r0, r3
+  68 003c 0010A0E3 		mov	r1, #0
+  69 0040 FEFFFFEB 		bl	CyU3PGpioInit
+  70 0044 08000BE5 		str	r0, [fp, #-8]
+  35:../RunApplication.c ****     CheckStatus("Start GPIO Clocks", Status);
+  71              		.loc 1 35 0
+  72 0048 74009FE5 		ldr	r0, .L2
+  73 004c 08101BE5 		ldr	r1, [fp, #-8]
+  74 0050 FEFFFFEB 		bl	CheckStatus
+  36:../RunApplication.c **** 
+  37:../RunApplication.c ****     // Need to claim CTRL[10] from the GPIF Interface
+  38:../RunApplication.c **** 	Status = CyU3PDeviceGpioOverride(CPLD_RESET, CyTrue);
+  75              		.loc 1 38 0
+  76 0054 1B00A0E3 		mov	r0, #27
+  77 0058 0110A0E3 		mov	r1, #1
+  78 005c FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  79 0060 08000BE5 		str	r0, [fp, #-8]
+  39:../RunApplication.c **** 	CheckStatus("CPLD_RESET Override", Status);
+  80              		.loc 1 39 0
+  81 0064 5C009FE5 		ldr	r0, .L2+4
+  82 0068 08101BE5 		ldr	r1, [fp, #-8]
+  83 006c FEFFFFEB 		bl	CheckStatus
+  40:../RunApplication.c **** 
+  41:../RunApplication.c **** 	// Reset by driving CPLD_RESET High
+  42:../RunApplication.c **** 	CyU3PMemSet((uint8_t *)&gpioConfig, 0, sizeof(gpioConfig));
+  84              		.loc 1 42 0
+  85 0070 28304BE2 		sub	r3, fp, #40
+  86 0074 0300A0E1 		mov	r0, r3
+  87 0078 0010A0E3 		mov	r1, #0
+  88 007c 1420A0E3 		mov	r2, #20
+  89 0080 FEFFFFEB 		bl	CyU3PMemSet
+  43:../RunApplication.c ****     gpioConfig.outValue = 1;
+  90              		.loc 1 43 0
+  91 0084 0130A0E3 		mov	r3, #1
+  92 0088 28300BE5 		str	r3, [fp, #-40]
+  44:../RunApplication.c ****     gpioConfig.driveLowEn = CyTrue;
+  93              		.loc 1 44 0
+  94 008c 0130A0E3 		mov	r3, #1
+  95 0090 24300BE5 		str	r3, [fp, #-36]
+  45:../RunApplication.c ****     gpioConfig.driveHighEn = CyTrue;
+  96              		.loc 1 45 0
+  97 0094 0130A0E3 		mov	r3, #1
+  98 0098 20300BE5 		str	r3, [fp, #-32]
+  46:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(CPLD_RESET, &gpioConfig);
+  99              		.loc 1 46 0
+ 100 009c 28304BE2 		sub	r3, fp, #40
+ 101 00a0 1B00A0E3 		mov	r0, #27
+ 102 00a4 0310A0E1 		mov	r1, r3
+ 103 00a8 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 104 00ac 08000BE5 		str	r0, [fp, #-8]
+  47:../RunApplication.c ****     CheckStatus("Reset CPLD", Status);
+ 105              		.loc 1 47 0
+ 106 00b0 14009FE5 		ldr	r0, .L2+8
+ 107 00b4 08101BE5 		ldr	r1, [fp, #-8]
+ 108 00b8 FEFFFFEB 		bl	CheckStatus
+  48:../RunApplication.c **** }
+ 109              		.loc 1 48 0
+ 110 00bc 04D04BE2 		sub	sp, fp, #4
+ 111              		@ sp needed
+ 112 00c0 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 113              	.L3:
+ 114              		.align	2
+ 115              	.L2:
+ 116 00c4 00000000 		.word	.LC0
+ 117 00c8 14000000 		.word	.LC1
+ 118 00cc 28000000 		.word	.LC2
+ 119              		.cfi_endproc
+ 120              	.LFE0:
+ 122              		.section	.rodata
+ 123 0033 00       		.align	2
+ 124              	.LC3:
+ 125 0034 496E6974 		.ascii	"Initialize USB\000"
+ 125      69616C69 
+ 125      7A652055 
+ 125      534200
+ 126 0043 00       		.align	2
+ 127              	.LC4:
+ 128 0044 0D0A4170 		.ascii	"\015\012Application started with %d\000"
+ 128      706C6963 
+ 128      6174696F 
+ 128      6E207374 
+ 128      61727465 
+ 129 0062 0000     		.align	2
+ 130              	.LC5:
+ 131 0064 0D0A4D41 		.ascii	"\015\012MAIN now running forever: \000"
+ 131      494E206E 
+ 131      6F772072 
+ 131      756E6E69 
+ 131      6E672066 
+ 132 0081 000000   		.align	2
+ 133              	.LC6:
+ 134 0084 25642C20 		.ascii	"%d, \000"
+ 134      00
+ 135 0089 000000   		.align	2
+ 136              	.LC7:
+ 137 008c 0D0A4170 		.ascii	"\015\012Application failed to initialize. Error cod"
+ 137      706C6963 
+ 137      6174696F 
+ 137      6E206661 
+ 137      696C6564 
+ 138 00b9 653A2025 		.ascii	"e: %d.\015\012\000"
+ 138      642E0D0A 
+ 138      00
+ 139              		.section	.text.ApplicationThread,"ax",%progbits
+ 140              		.align	2
+ 141              		.global	ApplicationThread
+ 143              	ApplicationThread:
+ 144              	.LFB1:
+  49:../RunApplication.c **** 
+  50:../RunApplication.c **** void ApplicationThread(uint32_t Value)
+  51:../RunApplication.c **** {
+ 145              		.loc 1 51 0
+ 146              		.cfi_startproc
+ 147              		@ args = 0, pretend = 0, frame = 24
+ 148              		@ frame_needed = 1, uses_anonymous_args = 0
+ 149 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 150              	.LCFI2:
+ 151              		.cfi_def_cfa_offset 8
+ 152              		.cfi_offset 11, -8
+ 153              		.cfi_offset 14, -4
+ 154 0004 04B08DE2 		add	fp, sp, #4
+ 155              	.LCFI3:
+ 156              		.cfi_def_cfa 11, 4
+ 157 0008 20D04DE2 		sub	sp, sp, #32
+ 158 000c 18000BE5 		str	r0, [fp, #-24]
+  52:../RunApplication.c **** 	// Value is passed to this routine from CyU3PThreadCreate, useful if the same code is used for mul
+  53:../RunApplication.c **** 	// Value is not used in this example
+  54:../RunApplication.c **** 	int32_t Seconds = 0;
+ 159              		.loc 1 54 0
+ 160 0010 0030A0E3 		mov	r3, #0
+ 161 0014 08300BE5 		str	r3, [fp, #-8]
+  55:../RunApplication.c **** 	uint32_t ActualEvents, Count;
+  56:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+  57:../RunApplication.c **** 
+  58:../RunApplication.c ****     // Spin up the USB Connection
+  59:../RunApplication.c ****     Status = InitializeUSB();
+ 162              		.loc 1 59 0
+ 163 0018 FEFFFFEB 		bl	InitializeUSB
+ 164 001c 10000BE5 		str	r0, [fp, #-16]
+  60:../RunApplication.c ****     CheckStatus("Initialize USB", Status);
+ 165              		.loc 1 60 0
+ 166 0020 2C019FE5 		ldr	r0, .L13
+ 167 0024 10101BE5 		ldr	r1, [fp, #-16]
+ 168 0028 FEFFFFEB 		bl	CheckStatus
+  61:../RunApplication.c **** 
+  62:../RunApplication.c ****     if (Status == CY_U3P_SUCCESS)
+ 169              		.loc 1 62 0
+ 170 002c 10301BE5 		ldr	r3, [fp, #-16]
+ 171 0030 000053E3 		cmp	r3, #0
+ 172 0034 4000001A 		bne	.L5
+  63:../RunApplication.c ****     {
+  64:../RunApplication.c ****     	DebugPrint(4, "\r\nApplication started with %d", Value);
+ 173              		.loc 1 64 0
+ 174 0038 0400A0E3 		mov	r0, #4
+ 175 003c 14119FE5 		ldr	r1, .L13+4
+ 176 0040 18201BE5 		ldr	r2, [fp, #-24]
+ 177 0044 FEFFFFEB 		bl	CyU3PDebugPrint
+  65:../RunApplication.c **** 		// Wait for the device to be enumerated
+  66:../RunApplication.c **** 		while (!glIsApplicationActive)
+ 178              		.loc 1 66 0
+ 179 0048 0D0000EA 		b	.L6
+ 180              	.L7:
+  67:../RunApplication.c **** 		{
+  68:../RunApplication.c **** 			// Check for USB CallBack Events every 100msec
+  69:../RunApplication.c **** 			Status = CyU3PEventGet(&CallbackEvent, USB_EVENTS, CYU3P_EVENT_OR_CLEAR, &ActualEvents, 100);
+ 181              		.loc 1 69 0
+ 182 004c 14304BE2 		sub	r3, fp, #20
+ 183 0050 6420A0E3 		mov	r2, #100
+ 184 0054 00208DE5 		str	r2, [sp]
+ 185 0058 FC009FE5 		ldr	r0, .L13+8
+ 186 005c FC109FE5 		ldr	r1, .L13+12
+ 187 0060 0120A0E3 		mov	r2, #1
+ 188 0064 FEFFFFEB 		bl	_txe_event_flags_get
+ 189 0068 10000BE5 		str	r0, [fp, #-16]
+  70:../RunApplication.c **** 			if (Status == TX_SUCCESS) DebugPrintEvent(ActualEvents);
+ 190              		.loc 1 70 0
+ 191 006c 10301BE5 		ldr	r3, [fp, #-16]
+ 192 0070 000053E3 		cmp	r3, #0
+ 193 0074 0200001A 		bne	.L6
+ 194              		.loc 1 70 0 is_stmt 0 discriminator 1
+ 195 0078 14301BE5 		ldr	r3, [fp, #-20]
+ 196 007c 0300A0E1 		mov	r0, r3
+ 197 0080 FEFFFFEB 		bl	DebugPrintEvent
+ 198              	.L6:
+  66:../RunApplication.c **** 		{
+ 199              		.loc 1 66 0 is_stmt 1 discriminator 1
+ 200 0084 D8309FE5 		ldr	r3, .L13+16
+ 201 0088 003093E5 		ldr	r3, [r3]
+ 202 008c 000053E3 		cmp	r3, #0
+ 203 0090 EDFFFF0A 		beq	.L7
+  71:../RunApplication.c **** 		}
+  72:../RunApplication.c **** 
+  73:../RunApplication.c ****     	// Now run forever
+  74:../RunApplication.c **** 		DebugPrint(4, "\r\nMAIN now running forever: ");
+ 204              		.loc 1 74 0
+ 205 0094 0400A0E3 		mov	r0, #4
+ 206 0098 C8109FE5 		ldr	r1, .L13+20
+ 207 009c FEFFFFEB 		bl	CyU3PDebugPrint
+ 208              	.L12:
+  75:../RunApplication.c ****     	while (1)
+  76:../RunApplication.c ****     	{
+  77:../RunApplication.c ****     		for (Count = 0; Count<10; Count++)
+ 209              		.loc 1 77 0
+ 210 00a0 0030A0E3 		mov	r3, #0
+ 211 00a4 0C300BE5 		str	r3, [fp, #-12]
+ 212 00a8 180000EA 		b	.L8
+ 213              	.L11:
+  78:../RunApplication.c ****     		{
+  79:../RunApplication.c **** 				// Check for User Commands (and other CallBack Events) every 100msec
+  80:../RunApplication.c **** 				CyU3PThreadSleep(100);
+ 214              		.loc 1 80 0
+ 215 00ac 6400A0E3 		mov	r0, #100
+ 216 00b0 FEFFFFEB 		bl	_tx_thread_sleep
+  81:../RunApplication.c **** 				Status = CyU3PEventGet(&CallbackEvent, ANY_EVENT, CYU3P_EVENT_OR_CLEAR, &ActualEvents, TX_NO_WA
+ 217              		.loc 1 81 0
+ 218 00b4 14304BE2 		sub	r3, fp, #20
+ 219 00b8 0020A0E3 		mov	r2, #0
+ 220 00bc 00208DE5 		str	r2, [sp]
+ 221 00c0 94009FE5 		ldr	r0, .L13+8
+ 222 00c4 FF14E0E3 		mvn	r1, #-16777216
+ 223 00c8 0120A0E3 		mov	r2, #1
+ 224 00cc FEFFFFEB 		bl	_txe_event_flags_get
+ 225 00d0 10000BE5 		str	r0, [fp, #-16]
+  82:../RunApplication.c **** 				if (Status == TX_SUCCESS)
+ 226              		.loc 1 82 0
+ 227 00d4 10301BE5 		ldr	r3, [fp, #-16]
+ 228 00d8 000053E3 		cmp	r3, #0
+ 229 00dc 0800001A 		bne	.L9
+  83:../RunApplication.c **** 				{
+  84:../RunApplication.c **** 					if (ActualEvents & USER_COMMAND_AVAILABLE) ParseCommand();
+ 230              		.loc 1 84 0
+ 231 00e0 14301BE5 		ldr	r3, [fp, #-20]
+ 232 00e4 173003E2 		and	r3, r3, #23
+ 233 00e8 000053E3 		cmp	r3, #0
+ 234 00ec 0100000A 		beq	.L10
+ 235              		.loc 1 84 0 is_stmt 0 discriminator 1
+ 236 00f0 FEFFFFEB 		bl	ParseCommand
+ 237 00f4 020000EA 		b	.L9
+ 238              	.L10:
+  85:../RunApplication.c **** 					else DebugPrintEvent(ActualEvents);
+ 239              		.loc 1 85 0 is_stmt 1
+ 240 00f8 14301BE5 		ldr	r3, [fp, #-20]
+ 241 00fc 0300A0E1 		mov	r0, r3
+ 242 0100 FEFFFFEB 		bl	DebugPrintEvent
+ 243              	.L9:
+  77:../RunApplication.c ****     		{
+ 244              		.loc 1 77 0
+ 245 0104 0C301BE5 		ldr	r3, [fp, #-12]
+ 246 0108 013083E2 		add	r3, r3, #1
+ 247 010c 0C300BE5 		str	r3, [fp, #-12]
+ 248              	.L8:
+  77:../RunApplication.c ****     		{
+ 249              		.loc 1 77 0 is_stmt 0 discriminator 1
+ 250 0110 0C301BE5 		ldr	r3, [fp, #-12]
+ 251 0114 090053E3 		cmp	r3, #9
+ 252 0118 E3FFFF9A 		bls	.L11
+  86:../RunApplication.c **** 				}
+  87:../RunApplication.c ****     		}
+  88:../RunApplication.c **** 			DebugPrint(4, "%d, ", Seconds++);
+ 253              		.loc 1 88 0 is_stmt 1
+ 254 011c 08301BE5 		ldr	r3, [fp, #-8]
+ 255 0120 012083E2 		add	r2, r3, #1
+ 256 0124 08200BE5 		str	r2, [fp, #-8]
+ 257 0128 0400A0E3 		mov	r0, #4
+ 258 012c 38109FE5 		ldr	r1, .L13+24
+ 259 0130 0320A0E1 		mov	r2, r3
+ 260 0134 FEFFFFEB 		bl	CyU3PDebugPrint
+  89:../RunApplication.c **** 		}
+ 261              		.loc 1 89 0
+ 262 0138 D8FFFFEA 		b	.L12
+ 263              	.L5:
+  90:../RunApplication.c ****     }
+  91:../RunApplication.c ****     DebugPrint(4, "\r\nApplication failed to initialize. Error code: %d.\r\n", Status);
+ 264              		.loc 1 91 0
+ 265 013c 0400A0E3 		mov	r0, #4
+ 266 0140 28109FE5 		ldr	r1, .L13+28
+ 267 0144 10201BE5 		ldr	r2, [fp, #-16]
+ 268 0148 FEFFFFEB 		bl	CyU3PDebugPrint
+  92:../RunApplication.c ****     // Returning here will stop the Application Thread running - it failed anyway so this is OK
+  93:../RunApplication.c **** }
+ 269              		.loc 1 93 0
+ 270 014c 04D04BE2 		sub	sp, fp, #4
+ 271              		@ sp needed
+ 272 0150 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 273              	.L14:
+ 274              		.align	2
+ 275              	.L13:
+ 276 0154 34000000 		.word	.LC3
+ 277 0158 44000000 		.word	.LC4
+ 278 015c 00000000 		.word	CallbackEvent
+ 279 0160 FFFF7F00 		.word	8388607
+ 280 0164 00000000 		.word	glIsApplicationActive
+ 281 0168 64000000 		.word	.LC5
+ 282 016c 84000000 		.word	.LC6
+ 283 0170 8C000000 		.word	.LC7
+ 284              		.cfi_endproc
+ 285              	.LFE1:
+ 287              		.section	.rodata
+ 288 00c2 0000     		.align	2
+ 289              	.LC8:
+ 290 00c4 496E6974 		.ascii	"Initialize Debug Console\000"
+ 290      69616C69 
+ 290      7A652044 
+ 290      65627567 
+ 290      20436F6E 
+ 291 00dd 000000   		.align	2
+ 292              	.LC9:
+ 293 00e0 43726561 		.ascii	"Create CallbackEvent\000"
+ 293      74652043 
+ 293      616C6C62 
+ 293      61636B45 
+ 293      76656E74 
+ 294 00f5 000000   		.align	2
+ 295              	.LC10:
+ 296 00f8 31313A47 		.ascii	"11:GPIF_Example2\000"
+ 296      5049465F 
+ 296      4578616D 
+ 296      706C6532 
+ 296      00
+ 297 0109 000000   		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 298              		.align	2
+ 299              		.global	CyFxApplicationDefine
+ 301              	CyFxApplicationDefine:
+ 302              	.LFB2:
+  94:../RunApplication.c **** 
+  95:../RunApplication.c **** // ApplicationDefine function called by RTOS to startup the application threads
+  96:../RunApplication.c **** void CyFxApplicationDefine(void)
+  97:../RunApplication.c **** {
+ 303              		.loc 1 97 0
+ 304              		.cfi_startproc
+ 305              		@ args = 0, pretend = 0, frame = 8
+ 306              		@ frame_needed = 1, uses_anonymous_args = 0
+ 307 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 308              	.LCFI4:
+ 309              		.cfi_def_cfa_offset 8
+ 310              		.cfi_offset 11, -8
+ 311              		.cfi_offset 14, -4
+ 312 0004 04B08DE2 		add	fp, sp, #4
+ 313              	.LCFI5:
+ 314              		.cfi_def_cfa 11, 4
+ 315 0008 28D04DE2 		sub	sp, sp, #40
+  98:../RunApplication.c ****     void *StackPtr;
+  99:../RunApplication.c ****     uint32_t Status;
+ 100:../RunApplication.c **** 
+ 101:../RunApplication.c ****     // Create any needed resources then the Application thread
+ 102:../RunApplication.c ****     Status = InitializeDebugConsole();
+ 316              		.loc 1 102 0
+ 317 000c FEFFFFEB 		bl	InitializeDebugConsole
+ 318 0010 08000BE5 		str	r0, [fp, #-8]
+ 103:../RunApplication.c ****     CheckStatus("Initialize Debug Console", Status);
+ 319              		.loc 1 103 0
+ 320 0014 9C009FE5 		ldr	r0, .L18
+ 321 0018 08101BE5 		ldr	r1, [fp, #-8]
+ 322 001c FEFFFFEB 		bl	CheckStatus
+ 104:../RunApplication.c **** 
+ 105:../RunApplication.c ****     // Create an Event so that alerts from CallBack routines can be monitored
+ 106:../RunApplication.c ****     Status = CyU3PEventCreate(&CallbackEvent);
+ 323              		.loc 1 106 0
+ 324 0020 94009FE5 		ldr	r0, .L18+4
+ 325 0024 0010A0E3 		mov	r1, #0
+ 326 0028 2820A0E3 		mov	r2, #40
+ 327 002c FEFFFFEB 		bl	_txe_event_flags_create
+ 328 0030 08000BE5 		str	r0, [fp, #-8]
+ 107:../RunApplication.c ****     CheckStatus("Create CallbackEvent", Status);
+ 329              		.loc 1 107 0
+ 330 0034 84009FE5 		ldr	r0, .L18+8
+ 331 0038 08101BE5 		ldr	r1, [fp, #-8]
+ 332 003c FEFFFFEB 		bl	CheckStatus
+ 108:../RunApplication.c **** 
+ 109:../RunApplication.c ****     // Need to Initialize CPLD
+ 110:../RunApplication.c ****     InitializeCPLD();
+ 333              		.loc 1 110 0
+ 334 0040 FEFFFFEB 		bl	InitializeCPLD
+ 111:../RunApplication.c **** 
+ 112:../RunApplication.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 335              		.loc 1 112 0
+ 336 0044 010AA0E3 		mov	r0, #4096
+ 337 0048 FEFFFFEB 		bl	CyU3PMemAlloc
+ 338 004c 0C000BE5 		str	r0, [fp, #-12]
+ 113:../RunApplication.c ****     Status = CyU3PThreadCreate(&ThreadHandle, 	// Handle to my Application Thread
+ 339              		.loc 1 113 0
+ 340 0050 0C301BE5 		ldr	r3, [fp, #-12]
+ 341 0054 00308DE5 		str	r3, [sp]
+ 342 0058 013AA0E3 		mov	r3, #4096
+ 343 005c 04308DE5 		str	r3, [sp, #4]
+ 344 0060 0830A0E3 		mov	r3, #8
+ 345 0064 08308DE5 		str	r3, [sp, #8]
+ 346 0068 0830A0E3 		mov	r3, #8
+ 347 006c 0C308DE5 		str	r3, [sp, #12]
+ 348 0070 0030A0E3 		mov	r3, #0
+ 349 0074 10308DE5 		str	r3, [sp, #16]
+ 350 0078 0130A0E3 		mov	r3, #1
+ 351 007c 14308DE5 		str	r3, [sp, #20]
+ 352 0080 A830A0E3 		mov	r3, #168
+ 353 0084 18308DE5 		str	r3, [sp, #24]
+ 354 0088 34009FE5 		ldr	r0, .L18+12
+ 355 008c 34109FE5 		ldr	r1, .L18+16
+ 356 0090 34209FE5 		ldr	r2, .L18+20
+ 357 0094 2A30A0E3 		mov	r3, #42
+ 358 0098 FEFFFFEB 		bl	_txe_thread_create
+ 359 009c 08000BE5 		str	r0, [fp, #-8]
+ 114:../RunApplication.c ****             "11:GPIF_Example2",               	// Thread ID and name
+ 115:../RunApplication.c ****             ApplicationThread,     				// Thread entry function
+ 116:../RunApplication.c ****             42,                             	// Parameter passed to Thread
+ 117:../RunApplication.c ****             StackPtr,                       	// Pointer to the allocated thread stack
+ 118:../RunApplication.c ****             APPLICATION_THREAD_STACK,           // Allocated thread stack size
+ 119:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,        // Thread priority
+ 120:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,        // = Thread priority so no preemption
+ 121:../RunApplication.c ****             CYU3P_NO_TIME_SLICE,            	// Time slice not supported
+ 122:../RunApplication.c ****             CYU3P_AUTO_START                	// Start the thread immediately
+ 123:../RunApplication.c ****             );
+ 124:../RunApplication.c **** 
+ 125:../RunApplication.c ****     if (Status != CY_U3P_SUCCESS)
+ 360              		.loc 1 125 0
+ 361 00a0 08301BE5 		ldr	r3, [fp, #-8]
+ 362 00a4 000053E3 		cmp	r3, #0
+ 363 00a8 0000000A 		beq	.L15
+ 364              	.L17:
+ 126:../RunApplication.c ****     {
+ 127:../RunApplication.c ****         // Thread creation failed with the Status = error code
+ 128:../RunApplication.c ****         while(1)
+ 129:../RunApplication.c ****         {
+ 130:../RunApplication.c ****         	// Application cannot continue. Loop indefinitely
+ 131:../RunApplication.c ****         }
+ 365              		.loc 1 131 0 discriminator 1
+ 366 00ac FEFFFFEA 		b	.L17
+ 367              	.L15:
+ 132:../RunApplication.c ****     }
+ 133:../RunApplication.c **** }
+ 368              		.loc 1 133 0
+ 369 00b0 04D04BE2 		sub	sp, fp, #4
+ 370              		@ sp needed
+ 371 00b4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 372              	.L19:
+ 373              		.align	2
+ 374              	.L18:
+ 375 00b8 C4000000 		.word	.LC8
+ 376 00bc 00000000 		.word	CallbackEvent
+ 377 00c0 E0000000 		.word	.LC9
+ 378 00c4 00000000 		.word	ThreadHandle
+ 379 00c8 F8000000 		.word	.LC10
+ 380 00cc 00000000 		.word	ApplicationThread
+ 381              		.cfi_endproc
+ 382              	.LFE2:
+ 384              		.text
+ 385              	.Letext0:
+ 386              		.file 2 "c:\\program files (x86)\\cypress\\ez-usb fx3 sdk\\1.3\\arm gcc\\arm-none-eabi\\include\\s
+ 387              		.file 3 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3typ
+ 388              		.file 4 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_port
+ 389              		.file 5 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_api.
+ 390              		.file 6 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3dma
+ 391              		.file 7 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3sys
+ 392              		.file 8 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3err
+ 393              		.file 9 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3lpp
+ 394              		.file 10 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3gp
+DEFINED SYMBOLS
+                            *ABS*:00000000 RunApplication.c
+                            *COM*:00000028 CallbackEvent
+                            *COM*:000000a8 ThreadHandle
+                            *COM*:00000004 glIsApplicationActive
+                            *COM*:00000030 Counter
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:21     .rodata:00000000 $d
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:31     .text.InitializeCPLD:00000000 $a
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:34     .text.InitializeCPLD:00000000 InitializeCPLD
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:116    .text.InitializeCPLD:000000c4 $d
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:140    .text.ApplicationThread:00000000 $a
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:143    .text.ApplicationThread:00000000 ApplicationThread
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:276    .text.ApplicationThread:00000154 $d
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:298    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:301    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\nikl\AppData\Local\Temp\ccYrLvY5.s:375    .text.CyFxApplicationDefine:000000b8 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PGpioInit
+CheckStatus
+CyU3PDeviceGpioOverride
+CyU3PMemSet
+CyU3PGpioSetSimpleConfig
+InitializeUSB
+CyU3PDebugPrint
+_txe_event_flags_get
+DebugPrintEvent
+_tx_thread_sleep
+ParseCommand
+InitializeDebugConsole
+_txe_event_flags_create
+CyU3PMemAlloc
+_txe_thread_create

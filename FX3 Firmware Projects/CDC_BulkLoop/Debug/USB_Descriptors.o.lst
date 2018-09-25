@@ -1,0 +1,1587 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"USB_Descriptors.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.global	CyFxUSB30DeviceDscr
+  17              		.section	.rodata.CyFxUSB30DeviceDscr,"a",%progbits
+  18              		.align	5
+  21              	CyFxUSB30DeviceDscr:
+  22 0000 12       		.byte	18
+  23 0001 01       		.byte	1
+  24 0002 00       		.byte	0
+  25 0003 03       		.byte	3
+  26 0004 EF       		.byte	-17
+  27 0005 02       		.byte	2
+  28 0006 01       		.byte	1
+  29 0007 09       		.byte	9
+  30 0008 42       		.byte	66
+  31 0009 42       		.byte	66
+  32 000a 04       		.byte	4
+  33 000b EC       		.byte	-20
+  34 000c 30       		.byte	48
+  35 000d 00       		.byte	0
+  36 000e 01       		.byte	1
+  37 000f 02       		.byte	2
+  38 0010 00       		.byte	0
+  39 0011 01       		.byte	1
+  40              		.global	CyFxUSB20DeviceDscr
+  41 0012 00000000 		.section	.rodata.CyFxUSB20DeviceDscr,"a",%progbits
+  41      00000000 
+  41      00000000 
+  41      0000
+  42              		.align	5
+  45              	CyFxUSB20DeviceDscr:
+  46 0000 12       		.byte	18
+  47 0001 01       		.byte	1
+  48 0002 10       		.byte	16
+  49 0003 02       		.byte	2
+  50 0004 EF       		.byte	-17
+  51 0005 02       		.byte	2
+  52 0006 01       		.byte	1
+  53 0007 40       		.byte	64
+  54 0008 42       		.byte	66
+  55 0009 42       		.byte	66
+  56 000a 04       		.byte	4
+  57 000b EC       		.byte	-20
+  58 000c 00       		.byte	0
+  59 000d 00       		.byte	0
+  60 000e 01       		.byte	1
+  61 000f 02       		.byte	2
+  62 0010 00       		.byte	0
+  63 0011 01       		.byte	1
+  64              		.global	CyFxUSBBOSDscr
+  65 0012 00000000 		.section	.rodata.CyFxUSBBOSDscr,"a",%progbits
+  65      00000000 
+  65      00000000 
+  65      0000
+  66              		.align	5
+  69              	CyFxUSBBOSDscr:
+  70 0000 05       		.byte	5
+  71 0001 0F       		.byte	15
+  72 0002 16       		.byte	22
+  73 0003 00       		.byte	0
+  74 0004 02       		.byte	2
+  75 0005 07       		.byte	7
+  76 0006 10       		.byte	16
+  77 0007 02       		.byte	2
+  78 0008 02       		.byte	2
+  79 0009 00       		.byte	0
+  80 000a 00       		.byte	0
+  81 000b 00       		.byte	0
+  82 000c 0A       		.byte	10
+  83 000d 10       		.byte	16
+  84 000e 03       		.byte	3
+  85 000f 00       		.byte	0
+  86 0010 0E       		.byte	14
+  87 0011 00       		.byte	0
+  88 0012 03       		.byte	3
+  89 0013 00       		.byte	0
+  90 0014 00       		.byte	0
+  91 0015 00       		.byte	0
+  92              		.global	CyFxUSBDeviceQualDscr
+  93 0016 00000000 		.section	.rodata.CyFxUSBDeviceQualDscr,"a",%progbits
+  93      00000000 
+  93      0000
+  94              		.align	5
+  97              	CyFxUSBDeviceQualDscr:
+  98 0000 0A       		.byte	10
+  99 0001 06       		.byte	6
+ 100 0002 00       		.byte	0
+ 101 0003 02       		.byte	2
+ 102 0004 EF       		.byte	-17
+ 103 0005 02       		.byte	2
+ 104 0006 01       		.byte	1
+ 105 0007 40       		.byte	64
+ 106 0008 01       		.byte	1
+ 107 0009 00       		.byte	0
+ 108              		.global	CyFxUSBSSConfigDscr
+ 109 000a 00000000 		.section	.rodata.CyFxUSBSSConfigDscr,"a",%progbits
+ 109      00000000 
+ 109      00000000 
+ 109      00000000 
+ 109      00000000 
+ 110              		.align	5
+ 113              	CyFxUSBSSConfigDscr:
+ 114 0000 09       		.byte	9
+ 115 0001 02       		.byte	2
+ 116 0002 80       		.byte	-128
+ 117 0003 00       		.byte	0
+ 118 0004 03       		.byte	3
+ 119 0005 01       		.byte	1
+ 120 0006 00       		.byte	0
+ 121 0007 80       		.byte	-128
+ 122 0008 32       		.byte	50
+ 123 0009 08       		.byte	8
+ 124 000a 0B       		.byte	11
+ 125 000b 00       		.byte	0
+ 126 000c 02       		.byte	2
+ 127 000d 02       		.byte	2
+ 128 000e 02       		.byte	2
+ 129 000f 01       		.byte	1
+ 130 0010 00       		.byte	0
+ 131 0011 09       		.byte	9
+ 132 0012 04       		.byte	4
+ 133 0013 00       		.byte	0
+ 134 0014 00       		.byte	0
+ 135 0015 01       		.byte	1
+ 136 0016 02       		.byte	2
+ 137 0017 02       		.byte	2
+ 138 0018 01       		.byte	1
+ 139 0019 03       		.byte	3
+ 140 001a 05       		.byte	5
+ 141 001b 24       		.byte	36
+ 142 001c 00       		.byte	0
+ 143 001d 10       		.byte	16
+ 144 001e 01       		.byte	1
+ 145 001f 04       		.byte	4
+ 146 0020 24       		.byte	36
+ 147 0021 02       		.byte	2
+ 148 0022 02       		.byte	2
+ 149 0023 05       		.byte	5
+ 150 0024 24       		.byte	36
+ 151 0025 06       		.byte	6
+ 152 0026 00       		.byte	0
+ 153 0027 01       		.byte	1
+ 154 0028 05       		.byte	5
+ 155 0029 24       		.byte	36
+ 156 002a 01       		.byte	1
+ 157 002b 00       		.byte	0
+ 158 002c 01       		.byte	1
+ 159 002d 07       		.byte	7
+ 160 002e 05       		.byte	5
+ 161 002f 83       		.byte	-125
+ 162 0030 03       		.byte	3
+ 163 0031 40       		.byte	64
+ 164 0032 00       		.byte	0
+ 165 0033 02       		.byte	2
+ 166 0034 06       		.byte	6
+ 167 0035 30       		.byte	48
+ 168 0036 00       		.byte	0
+ 169 0037 00       		.byte	0
+ 170 0038 40       		.byte	64
+ 171 0039 00       		.byte	0
+ 172 003a 09       		.byte	9
+ 173 003b 04       		.byte	4
+ 174 003c 01       		.byte	1
+ 175 003d 00       		.byte	0
+ 176 003e 02       		.byte	2
+ 177 003f 0A       		.byte	10
+ 178 0040 00       		.byte	0
+ 179 0041 00       		.byte	0
+ 180 0042 04       		.byte	4
+ 181 0043 07       		.byte	7
+ 182 0044 05       		.byte	5
+ 183 0045 02       		.byte	2
+ 184 0046 02       		.byte	2
+ 185 0047 00       		.byte	0
+ 186 0048 04       		.byte	4
+ 187 0049 00       		.byte	0
+ 188 004a 06       		.byte	6
+ 189 004b 30       		.byte	48
+ 190 004c 01       		.byte	1
+ 191 004d 01       		.byte	1
+ 192 004e 00       		.byte	0
+ 193 004f 04       		.byte	4
+ 194 0050 07       		.byte	7
+ 195 0051 05       		.byte	5
+ 196 0052 82       		.byte	-126
+ 197 0053 02       		.byte	2
+ 198 0054 00       		.byte	0
+ 199 0055 04       		.byte	4
+ 200 0056 00       		.byte	0
+ 201 0057 06       		.byte	6
+ 202 0058 30       		.byte	48
+ 203 0059 01       		.byte	1
+ 204 005a 01       		.byte	1
+ 205 005b 00       		.byte	0
+ 206 005c 04       		.byte	4
+ 207 005d 09       		.byte	9
+ 208 005e 04       		.byte	4
+ 209 005f 02       		.byte	2
+ 210 0060 00       		.byte	0
+ 211 0061 02       		.byte	2
+ 212 0062 FF       		.byte	-1
+ 213 0063 00       		.byte	0
+ 214 0064 00       		.byte	0
+ 215 0065 05       		.byte	5
+ 216 0066 07       		.byte	7
+ 217 0067 05       		.byte	5
+ 218 0068 01       		.byte	1
+ 219 0069 02       		.byte	2
+ 220 006a 00       		.byte	0
+ 221 006b 04       		.byte	4
+ 222 006c 00       		.byte	0
+ 223 006d 06       		.byte	6
+ 224 006e 30       		.byte	48
+ 225 006f 00       		.byte	0
+ 226 0070 00       		.byte	0
+ 227 0071 00       		.byte	0
+ 228 0072 00       		.byte	0
+ 229 0073 07       		.byte	7
+ 230 0074 05       		.byte	5
+ 231 0075 81       		.byte	-127
+ 232 0076 02       		.byte	2
+ 233 0077 00       		.byte	0
+ 234 0078 04       		.byte	4
+ 235 0079 00       		.byte	0
+ 236 007a 06       		.byte	6
+ 237 007b 30       		.byte	48
+ 238 007c 00       		.byte	0
+ 239 007d 00       		.byte	0
+ 240 007e 00       		.byte	0
+ 241 007f 00       		.byte	0
+ 242              		.global	CyFxUSBHSConfigDscr
+ 243              		.section	.rodata.CyFxUSBHSConfigDscr,"a",%progbits
+ 244              		.align	5
+ 247              	CyFxUSBHSConfigDscr:
+ 248 0000 09       		.byte	9
+ 249 0001 02       		.byte	2
+ 250 0002 62       		.byte	98
+ 251 0003 00       		.byte	0
+ 252 0004 03       		.byte	3
+ 253 0005 01       		.byte	1
+ 254 0006 00       		.byte	0
+ 255 0007 80       		.byte	-128
+ 256 0008 64       		.byte	100
+ 257 0009 08       		.byte	8
+ 258 000a 0B       		.byte	11
+ 259 000b 00       		.byte	0
+ 260 000c 02       		.byte	2
+ 261 000d 02       		.byte	2
+ 262 000e 02       		.byte	2
+ 263 000f 01       		.byte	1
+ 264 0010 00       		.byte	0
+ 265 0011 09       		.byte	9
+ 266 0012 04       		.byte	4
+ 267 0013 00       		.byte	0
+ 268 0014 00       		.byte	0
+ 269 0015 01       		.byte	1
+ 270 0016 02       		.byte	2
+ 271 0017 02       		.byte	2
+ 272 0018 01       		.byte	1
+ 273 0019 03       		.byte	3
+ 274 001a 05       		.byte	5
+ 275 001b 24       		.byte	36
+ 276 001c 00       		.byte	0
+ 277 001d 10       		.byte	16
+ 278 001e 01       		.byte	1
+ 279 001f 04       		.byte	4
+ 280 0020 24       		.byte	36
+ 281 0021 02       		.byte	2
+ 282 0022 02       		.byte	2
+ 283 0023 05       		.byte	5
+ 284 0024 24       		.byte	36
+ 285 0025 06       		.byte	6
+ 286 0026 00       		.byte	0
+ 287 0027 01       		.byte	1
+ 288 0028 05       		.byte	5
+ 289 0029 24       		.byte	36
+ 290 002a 01       		.byte	1
+ 291 002b 00       		.byte	0
+ 292 002c 01       		.byte	1
+ 293 002d 07       		.byte	7
+ 294 002e 05       		.byte	5
+ 295 002f 83       		.byte	-125
+ 296 0030 03       		.byte	3
+ 297 0031 40       		.byte	64
+ 298 0032 00       		.byte	0
+ 299 0033 02       		.byte	2
+ 300 0034 09       		.byte	9
+ 301 0035 04       		.byte	4
+ 302 0036 01       		.byte	1
+ 303 0037 00       		.byte	0
+ 304 0038 02       		.byte	2
+ 305 0039 0A       		.byte	10
+ 306 003a 00       		.byte	0
+ 307 003b 00       		.byte	0
+ 308 003c 04       		.byte	4
+ 309 003d 07       		.byte	7
+ 310 003e 05       		.byte	5
+ 311 003f 02       		.byte	2
+ 312 0040 02       		.byte	2
+ 313 0041 00       		.byte	0
+ 314 0042 02       		.byte	2
+ 315 0043 00       		.byte	0
+ 316 0044 07       		.byte	7
+ 317 0045 05       		.byte	5
+ 318 0046 82       		.byte	-126
+ 319 0047 02       		.byte	2
+ 320 0048 00       		.byte	0
+ 321 0049 02       		.byte	2
+ 322 004a 00       		.byte	0
+ 323 004b 09       		.byte	9
+ 324 004c 04       		.byte	4
+ 325 004d 02       		.byte	2
+ 326 004e 00       		.byte	0
+ 327 004f 02       		.byte	2
+ 328 0050 FF       		.byte	-1
+ 329 0051 00       		.byte	0
+ 330 0052 00       		.byte	0
+ 331 0053 05       		.byte	5
+ 332 0054 07       		.byte	7
+ 333 0055 05       		.byte	5
+ 334 0056 01       		.byte	1
+ 335 0057 02       		.byte	2
+ 336 0058 00       		.byte	0
+ 337 0059 02       		.byte	2
+ 338 005a 00       		.byte	0
+ 339 005b 07       		.byte	7
+ 340 005c 05       		.byte	5
+ 341 005d 81       		.byte	-127
+ 342 005e 02       		.byte	2
+ 343 005f 00       		.byte	0
+ 344 0060 02       		.byte	2
+ 345 0061 00       		.byte	0
+ 346              		.global	CyFxUSBFSConfigDscr
+ 347 0062 00000000 		.section	.rodata.CyFxUSBFSConfigDscr,"a",%progbits
+ 347      00000000 
+ 347      00000000 
+ 347      00000000 
+ 347      00000000 
+ 348              		.align	5
+ 351              	CyFxUSBFSConfigDscr:
+ 352 0000 09       		.byte	9
+ 353 0001 02       		.byte	2
+ 354 0002 62       		.byte	98
+ 355 0003 00       		.byte	0
+ 356 0004 03       		.byte	3
+ 357 0005 01       		.byte	1
+ 358 0006 00       		.byte	0
+ 359 0007 80       		.byte	-128
+ 360 0008 32       		.byte	50
+ 361 0009 08       		.byte	8
+ 362 000a 0B       		.byte	11
+ 363 000b 00       		.byte	0
+ 364 000c 02       		.byte	2
+ 365 000d 02       		.byte	2
+ 366 000e 02       		.byte	2
+ 367 000f 01       		.byte	1
+ 368 0010 00       		.byte	0
+ 369 0011 09       		.byte	9
+ 370 0012 04       		.byte	4
+ 371 0013 00       		.byte	0
+ 372 0014 00       		.byte	0
+ 373 0015 01       		.byte	1
+ 374 0016 02       		.byte	2
+ 375 0017 02       		.byte	2
+ 376 0018 01       		.byte	1
+ 377 0019 03       		.byte	3
+ 378 001a 05       		.byte	5
+ 379 001b 24       		.byte	36
+ 380 001c 00       		.byte	0
+ 381 001d 10       		.byte	16
+ 382 001e 01       		.byte	1
+ 383 001f 04       		.byte	4
+ 384 0020 24       		.byte	36
+ 385 0021 02       		.byte	2
+ 386 0022 02       		.byte	2
+ 387 0023 05       		.byte	5
+ 388 0024 24       		.byte	36
+ 389 0025 06       		.byte	6
+ 390 0026 00       		.byte	0
+ 391 0027 01       		.byte	1
+ 392 0028 05       		.byte	5
+ 393 0029 24       		.byte	36
+ 394 002a 01       		.byte	1
+ 395 002b 00       		.byte	0
+ 396 002c 01       		.byte	1
+ 397 002d 07       		.byte	7
+ 398 002e 05       		.byte	5
+ 399 002f 83       		.byte	-125
+ 400 0030 03       		.byte	3
+ 401 0031 10       		.byte	16
+ 402 0032 00       		.byte	0
+ 403 0033 02       		.byte	2
+ 404 0034 09       		.byte	9
+ 405 0035 04       		.byte	4
+ 406 0036 01       		.byte	1
+ 407 0037 00       		.byte	0
+ 408 0038 02       		.byte	2
+ 409 0039 0A       		.byte	10
+ 410 003a 00       		.byte	0
+ 411 003b 00       		.byte	0
+ 412 003c 04       		.byte	4
+ 413 003d 07       		.byte	7
+ 414 003e 05       		.byte	5
+ 415 003f 02       		.byte	2
+ 416 0040 02       		.byte	2
+ 417 0041 40       		.byte	64
+ 418 0042 00       		.byte	0
+ 419 0043 00       		.byte	0
+ 420 0044 07       		.byte	7
+ 421 0045 05       		.byte	5
+ 422 0046 82       		.byte	-126
+ 423 0047 02       		.byte	2
+ 424 0048 40       		.byte	64
+ 425 0049 00       		.byte	0
+ 426 004a 00       		.byte	0
+ 427 004b 09       		.byte	9
+ 428 004c 04       		.byte	4
+ 429 004d 02       		.byte	2
+ 430 004e 00       		.byte	0
+ 431 004f 02       		.byte	2
+ 432 0050 FF       		.byte	-1
+ 433 0051 00       		.byte	0
+ 434 0052 00       		.byte	0
+ 435 0053 05       		.byte	5
+ 436 0054 07       		.byte	7
+ 437 0055 05       		.byte	5
+ 438 0056 01       		.byte	1
+ 439 0057 02       		.byte	2
+ 440 0058 40       		.byte	64
+ 441 0059 00       		.byte	0
+ 442 005a 00       		.byte	0
+ 443 005b 07       		.byte	7
+ 444 005c 05       		.byte	5
+ 445 005d 81       		.byte	-127
+ 446 005e 02       		.byte	2
+ 447 005f 40       		.byte	64
+ 448 0060 00       		.byte	0
+ 449 0061 00       		.byte	0
+ 450              		.global	CyFxUSBStringLangIDDscr
+ 451 0062 00000000 		.section	.rodata.CyFxUSBStringLangIDDscr,"a",%progbits
+ 451      00000000 
+ 451      00000000 
+ 451      00000000 
+ 451      00000000 
+ 452              		.align	5
+ 455              	CyFxUSBStringLangIDDscr:
+ 456 0000 04       		.byte	4
+ 457 0001 03       		.byte	3
+ 458 0002 09       		.byte	9
+ 459 0003 04       		.byte	4
+ 460              		.global	CyFxUSBManufactureDscr
+ 461 0004 00000000 		.section	.rodata.CyFxUSBManufactureDscr,"a",%progbits
+ 461      00000000 
+ 461      00000000 
+ 461      00000000 
+ 461      00000000 
+ 462              		.align	5
+ 465              	CyFxUSBManufactureDscr:
+ 466 0000 2C       		.byte	44
+ 467 0001 03       		.byte	3
+ 468 0002 55       		.byte	85
+ 469 0003 00       		.byte	0
+ 470 0004 53       		.byte	83
+ 471 0005 00       		.byte	0
+ 472 0006 42       		.byte	66
+ 473 0007 00       		.byte	0
+ 474 0008 20       		.byte	32
+ 475 0009 00       		.byte	0
+ 476 000a 44       		.byte	68
+ 477 000b 00       		.byte	0
+ 478 000c 65       		.byte	101
+ 479 000d 00       		.byte	0
+ 480 000e 73       		.byte	115
+ 481 000f 00       		.byte	0
+ 482 0010 69       		.byte	105
+ 483 0011 00       		.byte	0
+ 484 0012 67       		.byte	103
+ 485 0013 00       		.byte	0
+ 486 0014 6E       		.byte	110
+ 487 0015 00       		.byte	0
+ 488 0016 20       		.byte	32
+ 489 0017 00       		.byte	0
+ 490 0018 42       		.byte	66
+ 491 0019 00       		.byte	0
+ 492 001a 79       		.byte	121
+ 493 001b 00       		.byte	0
+ 494 001c 20       		.byte	32
+ 495 001d 00       		.byte	0
+ 496 001e 45       		.byte	69
+ 497 001f 00       		.byte	0
+ 498 0020 78       		.byte	120
+ 499 0021 00       		.byte	0
+ 500 0022 61       		.byte	97
+ 501 0023 00       		.byte	0
+ 502 0024 6D       		.byte	109
+ 503 0025 00       		.byte	0
+ 504 0026 70       		.byte	112
+ 505 0027 00       		.byte	0
+ 506 0028 6C       		.byte	108
+ 507 0029 00       		.byte	0
+ 508 002a 65       		.byte	101
+ 509 002b 00       		.byte	0
+ 510              		.global	CyFxUSBProductDscr
+ 511 002c 00000000 		.section	.rodata.CyFxUSBProductDscr,"a",%progbits
+ 511      00000000 
+ 511      00000000 
+ 511      00000000 
+ 511      00000000 
+ 512              		.align	5
+ 515              	CyFxUSBProductDscr:
+ 516 0000 1A       		.byte	26
+ 517 0001 03       		.byte	3
+ 518 0002 43       		.byte	67
+ 519 0003 00       		.byte	0
+ 520 0004 44       		.byte	68
+ 521 0005 00       		.byte	0
+ 522 0006 43       		.byte	67
+ 523 0007 00       		.byte	0
+ 524 0008 5F       		.byte	95
+ 525 0009 00       		.byte	0
+ 526 000a 42       		.byte	66
+ 527 000b 00       		.byte	0
+ 528 000c 75       		.byte	117
+ 529 000d 00       		.byte	0
+ 530 000e 6C       		.byte	108
+ 531 000f 00       		.byte	0
+ 532 0010 6B       		.byte	107
+ 533 0011 00       		.byte	0
+ 534 0012 4C       		.byte	76
+ 535 0013 00       		.byte	0
+ 536 0014 6F       		.byte	111
+ 537 0015 00       		.byte	0
+ 538 0016 6F       		.byte	111
+ 539 0017 00       		.byte	0
+ 540 0018 70       		.byte	112
+ 541 0019 00       		.byte	0
+ 542              		.global	CyFxUSBInterface0Dscr
+ 543 001a 00000000 		.section	.rodata.CyFxUSBInterface0Dscr,"a",%progbits
+ 543      0000
+ 544              		.align	5
+ 547              	CyFxUSBInterface0Dscr:
+ 548 0000 1E       		.byte	30
+ 549 0001 03       		.byte	3
+ 550 0002 43       		.byte	67
+ 551 0003 00       		.byte	0
+ 552 0004 44       		.byte	68
+ 553 0005 00       		.byte	0
+ 554 0006 43       		.byte	67
+ 555 0007 00       		.byte	0
+ 556 0008 20       		.byte	32
+ 557 0009 00       		.byte	0
+ 558 000a 4D       		.byte	77
+ 559 000b 00       		.byte	0
+ 560 000c 61       		.byte	97
+ 561 000d 00       		.byte	0
+ 562 000e 6E       		.byte	110
+ 563 000f 00       		.byte	0
+ 564 0010 61       		.byte	97
+ 565 0011 00       		.byte	0
+ 566 0012 67       		.byte	103
+ 567 0013 00       		.byte	0
+ 568 0014 65       		.byte	101
+ 569 0015 00       		.byte	0
+ 570 0016 6D       		.byte	109
+ 571 0017 00       		.byte	0
+ 572 0018 65       		.byte	101
+ 573 0019 00       		.byte	0
+ 574 001a 6E       		.byte	110
+ 575 001b 00       		.byte	0
+ 576 001c 74       		.byte	116
+ 577 001d 00       		.byte	0
+ 578              		.global	CyFxUSBInterface1Dscr
+ 579 001e 0000     		.section	.rodata.CyFxUSBInterface1Dscr,"a",%progbits
+ 580              		.align	5
+ 583              	CyFxUSBInterface1Dscr:
+ 584 0000 12       		.byte	18
+ 585 0001 03       		.byte	3
+ 586 0002 43       		.byte	67
+ 587 0003 00       		.byte	0
+ 588 0004 44       		.byte	68
+ 589 0005 00       		.byte	0
+ 590 0006 43       		.byte	67
+ 591 0007 00       		.byte	0
+ 592 0008 20       		.byte	32
+ 593 0009 00       		.byte	0
+ 594 000a 44       		.byte	68
+ 595 000b 00       		.byte	0
+ 596 000c 61       		.byte	97
+ 597 000d 00       		.byte	0
+ 598 000e 74       		.byte	116
+ 599 000f 00       		.byte	0
+ 600 0010 61       		.byte	97
+ 601 0011 00       		.byte	0
+ 602              		.global	CyFxUSBInterface2Dscr
+ 603 0012 00000000 		.section	.rodata.CyFxUSBInterface2Dscr,"a",%progbits
+ 603      00000000 
+ 603      00000000 
+ 603      0000
+ 604              		.align	5
+ 607              	CyFxUSBInterface2Dscr:
+ 608 0000 12       		.byte	18
+ 609 0001 03       		.byte	3
+ 610 0002 42       		.byte	66
+ 611 0003 00       		.byte	0
+ 612 0004 75       		.byte	117
+ 613 0005 00       		.byte	0
+ 614 0006 6C       		.byte	108
+ 615 0007 00       		.byte	0
+ 616 0008 6B       		.byte	107
+ 617 0009 00       		.byte	0
+ 618 000a 4C       		.byte	76
+ 619 000b 00       		.byte	0
+ 620 000c 6F       		.byte	111
+ 621 000d 00       		.byte	0
+ 622 000e 6F       		.byte	111
+ 623 000f 00       		.byte	0
+ 624 0010 70       		.byte	112
+ 625 0011 00       		.byte	0
+ 626              		.comm	CyFxUsbDscrAlignBuffer,32,32
+ 627 0012 00000000 		.section	.rodata
+ 627      00000000 
+ 627      00000000 
+ 627      0000
+ 628              		.align	2
+ 629              	.LC0:
+ 630 0000 5345545F 		.ascii	"SET_SS_DEVICE_DESCR\000"
+ 630      53535F44 
+ 630      45564943 
+ 630      455F4445 
+ 630      53435200 
+ 631              		.align	2
+ 632              	.LC1:
+ 633 0014 5345545F 		.ascii	"SET_HS_DEVICE_DESCR\000"
+ 633      48535F44 
+ 633      45564943 
+ 633      455F4445 
+ 633      53435200 
+ 634              		.align	2
+ 635              	.LC2:
+ 636 0028 5345545F 		.ascii	"SET_SS_BOS_DESCR\000"
+ 636      53535F42 
+ 636      4F535F44 
+ 636      45534352 
+ 636      00
+ 637 0039 000000   		.align	2
+ 638              	.LC3:
+ 639 003c 5345545F 		.ascii	"SET_DEVQUAL_DESCR\000"
+ 639      44455651 
+ 639      55414C5F 
+ 639      44455343 
+ 639      5200
+ 640 004e 0000     		.align	2
+ 641              	.LC4:
+ 642 0050 5345545F 		.ascii	"SET_SS_CONFIG_DESCR\000"
+ 642      53535F43 
+ 642      4F4E4649 
+ 642      475F4445 
+ 642      53435200 
+ 643              		.align	2
+ 644              	.LC5:
+ 645 0064 5345545F 		.ascii	"SET_HS_CONFIG_DESCR\000"
+ 645      48535F43 
+ 645      4F4E4649 
+ 645      475F4445 
+ 645      53435200 
+ 646              		.align	2
+ 647              	.LC6:
+ 648 0078 5345545F 		.ascii	"SET_FS_CONFIG_DESCR\000"
+ 648      46535F43 
+ 648      4F4E4649 
+ 648      475F4445 
+ 648      53435200 
+ 649              		.align	2
+ 650              	.LC7:
+ 651 008c 5345545F 		.ascii	"SET_STRING0_DESCR\000"
+ 651      53545249 
+ 651      4E47305F 
+ 651      44455343 
+ 651      5200
+ 652 009e 0000     		.align	2
+ 653              	.LC8:
+ 654 00a0 5345545F 		.ascii	"SET_STRING1_DESCR\000"
+ 654      53545249 
+ 654      4E47315F 
+ 654      44455343 
+ 654      5200
+ 655 00b2 0000     		.align	2
+ 656              	.LC9:
+ 657 00b4 5345545F 		.ascii	"SET_STRING2_DESCR\000"
+ 657      53545249 
+ 657      4E47325F 
+ 657      44455343 
+ 657      5200
+ 658 00c6 0000     		.align	2
+ 659              	.LC10:
+ 660 00c8 5345545F 		.ascii	"SET_STRING3_DESCR\000"
+ 660      53545249 
+ 660      4E47335F 
+ 660      44455343 
+ 660      5200
+ 661 00da 0000     		.align	2
+ 662              	.LC11:
+ 663 00dc 5345545F 		.ascii	"SET_STRING4_DESCR\000"
+ 663      53545249 
+ 663      4E47345F 
+ 663      44455343 
+ 663      5200
+ 664 00ee 0000     		.align	2
+ 665              	.LC12:
+ 666 00f0 5345545F 		.ascii	"SET_STRING5_DESCR\000"
+ 666      53545249 
+ 666      4E47355F 
+ 666      44455343 
+ 666      5200
+ 667 0102 0000     		.section	.text.SetUSBdescriptors,"ax",%progbits
+ 668              		.align	2
+ 669              		.global	SetUSBdescriptors
+ 671              	SetUSBdescriptors:
+ 672              	.LFB0:
+ 673              		.file 1 "../USB_Descriptors.c"
+   1:../USB_Descriptors.c **** /*
+   2:../USB_Descriptors.c ****  * These descriptors define a Composite device with two interfaces: CDC + BulkLoop
+   3:../USB_Descriptors.c ****  *
+   4:../USB_Descriptors.c ****  *
+   5:../USB_Descriptors.c ****  *      Author: john@USB-By-Example.com
+   6:../USB_Descriptors.c ****  */
+   7:../USB_Descriptors.c **** 
+   8:../USB_Descriptors.c **** 
+   9:../USB_Descriptors.c **** #include "Application.h"
+  10:../USB_Descriptors.c **** 
+  11:../USB_Descriptors.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  12:../USB_Descriptors.c **** 
+  13:../USB_Descriptors.c **** // Note this custom VID_PID needs an INF file for driver matching.  Use "NEWcyusb3.inf"
+  14:../USB_Descriptors.c **** 
+  15:../USB_Descriptors.c **** /* Standard device descriptor for USB 3.0 */
+  16:../USB_Descriptors.c **** const uint8_t CyFxUSB30DeviceDscr[] __attribute__ ((aligned (32))) =
+  17:../USB_Descriptors.c **** {
+  18:../USB_Descriptors.c ****     0x12,                           /* Descriptor size */
+  19:../USB_Descriptors.c ****     CY_U3P_USB_DEVICE_DESCR,        /* Device descriptor type */
+  20:../USB_Descriptors.c ****     0x00,0x03,                      /* USB 3.0 */
+  21:../USB_Descriptors.c ****     0xEF,                           /* Device class */
+  22:../USB_Descriptors.c ****     0x02,                           /* Device sub-class */
+  23:../USB_Descriptors.c ****     0x01,                           /* Device protocol */
+  24:../USB_Descriptors.c ****     0x09,                           /* Maxpacket size for EP0 : 2^9 */
+  25:../USB_Descriptors.c ****     0x42,0x42,                      /* Vendor ID */
+  26:../USB_Descriptors.c ****     0x04,0xEC,                      /* Product ID */
+  27:../USB_Descriptors.c ****     0x30,0x00,                      /* Device release number */
+  28:../USB_Descriptors.c ****     0x01,                           /* Manufacture string index */
+  29:../USB_Descriptors.c ****     0x02,                           /* Product string index */
+  30:../USB_Descriptors.c ****     0x00,                           /* Serial number string index */
+  31:../USB_Descriptors.c ****     0x01                            /* Number of configurations */
+  32:../USB_Descriptors.c **** };
+  33:../USB_Descriptors.c **** 
+  34:../USB_Descriptors.c **** /* Standard device descriptor for USB 2.0 */
+  35:../USB_Descriptors.c **** const uint8_t CyFxUSB20DeviceDscr[] __attribute__ ((aligned (32))) =
+  36:../USB_Descriptors.c **** {
+  37:../USB_Descriptors.c ****     0x12,                           /* Descriptor size */
+  38:../USB_Descriptors.c ****     CY_U3P_USB_DEVICE_DESCR,        /* Device descriptor type */
+  39:../USB_Descriptors.c ****     0x10,0x02,                      /* USB 2.10 */
+  40:../USB_Descriptors.c ****     0xEF,                           /* Device class */
+  41:../USB_Descriptors.c ****     0x02,                           /* Device sub-class */
+  42:../USB_Descriptors.c ****     0x01,                           /* Device protocol */
+  43:../USB_Descriptors.c ****     0x40,                           /* Maxpacket size for EP0 : 64 bytes */
+  44:../USB_Descriptors.c ****     0x42,0x42,                      /* Vendor ID */
+  45:../USB_Descriptors.c ****     0x04,0xEC,                      /* Product ID */
+  46:../USB_Descriptors.c ****     0x00,0x00,                      /* Device release number */
+  47:../USB_Descriptors.c ****     0x01,                           /* Manufacture string index */
+  48:../USB_Descriptors.c ****     0x02,                           /* Product string index */
+  49:../USB_Descriptors.c ****     0x00,                           /* Serial number string index */
+  50:../USB_Descriptors.c ****     0x01                            /* Number of configurations */
+  51:../USB_Descriptors.c **** };
+  52:../USB_Descriptors.c **** 
+  53:../USB_Descriptors.c **** /* Binary device object store descriptor */
+  54:../USB_Descriptors.c **** const uint8_t CyFxUSBBOSDscr[] __attribute__ ((aligned (32))) =
+  55:../USB_Descriptors.c **** {
+  56:../USB_Descriptors.c ****     0x05,                           /* Descriptor size */
+  57:../USB_Descriptors.c ****     CY_U3P_BOS_DESCR,               /* Device descriptor type */
+  58:../USB_Descriptors.c ****     0x16,0x00,                      /* Length of this descriptor and all sub descriptors */
+  59:../USB_Descriptors.c ****     0x02,                           /* Number of device capability descriptors */
+  60:../USB_Descriptors.c **** 
+  61:../USB_Descriptors.c ****     /* USB 2.0 extension */
+  62:../USB_Descriptors.c ****     0x07,                           /* Descriptor size */
+  63:../USB_Descriptors.c ****     CY_U3P_DEVICE_CAPB_DESCR,       /* Device capability type descriptor */
+  64:../USB_Descriptors.c ****     CY_U3P_USB2_EXTN_CAPB_TYPE,     /* USB 2.0 extension capability type */
+  65:../USB_Descriptors.c ****     0x02,0x00,0x00,0x00,            /* Supported device level features: LPM support  */
+  66:../USB_Descriptors.c **** 
+  67:../USB_Descriptors.c ****     /* SuperSpeed device capability */
+  68:../USB_Descriptors.c ****     0x0A,                           /* Descriptor size */
+  69:../USB_Descriptors.c ****     CY_U3P_DEVICE_CAPB_DESCR,       /* Device capability type descriptor */
+  70:../USB_Descriptors.c ****     CY_U3P_SS_USB_CAPB_TYPE,        /* SuperSpeed device capability type */
+  71:../USB_Descriptors.c ****     0x00,                           /* Supported device level features  */
+  72:../USB_Descriptors.c ****     0x0E,0x00,                      /* Speeds supported by the device : SS, HS and FS */
+  73:../USB_Descriptors.c ****     0x03,                           /* Functionality support */
+  74:../USB_Descriptors.c ****     0x00,                           /* U1 Device Exit latency */
+  75:../USB_Descriptors.c ****     0x00,0x00                       /* U2 Device Exit latency */
+  76:../USB_Descriptors.c **** };
+  77:../USB_Descriptors.c **** 
+  78:../USB_Descriptors.c **** /* Standard device qualifier descriptor */
+  79:../USB_Descriptors.c **** const uint8_t CyFxUSBDeviceQualDscr[] __attribute__ ((aligned (32))) =
+  80:../USB_Descriptors.c **** {
+  81:../USB_Descriptors.c ****     0x0A,                           /* Descriptor size */
+  82:../USB_Descriptors.c ****     CY_U3P_USB_DEVQUAL_DESCR,       /* Device qualifier descriptor type */
+  83:../USB_Descriptors.c ****     0x00,0x02,                      /* USB 2.0 */
+  84:../USB_Descriptors.c ****     0xEF,                           /* Device class */
+  85:../USB_Descriptors.c ****     0x02,                           /* Device sub-class */
+  86:../USB_Descriptors.c ****     0x01,                           /* Device protocol */
+  87:../USB_Descriptors.c ****     0x40,                           /* Maxpacket size for EP0 : 64 bytes */
+  88:../USB_Descriptors.c ****     0x01,                           /* Number of configurations */
+  89:../USB_Descriptors.c ****     0x00                            /* Reserved */
+  90:../USB_Descriptors.c **** };
+  91:../USB_Descriptors.c **** 
+  92:../USB_Descriptors.c **** /* Standard super speed configuration descriptor */
+  93:../USB_Descriptors.c **** const uint8_t CyFxUSBSSConfigDscr[] __attribute__ ((aligned (32))) =
+  94:../USB_Descriptors.c **** {
+  95:../USB_Descriptors.c ****     /* Configuration descriptor */
+  96:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+  97:../USB_Descriptors.c ****     CY_U3P_USB_CONFIG_DESCR,        /* Configuration descriptor type */
+  98:../USB_Descriptors.c ****     0x80,0x00,                      /* Length of this descriptor and all sub descriptors */
+  99:../USB_Descriptors.c **** // Note: 3 interfaces, first two are CDC (Call Management and Data), third is Bulk Loop
+ 100:../USB_Descriptors.c ****     0x03,                           /* Number of interfaces */
+ 101:../USB_Descriptors.c ****     0x01,                           /* Configuration number */
+ 102:../USB_Descriptors.c ****     0x00,                           /* Configuration string index */
+ 103:../USB_Descriptors.c ****     0x80,                           /* Config characteristics - Bus powered */
+ 104:../USB_Descriptors.c ****     0x32,                           /* Max power consumption of device (in 8mA unit) : 400mA */
+ 105:../USB_Descriptors.c **** 
+ 106:../USB_Descriptors.c ****     /* Interface association descriptor */
+ 107:../USB_Descriptors.c ****     0x08,                           /* Descriptor size */
+ 108:../USB_Descriptors.c ****     0x0B,     				       /* Interface association descr type */
+ 109:../USB_Descriptors.c ****     0x00,                           /* first interface */
+ 110:../USB_Descriptors.c ****     0x02,                           /* InterfaceCount */
+ 111:../USB_Descriptors.c ****     0x02,                           /* CDC */
+ 112:../USB_Descriptors.c ****     0x02,                           /* abstract control model */
+ 113:../USB_Descriptors.c ****     0x01,                           /* AT commands*/
+ 114:../USB_Descriptors.c ****     0x00,                           /* String desc index for interface */
+ 115:../USB_Descriptors.c **** 
+ 116:../USB_Descriptors.c ****     /* Communication Interface descriptor */
+ 117:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+ 118:../USB_Descriptors.c **** 	CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 119:../USB_Descriptors.c **** 	0x00,                           /* Interface number */
+ 120:../USB_Descriptors.c **** 	0x00,                           /* Alternate setting number */
+ 121:../USB_Descriptors.c ****     0x01,                           /* Number of endpoints */
+ 122:../USB_Descriptors.c ****     0x02,                           /* Interface class : Communication interface */
+ 123:../USB_Descriptors.c ****     0x02,                           /* Interface sub class */
+ 124:../USB_Descriptors.c ****     0x01,                           /* Interface protocol code */
+ 125:../USB_Descriptors.c ****     0x03,                           /* Interface descriptor string index */
+ 126:../USB_Descriptors.c **** 
+ 127:../USB_Descriptors.c ****     /* CDC Class-specific Descriptors */
+ 128:../USB_Descriptors.c ****     /* Header functional Descriptor */
+ 129:../USB_Descriptors.c ****     0x05,                           /* Descriptors length(5) */
+ 130:../USB_Descriptors.c ****     0x24,                           /* Descriptor type : CS_Interface */
+ 131:../USB_Descriptors.c ****     0x00,                           /* DescriptorSubType : Header Functional Descriptor */
+ 132:../USB_Descriptors.c ****     0x10,0x01,                      /* bcdCDC : CDC Release Number */
+ 133:../USB_Descriptors.c ****     /* Abstract Control Management Functional Descriptor */
+ 134:../USB_Descriptors.c ****     0x04,                           /* Descriptors Length (4) */
+ 135:../USB_Descriptors.c ****     0x24,                           /* bDescriptorType: CS_INTERFACE */
+ 136:../USB_Descriptors.c ****     0x02,                           /* bDescriptorSubType: Abstract Control Model Functional Descri
+ 137:../USB_Descriptors.c ****     0x02,                           /* bmCapabilities: Supports the request combination of Set_Line
+ 138:../USB_Descriptors.c ****                                        Set_Control_Line_State, Get_Line_Coding and the notification
+ 139:../USB_Descriptors.c ****      /* Union Functional Descriptor */
+ 140:../USB_Descriptors.c ****     0x05,                           /* Descriptors Length (5) */
+ 141:../USB_Descriptors.c ****     0x24,                           /* bDescriptorType: CS_INTERFACE */
+ 142:../USB_Descriptors.c ****     0x06,                           /* bDescriptorSubType: Union Functional Descriptor */
+ 143:../USB_Descriptors.c ****     0x00,                           /* bMasterInterface */
+ 144:../USB_Descriptors.c ****     0x01,                           /* bSlaveInterface */
+ 145:../USB_Descriptors.c ****      /* Call Management Functional Descriptor */
+ 146:../USB_Descriptors.c ****     0x05,                           /*  Descriptors Length (5) */
+ 147:../USB_Descriptors.c ****     0x24,                           /*  bDescriptorType: CS_INTERFACE */
+ 148:../USB_Descriptors.c ****     0x01,                           /*  bDescriptorSubType: Call Management Functional Descriptor *
+ 149:../USB_Descriptors.c ****     0x00,                           /*  bmCapabilities: Device sends/receives call management infor
+ 150:../USB_Descriptors.c ****                                         only over the Communication Class Interface. */
+ 151:../USB_Descriptors.c ****     0x01,                           /*  Interface Number of Data Class interface */
+ 152:../USB_Descriptors.c ****      /* Endpoint Descriptor(Interrupt) */
+ 153:../USB_Descriptors.c ****     0x07,                           /* Descriptor size */
+ 154:../USB_Descriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 155:../USB_Descriptors.c ****     CY_FX_EP_INTERRUPT_CDC,         /* Endpoint address and description */
+ 156:../USB_Descriptors.c ****     CY_U3P_USB_EP_INTR,             /* Interrupt endpoint type */
+ 157:../USB_Descriptors.c ****     0x40,0x00,                      /* Max packet size = 1024 bytes */
+ 158:../USB_Descriptors.c ****     0x02,                           /* Servicing interval for data transfers */
+ 159:../USB_Descriptors.c ****      /* Super speed endpoint companion descriptor for interrupt endpoint */
+ 160:../USB_Descriptors.c ****     0x06,                           /* Descriptor size */
+ 161:../USB_Descriptors.c ****     CY_U3P_SS_EP_COMPN_DESCR,       /* SS endpoint companion descriptor type */
+ 162:../USB_Descriptors.c ****     0x00,                           /* Max no. of packets in a Burst : 1 */
+ 163:../USB_Descriptors.c ****     0x00,                           /* Mult.: Max number of packets : 1 */
+ 164:../USB_Descriptors.c ****     0x40,0x00,                      /* Bytes per interval : 1024 */
+ 165:../USB_Descriptors.c ****      /* Data Interface Descriptor */
+ 166:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+ 167:../USB_Descriptors.c ****     CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 168:../USB_Descriptors.c ****     0x01,                           /* Interface number */
+ 169:../USB_Descriptors.c ****     0x00,                           /* Alternate setting number */
+ 170:../USB_Descriptors.c ****     0x02,                           /* Number of endpoints */
+ 171:../USB_Descriptors.c ****     0x0A,                           /* Interface class: Data interface */
+ 172:../USB_Descriptors.c ****     0x00,                           /* Interface sub class */
+ 173:../USB_Descriptors.c ****     0x00,                           /* Interface protocol code */
+ 174:../USB_Descriptors.c ****     0x04,                           /* Interface descriptor string index */
+ 175:../USB_Descriptors.c ****      /* Endpoint Descriptor(CDC-PRODUCER) */
+ 176:../USB_Descriptors.c ****     0x07,                           /* Descriptor size */
+ 177:../USB_Descriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 178:../USB_Descriptors.c ****     CY_FX_EP_PRODUCER_CDC,          /* Endpoint address and description */
+ 179:../USB_Descriptors.c ****     CY_U3P_USB_EP_BULK,             /* BULK endpoint type */
+ 180:../USB_Descriptors.c ****     0x00,0x04,                      /* Max packet size = 1024 bytes */
+ 181:../USB_Descriptors.c ****     0x00,                           /* Servicing interval for data transfers */
+ 182:../USB_Descriptors.c ****      /* Super speed endpoint companion descriptor for producer ep */
+ 183:../USB_Descriptors.c ****     0x06,                           /* Descriptor size */
+ 184:../USB_Descriptors.c ****     CY_U3P_SS_EP_COMPN_DESCR,       /* SS endpoint companion descriptor type */
+ 185:../USB_Descriptors.c ****     0x01,                           /* Max no. of packets in a burst : 1 */
+ 186:../USB_Descriptors.c ****     0x01,                           /* Mult.: Max number of packets : 1 */
+ 187:../USB_Descriptors.c ****     0x00,0x04,                      /* Bytes per interval : 1024 */
+ 188:../USB_Descriptors.c ****      /* Endpoint Descriptor(CDC-CONSUMER) */
+ 189:../USB_Descriptors.c ****     0x07,                           /* Descriptor size */
+ 190:../USB_Descriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 191:../USB_Descriptors.c ****     CY_FX_EP_CONSUMER_CDC,          /* Endpoint address and description */
+ 192:../USB_Descriptors.c ****     CY_U3P_USB_EP_BULK,             /* BULK endpoint type */
+ 193:../USB_Descriptors.c ****     0x00,0x04,                      /* Max packet size = 1024 bytes */
+ 194:../USB_Descriptors.c ****     0x00,                           /* Servicing interval for data transfers */
+ 195:../USB_Descriptors.c ****      /* Super speed endpoint companion descriptor for consumer ep */
+ 196:../USB_Descriptors.c ****     0x06,                           /* Descriptor size */
+ 197:../USB_Descriptors.c ****     CY_U3P_SS_EP_COMPN_DESCR,       /* SS endpoint companion descriptor type */
+ 198:../USB_Descriptors.c ****     0x01,                           /* Max no. of packets in a burst : 1 */
+ 199:../USB_Descriptors.c ****     0x01,                           /* Mult.: Max number of packets : 1 */
+ 200:../USB_Descriptors.c ****     0x00,0x04,             			/* Bytes per interval : 1024 */
+ 201:../USB_Descriptors.c **** // Now define the BulkLoop interface
+ 202:../USB_Descriptors.c ****      /* Interface descriptor */
+ 203:../USB_Descriptors.c **** 	0x09,                           /* Descriptor size */
+ 204:../USB_Descriptors.c **** 	CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 205:../USB_Descriptors.c **** 	0x02,                           /* Interface number */
+ 206:../USB_Descriptors.c **** 	0x00,                           /* Alternate setting number */
+ 207:../USB_Descriptors.c **** 	0x02,                           /* Number of end points */
+ 208:../USB_Descriptors.c **** 	0xFF,                           /* Interface class */
+ 209:../USB_Descriptors.c **** 	0x00,                           /* Interface sub class */
+ 210:../USB_Descriptors.c **** 	0x00,                           /* Interface protocol code */
+ 211:../USB_Descriptors.c **** 	0x05,                           /* Interface descriptor string index */
+ 212:../USB_Descriptors.c **** 
+ 213:../USB_Descriptors.c **** 	/* Endpoint descriptor for producer EP */
+ 214:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 215:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 216:../USB_Descriptors.c **** 	CY_FX_EP_PRODUCER_BULKLOOP,     /* Endpoint address and description */
+ 217:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* Bulk endpoint type */
+ 218:../USB_Descriptors.c **** 	0x00,0x04,                      /* Max packet size = 1024 bytes */
+ 219:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers : 0 for bulk */
+ 220:../USB_Descriptors.c **** 
+ 221:../USB_Descriptors.c **** 	/* Super speed endpoint companion descriptor for producer EP */
+ 222:../USB_Descriptors.c **** 	0x06,                           /* Descriptor size */
+ 223:../USB_Descriptors.c **** 	CY_U3P_SS_EP_COMPN_DESCR,       /* SS endpoint companion descriptor type */
+ 224:../USB_Descriptors.c **** 	0x00,    						/* Max no. of packets in a burst(0-15) - 0: burst 1 packet at a time */
+ 225:../USB_Descriptors.c **** 	0x00,                           /* Max streams for bulk EP = 0 (No streams) */
+ 226:../USB_Descriptors.c **** 	0x00,0x00,                      /* Service interval for the EP : 0 for bulk */
+ 227:../USB_Descriptors.c **** 
+ 228:../USB_Descriptors.c **** 	/* Endpoint descriptor for consumer EP */
+ 229:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 230:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 231:../USB_Descriptors.c **** 	CY_FX_EP_CONSUMER_BULKLOOP,     /* Endpoint address and description */
+ 232:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* Bulk endpoint type */
+ 233:../USB_Descriptors.c **** 	0x00,0x04,                      /* Max packet size = 1024 bytes */
+ 234:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers : 0 for Bulk */
+ 235:../USB_Descriptors.c **** 
+ 236:../USB_Descriptors.c **** 	/* Super speed endpoint companion descriptor for consumer EP */
+ 237:../USB_Descriptors.c **** 	0x06,                           /* Descriptor size */
+ 238:../USB_Descriptors.c **** 	CY_U3P_SS_EP_COMPN_DESCR,       /* SS endpoint companion descriptor type */
+ 239:../USB_Descriptors.c **** 	0x00,    						/* Max no. of packets in a burst(0-15) - 0: burst 1 packet at a time */
+ 240:../USB_Descriptors.c **** 	0x00,                           /* Max streams for bulk EP = 0 (No streams) */
+ 241:../USB_Descriptors.c **** 	0x00,0x00,                 		/* Service interval for the EP : 0 for bulk */
+ 242:../USB_Descriptors.c **** };
+ 243:../USB_Descriptors.c **** 
+ 244:../USB_Descriptors.c **** /* Standard high speed configuration descriptor */
+ 245:../USB_Descriptors.c **** const uint8_t CyFxUSBHSConfigDscr[] __attribute__ ((aligned (32))) =
+ 246:../USB_Descriptors.c **** {
+ 247:../USB_Descriptors.c ****     /* Configuration descriptor */
+ 248:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+ 249:../USB_Descriptors.c ****     CY_U3P_USB_CONFIG_DESCR,        /* Configuration descriptor type */
+ 250:../USB_Descriptors.c ****     0x62,0x00,                      /* Length of this descriptor and all sub descriptors */
+ 251:../USB_Descriptors.c ****     0x03,                           /* Number of interfaces */
+ 252:../USB_Descriptors.c ****     0x01,                           /* Configuration number */
+ 253:../USB_Descriptors.c ****     0x00,                           /* Configuration string index */
+ 254:../USB_Descriptors.c ****     0x80,                           /* Config characteristics - bus powered */
+ 255:../USB_Descriptors.c ****     0x64,                           /* Max power consumption of device (in 2mA unit) : 100mA */
+ 256:../USB_Descriptors.c **** 
+ 257:../USB_Descriptors.c ****     /* Interface association descriptor */
+ 258:../USB_Descriptors.c ****     0x08,                           /* Descriptor size */
+ 259:../USB_Descriptors.c ****     0x0B,     				        /* Interface association descr type */
+ 260:../USB_Descriptors.c ****     0x00,                           /* first interface */
+ 261:../USB_Descriptors.c ****     0x02,                           /* InterfaceCount */
+ 262:../USB_Descriptors.c ****     0x02,                           /* CDC */
+ 263:../USB_Descriptors.c ****     0x02,                           /* abstract control model */
+ 264:../USB_Descriptors.c ****     0x01,                           /* AT commands*/
+ 265:../USB_Descriptors.c ****     0x00,                           /* String desc index for interface */
+ 266:../USB_Descriptors.c **** 
+ 267:../USB_Descriptors.c ****     /* Communication Interface descriptor */
+ 268:../USB_Descriptors.c **** 	0x09,                           /* Descriptor size */
+ 269:../USB_Descriptors.c **** 	CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 270:../USB_Descriptors.c **** 	0x00,                           /* Interface number */
+ 271:../USB_Descriptors.c **** 	0x00,                           /* Alternate setting number */
+ 272:../USB_Descriptors.c **** 	0x01,                           /* Number of endpoints */
+ 273:../USB_Descriptors.c **** 	0x02,                           /* Interface class : Communication interface */
+ 274:../USB_Descriptors.c **** 	0x02,                           /* Interface sub class */
+ 275:../USB_Descriptors.c **** 	0x01,                           /* Interface protocol code */
+ 276:../USB_Descriptors.c **** 	0x03,                           /* Interface descriptor string index */
+ 277:../USB_Descriptors.c **** 
+ 278:../USB_Descriptors.c ****     /* CDC Class-specific Descriptors */
+ 279:../USB_Descriptors.c ****     /* Header functional Descriptor */
+ 280:../USB_Descriptors.c ****     0x05,                           /* Descriptors length(5) */
+ 281:../USB_Descriptors.c ****     0x24,                           /* Descriptor type : CS_Interface */
+ 282:../USB_Descriptors.c ****     0x00,                           /* DescriptorSubType : Header Functional Descriptor */
+ 283:../USB_Descriptors.c ****     0x10,0x01,                      /* bcdCDC : CDC Release Number */
+ 284:../USB_Descriptors.c **** 
+ 285:../USB_Descriptors.c ****     /* Abstract Control Management Functional Descriptor */
+ 286:../USB_Descriptors.c ****     0x04,                           /* Descriptors Length (4) */
+ 287:../USB_Descriptors.c ****     0x24,                           /* bDescriptorType: CS_INTERFACE */
+ 288:../USB_Descriptors.c ****     0x02,                           /* bDescriptorSubType: Abstract Control Model Functional Descri
+ 289:../USB_Descriptors.c ****     0x02,                           /* bmCapabilities: Supports the request combination of Set_Line
+ 290:../USB_Descriptors.c ****                                        Set_Control_Line_State, Get_Line_Coding and the notification
+ 291:../USB_Descriptors.c **** 
+ 292:../USB_Descriptors.c ****     /* Union Functional Descriptor */
+ 293:../USB_Descriptors.c ****     0x05,                           /* Descriptors Length (5) */
+ 294:../USB_Descriptors.c ****     0x24,                           /* bDescriptorType: CS_INTERFACE */
+ 295:../USB_Descriptors.c ****     0x06,                           /* bDescriptorSubType: Union Functional Descriptor */
+ 296:../USB_Descriptors.c ****     0x00,                           /* bMasterInterface */
+ 297:../USB_Descriptors.c ****     0x01,                           /* bSlaveInterface */
+ 298:../USB_Descriptors.c **** 
+ 299:../USB_Descriptors.c ****     /* Call Management Functional Descriptor */
+ 300:../USB_Descriptors.c ****     0x05,                           /*  Descriptors Length (5) */
+ 301:../USB_Descriptors.c ****     0x24,                           /*  bDescriptorType: CS_INTERFACE */
+ 302:../USB_Descriptors.c ****     0x01,                           /*  bDescriptorSubType: Call Management Functional Descriptor *
+ 303:../USB_Descriptors.c ****     0x00,                           /*  bmCapabilities: Device sends/receives call management infor
+ 304:../USB_Descriptors.c ****                                            only over the Communication Class Interface. */
+ 305:../USB_Descriptors.c ****     0x01,                           /*  Interface Number of Data Class interface */
+ 306:../USB_Descriptors.c **** 
+ 307:../USB_Descriptors.c ****     /* Endpoint Descriptor(Interrupt) */
+ 308:../USB_Descriptors.c ****     0x07,                           /* Descriptor size */
+ 309:../USB_Descriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 310:../USB_Descriptors.c ****     CY_FX_EP_INTERRUPT_CDC,         /* Endpoint address and description */
+ 311:../USB_Descriptors.c ****     CY_U3P_USB_EP_INTR,             /* Interrupt endpoint type */
+ 312:../USB_Descriptors.c ****     0x40,0x00,                      /* Max packet size = 64 bytes */
+ 313:../USB_Descriptors.c ****     0x02,                           /* Servicing interval for data transfers */
+ 314:../USB_Descriptors.c **** 
+ 315:../USB_Descriptors.c ****     /* Data Interface Descriptor */
+ 316:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+ 317:../USB_Descriptors.c ****     CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 318:../USB_Descriptors.c ****     0x01,                           /* Interface number */
+ 319:../USB_Descriptors.c ****     0x00,                           /* Alternate setting number */
+ 320:../USB_Descriptors.c ****     0x02,                           /* Number of endpoints */
+ 321:../USB_Descriptors.c ****     0x0A,                           /* Interface class: Data interface */
+ 322:../USB_Descriptors.c ****     0x00,                           /* Interface sub class */
+ 323:../USB_Descriptors.c ****     0x00,                           /* Interface protocol code */
+ 324:../USB_Descriptors.c ****     0x04,                           /* Interface descriptor string index */
+ 325:../USB_Descriptors.c **** 
+ 326:../USB_Descriptors.c ****     /* Endpoint Descriptor(CDC-PRODUCER) */
+ 327:../USB_Descriptors.c ****     0x07,                           /* Descriptor size */
+ 328:../USB_Descriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 329:../USB_Descriptors.c ****     CY_FX_EP_PRODUCER_CDC,          /* Endpoint address and description */
+ 330:../USB_Descriptors.c ****     CY_U3P_USB_EP_BULK,             /* BULK endpoint type */
+ 331:../USB_Descriptors.c ****     0x00,0x02,                      /* Max packet size = 512 bytes */
+ 332:../USB_Descriptors.c ****     0x00,                           /* Servicing interval for data transfers */
+ 333:../USB_Descriptors.c **** 
+ 334:../USB_Descriptors.c ****     /* Endpoint Descriptor(CDC-CONSUMER) */
+ 335:../USB_Descriptors.c ****     0x07,                           /* Descriptor size */
+ 336:../USB_Descriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 337:../USB_Descriptors.c ****     CY_FX_EP_CONSUMER_CDC,          /* Endpoint address and description */
+ 338:../USB_Descriptors.c ****     CY_U3P_USB_EP_BULK,             /* BULK endpoint type */
+ 339:../USB_Descriptors.c ****     0x00,0x02,                      /* Max packet size = 512 bytes */
+ 340:../USB_Descriptors.c ****     0x00,                           /* Servicing interval for data transfers */
+ 341:../USB_Descriptors.c **** 
+ 342:../USB_Descriptors.c **** // Now define the BulkLoop interface
+ 343:../USB_Descriptors.c ****     /* Interface descriptor */
+ 344:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+ 345:../USB_Descriptors.c **** 	CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 346:../USB_Descriptors.c **** 	0x02,                           /* Interface number */
+ 347:../USB_Descriptors.c **** 	0x00,                           /* Alternate setting number */
+ 348:../USB_Descriptors.c **** 	0x02,                           /* Number of endpoints */
+ 349:../USB_Descriptors.c **** 	0xFF,                           /* Interface class */
+ 350:../USB_Descriptors.c **** 	0x00,                           /* Interface sub class */
+ 351:../USB_Descriptors.c **** 	0x00,                           /* Interface protocol code */
+ 352:../USB_Descriptors.c **** 	0x05,                           /* Interface descriptor string index */
+ 353:../USB_Descriptors.c **** 
+ 354:../USB_Descriptors.c **** 	/* Endpoint descriptor for producer EP */
+ 355:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 356:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 357:../USB_Descriptors.c **** 	CY_FX_EP_PRODUCER_BULKLOOP,     /* Endpoint address and description */
+ 358:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* Bulk endpoint type */
+ 359:../USB_Descriptors.c **** 	0x00,0x02,                      /* Max packet size = 512 bytes */
+ 360:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers : 0 for bulk */
+ 361:../USB_Descriptors.c **** 
+ 362:../USB_Descriptors.c **** 	/* Endpoint descriptor for consumer EP */
+ 363:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 364:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 365:../USB_Descriptors.c **** 	CY_FX_EP_CONSUMER_BULKLOOP,     /* Endpoint address and description */
+ 366:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* Bulk endpoint type */
+ 367:../USB_Descriptors.c **** 	0x00,0x02,                      /* Max packet size = 512 bytes */
+ 368:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers : 0 for bulk */
+ 369:../USB_Descriptors.c **** };
+ 370:../USB_Descriptors.c **** 
+ 371:../USB_Descriptors.c **** /* Standard full speed configuration descriptor */
+ 372:../USB_Descriptors.c **** // Only difference between this and the HS version is the bulk packet size
+ 373:../USB_Descriptors.c **** // Should fix this up dynamically, will do in Rev 2.0
+ 374:../USB_Descriptors.c **** const uint8_t CyFxUSBFSConfigDscr[] __attribute__ ((aligned (32))) =
+ 375:../USB_Descriptors.c **** {
+ 376:../USB_Descriptors.c ****     /* Configuration descriptor */
+ 377:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+ 378:../USB_Descriptors.c ****     CY_U3P_USB_CONFIG_DESCR,        /* Configuration descriptor type */
+ 379:../USB_Descriptors.c ****     0x62,0x00,                      /* Length of this descriptor and all sub descriptors */
+ 380:../USB_Descriptors.c ****     0x03,                           /* Number of interfaces */
+ 381:../USB_Descriptors.c ****     0x01,                           /* Configuration number */
+ 382:../USB_Descriptors.c ****     0x00,                           /* COnfiguration string index */
+ 383:../USB_Descriptors.c ****     0x80,                           /* Config characteristics - bus powered */
+ 384:../USB_Descriptors.c ****     0x32,                           /* Max power consumption of device (in 2mA unit) : 100mA */
+ 385:../USB_Descriptors.c **** 
+ 386:../USB_Descriptors.c ****     /* Interface association descriptor */
+ 387:../USB_Descriptors.c ****     0x08,                           /* Descriptor size */
+ 388:../USB_Descriptors.c ****     0x0B,     				        /* Interface association descr type */
+ 389:../USB_Descriptors.c ****     0x00,                           /* first interface */
+ 390:../USB_Descriptors.c ****     0x02,                           /* InterfaceCount */
+ 391:../USB_Descriptors.c ****     0x02,                           /* CDC */
+ 392:../USB_Descriptors.c ****     0x02,                           /* abstract control model */
+ 393:../USB_Descriptors.c ****     0x01,                           /* AT commands*/
+ 394:../USB_Descriptors.c ****     0x00,                           /* String desc index for interface */
+ 395:../USB_Descriptors.c **** 
+ 396:../USB_Descriptors.c ****     /* Communication Interface descriptor */
+ 397:../USB_Descriptors.c ****     0x09,                           /* Descriptor size */
+ 398:../USB_Descriptors.c **** 	CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 399:../USB_Descriptors.c **** 	0x00,                           /* Interface number */
+ 400:../USB_Descriptors.c **** 	0x00,                           /* Alternate setting number */
+ 401:../USB_Descriptors.c **** 	0x01,                           /* Number of endpoints */
+ 402:../USB_Descriptors.c **** 	0x02,                           /* Interface class : Communication interface */
+ 403:../USB_Descriptors.c **** 	0x02,                           /* Interface sub class */
+ 404:../USB_Descriptors.c **** 	0x01,                           /* Interface protocol code */
+ 405:../USB_Descriptors.c **** 	0x03,                           /* Interface descriptor string index */
+ 406:../USB_Descriptors.c **** 
+ 407:../USB_Descriptors.c **** 	/* CDC Class-specific Descriptors */
+ 408:../USB_Descriptors.c **** 	/* Header functional Descriptor */
+ 409:../USB_Descriptors.c **** 	0x05,                           /* Descriptors length(5) */
+ 410:../USB_Descriptors.c **** 	0x24,                           /* Descriptor type : CS_Interface */
+ 411:../USB_Descriptors.c **** 	0x00,                           /* DescriptorSubType : Header Functional Descriptor */
+ 412:../USB_Descriptors.c **** 	0x10,0x01,                      /* bcdCDC : CDC Release Number */
+ 413:../USB_Descriptors.c **** 
+ 414:../USB_Descriptors.c **** 	/* Abstract Control Management Functional Descriptor */
+ 415:../USB_Descriptors.c **** 	0x04,                           /* Descriptors Length (4) */
+ 416:../USB_Descriptors.c **** 	0x24,                           /* bDescriptorType: CS_INTERFACE */
+ 417:../USB_Descriptors.c **** 	0x02,                           /* bDescriptorSubType: Abstract Control Model Functional Descripto
+ 418:../USB_Descriptors.c **** 	0x02,                           /* bmCapabilities: Supports the request combination of Set_Line_Co
+ 419:../USB_Descriptors.c **** 	                                   Set_Control_Line_State, Get_Line_Coding and the notification Se
+ 420:../USB_Descriptors.c **** 	/* Union Functional Descriptor */
+ 421:../USB_Descriptors.c **** 	0x05,                           /* Descriptors Length (5) */
+ 422:../USB_Descriptors.c **** 	0x24,                           /* bDescriptorType: CS_INTERFACE */
+ 423:../USB_Descriptors.c **** 	0x06,                           /* bDescriptorSubType: Union Functional Descriptor */
+ 424:../USB_Descriptors.c **** 	0x00,                           /* bMasterInterface */
+ 425:../USB_Descriptors.c **** 	0x01,                           /* bSlaveInterface */
+ 426:../USB_Descriptors.c **** 
+ 427:../USB_Descriptors.c **** 	/* Call Management Functional Descriptor */
+ 428:../USB_Descriptors.c **** 	0x05,                           /*  Descriptors Length (5) */
+ 429:../USB_Descriptors.c **** 	0x24,                           /*  bDescriptorType: CS_INTERFACE */
+ 430:../USB_Descriptors.c **** 	0x01,                           /*  bDescriptorSubType: Call Management Functional Descriptor */
+ 431:../USB_Descriptors.c **** 	0x00,                           /*  bmCapabilities: Device sends/receives call management informat
+ 432:../USB_Descriptors.c **** 	                                    only over the Communication Class Interface. */
+ 433:../USB_Descriptors.c **** 	0x01,                           /*  Interface Number of Data Class interface */
+ 434:../USB_Descriptors.c **** 
+ 435:../USB_Descriptors.c **** 	/* Endpoint Descriptor(Interrupt) */
+ 436:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 437:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 438:../USB_Descriptors.c **** 	CY_FX_EP_INTERRUPT_CDC,         /* Endpoint address and description */
+ 439:../USB_Descriptors.c **** 	CY_U3P_USB_EP_INTR,             /* Interrupt endpoint type */
+ 440:../USB_Descriptors.c **** 	0x10,0x00,                      /* Max packet size = 16 bytes */
+ 441:../USB_Descriptors.c **** 	0x02,                           /* Servicing interval for data transfers */
+ 442:../USB_Descriptors.c **** 
+ 443:../USB_Descriptors.c **** 	/* Data Interface Descriptor */
+ 444:../USB_Descriptors.c **** 	0x09,                           /* Descriptor size */
+ 445:../USB_Descriptors.c **** 	CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 446:../USB_Descriptors.c **** 	0x01,                           /* Interface number */
+ 447:../USB_Descriptors.c **** 	0x00,                           /* Alternate setting number */
+ 448:../USB_Descriptors.c **** 	0x02,                           /* Number of endpoints */
+ 449:../USB_Descriptors.c **** 	0x0A,                           /* Interface class: Data interface */
+ 450:../USB_Descriptors.c **** 	0x00,                           /* Interface sub class */
+ 451:../USB_Descriptors.c **** 	0x00,                           /* Interface protocol code */
+ 452:../USB_Descriptors.c **** 	0x04,                           /* Interface descriptor string index */
+ 453:../USB_Descriptors.c **** 
+ 454:../USB_Descriptors.c **** 	/* Endpoint Descriptor(CDC-PRODUCER) */
+ 455:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 456:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 457:../USB_Descriptors.c **** 	CY_FX_EP_PRODUCER_CDC,          /* Endpoint address and description */
+ 458:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* BULK endpoint type */
+ 459:../USB_Descriptors.c **** 	0x40,0x00,                      /* Max packet size = 64 bytes */
+ 460:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers */
+ 461:../USB_Descriptors.c **** 
+ 462:../USB_Descriptors.c **** 	/* Endpoint Descriptor(CDC-CONSUMER) */
+ 463:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 464:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 465:../USB_Descriptors.c **** 	CY_FX_EP_CONSUMER_CDC,          /* Endpoint address and description */
+ 466:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* BULK endpoint type */
+ 467:../USB_Descriptors.c **** 	0x40,0x00,                      /* Max packet size = 64 bytes */
+ 468:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers */
+ 469:../USB_Descriptors.c **** 
+ 470:../USB_Descriptors.c **** // Now define the BulkLoop interface
+ 471:../USB_Descriptors.c **** 	/* Interface descriptor */
+ 472:../USB_Descriptors.c **** 	0x09,                           /* Descriptor size */
+ 473:../USB_Descriptors.c **** 	CY_U3P_USB_INTRFC_DESCR,        /* Interface descriptor type */
+ 474:../USB_Descriptors.c **** 	0x02,                           /* Interface number */
+ 475:../USB_Descriptors.c **** 	0x00,                           /* Alternate setting number */
+ 476:../USB_Descriptors.c **** 	0x02,                           /* Number of endpoints */
+ 477:../USB_Descriptors.c **** 	0xFF,                           /* Interface class */
+ 478:../USB_Descriptors.c **** 	0x00,                           /* Interface sub class */
+ 479:../USB_Descriptors.c **** 	0x00,                           /* Interface protocol code */
+ 480:../USB_Descriptors.c **** 	0x05,                           /* Interface descriptor string index */
+ 481:../USB_Descriptors.c **** 
+ 482:../USB_Descriptors.c **** 	/* Endpoint descriptor for producer EP */
+ 483:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 484:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 485:../USB_Descriptors.c **** 	CY_FX_EP_PRODUCER_BULKLOOP,     /* Endpoint address and description */
+ 486:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* Bulk endpoint type */
+ 487:../USB_Descriptors.c **** 	0x40,0x00,                      /* Max packet size = 64 bytes */
+ 488:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers : 0 for bulk */
+ 489:../USB_Descriptors.c **** 
+ 490:../USB_Descriptors.c **** 	/* Endpoint descriptor for consumer EP */
+ 491:../USB_Descriptors.c **** 	0x07,                           /* Descriptor size */
+ 492:../USB_Descriptors.c **** 	CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 493:../USB_Descriptors.c **** 	CY_FX_EP_CONSUMER_BULKLOOP,     /* Endpoint address and description */
+ 494:../USB_Descriptors.c **** 	CY_U3P_USB_EP_BULK,             /* Bulk endpoint type */
+ 495:../USB_Descriptors.c **** 	0x40,0x00,                      /* Max packet size = 64 bytes */
+ 496:../USB_Descriptors.c **** 	0x00,                           /* Servicing interval for data transfers : 0 for bulk */
+ 497:../USB_Descriptors.c **** };
+ 498:../USB_Descriptors.c **** 
+ 499:../USB_Descriptors.c **** /* Standard language ID string descriptor */
+ 500:../USB_Descriptors.c **** const uint8_t CyFxUSBStringLangIDDscr[] __attribute__ ((aligned (32))) =
+ 501:../USB_Descriptors.c **** {
+ 502:../USB_Descriptors.c ****     4,                              /* Descriptor size */
+ 503:../USB_Descriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 504:../USB_Descriptors.c ****     0x09,0x04                       /* Language ID supported */
+ 505:../USB_Descriptors.c **** };
+ 506:../USB_Descriptors.c **** 
+ 507:../USB_Descriptors.c **** /* Standard manufacturer string descriptor */
+ 508:../USB_Descriptors.c **** const uint8_t CyFxUSBManufactureDscr[] __attribute__ ((aligned (32))) =
+ 509:../USB_Descriptors.c **** {
+ 510:../USB_Descriptors.c ****     44,                             /* Descriptor size */
+ 511:../USB_Descriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 512:../USB_Descriptors.c ****     'U',0,'S',0,'B',0,' ',0,'D',0,'e',0,'s',0,'i',0,'g',0,'n',0,' ',0,
+ 513:../USB_Descriptors.c ****     'B',0,'y',0,' ',0,'E',0,'x',0,'a',0,'m',0,'p',0,'l',0,'e',0
+ 514:../USB_Descriptors.c **** };
+ 515:../USB_Descriptors.c **** 
+ 516:../USB_Descriptors.c **** /* Standard product string descriptor */
+ 517:../USB_Descriptors.c **** const uint8_t CyFxUSBProductDscr[] __attribute__ ((aligned (32))) =
+ 518:../USB_Descriptors.c **** {
+ 519:../USB_Descriptors.c ****     26,                           	/* Descriptor size */
+ 520:../USB_Descriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 521:../USB_Descriptors.c ****     'C',0,'D',0,'C',0,'_',0,'B',0,'u',0,'l',0,'k',0,'L',0,'o',0,'o',0,'p',0
+ 522:../USB_Descriptors.c **** };
+ 523:../USB_Descriptors.c **** 
+ 524:../USB_Descriptors.c **** /* Standard interface string descriptors */
+ 525:../USB_Descriptors.c **** const uint8_t CyFxUSBInterface0Dscr[] __attribute__ ((aligned (32))) =
+ 526:../USB_Descriptors.c **** {
+ 527:../USB_Descriptors.c ****     30,                           	/* Descriptor size */
+ 528:../USB_Descriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 529:../USB_Descriptors.c ****     'C',0,'D',0,'C',0,' ',0,'M',0,'a',0,'n',0,'a',0,'g',0,'e',0,'m',0,'e',0,'n',0,'t',0
+ 530:../USB_Descriptors.c **** };
+ 531:../USB_Descriptors.c **** const uint8_t CyFxUSBInterface1Dscr[] __attribute__ ((aligned (32))) =
+ 532:../USB_Descriptors.c **** {
+ 533:../USB_Descriptors.c ****     18,                           	/* Descriptor size */
+ 534:../USB_Descriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 535:../USB_Descriptors.c ****     'C',0,'D',0,'C',0,' ',0,'D',0,'a',0,'t',0,'a',0
+ 536:../USB_Descriptors.c **** };
+ 537:../USB_Descriptors.c **** const uint8_t CyFxUSBInterface2Dscr[] __attribute__ ((aligned (32))) =
+ 538:../USB_Descriptors.c **** {
+ 539:../USB_Descriptors.c ****     18,                           	/* Descriptor size */
+ 540:../USB_Descriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 541:../USB_Descriptors.c ****     'B',0,'u',0,'l',0,'k',0,'L',0,'o',0,'o',0,'p',0
+ 542:../USB_Descriptors.c **** };
+ 543:../USB_Descriptors.c **** 
+ 544:../USB_Descriptors.c **** // Place this buffer as the last buffer so that no other variable / code shares the same cache line
+ 545:../USB_Descriptors.c **** const uint8_t CyFxUsbDscrAlignBuffer[32] __attribute__ ((aligned (32)));
+ 546:../USB_Descriptors.c **** 
+ 547:../USB_Descriptors.c **** CyU3PReturnStatus_t SetUSBdescriptors(void)
+ 548:../USB_Descriptors.c **** {
+ 674              		.loc 1 548 0
+ 675              		.cfi_startproc
+ 676              		@ args = 0, pretend = 0, frame = 8
+ 677              		@ frame_needed = 1, uses_anonymous_args = 0
+ 678 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 679              	.LCFI0:
+ 680              		.cfi_def_cfa_offset 8
+ 681              		.cfi_offset 11, -8
+ 682              		.cfi_offset 14, -4
+ 683 0004 04B08DE2 		add	fp, sp, #4
+ 684              	.LCFI1:
+ 685              		.cfi_def_cfa 11, 4
+ 686 0008 08D04DE2 		sub	sp, sp, #8
+ 549:../USB_Descriptors.c **** 	CyU3PReturnStatus_t OverallStatus, Status;
+ 550:../USB_Descriptors.c **** 	OverallStatus = Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_DEVICE_DESCR, NULL, (uint8_t *)CyFxUSB3
+ 687              		.loc 1 550 0
+ 688 000c 0000A0E3 		mov	r0, #0
+ 689 0010 0010A0E3 		mov	r1, #0
+ 690 0014 68229FE5 		ldr	r2, .L3
+ 691 0018 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 692 001c 08000BE5 		str	r0, [fp, #-8]
+ 693 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 694 0024 0C300BE5 		str	r3, [fp, #-12]
+ 551:../USB_Descriptors.c ****     CheckStatus("SET_SS_DEVICE_DESCR", Status);
+ 695              		.loc 1 551 0
+ 696 0028 58029FE5 		ldr	r0, .L3+4
+ 697 002c 08101BE5 		ldr	r1, [fp, #-8]
+ 698 0030 FEFFFFEB 		bl	CheckStatus
+ 552:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_HS_DEVICE_DESCR, NULL, (uint8_t *)CyFx
+ 699              		.loc 1 552 0
+ 700 0034 0100A0E3 		mov	r0, #1
+ 701 0038 0010A0E3 		mov	r1, #0
+ 702 003c 48229FE5 		ldr	r2, .L3+8
+ 703 0040 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 704 0044 08000BE5 		str	r0, [fp, #-8]
+ 705 0048 0C201BE5 		ldr	r2, [fp, #-12]
+ 706 004c 08301BE5 		ldr	r3, [fp, #-8]
+ 707 0050 033082E1 		orr	r3, r2, r3
+ 708 0054 0C300BE5 		str	r3, [fp, #-12]
+ 553:../USB_Descriptors.c ****     CheckStatus("SET_HS_DEVICE_DESCR", Status);
+ 709              		.loc 1 553 0
+ 710 0058 30029FE5 		ldr	r0, .L3+12
+ 711 005c 08101BE5 		ldr	r1, [fp, #-8]
+ 712 0060 FEFFFFEB 		bl	CheckStatus
+ 554:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_BOS_DESCR, NULL, (uint8_t *)CyFxUSB
+ 713              		.loc 1 554 0
+ 714 0064 0700A0E3 		mov	r0, #7
+ 715 0068 0010A0E3 		mov	r1, #0
+ 716 006c 20229FE5 		ldr	r2, .L3+16
+ 717 0070 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 718 0074 08000BE5 		str	r0, [fp, #-8]
+ 719 0078 0C201BE5 		ldr	r2, [fp, #-12]
+ 720 007c 08301BE5 		ldr	r3, [fp, #-8]
+ 721 0080 033082E1 		orr	r3, r2, r3
+ 722 0084 0C300BE5 		str	r3, [fp, #-12]
+ 555:../USB_Descriptors.c ****     CheckStatus("SET_SS_BOS_DESCR", Status);
+ 723              		.loc 1 555 0
+ 724 0088 08029FE5 		ldr	r0, .L3+20
+ 725 008c 08101BE5 		ldr	r1, [fp, #-8]
+ 726 0090 FEFFFFEB 		bl	CheckStatus
+ 556:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_DEVQUAL_DESCR, NULL, (uint8_t *)CyFxUS
+ 727              		.loc 1 556 0
+ 728 0094 0200A0E3 		mov	r0, #2
+ 729 0098 0010A0E3 		mov	r1, #0
+ 730 009c F8219FE5 		ldr	r2, .L3+24
+ 731 00a0 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 732 00a4 08000BE5 		str	r0, [fp, #-8]
+ 733 00a8 0C201BE5 		ldr	r2, [fp, #-12]
+ 734 00ac 08301BE5 		ldr	r3, [fp, #-8]
+ 735 00b0 033082E1 		orr	r3, r2, r3
+ 736 00b4 0C300BE5 		str	r3, [fp, #-12]
+ 557:../USB_Descriptors.c ****     CheckStatus("SET_DEVQUAL_DESCR", Status);
+ 737              		.loc 1 557 0
+ 738 00b8 E0019FE5 		ldr	r0, .L3+28
+ 739 00bc 08101BE5 		ldr	r1, [fp, #-8]
+ 740 00c0 FEFFFFEB 		bl	CheckStatus
+ 558:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_CONFIG_DESCR, NULL, (uint8_t *)CyFx
+ 741              		.loc 1 558 0
+ 742 00c4 0600A0E3 		mov	r0, #6
+ 743 00c8 0010A0E3 		mov	r1, #0
+ 744 00cc D0219FE5 		ldr	r2, .L3+32
+ 745 00d0 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 746 00d4 08000BE5 		str	r0, [fp, #-8]
+ 747 00d8 0C201BE5 		ldr	r2, [fp, #-12]
+ 748 00dc 08301BE5 		ldr	r3, [fp, #-8]
+ 749 00e0 033082E1 		orr	r3, r2, r3
+ 750 00e4 0C300BE5 		str	r3, [fp, #-12]
+ 559:../USB_Descriptors.c ****     CheckStatus("SET_SS_CONFIG_DESCR", Status);
+ 751              		.loc 1 559 0
+ 752 00e8 B8019FE5 		ldr	r0, .L3+36
+ 753 00ec 08101BE5 		ldr	r1, [fp, #-8]
+ 754 00f0 FEFFFFEB 		bl	CheckStatus
+ 560:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_HS_CONFIG_DESCR, NULL, (uint8_t *)CyFx
+ 755              		.loc 1 560 0
+ 756 00f4 0400A0E3 		mov	r0, #4
+ 757 00f8 0010A0E3 		mov	r1, #0
+ 758 00fc A8219FE5 		ldr	r2, .L3+40
+ 759 0100 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 760 0104 08000BE5 		str	r0, [fp, #-8]
+ 761 0108 0C201BE5 		ldr	r2, [fp, #-12]
+ 762 010c 08301BE5 		ldr	r3, [fp, #-8]
+ 763 0110 033082E1 		orr	r3, r2, r3
+ 764 0114 0C300BE5 		str	r3, [fp, #-12]
+ 561:../USB_Descriptors.c ****     CheckStatus("SET_HS_CONFIG_DESCR", Status);
+ 765              		.loc 1 561 0
+ 766 0118 90019FE5 		ldr	r0, .L3+44
+ 767 011c 08101BE5 		ldr	r1, [fp, #-8]
+ 768 0120 FEFFFFEB 		bl	CheckStatus
+ 562:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_FS_CONFIG_DESCR, NULL, (uint8_t *)CyFx
+ 769              		.loc 1 562 0
+ 770 0124 0300A0E3 		mov	r0, #3
+ 771 0128 0010A0E3 		mov	r1, #0
+ 772 012c 80219FE5 		ldr	r2, .L3+48
+ 773 0130 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 774 0134 08000BE5 		str	r0, [fp, #-8]
+ 775 0138 0C201BE5 		ldr	r2, [fp, #-12]
+ 776 013c 08301BE5 		ldr	r3, [fp, #-8]
+ 777 0140 033082E1 		orr	r3, r2, r3
+ 778 0144 0C300BE5 		str	r3, [fp, #-12]
+ 563:../USB_Descriptors.c ****     CheckStatus("SET_FS_CONFIG_DESCR", Status);
+ 779              		.loc 1 563 0
+ 780 0148 68019FE5 		ldr	r0, .L3+52
+ 781 014c 08101BE5 		ldr	r1, [fp, #-8]
+ 782 0150 FEFFFFEB 		bl	CheckStatus
+ 564:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 0, (uint8_t *)CyFxUSBStr
+ 783              		.loc 1 564 0
+ 784 0154 0500A0E3 		mov	r0, #5
+ 785 0158 0010A0E3 		mov	r1, #0
+ 786 015c 58219FE5 		ldr	r2, .L3+56
+ 787 0160 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 788 0164 08000BE5 		str	r0, [fp, #-8]
+ 789 0168 0C201BE5 		ldr	r2, [fp, #-12]
+ 790 016c 08301BE5 		ldr	r3, [fp, #-8]
+ 791 0170 033082E1 		orr	r3, r2, r3
+ 792 0174 0C300BE5 		str	r3, [fp, #-12]
+ 565:../USB_Descriptors.c ****     CheckStatus("SET_STRING0_DESCR", Status);
+ 793              		.loc 1 565 0
+ 794 0178 40019FE5 		ldr	r0, .L3+60
+ 795 017c 08101BE5 		ldr	r1, [fp, #-8]
+ 796 0180 FEFFFFEB 		bl	CheckStatus
+ 566:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 1, (uint8_t *)CyFxUSBMan
+ 797              		.loc 1 566 0
+ 798 0184 0500A0E3 		mov	r0, #5
+ 799 0188 0110A0E3 		mov	r1, #1
+ 800 018c 30219FE5 		ldr	r2, .L3+64
+ 801 0190 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 802 0194 08000BE5 		str	r0, [fp, #-8]
+ 803 0198 0C201BE5 		ldr	r2, [fp, #-12]
+ 804 019c 08301BE5 		ldr	r3, [fp, #-8]
+ 805 01a0 033082E1 		orr	r3, r2, r3
+ 806 01a4 0C300BE5 		str	r3, [fp, #-12]
+ 567:../USB_Descriptors.c ****     CheckStatus("SET_STRING1_DESCR", Status);
+ 807              		.loc 1 567 0
+ 808 01a8 18019FE5 		ldr	r0, .L3+68
+ 809 01ac 08101BE5 		ldr	r1, [fp, #-8]
+ 810 01b0 FEFFFFEB 		bl	CheckStatus
+ 568:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 2, (uint8_t *)CyFxUSBPro
+ 811              		.loc 1 568 0
+ 812 01b4 0500A0E3 		mov	r0, #5
+ 813 01b8 0210A0E3 		mov	r1, #2
+ 814 01bc 08219FE5 		ldr	r2, .L3+72
+ 815 01c0 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 816 01c4 08000BE5 		str	r0, [fp, #-8]
+ 817 01c8 0C201BE5 		ldr	r2, [fp, #-12]
+ 818 01cc 08301BE5 		ldr	r3, [fp, #-8]
+ 819 01d0 033082E1 		orr	r3, r2, r3
+ 820 01d4 0C300BE5 		str	r3, [fp, #-12]
+ 569:../USB_Descriptors.c ****     CheckStatus("SET_STRING2_DESCR", Status);
+ 821              		.loc 1 569 0
+ 822 01d8 F0009FE5 		ldr	r0, .L3+76
+ 823 01dc 08101BE5 		ldr	r1, [fp, #-8]
+ 824 01e0 FEFFFFEB 		bl	CheckStatus
+ 570:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 3, (uint8_t *)CyFxUSBInt
+ 825              		.loc 1 570 0
+ 826 01e4 0500A0E3 		mov	r0, #5
+ 827 01e8 0310A0E3 		mov	r1, #3
+ 828 01ec E0209FE5 		ldr	r2, .L3+80
+ 829 01f0 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 830 01f4 08000BE5 		str	r0, [fp, #-8]
+ 831 01f8 0C201BE5 		ldr	r2, [fp, #-12]
+ 832 01fc 08301BE5 		ldr	r3, [fp, #-8]
+ 833 0200 033082E1 		orr	r3, r2, r3
+ 834 0204 0C300BE5 		str	r3, [fp, #-12]
+ 571:../USB_Descriptors.c ****     CheckStatus("SET_STRING3_DESCR", Status);
+ 835              		.loc 1 571 0
+ 836 0208 C8009FE5 		ldr	r0, .L3+84
+ 837 020c 08101BE5 		ldr	r1, [fp, #-8]
+ 838 0210 FEFFFFEB 		bl	CheckStatus
+ 572:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 4, (uint8_t *)CyFxUSBInt
+ 839              		.loc 1 572 0
+ 840 0214 0500A0E3 		mov	r0, #5
+ 841 0218 0410A0E3 		mov	r1, #4
+ 842 021c B8209FE5 		ldr	r2, .L3+88
+ 843 0220 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 844 0224 08000BE5 		str	r0, [fp, #-8]
+ 845 0228 0C201BE5 		ldr	r2, [fp, #-12]
+ 846 022c 08301BE5 		ldr	r3, [fp, #-8]
+ 847 0230 033082E1 		orr	r3, r2, r3
+ 848 0234 0C300BE5 		str	r3, [fp, #-12]
+ 573:../USB_Descriptors.c ****     CheckStatus("SET_STRING4_DESCR", Status);
+ 849              		.loc 1 573 0
+ 850 0238 A0009FE5 		ldr	r0, .L3+92
+ 851 023c 08101BE5 		ldr	r1, [fp, #-8]
+ 852 0240 FEFFFFEB 		bl	CheckStatus
+ 574:../USB_Descriptors.c ****     OverallStatus |= Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 5, (uint8_t *)CyFxUSBInt
+ 853              		.loc 1 574 0
+ 854 0244 0500A0E3 		mov	r0, #5
+ 855 0248 0510A0E3 		mov	r1, #5
+ 856 024c 90209FE5 		ldr	r2, .L3+96
+ 857 0250 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 858 0254 08000BE5 		str	r0, [fp, #-8]
+ 859 0258 0C201BE5 		ldr	r2, [fp, #-12]
+ 860 025c 08301BE5 		ldr	r3, [fp, #-8]
+ 861 0260 033082E1 		orr	r3, r2, r3
+ 862 0264 0C300BE5 		str	r3, [fp, #-12]
+ 575:../USB_Descriptors.c ****     CheckStatus("SET_STRING5_DESCR", Status);
+ 863              		.loc 1 575 0
+ 864 0268 78009FE5 		ldr	r0, .L3+100
+ 865 026c 08101BE5 		ldr	r1, [fp, #-8]
+ 866 0270 FEFFFFEB 		bl	CheckStatus
+ 576:../USB_Descriptors.c **** 
+ 577:../USB_Descriptors.c ****     return OverallStatus;
+ 867              		.loc 1 577 0
+ 868 0274 0C301BE5 		ldr	r3, [fp, #-12]
+ 578:../USB_Descriptors.c **** }
+ 869              		.loc 1 578 0
+ 870 0278 0300A0E1 		mov	r0, r3
+ 871 027c 04D04BE2 		sub	sp, fp, #4
+ 872              		@ sp needed
+ 873 0280 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 874              	.L4:
+ 875              		.align	2
+ 876              	.L3:
+ 877 0284 00000000 		.word	CyFxUSB30DeviceDscr
+ 878 0288 00000000 		.word	.LC0
+ 879 028c 00000000 		.word	CyFxUSB20DeviceDscr
+ 880 0290 14000000 		.word	.LC1
+ 881 0294 00000000 		.word	CyFxUSBBOSDscr
+ 882 0298 28000000 		.word	.LC2
+ 883 029c 00000000 		.word	CyFxUSBDeviceQualDscr
+ 884 02a0 3C000000 		.word	.LC3
+ 885 02a4 00000000 		.word	CyFxUSBSSConfigDscr
+ 886 02a8 50000000 		.word	.LC4
+ 887 02ac 00000000 		.word	CyFxUSBHSConfigDscr
+ 888 02b0 64000000 		.word	.LC5
+ 889 02b4 00000000 		.word	CyFxUSBFSConfigDscr
+ 890 02b8 78000000 		.word	.LC6
+ 891 02bc 00000000 		.word	CyFxUSBStringLangIDDscr
+ 892 02c0 8C000000 		.word	.LC7
+ 893 02c4 00000000 		.word	CyFxUSBManufactureDscr
+ 894 02c8 A0000000 		.word	.LC8
+ 895 02cc 00000000 		.word	CyFxUSBProductDscr
+ 896 02d0 B4000000 		.word	.LC9
+ 897 02d4 00000000 		.word	CyFxUSBInterface0Dscr
+ 898 02d8 C8000000 		.word	.LC10
+ 899 02dc 00000000 		.word	CyFxUSBInterface1Dscr
+ 900 02e0 DC000000 		.word	.LC11
+ 901 02e4 00000000 		.word	CyFxUSBInterface2Dscr
+ 902 02e8 F0000000 		.word	.LC12
+ 903              		.cfi_endproc
+ 904              	.LFE0:
+ 906              		.text
+ 907              	.Letext0:
+ 908              		.file 2 "c:\\program files (x86)\\cypress\\ez-usb fx3 sdk\\1.3\\arm gcc\\arm-none-eabi\\include\\s
+ 909              		.file 3 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3typ
+ 910              		.file 4 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3dma
+ 911              		.file 5 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3usb
+ 912              		.file 6 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3usb
+DEFINED SYMBOLS
+                            *ABS*:00000000 USB_Descriptors.c
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:21     .rodata.CyFxUSB30DeviceDscr:00000000 CyFxUSB30DeviceDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:18     .rodata.CyFxUSB30DeviceDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:45     .rodata.CyFxUSB20DeviceDscr:00000000 CyFxUSB20DeviceDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:42     .rodata.CyFxUSB20DeviceDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:69     .rodata.CyFxUSBBOSDscr:00000000 CyFxUSBBOSDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:66     .rodata.CyFxUSBBOSDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:97     .rodata.CyFxUSBDeviceQualDscr:00000000 CyFxUSBDeviceQualDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:94     .rodata.CyFxUSBDeviceQualDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:113    .rodata.CyFxUSBSSConfigDscr:00000000 CyFxUSBSSConfigDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:110    .rodata.CyFxUSBSSConfigDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:247    .rodata.CyFxUSBHSConfigDscr:00000000 CyFxUSBHSConfigDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:244    .rodata.CyFxUSBHSConfigDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:351    .rodata.CyFxUSBFSConfigDscr:00000000 CyFxUSBFSConfigDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:348    .rodata.CyFxUSBFSConfigDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:455    .rodata.CyFxUSBStringLangIDDscr:00000000 CyFxUSBStringLangIDDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:452    .rodata.CyFxUSBStringLangIDDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:465    .rodata.CyFxUSBManufactureDscr:00000000 CyFxUSBManufactureDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:462    .rodata.CyFxUSBManufactureDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:515    .rodata.CyFxUSBProductDscr:00000000 CyFxUSBProductDscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:512    .rodata.CyFxUSBProductDscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:547    .rodata.CyFxUSBInterface0Dscr:00000000 CyFxUSBInterface0Dscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:544    .rodata.CyFxUSBInterface0Dscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:583    .rodata.CyFxUSBInterface1Dscr:00000000 CyFxUSBInterface1Dscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:580    .rodata.CyFxUSBInterface1Dscr:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:607    .rodata.CyFxUSBInterface2Dscr:00000000 CyFxUSBInterface2Dscr
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:604    .rodata.CyFxUSBInterface2Dscr:00000000 $d
+                            *COM*:00000020 CyFxUsbDscrAlignBuffer
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:628    .rodata:00000000 $d
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:668    .text.SetUSBdescriptors:00000000 $a
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:671    .text.SetUSBdescriptors:00000000 SetUSBdescriptors
+C:\Users\mddd\AppData\Local\Temp\ccPZgbpm.s:877    .text.SetUSBdescriptors:00000284 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PUsbSetDesc
+CheckStatus

@@ -1,0 +1,869 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"StartStopApplication.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.global	BusSpeed
+  22              		.section	.rodata
+  23              		.align	2
+  24              	.LC0:
+  25 0000 4E6F7420 		.ascii	"Not Connected\000"
+  25      436F6E6E 
+  25      65637465 
+  25      6400
+  26 000e 0000     		.align	2
+  27              	.LC1:
+  28 0010 46756C6C 		.ascii	"Full \000"
+  28      2000
+  29 0016 0000     		.align	2
+  30              	.LC2:
+  31 0018 48696768 		.ascii	"High \000"
+  31      2000
+  32 001e 0000     		.align	2
+  33              	.LC3:
+  34 0020 53757065 		.ascii	"Super\000"
+  34      7200
+  35              		.section	.data.BusSpeed,"aw",%progbits
+  36              		.align	2
+  39              	BusSpeed:
+  40 0000 00000000 		.word	.LC0
+  41 0004 10000000 		.word	.LC1
+  42 0008 18000000 		.word	.LC2
+  43 000c 20000000 		.word	.LC3
+  44              		.global	EpSize
+  45              		.section	.rodata.EpSize,"a",%progbits
+  46              		.align	2
+  49              	EpSize:
+  50 0000 0000     		.short	0
+  51 0002 4000     		.short	64
+  52 0004 0002     		.short	512
+  53 0006 0004     		.short	1024
+  54              		.comm	glUSBtoCPU_Handle,220,4
+  55              		.comm	glCPUtoUSB_Handle,220,4
+  56              		.comm	UserBuffer,12,4
+  57              		.section	.rodata
+  58 0026 0000     		.align	2
+  59              	.LC4:
+  60 0028 0A526563 		.ascii	"\012Received: %s\000"
+  60      65697665 
+  60      643A2025 
+  60      7300
+  61              		.section	.text.GotCharactersFromHost,"ax",%progbits
+  62              		.align	2
+  63              		.global	GotCharactersFromHost
+  65              	GotCharactersFromHost:
+  66              	.LFB0:
+  67              		.file 1 "../StartStopApplication.c"
+   1:../StartStopApplication.c **** /*
+   2:../StartStopApplication.c ****  * StartStopApplication.c
+   3:../StartStopApplication.c ****  *
+   4:../StartStopApplication.c ****  *      Author: john@USB-By-Example.com
+   5:../StartStopApplication.c ****  */
+   6:../StartStopApplication.c **** 
+   7:../StartStopApplication.c **** #include "Application.h"
+   8:../StartStopApplication.c **** 
+   9:../StartStopApplication.c **** // Declare external functions
+  10:../StartStopApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  11:../StartStopApplication.c **** 
+  12:../StartStopApplication.c **** // Declare external data
+  13:../StartStopApplication.c **** extern CyBool_t glIsApplicationActive;	// Set true once device is enumerated
+  14:../StartStopApplication.c **** extern CyU3PEvent DisplayEvent;			// Used to display events
+  15:../StartStopApplication.c **** 
+  16:../StartStopApplication.c **** const char* BusSpeed[] = { "Not Connected", "Full ", "High ", "Super" };
+  17:../StartStopApplication.c **** const uint16_t EpSize[] = { 0, 64, 512, 1024 };
+  18:../StartStopApplication.c **** 
+  19:../StartStopApplication.c **** #if (DirectConnect)
+  20:../StartStopApplication.c **** CyU3PDmaChannel glUSBtoUART_Handle;		// Handle needed for Bulk Out Endpoint
+  21:../StartStopApplication.c **** CyU3PDmaChannel glUARTtoUSB_Handle;		// Handle needed for Bulk In Endpoint
+  22:../StartStopApplication.c **** 
+  23:../StartStopApplication.c **** void UartCharsOutDmaCallback(CyU3PDmaChannel *chHandle, CyU3PDmaCbType_t type, CyU3PDmaCBInput_t *i
+  24:../StartStopApplication.c **** {
+  25:../StartStopApplication.c ****     if (type == CY_U3P_DMA_CB_PROD_EVENT)
+  26:../StartStopApplication.c ****     {
+  27:../StartStopApplication.c ****     	CyU3PDmaChannelCommitBuffer(chHandle, input->buffer_p.count, 0);
+  28:../StartStopApplication.c ****     	CyU3PEventSet(&DisplayEvent, 1<<27, CYU3P_EVENT_OR);
+  29:../StartStopApplication.c ****     }
+  30:../StartStopApplication.c **** }
+  31:../StartStopApplication.c **** 
+  32:../StartStopApplication.c **** #else
+  33:../StartStopApplication.c **** CyU3PDmaChannel glUSBtoCPU_Handle;		// Handle needed for Bulk Out Endpoint
+  34:../StartStopApplication.c **** CyU3PDmaChannel glCPUtoUSB_Handle;		// Handle needed for Bulk In Endpoint
+  35:../StartStopApplication.c **** CyU3PDmaBuffer_t UserBuffer;			// Used for sending to EP Consumer
+  36:../StartStopApplication.c **** 
+  37:../StartStopApplication.c **** void GotCharactersFromHost(CyU3PDmaChannel *Handle, CyU3PDmaCbType_t Type, CyU3PDmaCBInput_t *Input
+  38:../StartStopApplication.c **** {
+  68              		.loc 1 38 0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 24
+  71              		@ frame_needed = 1, uses_anonymous_args = 0
+  72 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  73              	.LCFI0:
+  74              		.cfi_def_cfa_offset 8
+  75 0004 04B08DE2 		add	fp, sp, #4
+  76              		.cfi_offset 14, -4
+  77              		.cfi_offset 11, -8
+  78              	.LCFI1:
+  79              		.cfi_def_cfa 11, 4
+  80 0008 18D04DE2 		sub	sp, sp, #24
+  81 000c 10000BE5 		str	r0, [fp, #-16]
+  82 0010 0130A0E1 		mov	r3, r1
+  83 0014 18200BE5 		str	r2, [fp, #-24]
+  84 0018 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+  39:../StartStopApplication.c ****     if (Type == CY_U3P_DMA_CB_PROD_EVENT)
+  85              		.loc 1 39 0
+  86 001c B2315BE1 		ldrh	r3, [fp, #-18]
+  87 0020 080053E3 		cmp	r3, #8
+  88 0024 1000001A 		bne	.L1
+  89              	.LBB2:
+  40:../StartStopApplication.c ****     {
+  41:../StartStopApplication.c **** 		uint8_t* BytePtr = Input->buffer_p.buffer;
+  90              		.loc 1 41 0
+  91 0028 18301BE5 		ldr	r3, [fp, #-24]
+  92 002c 003093E5 		ldr	r3, [r3, #0]
+  93 0030 08300BE5 		str	r3, [fp, #-8]
+  42:../StartStopApplication.c **** 		uint8_t* EndPtr = BytePtr + Input->buffer_p.count;
+  94              		.loc 1 42 0
+  95 0034 18301BE5 		ldr	r3, [fp, #-24]
+  96 0038 B430D3E1 		ldrh	r3, [r3, #4]
+  97 003c 08201BE5 		ldr	r2, [fp, #-8]
+  98 0040 033082E0 		add	r3, r2, r3
+  99 0044 0C300BE5 		str	r3, [fp, #-12]
+  43:../StartStopApplication.c **** 		*EndPtr = 0;
+ 100              		.loc 1 43 0
+ 101 0048 0C301BE5 		ldr	r3, [fp, #-12]
+ 102 004c 0020A0E3 		mov	r2, #0
+ 103 0050 0020C3E5 		strb	r2, [r3, #0]
+  44:../StartStopApplication.c **** 		// Shouldn't call DebugPrint in a callback but this is a special case
+  45:../StartStopApplication.c **** 		DebugPrint(4, "\nReceived: %s", BytePtr);
+ 104              		.loc 1 45 0
+ 105 0054 0400A0E3 		mov	r0, #4
+ 106 0058 14109FE5 		ldr	r1, .L3
+ 107 005c 08201BE5 		ldr	r2, [fp, #-8]
+ 108 0060 FEFFFFEB 		bl	CyU3PDebugPrint
+  46:../StartStopApplication.c **** 		CyU3PDmaChannelDiscardBuffer(Handle);
+ 109              		.loc 1 46 0
+ 110 0064 10001BE5 		ldr	r0, [fp, #-16]
+ 111 0068 FEFFFFEB 		bl	CyU3PDmaChannelDiscardBuffer
+ 112              	.L1:
+ 113              	.LBE2:
+  47:../StartStopApplication.c ****     }
+  48:../StartStopApplication.c **** }
+ 114              		.loc 1 48 0
+ 115 006c 04D04BE2 		sub	sp, fp, #4
+ 116 0070 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 117              	.L4:
+ 118              		.align	2
+ 119              	.L3:
+ 120 0074 28000000 		.word	.LC4
+ 121              		.cfi_endproc
+ 122              	.LFE0:
+ 124              		.section	.text.SentCharacterToHost,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	SentCharacterToHost
+ 128              	SentCharacterToHost:
+ 129              	.LFB1:
+  49:../StartStopApplication.c **** 
+  50:../StartStopApplication.c **** void SentCharacterToHost(CyU3PDmaChannel *Handle, CyU3PDmaCbType_t Type, CyU3PDmaCBInput_t *Input)
+  51:../StartStopApplication.c **** {
+ 130              		.loc 1 51 0
+ 131              		.cfi_startproc
+ 132              		@ args = 0, pretend = 0, frame = 16
+ 133              		@ frame_needed = 1, uses_anonymous_args = 0
+ 134 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 135              	.LCFI2:
+ 136              		.cfi_def_cfa_offset 8
+ 137 0004 04B08DE2 		add	fp, sp, #4
+ 138              		.cfi_offset 14, -4
+ 139              		.cfi_offset 11, -8
+ 140              	.LCFI3:
+ 141              		.cfi_def_cfa 11, 4
+ 142 0008 10D04DE2 		sub	sp, sp, #16
+ 143 000c 08000BE5 		str	r0, [fp, #-8]
+ 144 0010 0130A0E1 		mov	r3, r1
+ 145 0014 10200BE5 		str	r2, [fp, #-16]
+ 146 0018 BA304BE1 		strh	r3, [fp, #-10]	@ movhi
+  52:../StartStopApplication.c ****     if (Type == CY_U3P_DMA_CB_CONS_EVENT) CyU3PDmaChannelDiscardBuffer(Handle);
+ 147              		.loc 1 52 0
+ 148 001c BA305BE1 		ldrh	r3, [fp, #-10]
+ 149 0020 100053E3 		cmp	r3, #16
+ 150 0024 0100001A 		bne	.L5
+ 151              		.loc 1 52 0 is_stmt 0 discriminator 1
+ 152 0028 08001BE5 		ldr	r0, [fp, #-8]
+ 153 002c FEFFFFEB 		bl	CyU3PDmaChannelDiscardBuffer
+ 154              	.L5:
+  53:../StartStopApplication.c **** }
+ 155              		.loc 1 53 0 is_stmt 1
+ 156 0030 04D04BE2 		sub	sp, fp, #4
+ 157 0034 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 158              		.cfi_endproc
+ 159              	.LFE1:
+ 161              		.section	.text.SendCharacter,"ax",%progbits
+ 162              		.align	2
+ 163              		.global	SendCharacter
+ 165              	SendCharacter:
+ 166              	.LFB2:
+  54:../StartStopApplication.c **** 
+  55:../StartStopApplication.c **** void SendCharacter(char InputChar)
+  56:../StartStopApplication.c **** {
+ 167              		.loc 1 56 0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 8
+ 170              		@ frame_needed = 1, uses_anonymous_args = 0
+ 171 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 172              	.LCFI4:
+ 173              		.cfi_def_cfa_offset 8
+ 174 0004 04B08DE2 		add	fp, sp, #4
+ 175              		.cfi_offset 14, -4
+ 176              		.cfi_offset 11, -8
+ 177              	.LCFI5:
+ 178              		.cfi_def_cfa 11, 4
+ 179 0008 08D04DE2 		sub	sp, sp, #8
+ 180 000c 0030A0E1 		mov	r3, r0
+ 181 0010 05304BE5 		strb	r3, [fp, #-5]
+  57:../StartStopApplication.c **** 	*UserBuffer.buffer = InputChar;
+ 182              		.loc 1 57 0
+ 183 0014 34309FE5 		ldr	r3, .L8
+ 184 0018 003093E5 		ldr	r3, [r3, #0]
+ 185 001c 05205BE5 		ldrb	r2, [fp, #-5]
+ 186 0020 0020C3E5 		strb	r2, [r3, #0]
+  58:../StartStopApplication.c **** 	UserBuffer.count = 1;
+ 187              		.loc 1 58 0
+ 188 0024 24309FE5 		ldr	r3, .L8
+ 189 0028 0120A0E3 		mov	r2, #1
+ 190 002c B420C3E1 		strh	r2, [r3, #4]	@ movhi
+  59:../StartStopApplication.c **** 	UserBuffer.status = 0;
+ 191              		.loc 1 59 0
+ 192 0030 18309FE5 		ldr	r3, .L8
+ 193 0034 0020A0E3 		mov	r2, #0
+ 194 0038 B820C3E1 		strh	r2, [r3, #8]	@ movhi
+  60:../StartStopApplication.c **** 	CyU3PDmaChannelSetupSendBuffer(&glCPUtoUSB_Handle, &UserBuffer);
+ 195              		.loc 1 60 0
+ 196 003c 10009FE5 		ldr	r0, .L8+4
+ 197 0040 08109FE5 		ldr	r1, .L8
+ 198 0044 FEFFFFEB 		bl	CyU3PDmaChannelSetupSendBuffer
+  61:../StartStopApplication.c **** }
+ 199              		.loc 1 61 0
+ 200 0048 04D04BE2 		sub	sp, fp, #4
+ 201 004c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 202              	.L9:
+ 203              		.align	2
+ 204              	.L8:
+ 205 0050 00000000 		.word	UserBuffer
+ 206 0054 00000000 		.word	glCPUtoUSB_Handle
+ 207              		.cfi_endproc
+ 208              	.LFE2:
+ 210              		.section	.rodata
+ 211 0036 0000     		.align	2
+ 212              	.LC5:
+ 213 0038 0A52756E 		.ascii	"\012Running at %sSpeed\000"
+ 213      6E696E67 
+ 213      20617420 
+ 213      25735370 
+ 213      65656400 
+ 214              		.align	2
+ 215              	.LC6:
+ 216 004c 53657475 		.ascii	"Setup Consumer Endpoint\000"
+ 216      7020436F 
+ 216      6E73756D 
+ 216      65722045 
+ 216      6E64706F 
+ 217              		.align	2
+ 218              	.LC7:
+ 219 0064 53657475 		.ascii	"Setup Producer Endpoint\000"
+ 219      70205072 
+ 219      6F647563 
+ 219      65722045 
+ 219      6E64706F 
+ 220              		.align	2
+ 221              	.LC8:
+ 222 007c 53657475 		.ascii	"Setup Interrupt Endpoint\000"
+ 222      7020496E 
+ 222      74657272 
+ 222      75707420 
+ 222      456E6470 
+ 223 0095 000000   		.align	2
+ 224              	.LC9:
+ 225 0098 43726561 		.ascii	"CreateUSBtoCPUdmaChannel\000"
+ 225      74655553 
+ 225      42746F43 
+ 225      5055646D 
+ 225      61436861 
+ 226 00b1 000000   		.align	2
+ 227              	.LC10:
+ 228 00b4 55534274 		.ascii	"USBtoCPUdmaChannelSetXfer\000"
+ 228      6F435055 
+ 228      646D6143 
+ 228      68616E6E 
+ 228      656C5365 
+ 229 00ce 0000     		.align	2
+ 230              	.LC11:
+ 231 00d0 43726561 		.ascii	"CreateCPUtoUSBdmaChannel\000"
+ 231      74654350 
+ 231      55746F55 
+ 231      5342646D 
+ 231      61436861 
+ 232 00e9 000000   		.align	2
+ 233              	.LC12:
+ 234 00ec 47657420 		.ascii	"Get UserBuffer\000"
+ 234      55736572 
+ 234      42756666 
+ 234      657200
+ 235              		.section	.text.StartApplication,"ax",%progbits
+ 236              		.align	2
+ 237              		.global	StartApplication
+ 239              	StartApplication:
+ 240              	.LFB3:
+  62:../StartStopApplication.c **** #endif
+  63:../StartStopApplication.c **** 
+  64:../StartStopApplication.c **** void StartApplication(void)
+  65:../StartStopApplication.c **** // USB has been enumerated, time to start the application running
+  66:../StartStopApplication.c **** {
+ 241              		.loc 1 66 0
+ 242              		.cfi_startproc
+ 243              		@ args = 0, pretend = 0, frame = 48
+ 244              		@ frame_needed = 1, uses_anonymous_args = 0
+ 245 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 246              	.LCFI6:
+ 247              		.cfi_def_cfa_offset 8
+ 248 0004 04B08DE2 		add	fp, sp, #4
+ 249              		.cfi_offset 14, -4
+ 250              		.cfi_offset 11, -8
+ 251              	.LCFI7:
+ 252              		.cfi_def_cfa 11, 4
+ 253 0008 30D04DE2 		sub	sp, sp, #48
+  67:../StartStopApplication.c ****     CyU3PEpConfig_t epConfig;
+  68:../StartStopApplication.c ****     CyU3PDmaChannelConfig_t dmaConfig;
+  69:../StartStopApplication.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 254              		.loc 1 69 0
+ 255 000c 0030A0E3 		mov	r3, #0
+ 256 0010 08300BE5 		str	r3, [fp, #-8]
+  70:../StartStopApplication.c ****     uint16_t Size = EpSize[CyU3PUsbGetSpeed()];
+ 257              		.loc 1 70 0
+ 258 0014 FEFFFFEB 		bl	CyU3PUsbGetSpeed
+ 259 0018 0030A0E1 		mov	r3, r0
+ 260 001c 34229FE5 		ldr	r2, .L12
+ 261 0020 8330A0E1 		mov	r3, r3, asl #1
+ 262 0024 033082E0 		add	r3, r2, r3
+ 263 0028 B030D3E1 		ldrh	r3, [r3, #0]	@ movhi
+ 264 002c BA304BE1 		strh	r3, [fp, #-10]	@ movhi
+  71:../StartStopApplication.c **** 
+  72:../StartStopApplication.c ****     // Display the enumerated device bus speed
+  73:../StartStopApplication.c ****     DebugPrint(4, "\nRunning at %sSpeed", BusSpeed[CyU3PUsbGetSpeed()]);
+ 265              		.loc 1 73 0
+ 266 0030 FEFFFFEB 		bl	CyU3PUsbGetSpeed
+ 267 0034 0030A0E1 		mov	r3, r0
+ 268 0038 0320A0E1 		mov	r2, r3
+ 269 003c 18329FE5 		ldr	r3, .L12+4
+ 270 0040 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 271 0044 0400A0E3 		mov	r0, #4
+ 272 0048 10129FE5 		ldr	r1, .L12+8
+ 273 004c 0320A0E1 		mov	r2, r3
+ 274 0050 FEFFFFEB 		bl	CyU3PDebugPrint
+  74:../StartStopApplication.c **** 
+  75:../StartStopApplication.c ****     // Configure and enable the Consumer Endpoint
+  76:../StartStopApplication.c ****     CyU3PMemSet((uint8_t *)&epConfig, 0, sizeof(epConfig));
+ 275              		.loc 1 76 0
+ 276 0054 18304BE2 		sub	r3, fp, #24
+ 277 0058 0300A0E1 		mov	r0, r3
+ 278 005c 0010A0E3 		mov	r1, #0
+ 279 0060 0C20A0E3 		mov	r2, #12
+ 280 0064 FEFFFFEB 		bl	CyU3PMemSet
+  77:../StartStopApplication.c ****     epConfig.enable = CyTrue;
+ 281              		.loc 1 77 0
+ 282 0068 0130A0E3 		mov	r3, #1
+ 283 006c 18300BE5 		str	r3, [fp, #-24]
+  78:../StartStopApplication.c ****     epConfig.epType = CY_U3P_USB_EP_BULK;
+ 284              		.loc 1 78 0
+ 285 0070 0230A0E3 		mov	r3, #2
+ 286 0074 14304BE5 		strb	r3, [fp, #-20]
+  79:../StartStopApplication.c ****     epConfig.burstLen = 1;
+ 287              		.loc 1 79 0
+ 288 0078 0130A0E3 		mov	r3, #1
+ 289 007c 0E304BE5 		strb	r3, [fp, #-14]
+  80:../StartStopApplication.c ****     epConfig.pcktSize = Size;
+ 290              		.loc 1 80 0
+ 291 0080 BA305BE1 		ldrh	r3, [fp, #-10]	@ movhi
+ 292 0084 B0314BE1 		strh	r3, [fp, #-16]	@ movhi
+  81:../StartStopApplication.c ****     Status = CyU3PSetEpConfig(CY_FX_EP_CONSUMER, &epConfig);
+ 293              		.loc 1 81 0
+ 294 0088 18304BE2 		sub	r3, fp, #24
+ 295 008c 8200A0E3 		mov	r0, #130
+ 296 0090 0310A0E1 		mov	r1, r3
+ 297 0094 FEFFFFEB 		bl	CyU3PSetEpConfig
+ 298 0098 08000BE5 		str	r0, [fp, #-8]
+  82:../StartStopApplication.c ****     CheckStatus("Setup Consumer Endpoint", Status);
+ 299              		.loc 1 82 0
+ 300 009c C0019FE5 		ldr	r0, .L12+12
+ 301 00a0 08101BE5 		ldr	r1, [fp, #-8]
+ 302 00a4 FEFFFFEB 		bl	CheckStatus
+  83:../StartStopApplication.c ****     // Configure and enable the Producer Endpoint
+  84:../StartStopApplication.c ****     Status = CyU3PSetEpConfig(CY_FX_EP_PRODUCER, &epConfig);
+ 303              		.loc 1 84 0
+ 304 00a8 18304BE2 		sub	r3, fp, #24
+ 305 00ac 0200A0E3 		mov	r0, #2
+ 306 00b0 0310A0E1 		mov	r1, r3
+ 307 00b4 FEFFFFEB 		bl	CyU3PSetEpConfig
+ 308 00b8 08000BE5 		str	r0, [fp, #-8]
+  85:../StartStopApplication.c ****     CheckStatus("Setup Producer Endpoint", Status);
+ 309              		.loc 1 85 0
+ 310 00bc A4019FE5 		ldr	r0, .L12+16
+ 311 00c0 08101BE5 		ldr	r1, [fp, #-8]
+ 312 00c4 FEFFFFEB 		bl	CheckStatus
+  86:../StartStopApplication.c ****     // Configure and enable the Interrupt Endpoint
+  87:../StartStopApplication.c ****     epConfig.epType = CY_U3P_USB_EP_INTR;
+ 313              		.loc 1 87 0
+ 314 00c8 0330A0E3 		mov	r3, #3
+ 315 00cc 14304BE5 		strb	r3, [fp, #-20]
+  88:../StartStopApplication.c ****     epConfig.pcktSize = 64;
+ 316              		.loc 1 88 0
+ 317 00d0 4030A0E3 		mov	r3, #64
+ 318 00d4 B0314BE1 		strh	r3, [fp, #-16]	@ movhi
+  89:../StartStopApplication.c ****     epConfig.isoPkts = 1;
+ 319              		.loc 1 89 0
+ 320 00d8 0130A0E3 		mov	r3, #1
+ 321 00dc 0D304BE5 		strb	r3, [fp, #-13]
+  90:../StartStopApplication.c ****     Status = CyU3PSetEpConfig(CY_FX_EP_INTERRUPT, &epConfig);
+ 322              		.loc 1 90 0
+ 323 00e0 18304BE2 		sub	r3, fp, #24
+ 324 00e4 8100A0E3 		mov	r0, #129
+ 325 00e8 0310A0E1 		mov	r1, r3
+ 326 00ec FEFFFFEB 		bl	CyU3PSetEpConfig
+ 327 00f0 08000BE5 		str	r0, [fp, #-8]
+  91:../StartStopApplication.c ****     CheckStatus("Setup Interrupt Endpoint", Status);
+ 328              		.loc 1 91 0
+ 329 00f4 70019FE5 		ldr	r0, .L12+20
+ 330 00f8 08101BE5 		ldr	r1, [fp, #-8]
+ 331 00fc FEFFFFEB 		bl	CheckStatus
+  92:../StartStopApplication.c **** #if (DirectConnect)
+  93:../StartStopApplication.c ****     // Create an auto DMA channel between USB producer socket and UART Consumer
+  94:../StartStopApplication.c ****     CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+  95:../StartStopApplication.c ****     dmaConfig.size = 16;
+  96:../StartStopApplication.c ****     dmaConfig.count = 4;
+  97:../StartStopApplication.c ****     dmaConfig.prodSckId = CY_FX_EP_PRODUCER_SOCKET;
+  98:../StartStopApplication.c ****     dmaConfig.consSckId = CY_U3P_LPP_SOCKET_UART_CONS;
+  99:../StartStopApplication.c ****     dmaConfig.dmaMode = CY_U3P_DMA_MODE_BYTE;
+ 100:../StartStopApplication.c ****     Status = CyU3PDmaChannelCreate(&glUSBtoUART_Handle, CY_U3P_DMA_TYPE_AUTO, &dmaConfig);
+ 101:../StartStopApplication.c ****     CheckStatus("CreateUSBtoCPUdmaChannel", Status);
+ 102:../StartStopApplication.c ****     // Set DMA Channel transfer size = infinite
+ 103:../StartStopApplication.c ****     Status = CyU3PDmaChannelSetXfer(&glUSBtoUART_Handle, 0);
+ 104:../StartStopApplication.c ****     CheckStatus("USBtoCPUdmaChannelSetXfer", Status);
+ 105:../StartStopApplication.c **** 
+ 106:../StartStopApplication.c ****     // Create a manual DMA channel between UART producer socket and USB Consumer
+ 107:../StartStopApplication.c ****     // Use a smaller buffer so that gets filled in a shorter amount of time
+ 108:../StartStopApplication.c ****     CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 109:../StartStopApplication.c ****     dmaConfig.size = 16;
+ 110:../StartStopApplication.c ****     dmaConfig.count = 2;
+ 111:../StartStopApplication.c ****     dmaConfig.prodSckId = CY_U3P_LPP_SOCKET_UART_PROD;
+ 112:../StartStopApplication.c ****     dmaConfig.consSckId = CY_FX_EP_CONSUMER_SOCKET;
+ 113:../StartStopApplication.c ****     dmaConfig.dmaMode = CY_U3P_DMA_MODE_BYTE;
+ 114:../StartStopApplication.c **** 
+ 115:../StartStopApplication.c ****     dmaConfig.notification = CY_U3P_DMA_CB_PROD_EVENT;
+ 116:../StartStopApplication.c ****     dmaConfig.cb = UartCharsOutDmaCallback;
+ 117:../StartStopApplication.c ****     Status = CyU3PDmaChannelCreate(&glUARTtoUSB_Handle, CY_U3P_DMA_TYPE_MANUAL_OUT, &dmaConfig);
+ 118:../StartStopApplication.c ****     CheckStatus("CreateCPUtoUSBdmaChannel", Status);
+ 119:../StartStopApplication.c ****     // Set DMA Channel transfer size = infinite
+ 120:../StartStopApplication.c ****     Status = CyU3PDmaChannelSetXfer(&glUSBtoUART_Handle, 0);
+ 121:../StartStopApplication.c ****     CheckStatus("USBtoCPUdmaChannelSetXfer", Status);
+ 122:../StartStopApplication.c **** #else
+ 123:../StartStopApplication.c ****     // Create a manual DMA channel between USB producer socket and CPU Consumer
+ 124:../StartStopApplication.c ****     CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 332              		.loc 1 124 0
+ 333 0100 34304BE2 		sub	r3, fp, #52
+ 334 0104 0300A0E1 		mov	r0, r3
+ 335 0108 0010A0E3 		mov	r1, #0
+ 336 010c 1C20A0E3 		mov	r2, #28
+ 337 0110 FEFFFFEB 		bl	CyU3PMemSet
+ 125:../StartStopApplication.c ****     dmaConfig.size = 32;		// I assume a person is typing
+ 338              		.loc 1 125 0
+ 339 0114 2030A0E3 		mov	r3, #32
+ 340 0118 B4334BE1 		strh	r3, [fp, #-52]	@ movhi
+ 126:../StartStopApplication.c ****     dmaConfig.count = 2;
+ 341              		.loc 1 126 0
+ 342 011c 0230A0E3 		mov	r3, #2
+ 343 0120 B2334BE1 		strh	r3, [fp, #-50]	@ movhi
+ 127:../StartStopApplication.c ****     dmaConfig.prodSckId = CY_FX_EP_PRODUCER_SOCKET;
+ 344              		.loc 1 127 0
+ 345 0124 44319FE5 		ldr	r3, .L12+24
+ 346 0128 B0334BE1 		strh	r3, [fp, #-48]	@ movhi
+ 128:../StartStopApplication.c ****     dmaConfig.consSckId = CY_U3P_CPU_SOCKET_CONS;
+ 347              		.loc 1 128 0
+ 348 012c 3F3CA0E3 		mov	r3, #16128
+ 349 0130 BE324BE1 		strh	r3, [fp, #-46]	@ movhi
+ 129:../StartStopApplication.c ****     dmaConfig.dmaMode = CY_U3P_DMA_MODE_BYTE;
+ 350              		.loc 1 129 0
+ 351 0134 0030A0E3 		mov	r3, #0
+ 352 0138 24304BE5 		strb	r3, [fp, #-36]
+ 130:../StartStopApplication.c ****     dmaConfig.notification = CY_U3P_DMA_CB_PROD_EVENT;
+ 353              		.loc 1 130 0
+ 354 013c 0830A0E3 		mov	r3, #8
+ 355 0140 20300BE5 		str	r3, [fp, #-32]
+ 131:../StartStopApplication.c ****     dmaConfig.cb = GotCharactersFromHost;
+ 356              		.loc 1 131 0
+ 357 0144 28319FE5 		ldr	r3, .L12+28
+ 358 0148 1C300BE5 		str	r3, [fp, #-28]
+ 132:../StartStopApplication.c ****     Status = CyU3PDmaChannelCreate(&glUSBtoCPU_Handle, CY_U3P_DMA_TYPE_MANUAL_IN, &dmaConfig);
+ 359              		.loc 1 132 0
+ 360 014c 34304BE2 		sub	r3, fp, #52
+ 361 0150 20019FE5 		ldr	r0, .L12+32
+ 362 0154 0310A0E3 		mov	r1, #3
+ 363 0158 0320A0E1 		mov	r2, r3
+ 364 015c FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 365 0160 08000BE5 		str	r0, [fp, #-8]
+ 133:../StartStopApplication.c ****     CheckStatus("CreateUSBtoCPUdmaChannel", Status);
+ 366              		.loc 1 133 0
+ 367 0164 10019FE5 		ldr	r0, .L12+36
+ 368 0168 08101BE5 		ldr	r1, [fp, #-8]
+ 369 016c FEFFFFEB 		bl	CheckStatus
+ 134:../StartStopApplication.c ****     // Set DMA Channel transfer size = infinite
+ 135:../StartStopApplication.c ****     Status = CyU3PDmaChannelSetXfer(&glUSBtoCPU_Handle, 0);
+ 370              		.loc 1 135 0
+ 371 0170 00019FE5 		ldr	r0, .L12+32
+ 372 0174 0010A0E3 		mov	r1, #0
+ 373 0178 FEFFFFEB 		bl	CyU3PDmaChannelSetXfer
+ 374 017c 08000BE5 		str	r0, [fp, #-8]
+ 136:../StartStopApplication.c ****     CheckStatus("USBtoCPUdmaChannelSetXfer", Status);
+ 375              		.loc 1 136 0
+ 376 0180 F8009FE5 		ldr	r0, .L12+40
+ 377 0184 08101BE5 		ldr	r1, [fp, #-8]
+ 378 0188 FEFFFFEB 		bl	CheckStatus
+ 137:../StartStopApplication.c **** 
+ 138:../StartStopApplication.c ****     // Create a manual DMA channel between CPU producer socket and USB Consumer
+ 139:../StartStopApplication.c ****     CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 379              		.loc 1 139 0
+ 380 018c 34304BE2 		sub	r3, fp, #52
+ 381 0190 0300A0E1 		mov	r0, r3
+ 382 0194 0010A0E3 		mov	r1, #0
+ 383 0198 1C20A0E3 		mov	r2, #28
+ 384 019c FEFFFFEB 		bl	CyU3PMemSet
+ 140:../StartStopApplication.c ****     dmaConfig.size = 32;		// I assume a person is typing
+ 385              		.loc 1 140 0
+ 386 01a0 2030A0E3 		mov	r3, #32
+ 387 01a4 B4334BE1 		strh	r3, [fp, #-52]	@ movhi
+ 141:../StartStopApplication.c ****     dmaConfig.count = 0;		// Don't assign any buffers here, will do manually
+ 388              		.loc 1 141 0
+ 389 01a8 0030A0E3 		mov	r3, #0
+ 390 01ac B2334BE1 		strh	r3, [fp, #-50]	@ movhi
+ 142:../StartStopApplication.c ****     dmaConfig.prodSckId = CY_U3P_CPU_SOCKET_PROD;
+ 391              		.loc 1 142 0
+ 392 01b0 CC309FE5 		ldr	r3, .L12+44
+ 393 01b4 B0334BE1 		strh	r3, [fp, #-48]	@ movhi
+ 143:../StartStopApplication.c ****     dmaConfig.consSckId = CY_FX_EP_CONSUMER_SOCKET;
+ 394              		.loc 1 143 0
+ 395 01b8 C8309FE5 		ldr	r3, .L12+48
+ 396 01bc BE324BE1 		strh	r3, [fp, #-46]	@ movhi
+ 144:../StartStopApplication.c ****     dmaConfig.dmaMode = CY_U3P_DMA_MODE_BYTE;
+ 397              		.loc 1 144 0
+ 398 01c0 0030A0E3 		mov	r3, #0
+ 399 01c4 24304BE5 		strb	r3, [fp, #-36]
+ 145:../StartStopApplication.c ****     dmaConfig.notification = CY_U3P_DMA_CB_CONS_EVENT;
+ 400              		.loc 1 145 0
+ 401 01c8 1030A0E3 		mov	r3, #16
+ 402 01cc 20300BE5 		str	r3, [fp, #-32]
+ 146:../StartStopApplication.c ****     dmaConfig.cb = SentCharacterToHost;
+ 403              		.loc 1 146 0
+ 404 01d0 B4309FE5 		ldr	r3, .L12+52
+ 405 01d4 1C300BE5 		str	r3, [fp, #-28]
+ 147:../StartStopApplication.c ****     Status = CyU3PDmaChannelCreate(&glCPUtoUSB_Handle, CY_U3P_DMA_TYPE_MANUAL_OUT, &dmaConfig);
+ 406              		.loc 1 147 0
+ 407 01d8 34304BE2 		sub	r3, fp, #52
+ 408 01dc AC009FE5 		ldr	r0, .L12+56
+ 409 01e0 0410A0E3 		mov	r1, #4
+ 410 01e4 0320A0E1 		mov	r2, r3
+ 411 01e8 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 412 01ec 08000BE5 		str	r0, [fp, #-8]
+ 148:../StartStopApplication.c ****     CheckStatus("CreateCPUtoUSBdmaChannel", Status);
+ 413              		.loc 1 148 0
+ 414 01f0 9C009FE5 		ldr	r0, .L12+60
+ 415 01f4 08101BE5 		ldr	r1, [fp, #-8]
+ 416 01f8 FEFFFFEB 		bl	CheckStatus
+ 149:../StartStopApplication.c **** 
+ 150:../StartStopApplication.c ****     UserBuffer.buffer = CyU3PMemAlloc(32);
+ 417              		.loc 1 150 0
+ 418 01fc 2000A0E3 		mov	r0, #32
+ 419 0200 FEFFFFEB 		bl	CyU3PMemAlloc
+ 420 0204 0030A0E1 		mov	r3, r0
+ 421 0208 0320A0E1 		mov	r2, r3
+ 422 020c 84309FE5 		ldr	r3, .L12+64
+ 423 0210 002083E5 		str	r2, [r3, #0]
+ 151:../StartStopApplication.c ****     if (UserBuffer.buffer == NULL) Status = CY_U3P_ERROR_MEMORY_ERROR;
+ 424              		.loc 1 151 0
+ 425 0214 7C309FE5 		ldr	r3, .L12+64
+ 426 0218 003093E5 		ldr	r3, [r3, #0]
+ 427 021c 000053E3 		cmp	r3, #0
+ 428 0220 0100001A 		bne	.L11
+ 429              		.loc 1 151 0 is_stmt 0 discriminator 1
+ 430 0224 1030A0E3 		mov	r3, #16
+ 431 0228 08300BE5 		str	r3, [fp, #-8]
+ 432              	.L11:
+ 152:../StartStopApplication.c ****     CheckStatus("Get UserBuffer", Status);
+ 433              		.loc 1 152 0 is_stmt 1
+ 434 022c 68009FE5 		ldr	r0, .L12+68
+ 435 0230 08101BE5 		ldr	r1, [fp, #-8]
+ 436 0234 FEFFFFEB 		bl	CheckStatus
+ 153:../StartStopApplication.c ****     UserBuffer.size = 32;
+ 437              		.loc 1 153 0
+ 438 0238 58309FE5 		ldr	r3, .L12+64
+ 439 023c 2020A0E3 		mov	r2, #32
+ 440 0240 B620C3E1 		strh	r2, [r3, #6]	@ movhi
+ 154:../StartStopApplication.c **** #endif
+ 155:../StartStopApplication.c ****     glIsApplicationActive = CyTrue;			// Now ready to run!
+ 441              		.loc 1 155 0
+ 442 0244 54309FE5 		ldr	r3, .L12+72
+ 443 0248 0120A0E3 		mov	r2, #1
+ 444 024c 002083E5 		str	r2, [r3, #0]
+ 156:../StartStopApplication.c **** }
+ 445              		.loc 1 156 0
+ 446 0250 04D04BE2 		sub	sp, fp, #4
+ 447 0254 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 448              	.L13:
+ 449              		.align	2
+ 450              	.L12:
+ 451 0258 00000000 		.word	EpSize
+ 452 025c 00000000 		.word	BusSpeed
+ 453 0260 38000000 		.word	.LC5
+ 454 0264 4C000000 		.word	.LC6
+ 455 0268 64000000 		.word	.LC7
+ 456 026c 7C000000 		.word	.LC8
+ 457 0270 02040000 		.word	1026
+ 458 0274 00000000 		.word	GotCharactersFromHost
+ 459 0278 00000000 		.word	glUSBtoCPU_Handle
+ 460 027c 98000000 		.word	.LC9
+ 461 0280 B4000000 		.word	.LC10
+ 462 0284 013F0000 		.word	16129
+ 463 0288 02030000 		.word	770
+ 464 028c 00000000 		.word	SentCharacterToHost
+ 465 0290 00000000 		.word	glCPUtoUSB_Handle
+ 466 0294 D0000000 		.word	.LC11
+ 467 0298 00000000 		.word	UserBuffer
+ 468 029c EC000000 		.word	.LC12
+ 469 02a0 00000000 		.word	glIsApplicationActive
+ 470              		.cfi_endproc
+ 471              	.LFE3:
+ 473              		.section	.rodata
+ 474 00fb 00       		.align	2
+ 475              	.LC13:
+ 476 00fc 44697361 		.ascii	"Disable Consumer Endpoint\000"
+ 476      626C6520 
+ 476      436F6E73 
+ 476      756D6572 
+ 476      20456E64 
+ 477 0116 0000     		.align	2
+ 478              	.LC14:
+ 479 0118 44697361 		.ascii	"Disable Producer Endpoint\000"
+ 479      626C6520 
+ 479      50726F64 
+ 479      75636572 
+ 479      20456E64 
+ 480 0132 0000     		.align	2
+ 481              	.LC15:
+ 482 0134 44697361 		.ascii	"Disable Interrupt Endpoint\000"
+ 482      626C6520 
+ 482      496E7465 
+ 482      72727570 
+ 482      7420456E 
+ 483 014f 00       		.align	2
+ 484              	.LC16:
+ 485 0150 436C6F73 		.ascii	"Close USBtoCPU DMA Channel\000"
+ 485      65205553 
+ 485      42746F43 
+ 485      50552044 
+ 485      4D412043 
+ 486 016b 00       		.align	2
+ 487              	.LC17:
+ 488 016c 436C6F73 		.ascii	"Close CPUtoUSB DMA Channel\000"
+ 488      65204350 
+ 488      55746F55 
+ 488      53422044 
+ 488      4D412043 
+ 489 0187 00       		.section	.text.StopApplication,"ax",%progbits
+ 490              		.align	2
+ 491              		.global	StopApplication
+ 493              	StopApplication:
+ 494              	.LFB4:
+ 157:../StartStopApplication.c **** 
+ 158:../StartStopApplication.c **** void StopApplication(void)
+ 159:../StartStopApplication.c **** // USB connection has been lost, time to stop the application running
+ 160:../StartStopApplication.c **** {
+ 495              		.loc 1 160 0
+ 496              		.cfi_startproc
+ 497              		@ args = 0, pretend = 0, frame = 16
+ 498              		@ frame_needed = 1, uses_anonymous_args = 0
+ 499 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 500              	.LCFI8:
+ 501              		.cfi_def_cfa_offset 8
+ 502 0004 04B08DE2 		add	fp, sp, #4
+ 503              		.cfi_offset 14, -4
+ 504              		.cfi_offset 11, -8
+ 505              	.LCFI9:
+ 506              		.cfi_def_cfa 11, 4
+ 507 0008 10D04DE2 		sub	sp, sp, #16
+ 161:../StartStopApplication.c ****     CyU3PEpConfig_t epConfig;
+ 162:../StartStopApplication.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 508              		.loc 1 162 0
+ 509 000c 0030A0E3 		mov	r3, #0
+ 510 0010 08300BE5 		str	r3, [fp, #-8]
+ 163:../StartStopApplication.c **** 
+ 164:../StartStopApplication.c ****     glIsApplicationActive = CyFalse;
+ 511              		.loc 1 164 0
+ 512 0014 D8309FE5 		ldr	r3, .L15
+ 513 0018 0020A0E3 		mov	r2, #0
+ 514 001c 002083E5 		str	r2, [r3, #0]
+ 165:../StartStopApplication.c **** 
+ 166:../StartStopApplication.c ****     // Close down and disable the endpoints then close the DMA channels
+ 167:../StartStopApplication.c ****     CyU3PUsbFlushEp(CY_FX_EP_CONSUMER);
+ 515              		.loc 1 167 0
+ 516 0020 8200A0E3 		mov	r0, #130
+ 517 0024 FEFFFFEB 		bl	CyU3PUsbFlushEp
+ 168:../StartStopApplication.c ****     CyU3PUsbFlushEp(CY_FX_EP_PRODUCER);
+ 518              		.loc 1 168 0
+ 519 0028 0200A0E3 		mov	r0, #2
+ 520 002c FEFFFFEB 		bl	CyU3PUsbFlushEp
+ 169:../StartStopApplication.c ****     CyU3PUsbFlushEp(CY_FX_EP_INTERRUPT);
+ 521              		.loc 1 169 0
+ 522 0030 8100A0E3 		mov	r0, #129
+ 523 0034 FEFFFFEB 		bl	CyU3PUsbFlushEp
+ 170:../StartStopApplication.c ****     CyU3PMemSet((uint8_t *)&epConfig, 0, sizeof (epConfig));
+ 524              		.loc 1 170 0
+ 525 0038 14304BE2 		sub	r3, fp, #20
+ 526 003c 0300A0E1 		mov	r0, r3
+ 527 0040 0010A0E3 		mov	r1, #0
+ 528 0044 0C20A0E3 		mov	r2, #12
+ 529 0048 FEFFFFEB 		bl	CyU3PMemSet
+ 171:../StartStopApplication.c ****     Status = CyU3PSetEpConfig(CY_FX_EP_CONSUMER, &epConfig);
+ 530              		.loc 1 171 0
+ 531 004c 14304BE2 		sub	r3, fp, #20
+ 532 0050 8200A0E3 		mov	r0, #130
+ 533 0054 0310A0E1 		mov	r1, r3
+ 534 0058 FEFFFFEB 		bl	CyU3PSetEpConfig
+ 535 005c 08000BE5 		str	r0, [fp, #-8]
+ 172:../StartStopApplication.c ****     CheckStatus("Disable Consumer Endpoint", Status);
+ 536              		.loc 1 172 0
+ 537 0060 90009FE5 		ldr	r0, .L15+4
+ 538 0064 08101BE5 		ldr	r1, [fp, #-8]
+ 539 0068 FEFFFFEB 		bl	CheckStatus
+ 173:../StartStopApplication.c ****     Status = CyU3PSetEpConfig(CY_FX_EP_PRODUCER, &epConfig);
+ 540              		.loc 1 173 0
+ 541 006c 14304BE2 		sub	r3, fp, #20
+ 542 0070 0200A0E3 		mov	r0, #2
+ 543 0074 0310A0E1 		mov	r1, r3
+ 544 0078 FEFFFFEB 		bl	CyU3PSetEpConfig
+ 545 007c 08000BE5 		str	r0, [fp, #-8]
+ 174:../StartStopApplication.c ****     CheckStatus("Disable Producer Endpoint", Status);
+ 546              		.loc 1 174 0
+ 547 0080 74009FE5 		ldr	r0, .L15+8
+ 548 0084 08101BE5 		ldr	r1, [fp, #-8]
+ 549 0088 FEFFFFEB 		bl	CheckStatus
+ 175:../StartStopApplication.c ****     Status = CyU3PSetEpConfig(CY_FX_EP_INTERRUPT, &epConfig);
+ 550              		.loc 1 175 0
+ 551 008c 14304BE2 		sub	r3, fp, #20
+ 552 0090 8100A0E3 		mov	r0, #129
+ 553 0094 0310A0E1 		mov	r1, r3
+ 554 0098 FEFFFFEB 		bl	CyU3PSetEpConfig
+ 555 009c 08000BE5 		str	r0, [fp, #-8]
+ 176:../StartStopApplication.c ****     CheckStatus("Disable Interrupt Endpoint", Status);
+ 556              		.loc 1 176 0
+ 557 00a0 58009FE5 		ldr	r0, .L15+12
+ 558 00a4 08101BE5 		ldr	r1, [fp, #-8]
+ 559 00a8 FEFFFFEB 		bl	CheckStatus
+ 177:../StartStopApplication.c **** #if (DirectConnect)
+ 178:../StartStopApplication.c ****     Status = CyU3PDmaChannelDestroy(&glUSBtoUART_Handle);
+ 179:../StartStopApplication.c ****     CheckStatus("Close USBtoUART DMA Channel", Status);
+ 180:../StartStopApplication.c ****     Status = CyU3PDmaChannelDestroy(&glUARTtoUSB_Handle);
+ 181:../StartStopApplication.c ****     CheckStatus("Close UARTtoUSB DMA Channel", Status);
+ 182:../StartStopApplication.c **** #else
+ 183:../StartStopApplication.c ****     Status = CyU3PDmaChannelDestroy(&glUSBtoCPU_Handle);
+ 560              		.loc 1 183 0
+ 561 00ac 50009FE5 		ldr	r0, .L15+16
+ 562 00b0 FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+ 563 00b4 08000BE5 		str	r0, [fp, #-8]
+ 184:../StartStopApplication.c ****     CheckStatus("Close USBtoCPU DMA Channel", Status);
+ 564              		.loc 1 184 0
+ 565 00b8 48009FE5 		ldr	r0, .L15+20
+ 566 00bc 08101BE5 		ldr	r1, [fp, #-8]
+ 567 00c0 FEFFFFEB 		bl	CheckStatus
+ 185:../StartStopApplication.c ****     Status = CyU3PDmaChannelDestroy(&glCPUtoUSB_Handle);
+ 568              		.loc 1 185 0
+ 569 00c4 40009FE5 		ldr	r0, .L15+24
+ 570 00c8 FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+ 571 00cc 08000BE5 		str	r0, [fp, #-8]
+ 186:../StartStopApplication.c ****     CheckStatus("Close CPUtoUSB DMA Channel", Status);
+ 572              		.loc 1 186 0
+ 573 00d0 38009FE5 		ldr	r0, .L15+28
+ 574 00d4 08101BE5 		ldr	r1, [fp, #-8]
+ 575 00d8 FEFFFFEB 		bl	CheckStatus
+ 187:../StartStopApplication.c ****     CyU3PMemFree(UserBuffer.buffer);
+ 576              		.loc 1 187 0
+ 577 00dc 30309FE5 		ldr	r3, .L15+32
+ 578 00e0 003093E5 		ldr	r3, [r3, #0]
+ 579 00e4 0300A0E1 		mov	r0, r3
+ 580 00e8 FEFFFFEB 		bl	CyU3PMemFree
+ 188:../StartStopApplication.c **** #endif
+ 189:../StartStopApplication.c **** }
+ 581              		.loc 1 189 0
+ 582 00ec 04D04BE2 		sub	sp, fp, #4
+ 583 00f0 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 584              	.L16:
+ 585              		.align	2
+ 586              	.L15:
+ 587 00f4 00000000 		.word	glIsApplicationActive
+ 588 00f8 FC000000 		.word	.LC13
+ 589 00fc 18010000 		.word	.LC14
+ 590 0100 34010000 		.word	.LC15
+ 591 0104 00000000 		.word	glUSBtoCPU_Handle
+ 592 0108 50010000 		.word	.LC16
+ 593 010c 00000000 		.word	glCPUtoUSB_Handle
+ 594 0110 6C010000 		.word	.LC17
+ 595 0114 00000000 		.word	UserBuffer
+ 596              		.cfi_endproc
+ 597              	.LFE4:
+ 599              		.text
+ 600              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 StartStopApplication.c
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:39     .data.BusSpeed:00000000 BusSpeed
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:23     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:36     .data.BusSpeed:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:49     .rodata.EpSize:00000000 EpSize
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:46     .rodata.EpSize:00000000 $d
+                            *COM*:000000dc glUSBtoCPU_Handle
+                            *COM*:000000dc glCPUtoUSB_Handle
+                            *COM*:0000000c UserBuffer
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:62     .text.GotCharactersFromHost:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:65     .text.GotCharactersFromHost:00000000 GotCharactersFromHost
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:120    .text.GotCharactersFromHost:00000074 $d
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:125    .text.SentCharacterToHost:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:128    .text.SentCharacterToHost:00000000 SentCharacterToHost
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:162    .text.SendCharacter:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:165    .text.SendCharacter:00000000 SendCharacter
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:205    .text.SendCharacter:00000050 $d
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:236    .text.StartApplication:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:239    .text.StartApplication:00000000 StartApplication
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:451    .text.StartApplication:00000258 $d
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:490    .text.StopApplication:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:493    .text.StopApplication:00000000 StopApplication
+C:\Users\John\AppData\Local\Temp\cc6a1eus.s:587    .text.StopApplication:000000f4 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+CyU3PDmaChannelDiscardBuffer
+CyU3PDmaChannelSetupSendBuffer
+CyU3PUsbGetSpeed
+CyU3PMemSet
+CyU3PSetEpConfig
+CheckStatus
+CyU3PDmaChannelCreate
+CyU3PDmaChannelSetXfer
+CyU3PMemAlloc
+glIsApplicationActive
+CyU3PUsbFlushEp
+CyU3PDmaChannelDestroy
+CyU3PMemFree

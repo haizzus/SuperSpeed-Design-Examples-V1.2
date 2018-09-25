@@ -1,0 +1,877 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"KeyboardDescriptors.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.global	CyFxUSB30DeviceDscr
+  22              		.section	.rodata.CyFxUSB30DeviceDscr,"a",%progbits
+  23              		.align	5
+  26              	CyFxUSB30DeviceDscr:
+  27 0000 12       		.byte	18
+  28 0001 01       		.byte	1
+  29 0002 00       		.byte	0
+  30 0003 03       		.byte	3
+  31 0004 00       		.byte	0
+  32 0005 00       		.byte	0
+  33 0006 00       		.byte	0
+  34 0007 09       		.byte	9
+  35 0008 42       		.byte	66
+  36 0009 42       		.byte	66
+  37 000a 02       		.byte	2
+  38 000b EC       		.byte	-20
+  39 000c 00       		.byte	0
+  40 000d 00       		.byte	0
+  41 000e 01       		.byte	1
+  42 000f 02       		.byte	2
+  43 0010 00       		.byte	0
+  44 0011 01       		.byte	1
+  45              		.global	CyFxUSB20DeviceDscr
+  46 0012 00000000 		.section	.rodata.CyFxUSB20DeviceDscr,"a",%progbits
+  46      00000000 
+  46      00000000 
+  46      0000
+  47              		.align	5
+  50              	CyFxUSB20DeviceDscr:
+  51 0000 12       		.byte	18
+  52 0001 01       		.byte	1
+  53 0002 10       		.byte	16
+  54 0003 02       		.byte	2
+  55 0004 00       		.byte	0
+  56 0005 00       		.byte	0
+  57 0006 00       		.byte	0
+  58 0007 40       		.byte	64
+  59 0008 42       		.byte	66
+  60 0009 42       		.byte	66
+  61 000a 01       		.byte	1
+  62 000b EC       		.byte	-20
+  63 000c 00       		.byte	0
+  64 000d 00       		.byte	0
+  65 000e 01       		.byte	1
+  66 000f 02       		.byte	2
+  67 0010 00       		.byte	0
+  68 0011 01       		.byte	1
+  69              		.global	CyFxUSBBOSDscr
+  70 0012 00000000 		.section	.rodata.CyFxUSBBOSDscr,"a",%progbits
+  70      00000000 
+  70      00000000 
+  70      0000
+  71              		.align	5
+  74              	CyFxUSBBOSDscr:
+  75 0000 05       		.byte	5
+  76 0001 0F       		.byte	15
+  77 0002 16       		.byte	22
+  78 0003 00       		.byte	0
+  79 0004 02       		.byte	2
+  80 0005 07       		.byte	7
+  81 0006 10       		.byte	16
+  82 0007 02       		.byte	2
+  83 0008 02       		.byte	2
+  84 0009 00       		.byte	0
+  85 000a 00       		.byte	0
+  86 000b 00       		.byte	0
+  87 000c 0A       		.byte	10
+  88 000d 10       		.byte	16
+  89 000e 03       		.byte	3
+  90 000f 00       		.byte	0
+  91 0010 0E       		.byte	14
+  92 0011 00       		.byte	0
+  93 0012 03       		.byte	3
+  94 0013 00       		.byte	0
+  95 0014 00       		.byte	0
+  96 0015 00       		.byte	0
+  97              		.global	CyFxUSBDeviceQualDscr
+  98 0016 00000000 		.section	.rodata.CyFxUSBDeviceQualDscr,"a",%progbits
+  98      00000000 
+  98      0000
+  99              		.align	5
+ 102              	CyFxUSBDeviceQualDscr:
+ 103 0000 0A       		.byte	10
+ 104 0001 06       		.byte	6
+ 105 0002 00       		.byte	0
+ 106 0003 02       		.byte	2
+ 107 0004 00       		.byte	0
+ 108 0005 00       		.byte	0
+ 109 0006 00       		.byte	0
+ 110 0007 40       		.byte	64
+ 111 0008 01       		.byte	1
+ 112 0009 00       		.byte	0
+ 113              		.global	ReportDescriptor
+ 114 000a 00000000 		.section	.rodata.ReportDescriptor,"a",%progbits
+ 114      00000000 
+ 114      00000000 
+ 114      00000000 
+ 114      00000000 
+ 115              		.align	5
+ 118              	ReportDescriptor:
+ 119 0000 05       		.byte	5
+ 120 0001 01       		.byte	1
+ 121 0002 09       		.byte	9
+ 122 0003 06       		.byte	6
+ 123 0004 A1       		.byte	-95
+ 124 0005 01       		.byte	1
+ 125 0006 05       		.byte	5
+ 126 0007 07       		.byte	7
+ 127 0008 19       		.byte	25
+ 128 0009 E0       		.byte	-32
+ 129 000a 29       		.byte	41
+ 130 000b E7       		.byte	-25
+ 131 000c 15       		.byte	21
+ 132 000d 00       		.byte	0
+ 133 000e 25       		.byte	37
+ 134 000f 01       		.byte	1
+ 135 0010 75       		.byte	117
+ 136 0011 01       		.byte	1
+ 137 0012 95       		.byte	-107
+ 138 0013 08       		.byte	8
+ 139 0014 81       		.byte	-127
+ 140 0015 02       		.byte	2
+ 141 0016 81       		.byte	-127
+ 142 0017 01       		.byte	1
+ 143 0018 75       		.byte	117
+ 144 0019 08       		.byte	8
+ 145 001a 95       		.byte	-107
+ 146 001b 06       		.byte	6
+ 147 001c 19       		.byte	25
+ 148 001d 00       		.byte	0
+ 149 001e 29       		.byte	41
+ 150 001f 65       		.byte	101
+ 151 0020 15       		.byte	21
+ 152 0021 00       		.byte	0
+ 153 0022 25       		.byte	37
+ 154 0023 65       		.byte	101
+ 155 0024 81       		.byte	-127
+ 156 0025 00       		.byte	0
+ 157 0026 05       		.byte	5
+ 158 0027 08       		.byte	8
+ 159 0028 19       		.byte	25
+ 160 0029 01       		.byte	1
+ 161 002a 29       		.byte	41
+ 162 002b 05       		.byte	5
+ 163 002c 15       		.byte	21
+ 164 002d 00       		.byte	0
+ 165 002e 25       		.byte	37
+ 166 002f 01       		.byte	1
+ 167 0030 75       		.byte	117
+ 168 0031 01       		.byte	1
+ 169 0032 95       		.byte	-107
+ 170 0033 05       		.byte	5
+ 171 0034 91       		.byte	-111
+ 172 0035 02       		.byte	2
+ 173 0036 95       		.byte	-107
+ 174 0037 03       		.byte	3
+ 175 0038 91       		.byte	-111
+ 176 0039 01       		.byte	1
+ 177 003a C0       		.byte	-64
+ 178              		.global	CyFxUSBSSConfigDscr
+ 179 003b 00000000 		.section	.rodata.CyFxUSBSSConfigDscr,"a",%progbits
+ 179      00
+ 180              		.align	5
+ 183              	CyFxUSBSSConfigDscr:
+ 184 0000 09       		.byte	9
+ 185 0001 02       		.byte	2
+ 186 0002 28       		.byte	40
+ 187 0003 00       		.byte	0
+ 188 0004 01       		.byte	1
+ 189 0005 01       		.byte	1
+ 190 0006 00       		.byte	0
+ 191 0007 80       		.byte	-128
+ 192 0008 0C       		.byte	12
+ 193 0009 09       		.byte	9
+ 194 000a 04       		.byte	4
+ 195 000b 00       		.byte	0
+ 196 000c 00       		.byte	0
+ 197 000d 01       		.byte	1
+ 198 000e 03       		.byte	3
+ 199 000f 01       		.byte	1
+ 200 0010 01       		.byte	1
+ 201 0011 00       		.byte	0
+ 202 0012 09       		.byte	9
+ 203 0013 21       		.byte	33
+ 204 0014 00       		.byte	0
+ 205 0015 01       		.byte	1
+ 206 0016 00       		.byte	0
+ 207 0017 01       		.byte	1
+ 208 0018 22       		.byte	34
+ 209 0019 3B       		.byte	59
+ 210 001a 00       		.byte	0
+ 211 001b 07       		.byte	7
+ 212 001c 05       		.byte	5
+ 213 001d 01       		.byte	1
+ 214 001e 03       		.byte	3
+ 215 001f 08       		.byte	8
+ 216 0020 00       		.byte	0
+ 217 0021 08       		.byte	8
+ 218 0022 06       		.byte	6
+ 219 0023 30       		.byte	48
+ 220 0024 01       		.byte	1
+ 221 0025 00       		.byte	0
+ 222 0026 08       		.byte	8
+ 223 0027 00       		.byte	0
+ 224              		.global	CyFxUSBnonSSConfigDscr
+ 225 0028 00000000 		.section	.rodata.CyFxUSBnonSSConfigDscr,"a",%progbits
+ 225      00000000 
+ 225      00000000 
+ 225      00000000 
+ 225      00000000 
+ 226              		.align	5
+ 229              	CyFxUSBnonSSConfigDscr:
+ 230 0000 09       		.byte	9
+ 231 0001 02       		.byte	2
+ 232 0002 22       		.byte	34
+ 233 0003 00       		.byte	0
+ 234 0004 01       		.byte	1
+ 235 0005 01       		.byte	1
+ 236 0006 00       		.byte	0
+ 237 0007 80       		.byte	-128
+ 238 0008 32       		.byte	50
+ 239 0009 09       		.byte	9
+ 240 000a 04       		.byte	4
+ 241 000b 00       		.byte	0
+ 242 000c 00       		.byte	0
+ 243 000d 01       		.byte	1
+ 244 000e 03       		.byte	3
+ 245 000f 01       		.byte	1
+ 246 0010 01       		.byte	1
+ 247 0011 00       		.byte	0
+ 248 0012 09       		.byte	9
+ 249 0013 21       		.byte	33
+ 250 0014 00       		.byte	0
+ 251 0015 01       		.byte	1
+ 252 0016 00       		.byte	0
+ 253 0017 01       		.byte	1
+ 254 0018 22       		.byte	34
+ 255 0019 3B       		.byte	59
+ 256 001a 00       		.byte	0
+ 257 001b 07       		.byte	7
+ 258 001c 05       		.byte	5
+ 259 001d 01       		.byte	1
+ 260 001e 03       		.byte	3
+ 261 001f 08       		.byte	8
+ 262 0020 00       		.byte	0
+ 263 0021 08       		.byte	8
+ 264              		.global	CyFxUSBStringLangIDDscr
+ 265 0022 00000000 		.section	.rodata.CyFxUSBStringLangIDDscr,"a",%progbits
+ 265      00000000 
+ 265      00000000 
+ 265      00000000 
+ 265      00000000 
+ 266              		.align	5
+ 269              	CyFxUSBStringLangIDDscr:
+ 270 0000 04       		.byte	4
+ 271 0001 03       		.byte	3
+ 272 0002 09       		.byte	9
+ 273 0003 04       		.byte	4
+ 274              		.global	CyFxUSBManufactureDscr
+ 275 0004 00000000 		.section	.rodata.CyFxUSBManufactureDscr,"a",%progbits
+ 275      00000000 
+ 275      00000000 
+ 275      00000000 
+ 275      00000000 
+ 276              		.align	5
+ 279              	CyFxUSBManufactureDscr:
+ 280 0000 2C       		.byte	44
+ 281 0001 03       		.byte	3
+ 282 0002 55       		.byte	85
+ 283 0003 00       		.byte	0
+ 284 0004 53       		.byte	83
+ 285 0005 00       		.byte	0
+ 286 0006 42       		.byte	66
+ 287 0007 00       		.byte	0
+ 288 0008 20       		.byte	32
+ 289 0009 00       		.byte	0
+ 290 000a 44       		.byte	68
+ 291 000b 00       		.byte	0
+ 292 000c 65       		.byte	101
+ 293 000d 00       		.byte	0
+ 294 000e 73       		.byte	115
+ 295 000f 00       		.byte	0
+ 296 0010 69       		.byte	105
+ 297 0011 00       		.byte	0
+ 298 0012 67       		.byte	103
+ 299 0013 00       		.byte	0
+ 300 0014 6E       		.byte	110
+ 301 0015 00       		.byte	0
+ 302 0016 20       		.byte	32
+ 303 0017 00       		.byte	0
+ 304 0018 42       		.byte	66
+ 305 0019 00       		.byte	0
+ 306 001a 79       		.byte	121
+ 307 001b 00       		.byte	0
+ 308 001c 20       		.byte	32
+ 309 001d 00       		.byte	0
+ 310 001e 45       		.byte	69
+ 311 001f 00       		.byte	0
+ 312 0020 78       		.byte	120
+ 313 0021 00       		.byte	0
+ 314 0022 61       		.byte	97
+ 315 0023 00       		.byte	0
+ 316 0024 6D       		.byte	109
+ 317 0025 00       		.byte	0
+ 318 0026 70       		.byte	112
+ 319 0027 00       		.byte	0
+ 320 0028 6C       		.byte	108
+ 321 0029 00       		.byte	0
+ 322 002a 65       		.byte	101
+ 323 002b 00       		.byte	0
+ 324              		.global	CyFxUSBProductDscr
+ 325 002c 00000000 		.section	.rodata.CyFxUSBProductDscr,"a",%progbits
+ 325      00000000 
+ 325      00000000 
+ 325      00000000 
+ 325      00000000 
+ 326              		.align	5
+ 329              	CyFxUSBProductDscr:
+ 330 0000 12       		.byte	18
+ 331 0001 03       		.byte	3
+ 332 0002 4B       		.byte	75
+ 333 0003 00       		.byte	0
+ 334 0004 65       		.byte	101
+ 335 0005 00       		.byte	0
+ 336 0006 79       		.byte	121
+ 337 0007 00       		.byte	0
+ 338 0008 62       		.byte	98
+ 339 0009 00       		.byte	0
+ 340 000a 6F       		.byte	111
+ 341 000b 00       		.byte	0
+ 342 000c 61       		.byte	97
+ 343 000d 00       		.byte	0
+ 344 000e 72       		.byte	114
+ 345 000f 00       		.byte	0
+ 346 0010 64       		.byte	100
+ 347 0011 00       		.byte	0
+ 348 0012 00000000 		.section	.rodata
+ 348      00000000 
+ 348      00000000 
+ 348      0000
+ 349              		.align	2
+ 350              	.LC0:
+ 351 0000 5345545F 		.ascii	"SET_SS_DEVICE_DESCR\000"
+ 351      53535F44 
+ 351      45564943 
+ 351      455F4445 
+ 351      53435200 
+ 352              		.align	2
+ 353              	.LC1:
+ 354 0014 5345545F 		.ascii	"SET_HS_DEVICE_DESCR\000"
+ 354      48535F44 
+ 354      45564943 
+ 354      455F4445 
+ 354      53435200 
+ 355              		.align	2
+ 356              	.LC2:
+ 357 0028 5345545F 		.ascii	"SET_SS_BOS_DESCR\000"
+ 357      53535F42 
+ 357      4F535F44 
+ 357      45534352 
+ 357      00
+ 358 0039 000000   		.align	2
+ 359              	.LC3:
+ 360 003c 5345545F 		.ascii	"SET_DEVQUAL_DESCR\000"
+ 360      44455651 
+ 360      55414C5F 
+ 360      44455343 
+ 360      5200
+ 361 004e 0000     		.align	2
+ 362              	.LC4:
+ 363 0050 5345545F 		.ascii	"SET_SS_CONFIG\000"
+ 363      53535F43 
+ 363      4F4E4649 
+ 363      4700
+ 364 005e 0000     		.align	2
+ 365              	.LC5:
+ 366 0060 5345545F 		.ascii	"SET_HS_CONFIG\000"
+ 366      48535F43 
+ 366      4F4E4649 
+ 366      4700
+ 367 006e 0000     		.align	2
+ 368              	.LC6:
+ 369 0070 5345545F 		.ascii	"SET_FS_CONFIG\000"
+ 369      46535F43 
+ 369      4F4E4649 
+ 369      4700
+ 370 007e 0000     		.align	2
+ 371              	.LC7:
+ 372 0080 5345545F 		.ascii	"SET_STRING0_DESCR\000"
+ 372      53545249 
+ 372      4E47305F 
+ 372      44455343 
+ 372      5200
+ 373 0092 0000     		.align	2
+ 374              	.LC8:
+ 375 0094 5345545F 		.ascii	"SET_STRING1_DESCR\000"
+ 375      53545249 
+ 375      4E47315F 
+ 375      44455343 
+ 375      5200
+ 376 00a6 0000     		.align	2
+ 377              	.LC9:
+ 378 00a8 5345545F 		.ascii	"SET_STRING2_DESCR\000"
+ 378      53545249 
+ 378      4E47325F 
+ 378      44455343 
+ 378      5200
+ 379 00ba 0000     		.section	.text.SetUSBdescriptors,"ax",%progbits
+ 380              		.align	2
+ 381              		.global	SetUSBdescriptors
+ 383              	SetUSBdescriptors:
+ 384              	.LFB0:
+ 385              		.file 1 "../KeyboardDescriptors.c"
+   1:../KeyboardDescriptors.c **** /*
+   2:../KeyboardDescriptors.c ****  * KeyboardDescriptors.c
+   3:../KeyboardDescriptors.c ****  *
+   4:../KeyboardDescriptors.c ****  *  Created on: Feb 17, 2014
+   5:../KeyboardDescriptors.c ****  *      Author: John
+   6:../KeyboardDescriptors.c ****  */
+   7:../KeyboardDescriptors.c **** 
+   8:../KeyboardDescriptors.c **** // This file contains the USB enumeration descriptors for a Keyboard and a routine that sets them
+   9:../KeyboardDescriptors.c **** // Note that there are alignment requirements for descriptors
+  10:../KeyboardDescriptors.c **** // This uses my VID = 0x4242 - use is permitted for development but NOT as a product
+  11:../KeyboardDescriptors.c **** 
+  12:../KeyboardDescriptors.c **** #include "Keyboard.h"
+  13:../KeyboardDescriptors.c **** 
+  14:../KeyboardDescriptors.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  15:../KeyboardDescriptors.c **** 
+  16:../KeyboardDescriptors.c **** /* Standard device descriptor for USB 3.0 */
+  17:../KeyboardDescriptors.c **** const uint8_t CyFxUSB30DeviceDscr[] __attribute__ ((aligned (32))) =
+  18:../KeyboardDescriptors.c **** {
+  19:../KeyboardDescriptors.c ****     0x12,                           /* Descriptor size */
+  20:../KeyboardDescriptors.c ****     CY_U3P_USB_DEVICE_DESCR,        /* Device descriptor type */
+  21:../KeyboardDescriptors.c ****     0x00,0x03,                      /* USB 3.0 */
+  22:../KeyboardDescriptors.c ****     0x00,                           /* Device class */
+  23:../KeyboardDescriptors.c ****     0x00,                           /* Device sub-class */
+  24:../KeyboardDescriptors.c ****     0x00,                           /* Device protocol */
+  25:../KeyboardDescriptors.c ****     0x09,                           /* Maxpacket size for EP0 : 2^9 */
+  26:../KeyboardDescriptors.c ****     0x42,0x42,                      /* Vendor ID */
+  27:../KeyboardDescriptors.c ****     0x02,0xEC,                      /* Product ID */
+  28:../KeyboardDescriptors.c ****     0x00,0x00,                      /* Device release number */
+  29:../KeyboardDescriptors.c ****     0x01,                           /* Manufacturer string index */
+  30:../KeyboardDescriptors.c ****     0x02,                           /* Product string index */
+  31:../KeyboardDescriptors.c ****     0x00,                           /* Serial number string index */
+  32:../KeyboardDescriptors.c ****     0x01                            /* Number of configurations */
+  33:../KeyboardDescriptors.c **** };
+  34:../KeyboardDescriptors.c **** 
+  35:../KeyboardDescriptors.c **** /* Standard device descriptor for USB 2.0 */
+  36:../KeyboardDescriptors.c **** const uint8_t CyFxUSB20DeviceDscr[] __attribute__ ((aligned (32))) =
+  37:../KeyboardDescriptors.c **** {
+  38:../KeyboardDescriptors.c ****     0x12,                           /* Descriptor size */
+  39:../KeyboardDescriptors.c ****     CY_U3P_USB_DEVICE_DESCR,        /* Device descriptor type */
+  40:../KeyboardDescriptors.c ****     0x10,0x02,                      /* USB 2.10 */
+  41:../KeyboardDescriptors.c ****     0x00,                           /* Device class */
+  42:../KeyboardDescriptors.c ****     0x00,                           /* Device sub-class */
+  43:../KeyboardDescriptors.c ****     0x00,                           /* Device protocol */
+  44:../KeyboardDescriptors.c ****     0x40,                           /* Maxpacket size for EP0 : 64 bytes */
+  45:../KeyboardDescriptors.c ****     0x42,0x42,                      /* Vendor ID */
+  46:../KeyboardDescriptors.c ****     0x01,0xEC,                      /* Product ID */
+  47:../KeyboardDescriptors.c ****     0x00,0x00,                      /* Device release number */
+  48:../KeyboardDescriptors.c ****     0x01,                           /* Manufacturer string index */
+  49:../KeyboardDescriptors.c ****     0x02,                           /* Product string index */
+  50:../KeyboardDescriptors.c ****     0x00,                           /* Serial number string index */
+  51:../KeyboardDescriptors.c ****     0x01                            /* Number of configurations */
+  52:../KeyboardDescriptors.c **** };
+  53:../KeyboardDescriptors.c **** 
+  54:../KeyboardDescriptors.c **** /* Binary device object store descriptor */
+  55:../KeyboardDescriptors.c **** const uint8_t CyFxUSBBOSDscr[] __attribute__ ((aligned (32))) =
+  56:../KeyboardDescriptors.c **** {
+  57:../KeyboardDescriptors.c ****     0x05,                           /* Descriptor size */
+  58:../KeyboardDescriptors.c ****     CY_U3P_BOS_DESCR,               /* Device descriptor type */
+  59:../KeyboardDescriptors.c ****     0x16,0x00,                      /* Length of this descriptor and all sub descriptors */
+  60:../KeyboardDescriptors.c ****     0x02,                           /* Number of device capability descriptors */
+  61:../KeyboardDescriptors.c **** 
+  62:../KeyboardDescriptors.c ****     /* USB 2.0 extension */
+  63:../KeyboardDescriptors.c ****     0x07,                           /* Descriptor size */
+  64:../KeyboardDescriptors.c ****     CY_U3P_DEVICE_CAPB_DESCR,       /* Device capability type descriptor */
+  65:../KeyboardDescriptors.c ****     CY_U3P_USB2_EXTN_CAPB_TYPE,     /* USB 2.0 extension capability type */
+  66:../KeyboardDescriptors.c ****     0x02,0x00,0x00,0x00,            /* Supported device level features: LPM support  */
+  67:../KeyboardDescriptors.c **** 
+  68:../KeyboardDescriptors.c ****     /* SuperSpeed device capability */
+  69:../KeyboardDescriptors.c ****     0x0A,                           /* Descriptor size */
+  70:../KeyboardDescriptors.c ****     CY_U3P_DEVICE_CAPB_DESCR,       /* Device capability type descriptor */
+  71:../KeyboardDescriptors.c ****     CY_U3P_SS_USB_CAPB_TYPE,        /* SuperSpeed device capability type */
+  72:../KeyboardDescriptors.c ****     0x00,                           /* Supported device level features  */
+  73:../KeyboardDescriptors.c ****     0x0E,0x00,                      /* Speeds supported by the device : SS, HS and FS */
+  74:../KeyboardDescriptors.c ****     0x03,                           /* Functionality support */
+  75:../KeyboardDescriptors.c ****     0x00,                           /* U1 Device Exit latency */
+  76:../KeyboardDescriptors.c ****     0x00,0x00                       /* U2 Device Exit latency */
+  77:../KeyboardDescriptors.c **** };
+  78:../KeyboardDescriptors.c **** 
+  79:../KeyboardDescriptors.c **** /* Standard device qualifier descriptor */
+  80:../KeyboardDescriptors.c **** const uint8_t CyFxUSBDeviceQualDscr[] __attribute__ ((aligned (32))) =
+  81:../KeyboardDescriptors.c **** {
+  82:../KeyboardDescriptors.c ****     0x0A,                           /* Descriptor size */
+  83:../KeyboardDescriptors.c ****     CY_U3P_USB_DEVQUAL_DESCR,       /* Device qualifier descriptor type */
+  84:../KeyboardDescriptors.c ****     0x00,0x02,                      /* USB 2.0 */
+  85:../KeyboardDescriptors.c ****     0x00,                           /* Device class */
+  86:../KeyboardDescriptors.c ****     0x00,                           /* Device sub-class */
+  87:../KeyboardDescriptors.c ****     0x00,                           /* Device protocol */
+  88:../KeyboardDescriptors.c ****     0x40,                           /* Maxpacket size for EP0 : 64 bytes */
+  89:../KeyboardDescriptors.c ****     0x01,                           /* Number of configurations */
+  90:../KeyboardDescriptors.c ****     0x00                            /* Reserved */
+  91:../KeyboardDescriptors.c **** };
+  92:../KeyboardDescriptors.c **** 
+  93:../KeyboardDescriptors.c **** // Report Descriptor, needed by all interfaces
+  94:../KeyboardDescriptors.c **** const uint8_t ReportDescriptor[] __attribute__ ((aligned (32))) =
+  95:../KeyboardDescriptors.c **** {
+  96:../KeyboardDescriptors.c **** 	5, 1,			// Usage Page(Generic Desktop)
+  97:../KeyboardDescriptors.c **** 	9, 6,			// Usage (Keyboard)
+  98:../KeyboardDescriptors.c **** 	0xA1, 1,		// Collection(Application)
+  99:../KeyboardDescriptors.c **** 	// First declare the 8 byte input report for Keycodes
+ 100:../KeyboardDescriptors.c **** 	5, 7,			//	Usage Page(Keycodes)
+ 101:../KeyboardDescriptors.c **** 	0x19, 224,		//	Usage Minimum
+ 102:../KeyboardDescriptors.c **** 	0x29, 231,		//	Usage Maximum
+ 103:../KeyboardDescriptors.c **** 	0x15, 0,		//	Logical Minimum
+ 104:../KeyboardDescriptors.c **** 	0x25, 1,		//	Logical Maximum
+ 105:../KeyboardDescriptors.c **** 	0x75, 1,		//	Report Size = 1 bit
+ 106:../KeyboardDescriptors.c **** 	0x95, 8,		//	Report Count
+ 107:../KeyboardDescriptors.c **** 	0x81, 2,		//	Input(DataAbsolute) = Modifier byte
+ 108:../KeyboardDescriptors.c **** 	0x81, 1,		//	Input(Constant) = Reserved byte
+ 109:../KeyboardDescriptors.c **** 	0x75, 8,		//	Report Size = 1 byte
+ 110:../KeyboardDescriptors.c **** 	0x95, 6,		//	Report Count
+ 111:../KeyboardDescriptors.c **** 	0x19, 0,		//	Usage Minimum
+ 112:../KeyboardDescriptors.c **** 	0x29, 101,		//	Usage Maximum
+ 113:../KeyboardDescriptors.c **** 	0x15, 0,		//	Logical Minimum
+ 114:../KeyboardDescriptors.c **** 	0x25, 101,		//	Logical Maximum
+ 115:../KeyboardDescriptors.c **** 	0x81, 0,		//	Input(DataArray) = 6 Keycodes
+ 116:../KeyboardDescriptors.c **** 	// Now declare the 5 bit input report for LEDs
+ 117:../KeyboardDescriptors.c **** 	5, 8,			//	Usage Page(LEDs)
+ 118:../KeyboardDescriptors.c **** 	0x19, 1,		//	Usage Minimum
+ 119:../KeyboardDescriptors.c **** 	0x29, 5,		//	Usage Maximum
+ 120:../KeyboardDescriptors.c **** 	0x15, 0,		//	Logical Minimum
+ 121:../KeyboardDescriptors.c **** 	0x25, 1,		//	Logical Maximum
+ 122:../KeyboardDescriptors.c **** 	0x75, 1,		//	Report Size = 1 bit
+ 123:../KeyboardDescriptors.c **** 	0x95, 5,		//	Report Count
+ 124:../KeyboardDescriptors.c **** 	0x91, 2,		//	Output(DataAbsolute) = LEDs
+ 125:../KeyboardDescriptors.c **** 	0x95, 3,		//	Report Count
+ 126:../KeyboardDescriptors.c **** 	0x91, 1,		//	Output(Constant) = LED padding to next byte boundary
+ 127:../KeyboardDescriptors.c **** 	0xC0			// End Collection
+ 128:../KeyboardDescriptors.c **** };
+ 129:../KeyboardDescriptors.c **** 
+ 130:../KeyboardDescriptors.c **** /* Standard super speed configuration descriptor */
+ 131:../KeyboardDescriptors.c **** const uint8_t CyFxUSBSSConfigDscr[] __attribute__ ((aligned (32))) =
+ 132:../KeyboardDescriptors.c **** {
+ 133:../KeyboardDescriptors.c ****     /* Configuration descriptor */
+ 134:../KeyboardDescriptors.c ****     9,                           	/* Descriptor size */
+ 135:../KeyboardDescriptors.c ****     CY_U3P_USB_CONFIG_DESCR,        /* Configuration descriptor type */
+ 136:../KeyboardDescriptors.c ****     40, 0,                      	/* Length of this descriptor and all sub descriptors */
+ 137:../KeyboardDescriptors.c ****     1,                           	/* Number of interfaces */
+ 138:../KeyboardDescriptors.c ****     1,                           	/* Configuration number */
+ 139:../KeyboardDescriptors.c ****     0,                           	/* COnfiguration string index */
+ 140:../KeyboardDescriptors.c ****     0x80,                           /* Config characteristics - Bus powered */
+ 141:../KeyboardDescriptors.c ****     12,                           	/* Max power consumption of device (in 8mA unit) : 96mA */
+ 142:../KeyboardDescriptors.c **** 
+ 143:../KeyboardDescriptors.c ****     /* HID Interface descriptor */
+ 144:../KeyboardDescriptors.c ****     9,                           	/* Descriptor size */
+ 145:../KeyboardDescriptors.c ****     CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 146:../KeyboardDescriptors.c ****     0,                           	/* Interface number */
+ 147:../KeyboardDescriptors.c ****     0,                        	   	/* Alternate setting number */
+ 148:../KeyboardDescriptors.c ****     1,                       	    /* Number of end points */
+ 149:../KeyboardDescriptors.c ****     3,                     	      	/* HID class */
+ 150:../KeyboardDescriptors.c ****     1,                           	/* Boot Interface sub class */
+ 151:../KeyboardDescriptors.c ****     1,                           	/* Keyboard protocol code */
+ 152:../KeyboardDescriptors.c ****     0,                           	/* Interface descriptor string index */
+ 153:../KeyboardDescriptors.c **** 
+ 154:../KeyboardDescriptors.c ****     /* HID descriptor */
+ 155:../KeyboardDescriptors.c ****     9,                           	/* Descriptor size */
+ 156:../KeyboardDescriptors.c ****     CY_U3P_USB_HID_DESCR,        	/* HID Class */
+ 157:../KeyboardDescriptors.c ****     0x00, 0x01,                     /* HID Specification Level */
+ 158:../KeyboardDescriptors.c ****     0,                           	/* HID Target Country */
+ 159:../KeyboardDescriptors.c ****     1,                           	/* Number of HID Class descriptors */
+ 160:../KeyboardDescriptors.c ****     CY_U3P_USB_REPORT_DESCR,        /* HID class type */
+ 161:../KeyboardDescriptors.c ****     sizeof(ReportDescriptor), 0,    /* Total length of Report Descriptor */
+ 162:../KeyboardDescriptors.c **** 
+ 163:../KeyboardDescriptors.c ****     /* Endpoint descriptor for producer EP */
+ 164:../KeyboardDescriptors.c ****     7,                           	/* Descriptor size */
+ 165:../KeyboardDescriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 166:../KeyboardDescriptors.c ****     CY_FX_EP_PRODUCER,              /* Endpoint address and description */
+ 167:../KeyboardDescriptors.c ****     CY_U3P_USB_EP_INTR,             /* Interrupt endpoint type */
+ 168:../KeyboardDescriptors.c ****     8, 0,                      		/* Max packet size = 8 bytes */
+ 169:../KeyboardDescriptors.c ****     8,                           	/* Servicing interval for data transfers */
+ 170:../KeyboardDescriptors.c **** 
+ 171:../KeyboardDescriptors.c ****     /* Super speed endpoint companion descriptor for producer EP */
+ 172:../KeyboardDescriptors.c ****     6,                           	/* Descriptor size */
+ 173:../KeyboardDescriptors.c ****     CY_U3P_SS_EP_COMPN_DESCR,       /* SS endpoint companion descriptor type */
+ 174:../KeyboardDescriptors.c ****     1,    							/* Max no. of packets in a burst(0-15) - 0: burst 1 packet at a time */
+ 175:../KeyboardDescriptors.c ****     0,                           	/* Max streams for interrupt endpoint = 0 (No streams) */
+ 176:../KeyboardDescriptors.c ****     8, 0,                      		/* Service interval for the endpoint */
+ 177:../KeyboardDescriptors.c **** 
+ 178:../KeyboardDescriptors.c **** };
+ 179:../KeyboardDescriptors.c **** 
+ 180:../KeyboardDescriptors.c **** /* Standard high speed configuration descriptor */
+ 181:../KeyboardDescriptors.c **** // AND
+ 182:../KeyboardDescriptors.c **** /* Standard full speed configuration descriptor */
+ 183:../KeyboardDescriptors.c **** const uint8_t CyFxUSBnonSSConfigDscr[] __attribute__ ((aligned (32))) =
+ 184:../KeyboardDescriptors.c **** {
+ 185:../KeyboardDescriptors.c ****     /* Configuration descriptor */
+ 186:../KeyboardDescriptors.c ****     9,                           	/* Descriptor size */
+ 187:../KeyboardDescriptors.c ****     CY_U3P_USB_CONFIG_DESCR,        /* Configuration descriptor type */
+ 188:../KeyboardDescriptors.c ****     34, 0,                      	/* Length of this descriptor and all sub descriptors */
+ 189:../KeyboardDescriptors.c ****     1,                           	/* Number of interfaces */
+ 190:../KeyboardDescriptors.c ****     1,                           	/* Configuration number */
+ 191:../KeyboardDescriptors.c ****     0,                           	/* Configuration string index */
+ 192:../KeyboardDescriptors.c ****     0x80,                           /* Config characteristics - bus powered */
+ 193:../KeyboardDescriptors.c ****     50,                           	/* Max power consumption of device (in 2mA unit) : 100mA */
+ 194:../KeyboardDescriptors.c **** 
+ 195:../KeyboardDescriptors.c ****     /* HID Interface descriptor */
+ 196:../KeyboardDescriptors.c ****     9,                           	/* Descriptor size */
+ 197:../KeyboardDescriptors.c ****     CY_U3P_USB_INTRFC_DESCR,        /* Interface Descriptor type */
+ 198:../KeyboardDescriptors.c ****     0,                           	/* Interface number */
+ 199:../KeyboardDescriptors.c ****     0,                        	   	/* Alternate setting number */
+ 200:../KeyboardDescriptors.c ****     1,                       	    /* Number of end points */
+ 201:../KeyboardDescriptors.c ****     3,                     	      	/* HID class */
+ 202:../KeyboardDescriptors.c ****     1,                           	/* Boot Interface sub class */
+ 203:../KeyboardDescriptors.c ****     1,                           	/* Keyboard protocol code */
+ 204:../KeyboardDescriptors.c ****     0,                           	/* Interface descriptor string index */
+ 205:../KeyboardDescriptors.c **** 
+ 206:../KeyboardDescriptors.c ****     /* HID descriptor */
+ 207:../KeyboardDescriptors.c ****     9,                           	/* Descriptor size */
+ 208:../KeyboardDescriptors.c ****     CY_U3P_USB_HID_DESCR,        	/* HID Class */
+ 209:../KeyboardDescriptors.c ****     0x00, 0x01,                     /* HID Specification Level */
+ 210:../KeyboardDescriptors.c ****     0,                           	/* HID Target Country */
+ 211:../KeyboardDescriptors.c ****     1,                           	/* Number of HID Class descriptors */
+ 212:../KeyboardDescriptors.c ****     CY_U3P_USB_REPORT_DESCR,        /* HID class type */
+ 213:../KeyboardDescriptors.c ****     sizeof(ReportDescriptor), 0,    /* Total length of Report Descriptor */
+ 214:../KeyboardDescriptors.c **** 
+ 215:../KeyboardDescriptors.c ****     /* Endpoint descriptor for producer EP */
+ 216:../KeyboardDescriptors.c ****     7,                           	/* Descriptor size */
+ 217:../KeyboardDescriptors.c ****     CY_U3P_USB_ENDPNT_DESCR,        /* Endpoint descriptor type */
+ 218:../KeyboardDescriptors.c ****     CY_FX_EP_PRODUCER,              /* Endpoint address and description */
+ 219:../KeyboardDescriptors.c ****     CY_U3P_USB_EP_INTR,             /* Interrupt endpoint type */
+ 220:../KeyboardDescriptors.c ****     8, 0,                      		/* Max packet size = 8 bytes */
+ 221:../KeyboardDescriptors.c ****     8,                           	/* Servicing interval for data transfers */
+ 222:../KeyboardDescriptors.c ****  };
+ 223:../KeyboardDescriptors.c **** 
+ 224:../KeyboardDescriptors.c **** 
+ 225:../KeyboardDescriptors.c **** /* Standard language ID string descriptor */
+ 226:../KeyboardDescriptors.c **** const uint8_t CyFxUSBStringLangIDDscr[] __attribute__ ((aligned (32))) =
+ 227:../KeyboardDescriptors.c **** {
+ 228:../KeyboardDescriptors.c ****     0x04,                           /* Descriptor size */
+ 229:../KeyboardDescriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 230:../KeyboardDescriptors.c ****     0x09,0x04                       /* Language ID supported */
+ 231:../KeyboardDescriptors.c **** };
+ 232:../KeyboardDescriptors.c **** 
+ 233:../KeyboardDescriptors.c **** /* Standard manufacturer string descriptor */
+ 234:../KeyboardDescriptors.c **** const uint8_t CyFxUSBManufactureDscr[] __attribute__ ((aligned (32))) =
+ 235:../KeyboardDescriptors.c **** {
+ 236:../KeyboardDescriptors.c ****     44,                             /* Descriptor size */
+ 237:../KeyboardDescriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 238:../KeyboardDescriptors.c ****     'U',0,'S',0,'B',0,' ',0,'D',0,'e',0,'s',0,'i',0,'g',0,'n',0,' ',0,
+ 239:../KeyboardDescriptors.c ****     'B',0,'y',0,' ',0,'E',0,'x',0,'a',0,'m',0,'p',0,'l',0,'e',0
+ 240:../KeyboardDescriptors.c **** };
+ 241:../KeyboardDescriptors.c **** 
+ 242:../KeyboardDescriptors.c **** /* Standard product string descriptor */
+ 243:../KeyboardDescriptors.c **** const uint8_t CyFxUSBProductDscr[] __attribute__ ((aligned (32))) =
+ 244:../KeyboardDescriptors.c **** {
+ 245:../KeyboardDescriptors.c ****     18,                           	/* Descriptor size */
+ 246:../KeyboardDescriptors.c ****     CY_U3P_USB_STRING_DESCR,        /* Device descriptor type */
+ 247:../KeyboardDescriptors.c ****     'K',0,'e',0,'y',0,'b',0,'o',0,'a',0,'r',0,'d',0
+ 248:../KeyboardDescriptors.c **** };
+ 249:../KeyboardDescriptors.c **** 
+ 250:../KeyboardDescriptors.c **** CyU3PReturnStatus_t SetUSBdescriptors(void)
+ 251:../KeyboardDescriptors.c **** {
+ 386              		.loc 1 251 0
+ 387              		.cfi_startproc
+ 388              		@ args = 0, pretend = 0, frame = 8
+ 389              		@ frame_needed = 1, uses_anonymous_args = 0
+ 390 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 391              	.LCFI0:
+ 392              		.cfi_def_cfa_offset 8
+ 393 0004 04B08DE2 		add	fp, sp, #4
+ 394              		.cfi_offset 14, -4
+ 395              		.cfi_offset 11, -8
+ 396              	.LCFI1:
+ 397              		.cfi_def_cfa 11, 4
+ 398 0008 08D04DE2 		sub	sp, sp, #8
+ 252:../KeyboardDescriptors.c **** 	CyU3PReturnStatus_t Status;
+ 253:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_DEVICE_DESCR, NULL, (uint8_t *)CyFxUSB30DeviceDscr);
+ 399              		.loc 1 253 0
+ 400 000c 0000A0E3 		mov	r0, #0
+ 401 0010 0010A0E3 		mov	r1, #0
+ 402 0014 40219FE5 		ldr	r2, .L2
+ 403 0018 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 404 001c 08000BE5 		str	r0, [fp, #-8]
+ 254:../KeyboardDescriptors.c ****     CheckStatus("SET_SS_DEVICE_DESCR", Status);
+ 405              		.loc 1 254 0
+ 406 0020 38019FE5 		ldr	r0, .L2+4
+ 407 0024 08101BE5 		ldr	r1, [fp, #-8]
+ 408 0028 FEFFFFEB 		bl	CheckStatus
+ 255:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_HS_DEVICE_DESCR, NULL, (uint8_t *)CyFxUSB20DeviceDscr);
+ 409              		.loc 1 255 0
+ 410 002c 0100A0E3 		mov	r0, #1
+ 411 0030 0010A0E3 		mov	r1, #0
+ 412 0034 28219FE5 		ldr	r2, .L2+8
+ 413 0038 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 414 003c 08000BE5 		str	r0, [fp, #-8]
+ 256:../KeyboardDescriptors.c ****     CheckStatus("SET_HS_DEVICE_DESCR", Status);
+ 415              		.loc 1 256 0
+ 416 0040 20019FE5 		ldr	r0, .L2+12
+ 417 0044 08101BE5 		ldr	r1, [fp, #-8]
+ 418 0048 FEFFFFEB 		bl	CheckStatus
+ 257:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_BOS_DESCR, NULL, (uint8_t *)CyFxUSBBOSDscr);
+ 419              		.loc 1 257 0
+ 420 004c 0700A0E3 		mov	r0, #7
+ 421 0050 0010A0E3 		mov	r1, #0
+ 422 0054 10219FE5 		ldr	r2, .L2+16
+ 423 0058 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 424 005c 08000BE5 		str	r0, [fp, #-8]
+ 258:../KeyboardDescriptors.c ****     CheckStatus("SET_SS_BOS_DESCR", Status);
+ 425              		.loc 1 258 0
+ 426 0060 08019FE5 		ldr	r0, .L2+20
+ 427 0064 08101BE5 		ldr	r1, [fp, #-8]
+ 428 0068 FEFFFFEB 		bl	CheckStatus
+ 259:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_DEVQUAL_DESCR, NULL, (uint8_t *)CyFxUSBDeviceQualDscr);
+ 429              		.loc 1 259 0
+ 430 006c 0200A0E3 		mov	r0, #2
+ 431 0070 0010A0E3 		mov	r1, #0
+ 432 0074 F8209FE5 		ldr	r2, .L2+24
+ 433 0078 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 434 007c 08000BE5 		str	r0, [fp, #-8]
+ 260:../KeyboardDescriptors.c ****     CheckStatus("SET_DEVQUAL_DESCR", Status);
+ 435              		.loc 1 260 0
+ 436 0080 F0009FE5 		ldr	r0, .L2+28
+ 437 0084 08101BE5 		ldr	r1, [fp, #-8]
+ 438 0088 FEFFFFEB 		bl	CheckStatus
+ 261:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_CONFIG_DESCR, NULL, (uint8_t *)CyFxUSBSSConfigDscr);
+ 439              		.loc 1 261 0
+ 440 008c 0600A0E3 		mov	r0, #6
+ 441 0090 0010A0E3 		mov	r1, #0
+ 442 0094 E0209FE5 		ldr	r2, .L2+32
+ 443 0098 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 444 009c 08000BE5 		str	r0, [fp, #-8]
+ 262:../KeyboardDescriptors.c ****     CheckStatus("SET_SS_CONFIG", Status);
+ 445              		.loc 1 262 0
+ 446 00a0 D8009FE5 		ldr	r0, .L2+36
+ 447 00a4 08101BE5 		ldr	r1, [fp, #-8]
+ 448 00a8 FEFFFFEB 		bl	CheckStatus
+ 263:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_HS_CONFIG_DESCR, NULL, (uint8_t *)CyFxUSBnonSSConfigDsc
+ 449              		.loc 1 263 0
+ 450 00ac 0400A0E3 		mov	r0, #4
+ 451 00b0 0010A0E3 		mov	r1, #0
+ 452 00b4 C8209FE5 		ldr	r2, .L2+40
+ 453 00b8 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 454 00bc 08000BE5 		str	r0, [fp, #-8]
+ 264:../KeyboardDescriptors.c ****     CheckStatus("SET_HS_CONFIG", Status);
+ 455              		.loc 1 264 0
+ 456 00c0 C0009FE5 		ldr	r0, .L2+44
+ 457 00c4 08101BE5 		ldr	r1, [fp, #-8]
+ 458 00c8 FEFFFFEB 		bl	CheckStatus
+ 265:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_FS_CONFIG_DESCR, NULL, (uint8_t *)CyFxUSBnonSSConfigDsc
+ 459              		.loc 1 265 0
+ 460 00cc 0300A0E3 		mov	r0, #3
+ 461 00d0 0010A0E3 		mov	r1, #0
+ 462 00d4 A8209FE5 		ldr	r2, .L2+40
+ 463 00d8 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 464 00dc 08000BE5 		str	r0, [fp, #-8]
+ 266:../KeyboardDescriptors.c ****     CheckStatus("SET_FS_CONFIG", Status);
+ 465              		.loc 1 266 0
+ 466 00e0 A4009FE5 		ldr	r0, .L2+48
+ 467 00e4 08101BE5 		ldr	r1, [fp, #-8]
+ 468 00e8 FEFFFFEB 		bl	CheckStatus
+ 267:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 0, (uint8_t *)CyFxUSBStringLangIDDscr);
+ 469              		.loc 1 267 0
+ 470 00ec 0500A0E3 		mov	r0, #5
+ 471 00f0 0010A0E3 		mov	r1, #0
+ 472 00f4 94209FE5 		ldr	r2, .L2+52
+ 473 00f8 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 474 00fc 08000BE5 		str	r0, [fp, #-8]
+ 268:../KeyboardDescriptors.c ****     CheckStatus("SET_STRING0_DESCR", Status);
+ 475              		.loc 1 268 0
+ 476 0100 8C009FE5 		ldr	r0, .L2+56
+ 477 0104 08101BE5 		ldr	r1, [fp, #-8]
+ 478 0108 FEFFFFEB 		bl	CheckStatus
+ 269:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 1, (uint8_t *)CyFxUSBManufactureDscr);
+ 479              		.loc 1 269 0
+ 480 010c 0500A0E3 		mov	r0, #5
+ 481 0110 0110A0E3 		mov	r1, #1
+ 482 0114 7C209FE5 		ldr	r2, .L2+60
+ 483 0118 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 484 011c 08000BE5 		str	r0, [fp, #-8]
+ 270:../KeyboardDescriptors.c ****     CheckStatus("SET_STRING1_DESCR", Status);
+ 485              		.loc 1 270 0
+ 486 0120 74009FE5 		ldr	r0, .L2+64
+ 487 0124 08101BE5 		ldr	r1, [fp, #-8]
+ 488 0128 FEFFFFEB 		bl	CheckStatus
+ 271:../KeyboardDescriptors.c ****     Status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 2, (uint8_t *)CyFxUSBProductDscr);
+ 489              		.loc 1 271 0
+ 490 012c 0500A0E3 		mov	r0, #5
+ 491 0130 0210A0E3 		mov	r1, #2
+ 492 0134 64209FE5 		ldr	r2, .L2+68
+ 493 0138 FEFFFFEB 		bl	CyU3PUsbSetDesc
+ 494 013c 08000BE5 		str	r0, [fp, #-8]
+ 272:../KeyboardDescriptors.c ****     CheckStatus("SET_STRING2_DESCR", Status);
+ 495              		.loc 1 272 0
+ 496 0140 5C009FE5 		ldr	r0, .L2+72
+ 497 0144 08101BE5 		ldr	r1, [fp, #-8]
+ 498 0148 FEFFFFEB 		bl	CheckStatus
+ 273:../KeyboardDescriptors.c **** 
+ 274:../KeyboardDescriptors.c ****     return Status;
+ 499              		.loc 1 274 0
+ 500 014c 08301BE5 		ldr	r3, [fp, #-8]
+ 275:../KeyboardDescriptors.c **** }
+ 501              		.loc 1 275 0
+ 502 0150 0300A0E1 		mov	r0, r3
+ 503 0154 04D04BE2 		sub	sp, fp, #4
+ 504 0158 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 505              	.L3:
+ 506              		.align	2
+ 507              	.L2:
+ 508 015c 00000000 		.word	CyFxUSB30DeviceDscr
+ 509 0160 00000000 		.word	.LC0
+ 510 0164 00000000 		.word	CyFxUSB20DeviceDscr
+ 511 0168 14000000 		.word	.LC1
+ 512 016c 00000000 		.word	CyFxUSBBOSDscr
+ 513 0170 28000000 		.word	.LC2
+ 514 0174 00000000 		.word	CyFxUSBDeviceQualDscr
+ 515 0178 3C000000 		.word	.LC3
+ 516 017c 00000000 		.word	CyFxUSBSSConfigDscr
+ 517 0180 50000000 		.word	.LC4
+ 518 0184 00000000 		.word	CyFxUSBnonSSConfigDscr
+ 519 0188 60000000 		.word	.LC5
+ 520 018c 70000000 		.word	.LC6
+ 521 0190 00000000 		.word	CyFxUSBStringLangIDDscr
+ 522 0194 80000000 		.word	.LC7
+ 523 0198 00000000 		.word	CyFxUSBManufactureDscr
+ 524 019c 94000000 		.word	.LC8
+ 525 01a0 00000000 		.word	CyFxUSBProductDscr
+ 526 01a4 A8000000 		.word	.LC9
+ 527              		.cfi_endproc
+ 528              	.LFE0:
+ 530              		.text
+ 531              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 KeyboardDescriptors.c
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:26     .rodata.CyFxUSB30DeviceDscr:00000000 CyFxUSB30DeviceDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:23     .rodata.CyFxUSB30DeviceDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:50     .rodata.CyFxUSB20DeviceDscr:00000000 CyFxUSB20DeviceDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:47     .rodata.CyFxUSB20DeviceDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:74     .rodata.CyFxUSBBOSDscr:00000000 CyFxUSBBOSDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:71     .rodata.CyFxUSBBOSDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:102    .rodata.CyFxUSBDeviceQualDscr:00000000 CyFxUSBDeviceQualDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:99     .rodata.CyFxUSBDeviceQualDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:118    .rodata.ReportDescriptor:00000000 ReportDescriptor
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:115    .rodata.ReportDescriptor:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:183    .rodata.CyFxUSBSSConfigDscr:00000000 CyFxUSBSSConfigDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:180    .rodata.CyFxUSBSSConfigDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:229    .rodata.CyFxUSBnonSSConfigDscr:00000000 CyFxUSBnonSSConfigDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:226    .rodata.CyFxUSBnonSSConfigDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:269    .rodata.CyFxUSBStringLangIDDscr:00000000 CyFxUSBStringLangIDDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:266    .rodata.CyFxUSBStringLangIDDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:279    .rodata.CyFxUSBManufactureDscr:00000000 CyFxUSBManufactureDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:276    .rodata.CyFxUSBManufactureDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:329    .rodata.CyFxUSBProductDscr:00000000 CyFxUSBProductDscr
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:326    .rodata.CyFxUSBProductDscr:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:349    .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:380    .text.SetUSBdescriptors:00000000 $a
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:383    .text.SetUSBdescriptors:00000000 SetUSBdescriptors
+C:\Users\John\AppData\Local\Temp\cchnOALr.s:508    .text.SetUSBdescriptors:0000015c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PUsbSetDesc
+CheckStatus

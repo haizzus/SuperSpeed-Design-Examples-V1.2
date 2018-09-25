@@ -1,0 +1,1855 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"DebugConsole.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.bss.DebugTxEnabled,"aw",%nobits
+  22              		.align	2
+  25              	DebugTxEnabled:
+  26 0000 00000000 		.space	4
+  27              		.section	.bss.UARTtoCPU_Handle,"aw",%nobits
+  28              		.align	2
+  31              	UARTtoCPU_Handle:
+  32 0000 00000000 		.space	220
+  32      00000000 
+  32      00000000 
+  32      00000000 
+  32      00000000 
+  33              		.section	.bss.ConsoleInBuffer,"aw",%nobits
+  34              		.align	2
+  37              	ConsoleInBuffer:
+  38 0000 00000000 		.space	32
+  38      00000000 
+  38      00000000 
+  38      00000000 
+  38      00000000 
+  39              		.section	.bss.ConsoleInIndex,"aw",%nobits
+  40              		.align	2
+  43              	ConsoleInIndex:
+  44 0000 00000000 		.space	4
+  45              		.global	RTOS_Trace
+  46              		.section	.data.RTOS_Trace,"aw",%progbits
+  47              		.align	2
+  50              	RTOS_Trace:
+  51 0000 01000000 		.word	1
+  52 0004 0A000000 		.word	10
+  53 0008 21000000 		.word	33
+  54 000c 01000000 		.word	1
+  55 0010 0B000000 		.word	11
+  56 0014 22000000 		.word	34
+  57 0018 01000000 		.word	1
+  58 001c 0C000000 		.word	12
+  59 0020 23000000 		.word	35
+  60 0024 03000000 		.word	3
+  61 0028 00000000 		.word	0
+  62 002c 24000000 		.word	36
+  63 0030 03000000 		.word	3
+  64 0034 01000000 		.word	1
+  65 0038 25000000 		.word	37
+  66 003c 00000000 		.word	0
+  67 0040 00000000 		.word	0
+  68 0044 26000000 		.word	38
+  69 0048 00000000 		.word	0
+  70 004c 00000000 		.word	0
+  71 0050 27000000 		.word	39
+  72 0054 01000000 		.word	1
+  73 0058 A7010000 		.word	423
+  74 005c 28000000 		.word	40
+  75 0060 00000000 		.word	0
+  76 0064 00000000 		.word	0
+  77 0068 29000000 		.word	41
+  78 006c 00000000 		.word	0
+  79 0070 00000000 		.word	0
+  80 0074 2A000000 		.word	42
+  81 0078 00000000 		.word	0
+  82 007c 00000000 		.word	0
+  83 0080 2B000000 		.word	43
+  84 0084 00000000 		.word	0
+  85 0088 00000000 		.word	0
+  86 008c 2C000000 		.word	44
+  87 0090 00000000 		.word	0
+  88 0094 00000000 		.word	0
+  89 0098 2E000000 		.word	46
+  90 009c 00000000 		.word	0
+  91 00a0 00000000 		.word	0
+  92 00a4 2F000000 		.word	47
+  93 00a8 00000000 		.word	0
+  94 00ac 00000000 		.word	0
+  95 00b0 30000000 		.word	48
+  96 00b4 00000000 		.word	0
+  97 00b8 00000000 		.word	0
+  98 00bc 31000000 		.word	49
+  99              		.section	.rodata
+ 100              		.align	2
+ 101              	.LC0:
+ 102 0000 0A257320 		.ascii	"\012%s Successful\000"
+ 102      53756363 
+ 102      65737366 
+ 102      756C00
+ 103 000f 00       		.align	2
+ 104              	.LC1:
+ 105 0010 0A257320 		.ascii	"\012%s failed, Status = %d\012\000"
+ 105      6661696C 
+ 105      65642C20 
+ 105      53746174 
+ 105      7573203D 
+ 106 0029 000000   		.align	2
+ 107              	.LC2:
+ 108 002c 3F00     		.ascii	"?\000"
+ 109              		.section	.text.CheckStatus,"ax",%progbits
+ 110              		.align	2
+ 111              		.global	CheckStatus
+ 113              	CheckStatus:
+ 114              	.LFB0:
+ 115              		.file 1 "../DebugConsole.c"
+   1:../DebugConsole.c **** // DebugConsole.c	include the Cypress UART-based Debug Console into the project
+   2:../DebugConsole.c **** 
+   3:../DebugConsole.c **** #include "Application.h"
+   4:../DebugConsole.c **** 
+   5:../DebugConsole.c **** extern uint32_t SampleTime;						// Application variable that we need to change
+   6:../DebugConsole.c **** extern CyU3PThread ThreadHandle[APP_THREADS];	// Handles to my Application Threads
+   7:../DebugConsole.c **** extern void *StackPtr[APP_THREADS];				// Stack allocated to each thread
+   8:../DebugConsole.c **** //extern CyU3PSemaphore SemaphoreHandle[2];		// Used for thread communications
+   9:../DebugConsole.c **** extern CyU3PSemaphore DataToProcess, DataToOutput;	// Used for thread communications
+  10:../DebugConsole.c **** 
+  11:../DebugConsole.c **** extern void IndicateError(uint16_t ErrorCode);
+  12:../DebugConsole.c **** 
+  13:../DebugConsole.c **** static CyBool_t DebugTxEnabled = CyFalse;	// Set true once I can output messages to the Console
+  14:../DebugConsole.c **** static CyU3PDmaChannel UARTtoCPU_Handle;	// Handle needed by Uart Callback routine
+  15:../DebugConsole.c **** static char ConsoleInBuffer[32];			// Buffer for user Console Input
+  16:../DebugConsole.c **** static uint32_t ConsoleInIndex;				// Index into ConsoleIn buffer
+  17:../DebugConsole.c **** 
+  18:../DebugConsole.c **** struct { uint32_t Type; uint32_t ID; uint32_t GPIO; } RTOS_Trace[16] = {
+  19:../DebugConsole.c **** 	{ TRACE_THREAD, 10, 33, }, { TRACE_THREAD, 11, 34, }, { TRACE_THREAD, 12, 35, }, { TRACE_SEMAPHORE
+  20:../DebugConsole.c **** 	{ TRACE_SEMAPHORE, 1, 37, }, { 0, 0, 38, }, { 0, 0, 39, }, { TRACE_THREAD, 423, 40, },
+  21:../DebugConsole.c **** 	{ 0, 0, 41, }, { 0, 0, 42, }, { 0, 0, 43, }, { 0, 0, 44, },
+  22:../DebugConsole.c **** 	{ 0, 0, 46, }, { 0, 0, 47, }, { 0, 0, 48, }, { 0, 0, 49, } };
+  23:../DebugConsole.c **** 
+  24:../DebugConsole.c **** 
+  25:../DebugConsole.c **** void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status)
+  26:../DebugConsole.c **** // In this initial debugging stage I stall on an un-successful system call, else I display progress
+  27:../DebugConsole.c **** // Note that this assumes that there were no errors bringing up the Debug Console
+  28:../DebugConsole.c **** {
+ 116              		.loc 1 28 0
+ 117              		.cfi_startproc
+ 118              		@ args = 0, pretend = 0, frame = 8
+ 119              		@ frame_needed = 1, uses_anonymous_args = 0
+ 120 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 121              	.LCFI0:
+ 122              		.cfi_def_cfa_offset 8
+ 123 0004 04B08DE2 		add	fp, sp, #4
+ 124              		.cfi_offset 14, -4
+ 125              		.cfi_offset 11, -8
+ 126              	.LCFI1:
+ 127              		.cfi_def_cfa 11, 4
+ 128 0008 08D04DE2 		sub	sp, sp, #8
+ 129 000c 08000BE5 		str	r0, [fp, #-8]
+ 130 0010 0C100BE5 		str	r1, [fp, #-12]
+  29:../DebugConsole.c **** 	if (DebugTxEnabled)				// Need to wait until ConsoleOut is enabled
+ 131              		.loc 1 29 0
+ 132 0014 60309FE5 		ldr	r3, .L5
+ 133 0018 003093E5 		ldr	r3, [r3, #0]
+ 134 001c 000053E3 		cmp	r3, #0
+ 135 0020 1300000A 		beq	.L1
+  30:../DebugConsole.c **** 	{
+  31:../DebugConsole.c **** 		if (Status == CY_U3P_SUCCESS)
+ 136              		.loc 1 31 0
+ 137 0024 0C301BE5 		ldr	r3, [fp, #-12]
+ 138 0028 000053E3 		cmp	r3, #0
+ 139 002c 0500001A 		bne	.L3
+  32:../DebugConsole.c **** 		{
+  33:../DebugConsole.c **** 			CyU3PDebugPrint(4, "\n%s Successful", StringPtr);
+ 140              		.loc 1 33 0
+ 141 0030 0400A0E3 		mov	r0, #4
+ 142 0034 44109FE5 		ldr	r1, .L5+4
+ 143 0038 08201BE5 		ldr	r2, [fp, #-8]
+ 144 003c FEFFFFEB 		bl	CyU3PDebugPrint
+  34:../DebugConsole.c **** 			return;
+ 145              		.loc 1 34 0
+ 146 0040 0000A0E1 		mov	r0, r0	@ nop
+ 147 0044 0A0000EA 		b	.L1
+ 148              	.L3:
+  35:../DebugConsole.c **** 		}
+  36:../DebugConsole.c **** 		// else hang here
+  37:../DebugConsole.c **** 		CyU3PDebugPrint(4, "\n%s failed, Status = %d\n", StringPtr, Status);
+ 149              		.loc 1 37 0
+ 150 0048 0400A0E3 		mov	r0, #4
+ 151 004c 30109FE5 		ldr	r1, .L5+8
+ 152 0050 08201BE5 		ldr	r2, [fp, #-8]
+ 153 0054 0C301BE5 		ldr	r3, [fp, #-12]
+ 154 0058 FEFFFFEB 		bl	CyU3PDebugPrint
+ 155              	.L4:
+  38:../DebugConsole.c **** 		while (1)
+  39:../DebugConsole.c **** 		{
+  40:../DebugConsole.c **** 			CyU3PDebugPrint(4, "?");
+ 156              		.loc 1 40 0 discriminator 1
+ 157 005c 0400A0E3 		mov	r0, #4
+ 158 0060 20109FE5 		ldr	r1, .L5+12
+ 159 0064 FEFFFFEB 		bl	CyU3PDebugPrint
+  41:../DebugConsole.c **** 			CyU3PThreadSleep (1000);
+ 160              		.loc 1 41 0 discriminator 1
+ 161 0068 FA0FA0E3 		mov	r0, #1000
+ 162 006c FEFFFFEB 		bl	_tx_thread_sleep
+  42:../DebugConsole.c **** 		}
+ 163              		.loc 1 42 0 discriminator 1
+ 164 0070 F9FFFFEA 		b	.L4
+ 165              	.L1:
+  43:../DebugConsole.c **** 	}
+  44:../DebugConsole.c **** }
+ 166              		.loc 1 44 0
+ 167 0074 04D04BE2 		sub	sp, fp, #4
+ 168 0078 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 169              	.L6:
+ 170              		.align	2
+ 171              	.L5:
+ 172 007c 00000000 		.word	DebugTxEnabled
+ 173 0080 00000000 		.word	.LC0
+ 174 0084 10000000 		.word	.LC1
+ 175 0088 2C000000 		.word	.LC2
+ 176              		.cfi_endproc
+ 177              	.LFE0:
+ 179              		.section	.rodata
+ 180 002e 0000     		.align	2
+ 181              	.LC3:
+ 182 0030 0A466F75 		.ascii	"\012Found: '%s', %X, %d\000"
+ 182      6E643A20 
+ 182      27257327 
+ 182      2C202558 
+ 182      2C202564 
+ 183              		.section	.text.FindThread,"ax",%progbits
+ 184              		.align	2
+ 185              		.global	FindThread
+ 187              	FindThread:
+ 188              	.LFB1:
+  45:../DebugConsole.c **** 
+  46:../DebugConsole.c **** CyU3PThread* FindThread(uint32_t ID)
+  47:../DebugConsole.c **** {
+ 189              		.loc 1 47 0
+ 190              		.cfi_startproc
+ 191              		@ args = 0, pretend = 0, frame = 32
+ 192              		@ frame_needed = 1, uses_anonymous_args = 0
+ 193 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 194              	.LCFI2:
+ 195              		.cfi_def_cfa_offset 8
+ 196 0004 04B08DE2 		add	fp, sp, #4
+ 197              		.cfi_offset 14, -4
+ 198              		.cfi_offset 11, -8
+ 199              	.LCFI3:
+ 200              		.cfi_def_cfa 11, 4
+ 201 0008 38D04DE2 		sub	sp, sp, #56
+ 202 000c 20000BE5 		str	r0, [fp, #-32]
+  48:../DebugConsole.c **** 	// Extract the thread number from the thread name
+  49:../DebugConsole.c **** 	CyU3PThread *ThisThread, *NextThread, *StartingThread;
+  50:../DebugConsole.c **** 	char* ThreadName;
+  51:../DebugConsole.c **** 	uint32_t ThreadNumber;
+  52:../DebugConsole.c **** 	// First find out who I am
+  53:../DebugConsole.c **** 	StartingThread = ThisThread = CyU3PThreadIdentify();
+ 203              		.loc 1 53 0
+ 204 0010 FEFFFFEB 		bl	_tx_thread_identify
+ 205 0014 08000BE5 		str	r0, [fp, #-8]
+ 206 0018 08301BE5 		ldr	r3, [fp, #-8]
+ 207 001c 0C300BE5 		str	r3, [fp, #-12]
+  54:../DebugConsole.c **** 	tx_thread_info_get(ThisThread, &ThreadName, NULL, NULL, NULL, NULL, NULL, &NextThread, NULL);
+ 208              		.loc 1 54 0
+ 209 0020 18304BE2 		sub	r3, fp, #24
+ 210 0024 0020A0E3 		mov	r2, #0
+ 211 0028 00208DE5 		str	r2, [sp, #0]
+ 212 002c 0020A0E3 		mov	r2, #0
+ 213 0030 04208DE5 		str	r2, [sp, #4]
+ 214 0034 0020A0E3 		mov	r2, #0
+ 215 0038 08208DE5 		str	r2, [sp, #8]
+ 216 003c 14204BE2 		sub	r2, fp, #20
+ 217 0040 0C208DE5 		str	r2, [sp, #12]
+ 218 0044 0020A0E3 		mov	r2, #0
+ 219 0048 10208DE5 		str	r2, [sp, #16]
+ 220 004c 08001BE5 		ldr	r0, [fp, #-8]
+ 221 0050 0310A0E1 		mov	r1, r3
+ 222 0054 0020A0E3 		mov	r2, #0
+ 223 0058 0030A0E3 		mov	r3, #0
+ 224 005c FEFFFFEB 		bl	_txe_thread_info_get
+  55:../DebugConsole.c **** 	// Now, using the Thread linked list, look for other threads until I find myself again
+  56:../DebugConsole.c **** 	while (NextThread != StartingThread)
+ 225              		.loc 1 56 0
+ 226 0060 330000EA 		b	.L8
+ 227              	.L11:
+  57:../DebugConsole.c **** 	{
+  58:../DebugConsole.c **** 		// Process ThisThread
+  59:../DebugConsole.c **** 		ThreadNumber = (*ThreadName++ - '0') * 10;
+ 228              		.loc 1 59 0
+ 229 0064 18201BE5 		ldr	r2, [fp, #-24]
+ 230 0068 0030D2E5 		ldrb	r3, [r2, #0]	@ zero_extendqisi2
+ 231 006c 0310A0E1 		mov	r1, r3
+ 232 0070 0130A0E1 		mov	r3, r1
+ 233 0074 0331A0E1 		mov	r3, r3, asl #2
+ 234 0078 013083E0 		add	r3, r3, r1
+ 235 007c 8330A0E1 		mov	r3, r3, asl #1
+ 236 0080 1E3E43E2 		sub	r3, r3, #480
+ 237 0084 10300BE5 		str	r3, [fp, #-16]
+ 238 0088 013082E2 		add	r3, r2, #1
+ 239 008c 18300BE5 		str	r3, [fp, #-24]
+  60:../DebugConsole.c **** 		ThreadNumber += (*ThreadName-- - '0');
+ 240              		.loc 1 60 0
+ 241 0090 18301BE5 		ldr	r3, [fp, #-24]
+ 242 0094 0020D3E5 		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 243 0098 0210A0E1 		mov	r1, r2
+ 244 009c 10201BE5 		ldr	r2, [fp, #-16]
+ 245 00a0 022081E0 		add	r2, r1, r2
+ 246 00a4 302042E2 		sub	r2, r2, #48
+ 247 00a8 10200BE5 		str	r2, [fp, #-16]
+ 248 00ac 013043E2 		sub	r3, r3, #1
+ 249 00b0 18300BE5 		str	r3, [fp, #-24]
+  61:../DebugConsole.c **** 		CyU3PDebugPrint(8, "\nFound: '%s', %X, %d", ThreadName, ThisThread, ThreadNumber);
+ 250              		.loc 1 61 0
+ 251 00b4 18301BE5 		ldr	r3, [fp, #-24]
+ 252 00b8 10201BE5 		ldr	r2, [fp, #-16]
+ 253 00bc 00208DE5 		str	r2, [sp, #0]
+ 254 00c0 0800A0E3 		mov	r0, #8
+ 255 00c4 88109FE5 		ldr	r1, .L12
+ 256 00c8 0320A0E1 		mov	r2, r3
+ 257 00cc 08301BE5 		ldr	r3, [fp, #-8]
+ 258 00d0 FEFFFFEB 		bl	CyU3PDebugPrint
+  62:../DebugConsole.c **** 		if (ThreadNumber == ID) return ThisThread;
+ 259              		.loc 1 62 0
+ 260 00d4 10201BE5 		ldr	r2, [fp, #-16]
+ 261 00d8 20301BE5 		ldr	r3, [fp, #-32]
+ 262 00dc 030052E1 		cmp	r2, r3
+ 263 00e0 0100001A 		bne	.L9
+ 264              		.loc 1 62 0 is_stmt 0 discriminator 1
+ 265 00e4 08301BE5 		ldr	r3, [fp, #-8]
+ 266 00e8 160000EA 		b	.L10
+ 267              	.L9:
+  63:../DebugConsole.c **** 		// Now get NextThread
+  64:../DebugConsole.c **** 		ThisThread = NextThread;
+ 268              		.loc 1 64 0 is_stmt 1
+ 269 00ec 14301BE5 		ldr	r3, [fp, #-20]
+ 270 00f0 08300BE5 		str	r3, [fp, #-8]
+  65:../DebugConsole.c **** 		tx_thread_info_get(ThisThread, &ThreadName, NULL, NULL, NULL, NULL, NULL, &NextThread, NULL);
+ 271              		.loc 1 65 0
+ 272 00f4 18304BE2 		sub	r3, fp, #24
+ 273 00f8 0020A0E3 		mov	r2, #0
+ 274 00fc 00208DE5 		str	r2, [sp, #0]
+ 275 0100 0020A0E3 		mov	r2, #0
+ 276 0104 04208DE5 		str	r2, [sp, #4]
+ 277 0108 0020A0E3 		mov	r2, #0
+ 278 010c 08208DE5 		str	r2, [sp, #8]
+ 279 0110 14204BE2 		sub	r2, fp, #20
+ 280 0114 0C208DE5 		str	r2, [sp, #12]
+ 281 0118 0020A0E3 		mov	r2, #0
+ 282 011c 10208DE5 		str	r2, [sp, #16]
+ 283 0120 08001BE5 		ldr	r0, [fp, #-8]
+ 284 0124 0310A0E1 		mov	r1, r3
+ 285 0128 0020A0E3 		mov	r2, #0
+ 286 012c 0030A0E3 		mov	r3, #0
+ 287 0130 FEFFFFEB 		bl	_txe_thread_info_get
+ 288              	.L8:
+  56:../DebugConsole.c **** 	while (NextThread != StartingThread)
+ 289              		.loc 1 56 0 discriminator 1
+ 290 0134 14201BE5 		ldr	r2, [fp, #-20]
+ 291 0138 0C301BE5 		ldr	r3, [fp, #-12]
+ 292 013c 030052E1 		cmp	r2, r3
+ 293 0140 C7FFFF1A 		bne	.L11
+  66:../DebugConsole.c **** 	}
+  67:../DebugConsole.c **** 	return 0;
+ 294              		.loc 1 67 0
+ 295 0144 0030A0E3 		mov	r3, #0
+ 296              	.L10:
+  68:../DebugConsole.c **** }
+ 297              		.loc 1 68 0
+ 298 0148 0300A0E1 		mov	r0, r3
+ 299 014c 04D04BE2 		sub	sp, fp, #4
+ 300 0150 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 301              	.L13:
+ 302              		.align	2
+ 303              	.L12:
+ 304 0154 30000000 		.word	.LC3
+ 305              		.cfi_endproc
+ 306              	.LFE1:
+ 308              		.section	.rodata
+ 309 0045 000000   		.align	2
+ 310              	.LC4:
+ 311 0048 0A546872 		.ascii	"\012Thread = %X is using GPIO = %d\000"
+ 311      65616420 
+ 311      3D202558 
+ 311      20697320 
+ 311      7573696E 
+ 312              		.align	2
+ 313              	.LC5:
+ 314 0068 52656769 		.ascii	"Register thread monitoring GPIO\000"
+ 314      73746572 
+ 314      20746872 
+ 314      65616420 
+ 314      6D6F6E69 
+ 315              		.align	2
+ 316              	.LC6:
+ 317 0088 52656769 		.ascii	"Register semaphore monitoring GPIO\000"
+ 317      73746572 
+ 317      2073656D 
+ 317      6170686F 
+ 317      7265206D 
+ 318 00ab 00       		.align	2
+ 319              	.LC7:
+ 320 00ac 0A496E76 		.ascii	"\012Invalid Type in SetupTrace = %d\000"
+ 320      616C6964 
+ 320      20547970 
+ 320      6520696E 
+ 320      20536574 
+ 321              		.section	.text.SetupTrace,"ax",%progbits
+ 322              		.align	2
+ 323              		.global	SetupTrace
+ 325              	SetupTrace:
+ 326              	.LFB2:
+  69:../DebugConsole.c **** 
+  70:../DebugConsole.c **** CyU3PReturnStatus_t SetupTrace(uint32_t Index)
+  71:../DebugConsole.c **** {
+ 327              		.loc 1 71 0
+ 328              		.cfi_startproc
+ 329              		@ args = 0, pretend = 0, frame = 16
+ 330              		@ frame_needed = 1, uses_anonymous_args = 0
+ 331 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 332              	.LCFI4:
+ 333              		.cfi_def_cfa_offset 8
+ 334 0004 04B08DE2 		add	fp, sp, #4
+ 335              		.cfi_offset 14, -4
+ 336              		.cfi_offset 11, -8
+ 337              	.LCFI5:
+ 338              		.cfi_def_cfa 11, 4
+ 339 0008 10D04DE2 		sub	sp, sp, #16
+ 340 000c 10000BE5 		str	r0, [fp, #-16]
+  72:../DebugConsole.c **** 	CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 341              		.loc 1 72 0
+ 342 0010 0030A0E3 		mov	r3, #0
+ 343 0014 08300BE5 		str	r3, [fp, #-8]
+  73:../DebugConsole.c **** 	CyU3PThread* Thread;
+  74:../DebugConsole.c **** 	switch (RTOS_Trace[Index].Type)
+ 344              		.loc 1 74 0
+ 345 0018 24129FE5 		ldr	r1, .L26
+ 346 001c 10201BE5 		ldr	r2, [fp, #-16]
+ 347 0020 0230A0E1 		mov	r3, r2
+ 348 0024 8330A0E1 		mov	r3, r3, asl #1
+ 349 0028 023083E0 		add	r3, r3, r2
+ 350 002c 0331A0E1 		mov	r3, r3, asl #2
+ 351 0030 033081E0 		add	r3, r1, r3
+ 352 0034 003093E5 		ldr	r3, [r3, #0]
+ 353 0038 010053E3 		cmp	r3, #1
+ 354 003c 0400000A 		beq	.L17
+ 355 0040 010053E3 		cmp	r3, #1
+ 356 0044 7700003A 		bcc	.L24
+ 357 0048 030053E3 		cmp	r3, #3
+ 358 004c 3000000A 		beq	.L18
+ 359 0050 670000EA 		b	.L23
+ 360              	.L17:
+  75:../DebugConsole.c **** 	{
+  76:../DebugConsole.c **** 		case 0: break;				// Do nothing
+  77:../DebugConsole.c **** 		case TRACE_THREAD:
+  78:../DebugConsole.c **** 			Thread = FindThread(RTOS_Trace[Index].ID);
+ 361              		.loc 1 78 0
+ 362 0054 E8019FE5 		ldr	r0, .L26
+ 363 0058 10201BE5 		ldr	r2, [fp, #-16]
+ 364 005c 0410A0E3 		mov	r1, #4
+ 365 0060 0230A0E1 		mov	r3, r2
+ 366 0064 8330A0E1 		mov	r3, r3, asl #1
+ 367 0068 023083E0 		add	r3, r3, r2
+ 368 006c 0331A0E1 		mov	r3, r3, asl #2
+ 369 0070 033080E0 		add	r3, r0, r3
+ 370 0074 013083E0 		add	r3, r3, r1
+ 371 0078 003093E5 		ldr	r3, [r3, #0]
+ 372 007c 0300A0E1 		mov	r0, r3
+ 373 0080 FEFFFFEB 		bl	FindThread
+ 374 0084 0C000BE5 		str	r0, [fp, #-12]
+  79:../DebugConsole.c **** 			if (Thread)
+ 375              		.loc 1 79 0
+ 376 0088 0C301BE5 		ldr	r3, [fp, #-12]
+ 377 008c 000053E3 		cmp	r3, #0
+ 378 0090 6600000A 		beq	.L25
+  80:../DebugConsole.c **** 			{
+  81:../DebugConsole.c **** 				CyU3PDebugPrint(8, "\nThread = %X is using GPIO = %d", Thread, RTOS_Trace[Index].GPIO);
+ 379              		.loc 1 81 0
+ 380 0094 A8019FE5 		ldr	r0, .L26
+ 381 0098 10201BE5 		ldr	r2, [fp, #-16]
+ 382 009c 0810A0E3 		mov	r1, #8
+ 383 00a0 0230A0E1 		mov	r3, r2
+ 384 00a4 8330A0E1 		mov	r3, r3, asl #1
+ 385 00a8 023083E0 		add	r3, r3, r2
+ 386 00ac 0331A0E1 		mov	r3, r3, asl #2
+ 387 00b0 033080E0 		add	r3, r0, r3
+ 388 00b4 013083E0 		add	r3, r3, r1
+ 389 00b8 003093E5 		ldr	r3, [r3, #0]
+ 390 00bc 0800A0E3 		mov	r0, #8
+ 391 00c0 80119FE5 		ldr	r1, .L26+4
+ 392 00c4 0C201BE5 		ldr	r2, [fp, #-12]
+ 393 00c8 FEFFFFEB 		bl	CyU3PDebugPrint
+  82:../DebugConsole.c **** 				Status = CyU3PThreadSetActivityGpio(Thread, RTOS_Trace[Index].GPIO);
+ 394              		.loc 1 82 0
+ 395 00cc 70019FE5 		ldr	r0, .L26
+ 396 00d0 10201BE5 		ldr	r2, [fp, #-16]
+ 397 00d4 0810A0E3 		mov	r1, #8
+ 398 00d8 0230A0E1 		mov	r3, r2
+ 399 00dc 8330A0E1 		mov	r3, r3, asl #1
+ 400 00e0 023083E0 		add	r3, r3, r2
+ 401 00e4 0331A0E1 		mov	r3, r3, asl #2
+ 402 00e8 033080E0 		add	r3, r0, r3
+ 403 00ec 013083E0 		add	r3, r3, r1
+ 404 00f0 003093E5 		ldr	r3, [r3, #0]
+ 405 00f4 0C001BE5 		ldr	r0, [fp, #-12]
+ 406 00f8 0310A0E1 		mov	r1, r3
+ 407 00fc FEFFFFEB 		bl	tx_thread_set_profile_gpio
+ 408 0100 08000BE5 		str	r0, [fp, #-8]
+  83:../DebugConsole.c **** 				CheckStatus("Register thread monitoring GPIO", Status);
+ 409              		.loc 1 83 0
+ 410 0104 40019FE5 		ldr	r0, .L26+8
+ 411 0108 08101BE5 		ldr	r1, [fp, #-8]
+ 412 010c FEFFFFEB 		bl	CheckStatus
+  84:../DebugConsole.c **** 			}
+  85:../DebugConsole.c **** 			break;
+ 413              		.loc 1 85 0
+ 414 0110 470000EA 		b	.L19
+ 415              	.L18:
+  86:../DebugConsole.c **** 		case TRACE_SEMAPHORE:
+  87:../DebugConsole.c **** //		    Status = CyU3PSemaphoreSetActivityGpio(&SemaphoreHandle[RTOS_Trace[Index].ID], RTOS_Trace[I
+  88:../DebugConsole.c **** 		    if (RTOS_Trace[Index].ID == 0) Status = CyU3PSemaphoreSetActivityGpio(&DataToProcess, RTOS_Tr
+ 416              		.loc 1 88 0
+ 417 0114 28019FE5 		ldr	r0, .L26
+ 418 0118 10201BE5 		ldr	r2, [fp, #-16]
+ 419 011c 0410A0E3 		mov	r1, #4
+ 420 0120 0230A0E1 		mov	r3, r2
+ 421 0124 8330A0E1 		mov	r3, r3, asl #1
+ 422 0128 023083E0 		add	r3, r3, r2
+ 423 012c 0331A0E1 		mov	r3, r3, asl #2
+ 424 0130 033080E0 		add	r3, r0, r3
+ 425 0134 013083E0 		add	r3, r3, r1
+ 426 0138 003093E5 		ldr	r3, [r3, #0]
+ 427 013c 000053E3 		cmp	r3, #0
+ 428 0140 0D00001A 		bne	.L21
+ 429              		.loc 1 88 0 is_stmt 0 discriminator 1
+ 430 0144 F8009FE5 		ldr	r0, .L26
+ 431 0148 10201BE5 		ldr	r2, [fp, #-16]
+ 432 014c 0810A0E3 		mov	r1, #8
+ 433 0150 0230A0E1 		mov	r3, r2
+ 434 0154 8330A0E1 		mov	r3, r3, asl #1
+ 435 0158 023083E0 		add	r3, r3, r2
+ 436 015c 0331A0E1 		mov	r3, r3, asl #2
+ 437 0160 033080E0 		add	r3, r0, r3
+ 438 0164 013083E0 		add	r3, r3, r1
+ 439 0168 003093E5 		ldr	r3, [r3, #0]
+ 440 016c DC009FE5 		ldr	r0, .L26+12
+ 441 0170 0310A0E1 		mov	r1, r3
+ 442 0174 FEFFFFEB 		bl	tx_semaphore_set_profile_gpio
+ 443 0178 08000BE5 		str	r0, [fp, #-8]
+ 444              	.L21:
+  89:../DebugConsole.c **** 		    if (RTOS_Trace[Index].ID == 1) Status = CyU3PSemaphoreSetActivityGpio(&DataToOutput, RTOS_Tra
+ 445              		.loc 1 89 0 is_stmt 1
+ 446 017c C0009FE5 		ldr	r0, .L26
+ 447 0180 10201BE5 		ldr	r2, [fp, #-16]
+ 448 0184 0410A0E3 		mov	r1, #4
+ 449 0188 0230A0E1 		mov	r3, r2
+ 450 018c 8330A0E1 		mov	r3, r3, asl #1
+ 451 0190 023083E0 		add	r3, r3, r2
+ 452 0194 0331A0E1 		mov	r3, r3, asl #2
+ 453 0198 033080E0 		add	r3, r0, r3
+ 454 019c 013083E0 		add	r3, r3, r1
+ 455 01a0 003093E5 		ldr	r3, [r3, #0]
+ 456 01a4 010053E3 		cmp	r3, #1
+ 457 01a8 0D00001A 		bne	.L22
+ 458              		.loc 1 89 0 is_stmt 0 discriminator 1
+ 459 01ac 90009FE5 		ldr	r0, .L26
+ 460 01b0 10201BE5 		ldr	r2, [fp, #-16]
+ 461 01b4 0810A0E3 		mov	r1, #8
+ 462 01b8 0230A0E1 		mov	r3, r2
+ 463 01bc 8330A0E1 		mov	r3, r3, asl #1
+ 464 01c0 023083E0 		add	r3, r3, r2
+ 465 01c4 0331A0E1 		mov	r3, r3, asl #2
+ 466 01c8 033080E0 		add	r3, r0, r3
+ 467 01cc 013083E0 		add	r3, r3, r1
+ 468 01d0 003093E5 		ldr	r3, [r3, #0]
+ 469 01d4 78009FE5 		ldr	r0, .L26+16
+ 470 01d8 0310A0E1 		mov	r1, r3
+ 471 01dc FEFFFFEB 		bl	tx_semaphore_set_profile_gpio
+ 472 01e0 08000BE5 		str	r0, [fp, #-8]
+ 473              	.L22:
+  90:../DebugConsole.c **** 		    CheckStatus("Register semaphore monitoring GPIO", Status);
+ 474              		.loc 1 90 0 is_stmt 1
+ 475 01e4 6C009FE5 		ldr	r0, .L26+20
+ 476 01e8 08101BE5 		ldr	r1, [fp, #-8]
+ 477 01ec FEFFFFEB 		bl	CheckStatus
+  91:../DebugConsole.c **** 			break;
+ 478              		.loc 1 91 0
+ 479 01f0 0F0000EA 		b	.L19
+ 480              	.L23:
+  92:../DebugConsole.c **** 		default: CyU3PDebugPrint(4, "\nInvalid Type in SetupTrace = %d", RTOS_Trace[Index].Type);
+ 481              		.loc 1 92 0
+ 482 01f4 48109FE5 		ldr	r1, .L26
+ 483 01f8 10201BE5 		ldr	r2, [fp, #-16]
+ 484 01fc 0230A0E1 		mov	r3, r2
+ 485 0200 8330A0E1 		mov	r3, r3, asl #1
+ 486 0204 023083E0 		add	r3, r3, r2
+ 487 0208 0331A0E1 		mov	r3, r3, asl #2
+ 488 020c 033081E0 		add	r3, r1, r3
+ 489 0210 003093E5 		ldr	r3, [r3, #0]
+ 490 0214 0400A0E3 		mov	r0, #4
+ 491 0218 3C109FE5 		ldr	r1, .L26+24
+ 492 021c 0320A0E1 		mov	r2, r3
+ 493 0220 FEFFFFEB 		bl	CyU3PDebugPrint
+  93:../DebugConsole.c **** 			break;
+ 494              		.loc 1 93 0
+ 495 0224 020000EA 		b	.L19
+ 496              	.L24:
+  76:../DebugConsole.c **** 		case 0: break;				// Do nothing
+ 497              		.loc 1 76 0
+ 498 0228 0000A0E1 		mov	r0, r0	@ nop
+ 499 022c 000000EA 		b	.L19
+ 500              	.L25:
+  85:../DebugConsole.c **** 			break;
+ 501              		.loc 1 85 0
+ 502 0230 0000A0E1 		mov	r0, r0	@ nop
+ 503              	.L19:
+  94:../DebugConsole.c **** 	}
+  95:../DebugConsole.c **** 	return Status;
+ 504              		.loc 1 95 0
+ 505 0234 08301BE5 		ldr	r3, [fp, #-8]
+  96:../DebugConsole.c **** }
+ 506              		.loc 1 96 0
+ 507 0238 0300A0E1 		mov	r0, r3
+ 508 023c 04D04BE2 		sub	sp, fp, #4
+ 509 0240 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 510              	.L27:
+ 511              		.align	2
+ 512              	.L26:
+ 513 0244 00000000 		.word	RTOS_Trace
+ 514 0248 48000000 		.word	.LC4
+ 515 024c 68000000 		.word	.LC5
+ 516 0250 00000000 		.word	DataToProcess
+ 517 0254 00000000 		.word	DataToOutput
+ 518 0258 88000000 		.word	.LC6
+ 519 025c AC000000 		.word	.LC7
+ 520              		.cfi_endproc
+ 521              	.LFE2:
+ 523              		.section	.text.ASCII_Digit,"ax",%progbits
+ 524              		.align	2
+ 525              		.global	ASCII_Digit
+ 527              	ASCII_Digit:
+ 528              	.LFB3:
+  97:../DebugConsole.c **** 
+  98:../DebugConsole.c **** CyBool_t ASCII_Digit(char Char)
+  99:../DebugConsole.c **** {
+ 529              		.loc 1 99 0
+ 530              		.cfi_startproc
+ 531              		@ args = 0, pretend = 0, frame = 8
+ 532              		@ frame_needed = 1, uses_anonymous_args = 0
+ 533              		@ link register save eliminated.
+ 534 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 535              	.LCFI6:
+ 536              		.cfi_def_cfa_offset 4
+ 537 0004 00B08DE2 		add	fp, sp, #0
+ 538              		.cfi_offset 11, -4
+ 539              	.LCFI7:
+ 540              		.cfi_def_cfa_register 11
+ 541 0008 0CD04DE2 		sub	sp, sp, #12
+ 542 000c 0030A0E1 		mov	r3, r0
+ 543 0010 05304BE5 		strb	r3, [fp, #-5]
+ 100:../DebugConsole.c **** 	return ((Char >= '0') && (Char <= '9'));
+ 544              		.loc 1 100 0
+ 545 0014 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 546 0018 2F0053E3 		cmp	r3, #47
+ 547 001c 0400009A 		bls	.L29
+ 548              		.loc 1 100 0 is_stmt 0 discriminator 1
+ 549 0020 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 550 0024 390053E3 		cmp	r3, #57
+ 551 0028 0100008A 		bhi	.L29
+ 552 002c 0130A0E3 		mov	r3, #1
+ 553 0030 000000EA 		b	.L30
+ 554              	.L29:
+ 555              		.loc 1 100 0 discriminator 2
+ 556 0034 0030A0E3 		mov	r3, #0
+ 557              	.L30:
+ 101:../DebugConsole.c **** }
+ 558              		.loc 1 101 0 is_stmt 1 discriminator 3
+ 559 0038 0300A0E1 		mov	r0, r3
+ 560 003c 00D08BE2 		add	sp, fp, #0
+ 561 0040 04B09DE4 		ldmfd	sp!, {fp}
+ 562 0044 1EFF2FE1 		bx	lr
+ 563              		.cfi_endproc
+ 564              	.LFE3:
+ 566              		.section	.text.GetValue,"ax",%progbits
+ 567              		.align	2
+ 568              		.global	GetValue
+ 570              	GetValue:
+ 571              	.LFB4:
+ 102:../DebugConsole.c **** 
+ 103:../DebugConsole.c **** uint32_t GetValue(char* CharPtr)
+ 104:../DebugConsole.c **** {
+ 572              		.loc 1 104 0
+ 573              		.cfi_startproc
+ 574              		@ args = 0, pretend = 0, frame = 16
+ 575              		@ frame_needed = 1, uses_anonymous_args = 0
+ 576 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 577              	.LCFI8:
+ 578              		.cfi_def_cfa_offset 8
+ 579 0004 04B08DE2 		add	fp, sp, #4
+ 580              		.cfi_offset 14, -4
+ 581              		.cfi_offset 11, -8
+ 582              	.LCFI9:
+ 583              		.cfi_def_cfa 11, 4
+ 584 0008 10D04DE2 		sub	sp, sp, #16
+ 585 000c 10000BE5 		str	r0, [fp, #-16]
+ 105:../DebugConsole.c **** 	uint32_t Value = 0;
+ 586              		.loc 1 105 0
+ 587 0010 0030A0E3 		mov	r3, #0
+ 588 0014 08300BE5 		str	r3, [fp, #-8]
+ 106:../DebugConsole.c **** 	while (ASCII_Digit(*CharPtr)) Value = (10*Value) + (*CharPtr++ - '0');
+ 589              		.loc 1 106 0
+ 590 0018 0D0000EA 		b	.L32
+ 591              	.L33:
+ 592              		.loc 1 106 0 is_stmt 0 discriminator 2
+ 593 001c 08201BE5 		ldr	r2, [fp, #-8]
+ 594 0020 0230A0E1 		mov	r3, r2
+ 595 0024 0331A0E1 		mov	r3, r3, asl #2
+ 596 0028 023083E0 		add	r3, r3, r2
+ 597 002c 8330A0E1 		mov	r3, r3, asl #1
+ 598 0030 0320A0E1 		mov	r2, r3
+ 599 0034 10301BE5 		ldr	r3, [fp, #-16]
+ 600 0038 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 601 003c 033082E0 		add	r3, r2, r3
+ 602 0040 303043E2 		sub	r3, r3, #48
+ 603 0044 08300BE5 		str	r3, [fp, #-8]
+ 604 0048 10301BE5 		ldr	r3, [fp, #-16]
+ 605 004c 013083E2 		add	r3, r3, #1
+ 606 0050 10300BE5 		str	r3, [fp, #-16]
+ 607              	.L32:
+ 608              		.loc 1 106 0 discriminator 1
+ 609 0054 10301BE5 		ldr	r3, [fp, #-16]
+ 610 0058 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 611 005c 0300A0E1 		mov	r0, r3
+ 612 0060 FEFFFFEB 		bl	ASCII_Digit
+ 613 0064 0030A0E1 		mov	r3, r0
+ 614 0068 000053E3 		cmp	r3, #0
+ 615 006c EAFFFF1A 		bne	.L33
+ 107:../DebugConsole.c **** 	return Value;
+ 616              		.loc 1 107 0 is_stmt 1
+ 617 0070 08301BE5 		ldr	r3, [fp, #-8]
+ 108:../DebugConsole.c **** }
+ 618              		.loc 1 108 0
+ 619 0074 0300A0E1 		mov	r0, r3
+ 620 0078 04D04BE2 		sub	sp, fp, #4
+ 621 007c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 622              		.cfi_endproc
+ 623              	.LFE4:
+ 625              		.section	.rodata
+ 626 00cd 000000   		.align	2
+ 627              	.LC8:
+ 628 00d0 0A466F75 		.ascii	"\012Found: '%s'\000"
+ 628      6E643A20 
+ 628      27257327 
+ 628      00
+ 629              		.section	.text.DisplayThreads,"ax",%progbits
+ 630              		.align	2
+ 631              		.global	DisplayThreads
+ 633              	DisplayThreads:
+ 634              	.LFB5:
+ 109:../DebugConsole.c **** 
+ 110:../DebugConsole.c **** void DisplayThreads(void)
+ 111:../DebugConsole.c **** {
+ 635              		.loc 1 111 0
+ 636              		.cfi_startproc
+ 637              		@ args = 0, pretend = 0, frame = 16
+ 638              		@ frame_needed = 1, uses_anonymous_args = 0
+ 639 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 640              	.LCFI10:
+ 641              		.cfi_def_cfa_offset 8
+ 642 0004 04B08DE2 		add	fp, sp, #4
+ 643              		.cfi_offset 14, -4
+ 644              		.cfi_offset 11, -8
+ 645              	.LCFI11:
+ 646              		.cfi_def_cfa 11, 4
+ 647 0008 28D04DE2 		sub	sp, sp, #40
+ 112:../DebugConsole.c **** 	CyU3PThread *ThisThread, *NextThread;
+ 113:../DebugConsole.c **** 	char* ThreadName;
+ 114:../DebugConsole.c **** 	// First find out who I am
+ 115:../DebugConsole.c **** 	ThisThread = CyU3PThreadIdentify();
+ 648              		.loc 1 115 0
+ 649 000c FEFFFFEB 		bl	_tx_thread_identify
+ 650 0010 08000BE5 		str	r0, [fp, #-8]
+ 116:../DebugConsole.c **** 	tx_thread_info_get(ThisThread, &ThreadName, NULL, NULL, NULL, NULL, NULL, &NextThread, NULL);
+ 651              		.loc 1 116 0
+ 652 0014 10304BE2 		sub	r3, fp, #16
+ 653 0018 0020A0E3 		mov	r2, #0
+ 654 001c 00208DE5 		str	r2, [sp, #0]
+ 655 0020 0020A0E3 		mov	r2, #0
+ 656 0024 04208DE5 		str	r2, [sp, #4]
+ 657 0028 0020A0E3 		mov	r2, #0
+ 658 002c 08208DE5 		str	r2, [sp, #8]
+ 659 0030 0C204BE2 		sub	r2, fp, #12
+ 660 0034 0C208DE5 		str	r2, [sp, #12]
+ 661 0038 0020A0E3 		mov	r2, #0
+ 662 003c 10208DE5 		str	r2, [sp, #16]
+ 663 0040 08001BE5 		ldr	r0, [fp, #-8]
+ 664 0044 0310A0E1 		mov	r1, r3
+ 665 0048 0020A0E3 		mov	r2, #0
+ 666 004c 0030A0E3 		mov	r3, #0
+ 667 0050 FEFFFFEB 		bl	_txe_thread_info_get
+ 117:../DebugConsole.c **** 	// Now, using the Thread linked list, look for other threads until I find myself again
+ 118:../DebugConsole.c **** 	while (NextThread != ThisThread)
+ 668              		.loc 1 118 0
+ 669 0054 150000EA 		b	.L35
+ 670              	.L36:
+ 119:../DebugConsole.c **** 	{
+ 120:../DebugConsole.c **** 		tx_thread_info_get(NextThread, &ThreadName, NULL, NULL, NULL, NULL, NULL, &NextThread, NULL);
+ 671              		.loc 1 120 0
+ 672 0058 0C201BE5 		ldr	r2, [fp, #-12]
+ 673 005c 10304BE2 		sub	r3, fp, #16
+ 674 0060 0010A0E3 		mov	r1, #0
+ 675 0064 00108DE5 		str	r1, [sp, #0]
+ 676 0068 0010A0E3 		mov	r1, #0
+ 677 006c 04108DE5 		str	r1, [sp, #4]
+ 678 0070 0010A0E3 		mov	r1, #0
+ 679 0074 08108DE5 		str	r1, [sp, #8]
+ 680 0078 0C104BE2 		sub	r1, fp, #12
+ 681 007c 0C108DE5 		str	r1, [sp, #12]
+ 682 0080 0010A0E3 		mov	r1, #0
+ 683 0084 10108DE5 		str	r1, [sp, #16]
+ 684 0088 0200A0E1 		mov	r0, r2
+ 685 008c 0310A0E1 		mov	r1, r3
+ 686 0090 0020A0E3 		mov	r2, #0
+ 687 0094 0030A0E3 		mov	r3, #0
+ 688 0098 FEFFFFEB 		bl	_txe_thread_info_get
+ 121:../DebugConsole.c **** 		CyU3PDebugPrint(4, "\nFound: '%s'", ThreadName);
+ 689              		.loc 1 121 0
+ 690 009c 10301BE5 		ldr	r3, [fp, #-16]
+ 691 00a0 0400A0E3 		mov	r0, #4
+ 692 00a4 1C109FE5 		ldr	r1, .L37
+ 693 00a8 0320A0E1 		mov	r2, r3
+ 694 00ac FEFFFFEB 		bl	CyU3PDebugPrint
+ 695              	.L35:
+ 118:../DebugConsole.c **** 	while (NextThread != ThisThread)
+ 696              		.loc 1 118 0 discriminator 1
+ 697 00b0 0C201BE5 		ldr	r2, [fp, #-12]
+ 698 00b4 08301BE5 		ldr	r3, [fp, #-8]
+ 699 00b8 030052E1 		cmp	r2, r3
+ 700 00bc E5FFFF1A 		bne	.L36
+ 122:../DebugConsole.c **** 	}
+ 123:../DebugConsole.c **** }
+ 701              		.loc 1 123 0
+ 702 00c0 04D04BE2 		sub	sp, fp, #4
+ 703 00c4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 704              	.L38:
+ 705              		.align	2
+ 706              	.L37:
+ 707 00c8 D0000000 		.word	.LC8
+ 708              		.cfi_endproc
+ 709              	.LFE5:
+ 711              		.section	.rodata
+ 712 00dd 000000   		.align	2
+ 713              	.LC9:
+ 714 00e0 0A546872 		.ascii	"\012Thread: '%s' = %d%%\000"
+ 714      6561643A 
+ 714      20272573 
+ 714      27203D20 
+ 714      25642525 
+ 715 00f5 000000   		.align	2
+ 716              	.LC10:
+ 717 00f8 0A546F74 		.ascii	"\012Total Drivers: = %d%%\000"
+ 717      616C2044 
+ 717      72697665 
+ 717      72733A20 
+ 717      3D202564 
+ 718 010f 00       		.align	2
+ 719              	.LC11:
+ 720 0110 0A546F74 		.ascii	"\012Total CPU: = %d%%\000"
+ 720      616C2043 
+ 720      50553A20 
+ 720      3D202564 
+ 720      252500
+ 721              		.section	.text.DisplayUsage,"ax",%progbits
+ 722              		.align	2
+ 723              		.global	DisplayUsage
+ 725              	DisplayUsage:
+ 726              	.LFB6:
+ 124:../DebugConsole.c **** 
+ 125:../DebugConsole.c **** void DisplayUsage(void)
+ 126:../DebugConsole.c **** {
+ 727              		.loc 1 126 0
+ 728              		.cfi_startproc
+ 729              		@ args = 0, pretend = 0, frame = 24
+ 730              		@ frame_needed = 1, uses_anonymous_args = 0
+ 731 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 732              	.LCFI12:
+ 733              		.cfi_def_cfa_offset 8
+ 734 0004 04B08DE2 		add	fp, sp, #4
+ 735              		.cfi_offset 14, -4
+ 736              		.cfi_offset 11, -8
+ 737              	.LCFI13:
+ 738              		.cfi_def_cfa 11, 4
+ 739 0008 30D04DE2 		sub	sp, sp, #48
+ 127:../DebugConsole.c **** 	CyU3PThread *ThisThread, *NextThread, *StartingThread;
+ 128:../DebugConsole.c **** 	char* ThreadName;
+ 129:../DebugConsole.c **** 	uint32_t Usage;
+ 130:../DebugConsole.c **** 	// First find out who I am
+ 131:../DebugConsole.c **** 	StartingThread = ThisThread = CyU3PThreadIdentify();
+ 740              		.loc 1 131 0
+ 741 000c FEFFFFEB 		bl	_tx_thread_identify
+ 742 0010 08000BE5 		str	r0, [fp, #-8]
+ 743 0014 08301BE5 		ldr	r3, [fp, #-8]
+ 744 0018 0C300BE5 		str	r3, [fp, #-12]
+ 132:../DebugConsole.c **** 	tx_thread_info_get(ThisThread, &ThreadName, NULL, NULL, NULL, NULL, NULL, &NextThread, NULL);
+ 745              		.loc 1 132 0
+ 746 001c 18304BE2 		sub	r3, fp, #24
+ 747 0020 0020A0E3 		mov	r2, #0
+ 748 0024 00208DE5 		str	r2, [sp, #0]
+ 749 0028 0020A0E3 		mov	r2, #0
+ 750 002c 04208DE5 		str	r2, [sp, #4]
+ 751 0030 0020A0E3 		mov	r2, #0
+ 752 0034 08208DE5 		str	r2, [sp, #8]
+ 753 0038 14204BE2 		sub	r2, fp, #20
+ 754 003c 0C208DE5 		str	r2, [sp, #12]
+ 755 0040 0020A0E3 		mov	r2, #0
+ 756 0044 10208DE5 		str	r2, [sp, #16]
+ 757 0048 08001BE5 		ldr	r0, [fp, #-8]
+ 758 004c 0310A0E1 		mov	r1, r3
+ 759 0050 0020A0E3 		mov	r2, #0
+ 760 0054 0030A0E3 		mov	r3, #0
+ 761 0058 FEFFFFEB 		bl	_txe_thread_info_get
+ 133:../DebugConsole.c **** 	// Now, using the Thread linked list, look for other threads until I find myself again
+ 134:../DebugConsole.c **** 	while (NextThread != StartingThread)
+ 762              		.loc 1 134 0
+ 763 005c 1A0000EA 		b	.L40
+ 764              	.L41:
+ 135:../DebugConsole.c **** 	{
+ 136:../DebugConsole.c **** 		Usage = CyU3PDeviceGetThreadLoad(ThisThread);
+ 765              		.loc 1 136 0
+ 766 0060 08001BE5 		ldr	r0, [fp, #-8]
+ 767 0064 FEFFFFEB 		bl	CyU3PDeviceGetThreadLoad
+ 768 0068 10000BE5 		str	r0, [fp, #-16]
+ 137:../DebugConsole.c **** 		CyU3PDebugPrint(4, "\nThread: '%s' = %d%%", ThreadName, Usage);
+ 769              		.loc 1 137 0
+ 770 006c 18301BE5 		ldr	r3, [fp, #-24]
+ 771 0070 0400A0E3 		mov	r0, #4
+ 772 0074 98109FE5 		ldr	r1, .L42
+ 773 0078 0320A0E1 		mov	r2, r3
+ 774 007c 10301BE5 		ldr	r3, [fp, #-16]
+ 775 0080 FEFFFFEB 		bl	CyU3PDebugPrint
+ 138:../DebugConsole.c **** 		ThisThread = NextThread;
+ 776              		.loc 1 138 0
+ 777 0084 14301BE5 		ldr	r3, [fp, #-20]
+ 778 0088 08300BE5 		str	r3, [fp, #-8]
+ 139:../DebugConsole.c **** 		tx_thread_info_get(ThisThread, &ThreadName, NULL, NULL, NULL, NULL, NULL, &NextThread, NULL);
+ 779              		.loc 1 139 0
+ 780 008c 18304BE2 		sub	r3, fp, #24
+ 781 0090 0020A0E3 		mov	r2, #0
+ 782 0094 00208DE5 		str	r2, [sp, #0]
+ 783 0098 0020A0E3 		mov	r2, #0
+ 784 009c 04208DE5 		str	r2, [sp, #4]
+ 785 00a0 0020A0E3 		mov	r2, #0
+ 786 00a4 08208DE5 		str	r2, [sp, #8]
+ 787 00a8 14204BE2 		sub	r2, fp, #20
+ 788 00ac 0C208DE5 		str	r2, [sp, #12]
+ 789 00b0 0020A0E3 		mov	r2, #0
+ 790 00b4 10208DE5 		str	r2, [sp, #16]
+ 791 00b8 08001BE5 		ldr	r0, [fp, #-8]
+ 792 00bc 0310A0E1 		mov	r1, r3
+ 793 00c0 0020A0E3 		mov	r2, #0
+ 794 00c4 0030A0E3 		mov	r3, #0
+ 795 00c8 FEFFFFEB 		bl	_txe_thread_info_get
+ 796              	.L40:
+ 134:../DebugConsole.c **** 	while (NextThread != StartingThread)
+ 797              		.loc 1 134 0 discriminator 1
+ 798 00cc 14201BE5 		ldr	r2, [fp, #-20]
+ 799 00d0 0C301BE5 		ldr	r3, [fp, #-12]
+ 800 00d4 030052E1 		cmp	r2, r3
+ 801 00d8 E0FFFF1A 		bne	.L41
+ 140:../DebugConsole.c **** 	}
+ 141:../DebugConsole.c **** 	CyU3PDebugPrint(4, "\nTotal Drivers: = %d%%", CyU3PDeviceGetDriverLoad());
+ 802              		.loc 1 141 0
+ 803 00dc FEFFFFEB 		bl	CyU3PDeviceGetDriverLoad
+ 804 00e0 0030A0E1 		mov	r3, r0
+ 805 00e4 0400A0E3 		mov	r0, #4
+ 806 00e8 28109FE5 		ldr	r1, .L42+4
+ 807 00ec 0320A0E1 		mov	r2, r3
+ 808 00f0 FEFFFFEB 		bl	CyU3PDebugPrint
+ 142:../DebugConsole.c **** 	CyU3PDebugPrint(4, "\nTotal CPU: = %d%%", CyU3PDeviceGetCpuLoad());
+ 809              		.loc 1 142 0
+ 810 00f4 FEFFFFEB 		bl	CyU3PDeviceGetCpuLoad
+ 811 00f8 0030A0E1 		mov	r3, r0
+ 812 00fc 0400A0E3 		mov	r0, #4
+ 813 0100 14109FE5 		ldr	r1, .L42+8
+ 814 0104 0320A0E1 		mov	r2, r3
+ 815 0108 FEFFFFEB 		bl	CyU3PDebugPrint
+ 143:../DebugConsole.c **** }
+ 816              		.loc 1 143 0
+ 817 010c 04D04BE2 		sub	sp, fp, #4
+ 818 0110 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 819              	.L43:
+ 820              		.align	2
+ 821              	.L42:
+ 822 0114 E0000000 		.word	.LC9
+ 823 0118 F8000000 		.word	.LC10
+ 824 011c 10010000 		.word	.LC11
+ 825              		.cfi_endproc
+ 826              	.LFE6:
+ 828              		.section	.rodata
+ 829 0123 00       		.align	2
+ 830              	.LC12:
+ 831 0124 0A537461 		.ascii	"\012Stack free in %s is %d/%d\000"
+ 831      636B2066 
+ 831      72656520 
+ 831      696E2025 
+ 831      73206973 
+ 832 013f 00       		.align	2
+ 833              	.LC13:
+ 834 0140 0A00     		.ascii	"\012\000"
+ 835              		.section	.text.DisplayStacks,"ax",%progbits
+ 836              		.align	2
+ 837              		.global	DisplayStacks
+ 839              	DisplayStacks:
+ 840              	.LFB7:
+ 144:../DebugConsole.c **** 
+ 145:../DebugConsole.c **** void DisplayStacks(void)
+ 146:../DebugConsole.c **** {
+ 841              		.loc 1 146 0
+ 842              		.cfi_startproc
+ 843              		@ args = 0, pretend = 0, frame = 24
+ 844              		@ frame_needed = 1, uses_anonymous_args = 0
+ 845 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 846              	.LCFI14:
+ 847              		.cfi_def_cfa_offset 8
+ 848 0004 04B08DE2 		add	fp, sp, #4
+ 849              		.cfi_offset 14, -4
+ 850              		.cfi_offset 11, -8
+ 851              	.LCFI15:
+ 852              		.cfi_def_cfa 11, 4
+ 853 0008 30D04DE2 		sub	sp, sp, #48
+ 147:../DebugConsole.c **** 	int i, j;
+ 148:../DebugConsole.c **** 	char* ThreadName;
+ 149:../DebugConsole.c **** 	for (i = 0; i<APP_THREADS; i++)
+ 854              		.loc 1 149 0
+ 855 000c 0030A0E3 		mov	r3, #0
+ 856 0010 08300BE5 		str	r3, [fp, #-8]
+ 857 0014 420000EA 		b	.L45
+ 858              	.L50:
+ 859              	.LBB2:
+ 150:../DebugConsole.c **** 	{
+ 151:../DebugConsole.c **** 		// Note that StackSize is in bytes but RTOS fill pattern is a uint32
+ 152:../DebugConsole.c **** 		uint32_t* StackStartPtr = StackPtr[i];
+ 860              		.loc 1 152 0
+ 861 0018 24319FE5 		ldr	r3, .L52
+ 862 001c 08201BE5 		ldr	r2, [fp, #-8]
+ 863 0020 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 864 0024 14300BE5 		str	r3, [fp, #-20]
+ 153:../DebugConsole.c **** 		uint32_t* DataPtr = StackStartPtr;
+ 865              		.loc 1 153 0
+ 866 0028 14301BE5 		ldr	r3, [fp, #-20]
+ 867 002c 10300BE5 		str	r3, [fp, #-16]
+ 154:../DebugConsole.c **** 		for (j = 0; j<APPLICATION_THREAD_STACK>>2; j++) if (*DataPtr++ != 0xEFEFEFEF) break;
+ 868              		.loc 1 154 0
+ 869 0030 0030A0E3 		mov	r3, #0
+ 870 0034 0C300BE5 		str	r3, [fp, #-12]
+ 871 0038 0E0000EA 		b	.L46
+ 872              	.L49:
+ 873              		.loc 1 154 0 is_stmt 0 discriminator 2
+ 874 003c 10301BE5 		ldr	r3, [fp, #-16]
+ 875 0040 002093E5 		ldr	r2, [r3, #0]
+ 876 0044 FC309FE5 		ldr	r3, .L52+4
+ 877 0048 030052E1 		cmp	r2, r3
+ 878 004c 0030A003 		moveq	r3, #0
+ 879 0050 0130A013 		movne	r3, #1
+ 880 0054 FF3003E2 		and	r3, r3, #255
+ 881 0058 10201BE5 		ldr	r2, [fp, #-16]
+ 882 005c 042082E2 		add	r2, r2, #4
+ 883 0060 10200BE5 		str	r2, [fp, #-16]
+ 884 0064 000053E3 		cmp	r3, #0
+ 885 0068 0600001A 		bne	.L51
+ 886              	.L47:
+ 887 006c 0C301BE5 		ldr	r3, [fp, #-12]
+ 888 0070 013083E2 		add	r3, r3, #1
+ 889 0074 0C300BE5 		str	r3, [fp, #-12]
+ 890              	.L46:
+ 891              		.loc 1 154 0 discriminator 1
+ 892 0078 0C301BE5 		ldr	r3, [fp, #-12]
+ 893 007c FF0053E3 		cmp	r3, #255
+ 894 0080 EDFFFFDA 		ble	.L49
+ 895 0084 000000EA 		b	.L48
+ 896              	.L51:
+ 897              		.loc 1 154 0
+ 898 0088 0000A0E1 		mov	r0, r0	@ nop
+ 899              	.L48:
+ 155:../DebugConsole.c **** 		CyU3PThreadInfoGet(&ThreadHandle[i], &ThreadName, 0, 0, 0);
+ 900              		.loc 1 155 0 is_stmt 1
+ 901 008c 08301BE5 		ldr	r3, [fp, #-8]
+ 902 0090 D420A0E3 		mov	r2, #212
+ 903 0094 930202E0 		mul	r2, r3, r2
+ 904 0098 AC309FE5 		ldr	r3, .L52+8
+ 905 009c 032082E0 		add	r2, r2, r3
+ 906 00a0 18304BE2 		sub	r3, fp, #24
+ 907 00a4 0010A0E3 		mov	r1, #0
+ 908 00a8 00108DE5 		str	r1, [sp, #0]
+ 909 00ac 0010A0E3 		mov	r1, #0
+ 910 00b0 04108DE5 		str	r1, [sp, #4]
+ 911 00b4 0010A0E3 		mov	r1, #0
+ 912 00b8 08108DE5 		str	r1, [sp, #8]
+ 913 00bc 0010A0E3 		mov	r1, #0
+ 914 00c0 0C108DE5 		str	r1, [sp, #12]
+ 915 00c4 0010A0E3 		mov	r1, #0
+ 916 00c8 10108DE5 		str	r1, [sp, #16]
+ 917 00cc 0200A0E1 		mov	r0, r2
+ 918 00d0 0310A0E1 		mov	r1, r3
+ 919 00d4 0020A0E3 		mov	r2, #0
+ 920 00d8 0030A0E3 		mov	r3, #0
+ 921 00dc FEFFFFEB 		bl	_txe_thread_info_get
+ 156:../DebugConsole.c **** 		ThreadName += 3;	// Skip numeric ID
+ 922              		.loc 1 156 0
+ 923 00e0 18301BE5 		ldr	r3, [fp, #-24]
+ 924 00e4 033083E2 		add	r3, r3, #3
+ 925 00e8 18300BE5 		str	r3, [fp, #-24]
+ 157:../DebugConsole.c **** 		CyU3PDebugPrint(4, "\nStack free in %s is %d/%d", ThreadName, (DataPtr - StackStartPtr)<<2, APPLI
+ 926              		.loc 1 157 0
+ 927 00ec 18201BE5 		ldr	r2, [fp, #-24]
+ 928 00f0 10101BE5 		ldr	r1, [fp, #-16]
+ 929 00f4 14301BE5 		ldr	r3, [fp, #-20]
+ 930 00f8 013063E0 		rsb	r3, r3, r1
+ 931 00fc 4331A0E1 		mov	r3, r3, asr #2
+ 932 0100 0331A0E1 		mov	r3, r3, asl #2
+ 933 0104 011BA0E3 		mov	r1, #1024
+ 934 0108 00108DE5 		str	r1, [sp, #0]
+ 935 010c 0400A0E3 		mov	r0, #4
+ 936 0110 38109FE5 		ldr	r1, .L52+12
+ 937 0114 FEFFFFEB 		bl	CyU3PDebugPrint
+ 938              	.LBE2:
+ 149:../DebugConsole.c **** 	for (i = 0; i<APP_THREADS; i++)
+ 939              		.loc 1 149 0
+ 940 0118 08301BE5 		ldr	r3, [fp, #-8]
+ 941 011c 013083E2 		add	r3, r3, #1
+ 942 0120 08300BE5 		str	r3, [fp, #-8]
+ 943              	.L45:
+ 149:../DebugConsole.c **** 	for (i = 0; i<APP_THREADS; i++)
+ 944              		.loc 1 149 0 is_stmt 0 discriminator 1
+ 945 0124 08301BE5 		ldr	r3, [fp, #-8]
+ 946 0128 020053E3 		cmp	r3, #2
+ 947 012c B9FFFFDA 		ble	.L50
+ 158:../DebugConsole.c **** 	}
+ 159:../DebugConsole.c **** 	CyU3PDebugPrint(4, "\n");
+ 948              		.loc 1 159 0 is_stmt 1
+ 949 0130 0400A0E3 		mov	r0, #4
+ 950 0134 18109FE5 		ldr	r1, .L52+16
+ 951 0138 FEFFFFEB 		bl	CyU3PDebugPrint
+ 160:../DebugConsole.c **** }
+ 952              		.loc 1 160 0
+ 953 013c 04D04BE2 		sub	sp, fp, #4
+ 954 0140 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 955              	.L53:
+ 956              		.align	2
+ 957              	.L52:
+ 958 0144 00000000 		.word	StackPtr
+ 959 0148 EFEFEFEF 		.word	-269488145
+ 960 014c 00000000 		.word	ThreadHandle
+ 961 0150 24010000 		.word	.LC12
+ 962 0154 40010000 		.word	.LC13
+ 963              		.cfi_endproc
+ 964              	.LFE7:
+ 966              		.section	.rodata
+ 967 0142 0000     		.align	2
+ 968              	.LC14:
+ 969 0144 73657400 		.ascii	"set\000"
+ 970              		.align	2
+ 971              	.LC15:
+ 972 0148 0A536574 		.ascii	"\012Set SampleTime = %d\000"
+ 972      2053616D 
+ 972      706C6554 
+ 972      696D6520 
+ 972      3D202564 
+ 973 015d 000000   		.align	2
+ 974              	.LC16:
+ 975 0160 72657365 		.ascii	"reset\000"
+ 975      7400
+ 976 0166 0000     		.align	2
+ 977              	.LC17:
+ 978 0168 0A524553 		.ascii	"\012RESETTING CPU\012\000"
+ 978      45545449 
+ 978      4E472043 
+ 978      50550A00 
+ 979              		.align	2
+ 980              	.LC18:
+ 981 0178 74687265 		.ascii	"threads\000"
+ 981      61647300 
+ 982              		.align	2
+ 983              	.LC19:
+ 984 0180 73746163 		.ascii	"stacks\000"
+ 984      6B7300
+ 985 0187 00       		.align	2
+ 986              	.LC20:
+ 987 0188 75736167 		.ascii	"usage\000"
+ 987      6500
+ 988 018e 0000     		.align	2
+ 989              	.LC21:
+ 990 0190 6572726F 		.ascii	"error\000"
+ 990      7200
+ 991 0196 0000     		.align	2
+ 992              	.LC22:
+ 993 0198 0A556E6B 		.ascii	"\012Unknown Command: '%s'\012Available commands:\012"
+ 993      6E6F776E 
+ 993      20436F6D 
+ 993      6D616E64 
+ 993      3A202725 
+ 994 01c3 52657365 		.ascii	"Reset Set Stacks Threads Usage\012\000"
+ 994      74205365 
+ 994      74205374 
+ 994      61636B73 
+ 994      20546872 
+ 995              		.section	.text.ParseCommand,"ax",%progbits
+ 996              		.align	2
+ 997              		.global	ParseCommand
+ 999              	ParseCommand:
+ 1000              	.LFB8:
+ 161:../DebugConsole.c **** 
+ 162:../DebugConsole.c **** 
+ 163:../DebugConsole.c **** void ParseCommand(void)
+ 164:../DebugConsole.c **** {
+ 1001              		.loc 1 164 0
+ 1002              		.cfi_startproc
+ 1003              		@ args = 0, pretend = 0, frame = 0
+ 1004              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1005 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 1006              	.LCFI16:
+ 1007              		.cfi_def_cfa_offset 8
+ 1008 0004 04B08DE2 		add	fp, sp, #4
+ 1009              		.cfi_offset 14, -4
+ 1010              		.cfi_offset 11, -8
+ 1011              	.LCFI17:
+ 1012              		.cfi_def_cfa 11, 4
+ 165:../DebugConsole.c **** 	CyU3PDebugPrint(4, "\n");
+ 1013              		.loc 1 165 0
+ 1014 0008 0400A0E3 		mov	r0, #4
+ 1015 000c 40119FE5 		ldr	r1, .L62
+ 1016 0010 FEFFFFEB 		bl	CyU3PDebugPrint
+ 166:../DebugConsole.c **** 	if (strncmp("set", ConsoleInBuffer, 3) == 0)
+ 1017              		.loc 1 166 0
+ 1018 0014 3C019FE5 		ldr	r0, .L62+4
+ 1019 0018 3C119FE5 		ldr	r1, .L62+8
+ 1020 001c 0320A0E3 		mov	r2, #3
+ 1021 0020 FEFFFFEB 		bl	strncmp
+ 1022 0024 0030A0E1 		mov	r3, r0
+ 1023 0028 000053E3 		cmp	r3, #0
+ 1024 002c 0B00001A 		bne	.L55
+ 167:../DebugConsole.c **** 		{
+ 168:../DebugConsole.c **** 			SampleTime = GetValue(&ConsoleInBuffer[3]);
+ 1025              		.loc 1 168 0
+ 1026 0030 28019FE5 		ldr	r0, .L62+12
+ 1027 0034 FEFFFFEB 		bl	GetValue
+ 1028 0038 0020A0E1 		mov	r2, r0
+ 1029 003c 20319FE5 		ldr	r3, .L62+16
+ 1030 0040 002083E5 		str	r2, [r3, #0]
+ 169:../DebugConsole.c **** 			CyU3PDebugPrint(4, "\nSet SampleTime = %d", SampleTime);
+ 1031              		.loc 1 169 0
+ 1032 0044 18319FE5 		ldr	r3, .L62+16
+ 1033 0048 003093E5 		ldr	r3, [r3, #0]
+ 1034 004c 0400A0E3 		mov	r0, #4
+ 1035 0050 10119FE5 		ldr	r1, .L62+20
+ 1036 0054 0320A0E1 		mov	r2, r3
+ 1037 0058 FEFFFFEB 		bl	CyU3PDebugPrint
+ 1038 005c 380000EA 		b	.L56
+ 1039              	.L55:
+ 170:../DebugConsole.c **** 		}
+ 171:../DebugConsole.c **** 	else if (strcmp("reset", ConsoleInBuffer) == 0)
+ 1040              		.loc 1 171 0
+ 1041 0060 04019FE5 		ldr	r0, .L62+24
+ 1042 0064 F0109FE5 		ldr	r1, .L62+8
+ 1043 0068 FEFFFFEB 		bl	strcmp
+ 1044 006c 0030A0E1 		mov	r3, r0
+ 1045 0070 000053E3 		cmp	r3, #0
+ 1046 0074 0700001A 		bne	.L57
+ 172:../DebugConsole.c **** 	{
+ 173:../DebugConsole.c **** 		CyU3PDebugPrint(4, "\nRESETTING CPU\n");
+ 1047              		.loc 1 173 0
+ 1048 0078 0400A0E3 		mov	r0, #4
+ 1049 007c EC109FE5 		ldr	r1, .L62+28
+ 1050 0080 FEFFFFEB 		bl	CyU3PDebugPrint
+ 174:../DebugConsole.c **** 		CyU3PThreadSleep(100);
+ 1051              		.loc 1 174 0
+ 1052 0084 6400A0E3 		mov	r0, #100
+ 1053 0088 FEFFFFEB 		bl	_tx_thread_sleep
+ 175:../DebugConsole.c **** 		CyU3PDeviceReset(CyFalse);
+ 1054              		.loc 1 175 0
+ 1055 008c 0000A0E3 		mov	r0, #0
+ 1056 0090 FEFFFFEB 		bl	CyU3PDeviceReset
+ 1057 0094 2A0000EA 		b	.L56
+ 1058              	.L57:
+ 176:../DebugConsole.c **** 	}
+ 177:../DebugConsole.c **** 	else if (strcmp("threads", ConsoleInBuffer) == 0) DisplayThreads();
+ 1059              		.loc 1 177 0
+ 1060 0098 D4009FE5 		ldr	r0, .L62+32
+ 1061 009c B8109FE5 		ldr	r1, .L62+8
+ 1062 00a0 FEFFFFEB 		bl	strcmp
+ 1063 00a4 0030A0E1 		mov	r3, r0
+ 1064 00a8 000053E3 		cmp	r3, #0
+ 1065 00ac 0100001A 		bne	.L58
+ 1066              		.loc 1 177 0 is_stmt 0 discriminator 1
+ 1067 00b0 FEFFFFEB 		bl	DisplayThreads
+ 1068 00b4 220000EA 		b	.L56
+ 1069              	.L58:
+ 178:../DebugConsole.c **** 	else if (strcmp("stacks", ConsoleInBuffer) == 0) DisplayStacks();
+ 1070              		.loc 1 178 0 is_stmt 1
+ 1071 00b8 B8009FE5 		ldr	r0, .L62+36
+ 1072 00bc 98109FE5 		ldr	r1, .L62+8
+ 1073 00c0 FEFFFFEB 		bl	strcmp
+ 1074 00c4 0030A0E1 		mov	r3, r0
+ 1075 00c8 000053E3 		cmp	r3, #0
+ 1076 00cc 0100001A 		bne	.L59
+ 1077              		.loc 1 178 0 is_stmt 0 discriminator 1
+ 1078 00d0 FEFFFFEB 		bl	DisplayStacks
+ 1079 00d4 1A0000EA 		b	.L56
+ 1080              	.L59:
+ 179:../DebugConsole.c **** 	else if (strcmp("usage", ConsoleInBuffer) == 0) DisplayUsage();
+ 1081              		.loc 1 179 0 is_stmt 1
+ 1082 00d8 9C009FE5 		ldr	r0, .L62+40
+ 1083 00dc 78109FE5 		ldr	r1, .L62+8
+ 1084 00e0 FEFFFFEB 		bl	strcmp
+ 1085 00e4 0030A0E1 		mov	r3, r0
+ 1086 00e8 000053E3 		cmp	r3, #0
+ 1087 00ec 0100001A 		bne	.L60
+ 1088              		.loc 1 179 0 is_stmt 0 discriminator 1
+ 1089 00f0 FEFFFFEB 		bl	DisplayUsage
+ 1090 00f4 120000EA 		b	.L56
+ 1091              	.L60:
+ 180:../DebugConsole.c **** 	else if (strncmp("error", ConsoleInBuffer, 5) == 0) IndicateError(GetValue(&ConsoleInBuffer[5]));
+ 1092              		.loc 1 180 0 is_stmt 1
+ 1093 00f8 80009FE5 		ldr	r0, .L62+44
+ 1094 00fc 58109FE5 		ldr	r1, .L62+8
+ 1095 0100 0520A0E3 		mov	r2, #5
+ 1096 0104 FEFFFFEB 		bl	strncmp
+ 1097 0108 0030A0E1 		mov	r3, r0
+ 1098 010c 000053E3 		cmp	r3, #0
+ 1099 0110 0700001A 		bne	.L61
+ 1100              		.loc 1 180 0 is_stmt 0 discriminator 1
+ 1101 0114 68009FE5 		ldr	r0, .L62+48
+ 1102 0118 FEFFFFEB 		bl	GetValue
+ 1103 011c 0030A0E1 		mov	r3, r0
+ 1104 0120 0338A0E1 		mov	r3, r3, asl #16
+ 1105 0124 2338A0E1 		mov	r3, r3, lsr #16
+ 1106 0128 0300A0E1 		mov	r0, r3
+ 1107 012c FEFFFFEB 		bl	IndicateError
+ 1108 0130 030000EA 		b	.L56
+ 1109              	.L61:
+ 181:../DebugConsole.c **** 	else CyU3PDebugPrint(4, "\nUnknown Command: '%s'\nAvailable commands:\n"
+ 1110              		.loc 1 181 0 is_stmt 1
+ 1111 0134 0400A0E3 		mov	r0, #4
+ 1112 0138 48109FE5 		ldr	r1, .L62+52
+ 1113 013c 18209FE5 		ldr	r2, .L62+8
+ 1114 0140 FEFFFFEB 		bl	CyU3PDebugPrint
+ 1115              	.L56:
+ 182:../DebugConsole.c **** 			"Reset Set Stacks Threads Usage\n", ConsoleInBuffer);
+ 183:../DebugConsole.c **** 	ConsoleInIndex = 0;
+ 1116              		.loc 1 183 0
+ 1117 0144 40309FE5 		ldr	r3, .L62+56
+ 1118 0148 0020A0E3 		mov	r2, #0
+ 1119 014c 002083E5 		str	r2, [r3, #0]
+ 184:../DebugConsole.c **** }
+ 1120              		.loc 1 184 0
+ 1121 0150 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 1122              	.L63:
+ 1123              		.align	2
+ 1124              	.L62:
+ 1125 0154 40010000 		.word	.LC13
+ 1126 0158 44010000 		.word	.LC14
+ 1127 015c 00000000 		.word	ConsoleInBuffer
+ 1128 0160 03000000 		.word	ConsoleInBuffer+3
+ 1129 0164 00000000 		.word	SampleTime
+ 1130 0168 48010000 		.word	.LC15
+ 1131 016c 60010000 		.word	.LC16
+ 1132 0170 68010000 		.word	.LC17
+ 1133 0174 78010000 		.word	.LC18
+ 1134 0178 80010000 		.word	.LC19
+ 1135 017c 88010000 		.word	.LC20
+ 1136 0180 90010000 		.word	.LC21
+ 1137 0184 05000000 		.word	ConsoleInBuffer+5
+ 1138 0188 98010000 		.word	.LC22
+ 1139 018c 00000000 		.word	ConsoleInIndex
+ 1140              		.cfi_endproc
+ 1141              	.LFE8:
+ 1143              		.section	.rodata
+ 1144 01e3 00       		.align	2
+ 1145              	.LC23:
+ 1146 01e4 256300   		.ascii	"%c\000"
+ 1147              		.section	.text.UartCallback,"ax",%progbits
+ 1148              		.align	2
+ 1149              		.global	UartCallback
+ 1151              	UartCallback:
+ 1152              	.LFB9:
+ 185:../DebugConsole.c **** 
+ 186:../DebugConsole.c **** void UartCallback(CyU3PUartEvt_t Event, CyU3PUartError_t Error)
+ 187:../DebugConsole.c **** // Handle characters typed in by the developer
+ 188:../DebugConsole.c **** // Look for and execute commands on a <CR>
+ 189:../DebugConsole.c **** {
+ 1153              		.loc 1 189 0
+ 1154              		.cfi_startproc
+ 1155              		@ args = 0, pretend = 0, frame = 24
+ 1156              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1157 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 1158              	.LCFI18:
+ 1159              		.cfi_def_cfa_offset 8
+ 1160 0004 04B08DE2 		add	fp, sp, #4
+ 1161              		.cfi_offset 14, -4
+ 1162              		.cfi_offset 11, -8
+ 1163              	.LCFI19:
+ 1164              		.cfi_def_cfa 11, 4
+ 1165 0008 18D04DE2 		sub	sp, sp, #24
+ 1166 000c 0020A0E1 		mov	r2, r0
+ 1167 0010 0130A0E1 		mov	r3, r1
+ 1168 0014 15204BE5 		strb	r2, [fp, #-21]
+ 1169 0018 16304BE5 		strb	r3, [fp, #-22]
+ 190:../DebugConsole.c **** 	CyU3PDmaBuffer_t ConsoleInDmaBuffer;
+ 191:../DebugConsole.c **** 	char InputChar;
+ 192:../DebugConsole.c **** 	if (Event == CY_U3P_UART_EVENT_RX_DONE)
+ 1170              		.loc 1 192 0
+ 1171 001c 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+ 1172 0020 000053E3 		cmp	r3, #0
+ 1173 0024 3400001A 		bne	.L64
+ 193:../DebugConsole.c ****     {
+ 194:../DebugConsole.c **** 		CyU3PDmaChannelSetWrapUp(&UARTtoCPU_Handle);
+ 1174              		.loc 1 194 0
+ 1175 0028 D4009FE5 		ldr	r0, .L69
+ 1176 002c FEFFFFEB 		bl	CyU3PDmaChannelSetWrapUp
+ 195:../DebugConsole.c **** 		CyU3PDmaChannelGetBuffer(&UARTtoCPU_Handle, &ConsoleInDmaBuffer, CYU3P_NO_WAIT);
+ 1177              		.loc 1 195 0
+ 1178 0030 14304BE2 		sub	r3, fp, #20
+ 1179 0034 C8009FE5 		ldr	r0, .L69
+ 1180 0038 0310A0E1 		mov	r1, r3
+ 1181 003c 0020A0E3 		mov	r2, #0
+ 1182 0040 FEFFFFEB 		bl	CyU3PDmaChannelGetBuffer
+ 196:../DebugConsole.c **** 		InputChar = (char)*ConsoleInDmaBuffer.buffer;
+ 1183              		.loc 1 196 0
+ 1184 0044 14301BE5 		ldr	r3, [fp, #-20]
+ 1185 0048 0030D3E5 		ldrb	r3, [r3, #0]
+ 1186 004c 05304BE5 		strb	r3, [fp, #-5]
+ 197:../DebugConsole.c **** 		CyU3PDebugPrint(4, "%c", InputChar);			// Echo the character
+ 1187              		.loc 1 197 0
+ 1188 0050 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 1189 0054 0400A0E3 		mov	r0, #4
+ 1190 0058 A8109FE5 		ldr	r1, .L69+4
+ 1191 005c 0320A0E1 		mov	r2, r3
+ 1192 0060 FEFFFFEB 		bl	CyU3PDebugPrint
+ 198:../DebugConsole.c **** 		if (InputChar == 0x0d) ParseCommand();
+ 1193              		.loc 1 198 0
+ 1194 0064 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 1195 0068 0D0053E3 		cmp	r3, #13
+ 1196 006c 0100001A 		bne	.L66
+ 1197              		.loc 1 198 0 is_stmt 0 discriminator 1
+ 1198 0070 FEFFFFEB 		bl	ParseCommand
+ 1199 0074 1C0000EA 		b	.L67
+ 1200              	.L66:
+ 199:../DebugConsole.c **** 		else
+ 200:../DebugConsole.c **** 		{
+ 201:../DebugConsole.c **** 			ConsoleInBuffer[ConsoleInIndex] = InputChar | 0x20;		// Force lower case
+ 1201              		.loc 1 201 0 is_stmt 1
+ 1202 0078 8C309FE5 		ldr	r3, .L69+8
+ 1203 007c 003093E5 		ldr	r3, [r3, #0]
+ 1204 0080 05205BE5 		ldrb	r2, [fp, #-5]
+ 1205 0084 202082E3 		orr	r2, r2, #32
+ 1206 0088 FF1002E2 		and	r1, r2, #255
+ 1207 008c 7C209FE5 		ldr	r2, .L69+12
+ 1208 0090 0310C2E7 		strb	r1, [r2, r3]
+ 202:../DebugConsole.c **** 			if (ConsoleInIndex++ < sizeof(ConsoleInBuffer)) ConsoleInBuffer[ConsoleInIndex] = 0;
+ 1209              		.loc 1 202 0
+ 1210 0094 70309FE5 		ldr	r3, .L69+8
+ 1211 0098 003093E5 		ldr	r3, [r3, #0]
+ 1212 009c 1F0053E3 		cmp	r3, #31
+ 1213 00a0 0020A083 		movhi	r2, #0
+ 1214 00a4 0120A093 		movls	r2, #1
+ 1215 00a8 FF2002E2 		and	r2, r2, #255
+ 1216 00ac 011083E2 		add	r1, r3, #1
+ 1217 00b0 54309FE5 		ldr	r3, .L69+8
+ 1218 00b4 001083E5 		str	r1, [r3, #0]
+ 1219 00b8 000052E3 		cmp	r2, #0
+ 1220 00bc 0500000A 		beq	.L68
+ 1221              		.loc 1 202 0 is_stmt 0 discriminator 1
+ 1222 00c0 44309FE5 		ldr	r3, .L69+8
+ 1223 00c4 003093E5 		ldr	r3, [r3, #0]
+ 1224 00c8 40209FE5 		ldr	r2, .L69+12
+ 1225 00cc 0010A0E3 		mov	r1, #0
+ 1226 00d0 0310C2E7 		strb	r1, [r2, r3]
+ 1227 00d4 040000EA 		b	.L67
+ 1228              	.L68:
+ 203:../DebugConsole.c **** 			else ConsoleInIndex--;
+ 1229              		.loc 1 203 0 is_stmt 1
+ 1230 00d8 2C309FE5 		ldr	r3, .L69+8
+ 1231 00dc 003093E5 		ldr	r3, [r3, #0]
+ 1232 00e0 012043E2 		sub	r2, r3, #1
+ 1233 00e4 20309FE5 		ldr	r3, .L69+8
+ 1234 00e8 002083E5 		str	r2, [r3, #0]
+ 1235              	.L67:
+ 204:../DebugConsole.c **** 		}
+ 205:../DebugConsole.c **** 		CyU3PDmaChannelDiscardBuffer(&UARTtoCPU_Handle);
+ 1236              		.loc 1 205 0
+ 1237 00ec 10009FE5 		ldr	r0, .L69
+ 1238 00f0 FEFFFFEB 		bl	CyU3PDmaChannelDiscardBuffer
+ 206:../DebugConsole.c **** 		CyU3PUartRxSetBlockXfer(1);
+ 1239              		.loc 1 206 0
+ 1240 00f4 0100A0E3 		mov	r0, #1
+ 1241 00f8 FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 1242              	.L64:
+ 207:../DebugConsole.c ****     }
+ 208:../DebugConsole.c **** }
+ 1243              		.loc 1 208 0
+ 1244 00fc 04D04BE2 		sub	sp, fp, #4
+ 1245 0100 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 1246              	.L70:
+ 1247              		.align	2
+ 1248              	.L69:
+ 1249 0104 00000000 		.word	UARTtoCPU_Handle
+ 1250 0108 E4010000 		.word	.LC23
+ 1251 010c 00000000 		.word	ConsoleInIndex
+ 1252 0110 00000000 		.word	ConsoleInBuffer
+ 1253              		.cfi_endproc
+ 1254              	.LFE9:
+ 1256              		.section	.rodata
+ 1257 01e7 00       		.align	2
+ 1258              	.LC24:
+ 1259 01e8 43795533 		.ascii	"CyU3PUartInit\000"
+ 1259      50556172 
+ 1259      74496E69 
+ 1259      7400
+ 1260 01f6 0000     		.align	2
+ 1261              	.LC25:
+ 1262 01f8 43795533 		.ascii	"CyU3PUartSetConfig\000"
+ 1262      50556172 
+ 1262      74536574 
+ 1262      436F6E66 
+ 1262      696700
+ 1263 020b 00       		.align	2
+ 1264              	.LC26:
+ 1265 020c 43795533 		.ascii	"CyU3PUartTxSetBlockXfer\000"
+ 1265      50556172 
+ 1265      74547853 
+ 1265      6574426C 
+ 1265      6F636B58 
+ 1266              		.align	2
+ 1267              	.LC27:
+ 1268 0224 436F6E73 		.ascii	"ConsoleOutEnabled\000"
+ 1268      6F6C654F 
+ 1268      7574456E 
+ 1268      61626C65 
+ 1268      6400
+ 1269 0236 0000     		.align	2
+ 1270              	.LC28:
+ 1271 0238 43795533 		.ascii	"CyU3PUartRxSetBlockXfer\000"
+ 1271      50556172 
+ 1271      74527853 
+ 1271      6574426C 
+ 1271      6F636B58 
+ 1272              		.align	2
+ 1273              	.LC29:
+ 1274 0250 43726561 		.ascii	"CreateDebugRxDmaChannel\000"
+ 1274      74654465 
+ 1274      62756752 
+ 1274      78446D61 
+ 1274      4368616E 
+ 1275              		.align	2
+ 1276              	.LC30:
+ 1277 0268 436F6E73 		.ascii	"ConsoleInEnabled\000"
+ 1277      6F6C6549 
+ 1277      6E456E61 
+ 1277      626C6564 
+ 1277      00
+ 1278 0279 000000   		.section	.text.InitializeDebugConsole,"ax",%progbits
+ 1279              		.align	2
+ 1280              		.global	InitializeDebugConsole
+ 1282              	InitializeDebugConsole:
+ 1283              	.LFB10:
+ 209:../DebugConsole.c **** 
+ 210:../DebugConsole.c **** // Spin up the DEBUG Console, Out and In
+ 211:../DebugConsole.c **** CyU3PReturnStatus_t InitializeDebugConsole(void)
+ 212:../DebugConsole.c **** {
+ 1284              		.loc 1 212 0
+ 1285              		.cfi_startproc
+ 1286              		@ args = 0, pretend = 0, frame = 56
+ 1287              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1288 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 1289              	.LCFI20:
+ 1290              		.cfi_def_cfa_offset 8
+ 1291 0004 04B08DE2 		add	fp, sp, #4
+ 1292              		.cfi_offset 14, -4
+ 1293              		.cfi_offset 11, -8
+ 1294              	.LCFI21:
+ 1295              		.cfi_def_cfa 11, 4
+ 1296 0008 38D04DE2 		sub	sp, sp, #56
+ 213:../DebugConsole.c ****     CyU3PUartConfig_t uartConfig;
+ 214:../DebugConsole.c ****     CyU3PDmaChannelConfig_t dmaConfig;
+ 215:../DebugConsole.c ****     CyU3PReturnStatus_t Status;
+ 216:../DebugConsole.c **** 
+ 217:../DebugConsole.c ****     Status = CyU3PUartInit();										// Start the UART driver
+ 1297              		.loc 1 217 0
+ 1298 000c FEFFFFEB 		bl	CyU3PUartInit
+ 1299 0010 08000BE5 		str	r0, [fp, #-8]
+ 218:../DebugConsole.c ****     CheckStatus("CyU3PUartInit", Status);
+ 1300              		.loc 1 218 0
+ 1301 0014 78019FE5 		ldr	r0, .L75
+ 1302 0018 08101BE5 		ldr	r1, [fp, #-8]
+ 1303 001c FEFFFFEB 		bl	CheckStatus
+ 219:../DebugConsole.c **** 
+ 220:../DebugConsole.c ****     CyU3PMemSet ((uint8_t *)&uartConfig, 0, sizeof (uartConfig));
+ 1304              		.loc 1 220 0
+ 1305 0020 20304BE2 		sub	r3, fp, #32
+ 1306 0024 0300A0E1 		mov	r0, r3
+ 1307 0028 0010A0E3 		mov	r1, #0
+ 1308 002c 1820A0E3 		mov	r2, #24
+ 1309 0030 FEFFFFEB 		bl	CyU3PMemSet
+ 221:../DebugConsole.c **** 	uartConfig.baudRate = CY_U3P_UART_BAUDRATE_115200;
+ 1310              		.loc 1 221 0
+ 1311 0034 5C319FE5 		ldr	r3, .L75+4
+ 1312 0038 10300BE5 		str	r3, [fp, #-16]
+ 222:../DebugConsole.c **** 	uartConfig.stopBit  = CY_U3P_UART_ONE_STOP_BIT;
+ 1313              		.loc 1 222 0
+ 1314 003c 0130A0E3 		mov	r3, #1
+ 1315 0040 0C304BE5 		strb	r3, [fp, #-12]
+ 223:../DebugConsole.c **** //r	uartConfig.parity   = CY_U3P_UART_NO_PARITY;
+ 224:../DebugConsole.c **** 	uartConfig.txEnable = CyTrue;
+ 1316              		.loc 1 224 0
+ 1317 0044 0130A0E3 		mov	r3, #1
+ 1318 0048 20300BE5 		str	r3, [fp, #-32]
+ 225:../DebugConsole.c **** 	uartConfig.rxEnable = CyTrue;
+ 1319              		.loc 1 225 0
+ 1320 004c 0130A0E3 		mov	r3, #1
+ 1321 0050 1C300BE5 		str	r3, [fp, #-28]
+ 226:../DebugConsole.c **** //r	uartConfig.flowCtrl = CyFalse;
+ 227:../DebugConsole.c **** 	uartConfig.isDma    = CyTrue;
+ 1322              		.loc 1 227 0
+ 1323 0054 0130A0E3 		mov	r3, #1
+ 1324 0058 14300BE5 		str	r3, [fp, #-20]
+ 228:../DebugConsole.c **** 	Status = CyU3PUartSetConfig(&uartConfig, UartCallback);			// Configure the UART hardware
+ 1325              		.loc 1 228 0
+ 1326 005c 20304BE2 		sub	r3, fp, #32
+ 1327 0060 0300A0E1 		mov	r0, r3
+ 1328 0064 30119FE5 		ldr	r1, .L75+8
+ 1329 0068 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 1330 006c 08000BE5 		str	r0, [fp, #-8]
+ 229:../DebugConsole.c ****     CheckStatus("CyU3PUartSetConfig", Status);
+ 1331              		.loc 1 229 0
+ 1332 0070 28019FE5 		ldr	r0, .L75+12
+ 1333 0074 08101BE5 		ldr	r1, [fp, #-8]
+ 1334 0078 FEFFFFEB 		bl	CheckStatus
+ 230:../DebugConsole.c **** 
+ 231:../DebugConsole.c ****     Status = CyU3PUartTxSetBlockXfer(0xFFFFFFFF);					// Send as much data as I need to
+ 1335              		.loc 1 231 0
+ 1336 007c 0000E0E3 		mvn	r0, #0
+ 1337 0080 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 1338 0084 08000BE5 		str	r0, [fp, #-8]
+ 232:../DebugConsole.c ****     CheckStatus("CyU3PUartTxSetBlockXfer", Status);
+ 1339              		.loc 1 232 0
+ 1340 0088 14019FE5 		ldr	r0, .L75+16
+ 1341 008c 08101BE5 		ldr	r1, [fp, #-8]
+ 1342 0090 FEFFFFEB 		bl	CheckStatus
+ 233:../DebugConsole.c **** 
+ 234:../DebugConsole.c **** 	Status = CyU3PDebugInit(CY_U3P_LPP_SOCKET_UART_CONS, 6);		// Attach the Debug driver above the UAR
+ 1343              		.loc 1 234 0
+ 1344 0094 0300A0E3 		mov	r0, #3
+ 1345 0098 0610A0E3 		mov	r1, #6
+ 1346 009c FEFFFFEB 		bl	CyU3PDebugInit
+ 1347 00a0 08000BE5 		str	r0, [fp, #-8]
+ 235:../DebugConsole.c **** 	if (Status == CY_U3P_SUCCESS) DebugTxEnabled = CyTrue;
+ 1348              		.loc 1 235 0
+ 1349 00a4 08301BE5 		ldr	r3, [fp, #-8]
+ 1350 00a8 000053E3 		cmp	r3, #0
+ 1351 00ac 0200001A 		bne	.L72
+ 1352              		.loc 1 235 0 is_stmt 0 discriminator 1
+ 1353 00b0 F0309FE5 		ldr	r3, .L75+20
+ 1354 00b4 0120A0E3 		mov	r2, #1
+ 1355 00b8 002083E5 		str	r2, [r3, #0]
+ 1356              	.L72:
+ 236:../DebugConsole.c ****     CheckStatus("ConsoleOutEnabled", Status);
+ 1357              		.loc 1 236 0 is_stmt 1
+ 1358 00bc E8009FE5 		ldr	r0, .L75+24
+ 1359 00c0 08101BE5 		ldr	r1, [fp, #-8]
+ 1360 00c4 FEFFFFEB 		bl	CheckStatus
+ 237:../DebugConsole.c **** 	CyU3PDebugPreamble(CyFalse);									// Skip preamble, debug info is targeted for a person
+ 1361              		.loc 1 237 0
+ 1362 00c8 0000A0E3 		mov	r0, #0
+ 1363 00cc FEFFFFEB 		bl	CyU3PDebugPreamble
+ 238:../DebugConsole.c **** 
+ 239:../DebugConsole.c **** 	// Now setup a DMA channel to receive characters from the Uart Rx
+ 240:../DebugConsole.c ****     Status = CyU3PUartRxSetBlockXfer(1);
+ 1364              		.loc 1 240 0
+ 1365 00d0 0100A0E3 		mov	r0, #1
+ 1366 00d4 FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 1367 00d8 08000BE5 		str	r0, [fp, #-8]
+ 241:../DebugConsole.c ****     CheckStatus("CyU3PUartRxSetBlockXfer", Status);
+ 1368              		.loc 1 241 0
+ 1369 00dc CC009FE5 		ldr	r0, .L75+28
+ 1370 00e0 08101BE5 		ldr	r1, [fp, #-8]
+ 1371 00e4 FEFFFFEB 		bl	CheckStatus
+ 242:../DebugConsole.c **** 	CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 1372              		.loc 1 242 0
+ 1373 00e8 3C304BE2 		sub	r3, fp, #60
+ 1374 00ec 0300A0E1 		mov	r0, r3
+ 1375 00f0 0010A0E3 		mov	r1, #0
+ 1376 00f4 1C20A0E3 		mov	r2, #28
+ 1377 00f8 FEFFFFEB 		bl	CyU3PMemSet
+ 243:../DebugConsole.c **** 	dmaConfig.size  		= 16;									// Minimum size allowed, I only need 1 byte
+ 1378              		.loc 1 243 0
+ 1379 00fc 1030A0E3 		mov	r3, #16
+ 1380 0100 BC334BE1 		strh	r3, [fp, #-60]	@ movhi
+ 244:../DebugConsole.c **** 	dmaConfig.count 		= 1;									// I can't type faster than the Uart Callback routine!
+ 1381              		.loc 1 244 0
+ 1382 0104 0130A0E3 		mov	r3, #1
+ 1383 0108 BA334BE1 		strh	r3, [fp, #-58]	@ movhi
+ 245:../DebugConsole.c **** 	dmaConfig.prodSckId		= CY_U3P_LPP_SOCKET_UART_PROD;
+ 1384              		.loc 1 245 0
+ 1385 010c 0630A0E3 		mov	r3, #6
+ 1386 0110 B8334BE1 		strh	r3, [fp, #-56]	@ movhi
+ 246:../DebugConsole.c **** 	dmaConfig.consSckId 	= CY_U3P_CPU_SOCKET_CONS;
+ 1387              		.loc 1 246 0
+ 1388 0114 3F3CA0E3 		mov	r3, #16128
+ 1389 0118 B6334BE1 		strh	r3, [fp, #-54]	@ movhi
+ 247:../DebugConsole.c **** 	dmaConfig.dmaMode 		= CY_U3P_DMA_MODE_BYTE;
+ 1390              		.loc 1 247 0
+ 1391 011c 0030A0E3 		mov	r3, #0
+ 1392 0120 2C304BE5 		strb	r3, [fp, #-44]
+ 248:../DebugConsole.c **** 	dmaConfig.notification	= CY_U3P_DMA_CB_PROD_EVENT;
+ 1393              		.loc 1 248 0
+ 1394 0124 0830A0E3 		mov	r3, #8
+ 1395 0128 28300BE5 		str	r3, [fp, #-40]
+ 249:../DebugConsole.c **** 	Status = CyU3PDmaChannelCreate(&UARTtoCPU_Handle, CY_U3P_DMA_TYPE_MANUAL_IN, &dmaConfig);
+ 1396              		.loc 1 249 0
+ 1397 012c 3C304BE2 		sub	r3, fp, #60
+ 1398 0130 7C009FE5 		ldr	r0, .L75+32
+ 1399 0134 0310A0E3 		mov	r1, #3
+ 1400 0138 0320A0E1 		mov	r2, r3
+ 1401 013c FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 1402 0140 08000BE5 		str	r0, [fp, #-8]
+ 250:../DebugConsole.c ****     CheckStatus("CreateDebugRxDmaChannel", Status);
+ 1403              		.loc 1 250 0
+ 1404 0144 6C009FE5 		ldr	r0, .L75+36
+ 1405 0148 08101BE5 		ldr	r1, [fp, #-8]
+ 1406 014c FEFFFFEB 		bl	CheckStatus
+ 251:../DebugConsole.c ****     if (Status != CY_U3P_SUCCESS) CyU3PDmaChannelDestroy(&UARTtoCPU_Handle);
+ 1407              		.loc 1 251 0
+ 1408 0150 08301BE5 		ldr	r3, [fp, #-8]
+ 1409 0154 000053E3 		cmp	r3, #0
+ 1410 0158 0200000A 		beq	.L73
+ 1411              		.loc 1 251 0 is_stmt 0 discriminator 1
+ 1412 015c 50009FE5 		ldr	r0, .L75+32
+ 1413 0160 FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+ 1414 0164 060000EA 		b	.L74
+ 1415              	.L73:
+ 252:../DebugConsole.c ****     else
+ 253:../DebugConsole.c ****     {
+ 254:../DebugConsole.c **** 		Status = CyU3PDmaChannelSetXfer(&UARTtoCPU_Handle, INFINITE_TRANSFER_SIZE);
+ 1416              		.loc 1 254 0 is_stmt 1
+ 1417 0168 44009FE5 		ldr	r0, .L75+32
+ 1418 016c 0010A0E3 		mov	r1, #0
+ 1419 0170 FEFFFFEB 		bl	CyU3PDmaChannelSetXfer
+ 1420 0174 08000BE5 		str	r0, [fp, #-8]
+ 255:../DebugConsole.c **** 		CheckStatus("ConsoleInEnabled", Status);
+ 1421              		.loc 1 255 0
+ 1422 0178 3C009FE5 		ldr	r0, .L75+40
+ 1423 017c 08101BE5 		ldr	r1, [fp, #-8]
+ 1424 0180 FEFFFFEB 		bl	CheckStatus
+ 1425              	.L74:
+ 256:../DebugConsole.c ****     }
+ 257:../DebugConsole.c ****     return Status;
+ 1426              		.loc 1 257 0
+ 1427 0184 08301BE5 		ldr	r3, [fp, #-8]
+ 258:../DebugConsole.c **** }
+ 1428              		.loc 1 258 0
+ 1429 0188 0300A0E1 		mov	r0, r3
+ 1430 018c 04D04BE2 		sub	sp, fp, #4
+ 1431 0190 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 1432              	.L76:
+ 1433              		.align	2
+ 1434              	.L75:
+ 1435 0194 E8010000 		.word	.LC24
+ 1436 0198 00C20100 		.word	115200
+ 1437 019c 00000000 		.word	UartCallback
+ 1438 01a0 F8010000 		.word	.LC25
+ 1439 01a4 0C020000 		.word	.LC26
+ 1440 01a8 00000000 		.word	DebugTxEnabled
+ 1441 01ac 24020000 		.word	.LC27
+ 1442 01b0 38020000 		.word	.LC28
+ 1443 01b4 00000000 		.word	UARTtoCPU_Handle
+ 1444 01b8 50020000 		.word	.LC29
+ 1445 01bc 68020000 		.word	.LC30
+ 1446              		.cfi_endproc
+ 1447              	.LFE10:
+ 1449              		.text
+ 1450              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 DebugConsole.c
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:22     .bss.DebugTxEnabled:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:25     .bss.DebugTxEnabled:00000000 DebugTxEnabled
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:28     .bss.UARTtoCPU_Handle:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:31     .bss.UARTtoCPU_Handle:00000000 UARTtoCPU_Handle
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:34     .bss.ConsoleInBuffer:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:37     .bss.ConsoleInBuffer:00000000 ConsoleInBuffer
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:40     .bss.ConsoleInIndex:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:43     .bss.ConsoleInIndex:00000000 ConsoleInIndex
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:50     .data.RTOS_Trace:00000000 RTOS_Trace
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:47     .data.RTOS_Trace:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:100    .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:110    .text.CheckStatus:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:113    .text.CheckStatus:00000000 CheckStatus
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:172    .text.CheckStatus:0000007c $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:184    .text.FindThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:187    .text.FindThread:00000000 FindThread
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:304    .text.FindThread:00000154 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:322    .text.SetupTrace:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:325    .text.SetupTrace:00000000 SetupTrace
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:513    .text.SetupTrace:00000244 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:524    .text.ASCII_Digit:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:527    .text.ASCII_Digit:00000000 ASCII_Digit
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:567    .text.GetValue:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:570    .text.GetValue:00000000 GetValue
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:630    .text.DisplayThreads:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:633    .text.DisplayThreads:00000000 DisplayThreads
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:707    .text.DisplayThreads:000000c8 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:722    .text.DisplayUsage:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:725    .text.DisplayUsage:00000000 DisplayUsage
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:822    .text.DisplayUsage:00000114 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:836    .text.DisplayStacks:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:839    .text.DisplayStacks:00000000 DisplayStacks
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:958    .text.DisplayStacks:00000144 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:996    .text.ParseCommand:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:999    .text.ParseCommand:00000000 ParseCommand
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:1125   .text.ParseCommand:00000154 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:1148   .text.UartCallback:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:1151   .text.UartCallback:00000000 UartCallback
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:1249   .text.UartCallback:00000104 $d
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:1279   .text.InitializeDebugConsole:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:1282   .text.InitializeDebugConsole:00000000 InitializeDebugConsole
+C:\Users\John\AppData\Local\Temp\cc9Y07gO.s:1435   .text.InitializeDebugConsole:00000194 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+_tx_thread_sleep
+_tx_thread_identify
+_txe_thread_info_get
+tx_thread_set_profile_gpio
+tx_semaphore_set_profile_gpio
+DataToProcess
+DataToOutput
+CyU3PDeviceGetThreadLoad
+CyU3PDeviceGetDriverLoad
+CyU3PDeviceGetCpuLoad
+StackPtr
+ThreadHandle
+strncmp
+strcmp
+CyU3PDeviceReset
+IndicateError
+SampleTime
+CyU3PDmaChannelSetWrapUp
+CyU3PDmaChannelGetBuffer
+CyU3PDmaChannelDiscardBuffer
+CyU3PUartRxSetBlockXfer
+CyU3PUartInit
+CyU3PMemSet
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble
+CyU3PDmaChannelCreate
+CyU3PDmaChannelDestroy
+CyU3PDmaChannelSetXfer

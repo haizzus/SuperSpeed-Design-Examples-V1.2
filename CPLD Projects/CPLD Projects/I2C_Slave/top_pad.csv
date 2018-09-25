@@ -1,0 +1,129 @@
+Release 8.1i - Fit P.15xf
+Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
+
+10- 5-2015  6:15PM
+
+NOTE: This file is designed to be imported into a spreadsheet program
+such as Microsoft Excel for viewing, printing and sorting. The comma ','
+character is used as the data field separator.
+This file is also designed to support parsing.
+
+Input file:  top.ngd
+output file: top_pad.csv
+Part type:   xc2c128
+Speed grade: -6
+Package:     vq100
+
+Pinout by Pin Number:
+
+-----,-----,-----,-----,-----,-----,-----,-----,-----,-----,
+Pin Number,Signal Name,Pin Usage,Pin Name,Direction,IO Standard,IO Bank Number,{blank},Slew Rate,Termination,{blank},Voltage,Constraint,
+P1,TIE,,I/O/GTS2,,,2,,,,,,,
+P2,TIE,,I/O/GTS3,,,2,,,,,,,
+P3,TIE,,I/O/GTS0,,,2,,,,,,,
+P4,TIE,,I/O/GTS1,,,2,,,,,,,
+P5,,VCCAUX,VAUX,,,,,,,,,,
+P6,CTRL<10>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P7,TIE,,I/O,,,2,,,,,,,
+P8,TIE,,I/O,,,2,,,,,,,
+P9,TIE,,I/O,,,2,,,,,,,
+P10,TIE,,I/O,,,2,,,,,,,
+P11,TIE,,I/O,,,2,,,,,,,
+P12,TIE,,I/O,,,2,,,,,,,
+P13,TIE,,I/O,,,2,,,,,,,
+P14,TIE,,I/O,,,1,,,,,,,
+P15,TIE,,I/O,,,1,,,,,,,
+P16,TIE,,I/O,,,1,,,,,,,
+P17,TIE,,I/O,,,1,,,,,,,
+P18,TIE,,I/O,,,1,,,,,,,
+P19,TIE,,I/O,,,1,,,,,,,
+P20,,VCCIO-3.3,VCCIO,,,1,,,,,,,
+P21,GND,,GND,,,,,,,,,,
+P22,TIE,,I/O/GCK0,,,1,,,,,,,
+P23,TIE,,I/O/GCK1,,,1,,,,,,,
+P24,TIE,,I/O/CDR,,,1,,,,,,,
+P25,GND,,GND,,,,,,,,,,
+P26,,VCC,VCC,,,,,,,,,,
+P27,TIE,,I/O/GCK2,,,1,,,,,,,
+P28,TIE,,I/O/DGE0,,,1,,,,,,,
+P29,I2C_SDA,I/O,I/O,BIDIR,LVCMOS33,1,,FAST,,,,
+P30,I2C_SCL,I,I/O,INPUT,LVCMOS33,1,,FAST,,,,
+P31,GND,,GND,,,,,,,,,,
+P32,TIE,,I/O,,,1,,,,,,,
+P33,TIE,,I/O,,,1,,,,,,,
+P34,TIE,,I/O,,,1,,,,,,,
+P35,TIE,,I/O,,,1,,,,,,,
+P36,TIE,,I/O,,,1,,,,,,,
+P37,TIE,,I/O,,,1,,,,,,,
+P38,,VCCIO-3.3,VCCIO,,,1,,,,,,,
+P39,TIE,,I/O,,,1,,,,,,,
+P40,TIE,,I/O,,,1,,,,,,,
+P41,TIE,,I/O,,,1,,,,,,,
+P42,TIE,,I/O,,,1,,,,,,,
+P43,TIE,,I/O,,,1,,,,,,,
+P44,TIE,,I/O,,,1,,,,,,,
+P45,TDI,,TDI,,,,,,,,,,
+P46,TIE,,I/O,,,1,,,,,,,
+P47,TMS,,TMS,,,,,,,,,,
+P48,TCK,,TCK,,,,,,,,,,
+P49,TIE,,I/O,,,1,,,,,,,
+P50,TIE,,I/O,,,1,,,,,,,
+P51,,VCCIO-3.3,VCCIO,,,1,,,,,,,
+P52,TIE,,I/O,,,1,,,,,,,
+P53,TIE,,I/O,,,1,,,,,,,
+P54,TIE,,I/O,,,1,,,,,,,
+P55,TIE,,I/O,,,1,,,,,,,
+P56,TIE,,I/O,,,1,,,,,,,
+P57,,VCC,VCC,,,,,,,,,,
+P58,TIE,,I/O,,,1,,,,,,,
+P59,TIE,,I/O,,,1,,,,,,,
+P60,TIE,,I/O,,,1,,,,,,,
+P61,TIE,,I/O,,,1,,,,,,,
+P62,GND,,GND,,,,,,,,,,
+P63,TIE,,I/O,,,1,,,,,,,
+P64,Button<7>,I,I/O,INPUT,LVCMOS33,1,,FAST,,,,
+P65,Button<6>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P66,Button<5>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P67,Button<4>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P68,Button<3>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P69,GND,,GND,,,,,,,,,,
+P70,Button<2>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P71,Button<1>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P72,Button<0>,I,I/O,INPUT,LVCMOS33,2,,FAST,,,,
+P73,FlashCS_n,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P74,TIE,,I/O,,,2,,,,,,,
+P75,GND,,GND,,,,,,,,,,
+P76,TIE,,I/O,,,2,,,,,,,
+P77,TX_MISO,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P78,TIE,,I/O,,,2,,,,,,,
+P79,TIE,,I/O,,,2,,,,,,,
+P80,TIE,,I/O,,,2,,,,,,,
+P81,LED<0>,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P82,LED<1>,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P83,TDO,,TDO,,,,,,,,,,
+P84,GND,,GND,,,,,,,,,,
+P85,LED<2>,O,I/O/DGE1,OUTPUT,LVCMOS33,2,,FAST,,,,
+P86,LED<3>,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P87,LED<4>,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P88,,VCCIO-3.3,VCCIO,,,2,,,,,,,
+P89,LED<5>,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P90,LED<6>,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P91,LED<7>,O,I/O,OUTPUT,LVCMOS33,2,,FAST,,,,
+P92,TIE,,I/O,,,2,,,,,,,
+P93,TIE,,I/O,,,2,,,,,,,
+P94,TIE,,I/O,,,2,,,,,,,
+P95,TIE,,I/O,,,2,,,,,,,
+P96,TIE,,I/O,,,2,,,,,,,
+P97,TIE,,I/O,,,2,,,,,,,
+P98,,VCCIO-3.3,VCCIO,,,2,,,,,,,
+P99,INT,O,I/O/GSR,OUTPUT,LVCMOS33,2,,FAST,,,,
+P100,GND,,GND,,,,,,,,,,
+
+To preserve the pinout above for future design iterations in
+Project Navigator simply execute the (Lock Pins) process
+located under the (Implement Design) process in a toolbox named
+(Optional Implementation Tools) or invoke PIN2UCF from the
+command line. The location constraints will be written into your
+specified UCF file
+
+

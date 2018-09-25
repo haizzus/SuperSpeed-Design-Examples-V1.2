@@ -1,0 +1,728 @@
+MDF Database:  version 1.0
+MDF_INFO | top | XC2C128-7-VQ100
+MACROCELL | 7 | 12 | CTRL<0>_MC
+ATTRIBUTES | 2172945154 | 0
+OUTPUTMC | 1 | 7 | 12
+INPUTS | 17 | DQ<12>  | CTRL<0>  | CTRL<6>  | CTRL<4>  | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>
+INPUTMC | 15 | 0 | 5 | 7 | 12 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3
+INPUTP | 2 | 33 | 43
+LCT | 1 | 1 | Internal_Name
+EQ | 10 | 
+   CTRL<0> := DQ<12> & CTRL<0> & !CTRL<6>
+	# !DQ<12> & CTRL<0> & !CTRL<4>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & !CTRL<4>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & !DQ<12> & !CTRL<6>;	// (4 pt, 17 inp)
+   CTRL<0>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    CTRL<0>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 5 | DQ<12>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 26 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 13 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>
+INPUTMC | 13 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3
+LCT | 1 | 4 | Internal_Name
+EQ | 5 | 
+   DQ<12>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11>;	// (1 pt, 13 inp)
+   DQ<12>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<12>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 3 | DQ<0>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 38 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 1 | Counter/CurrentState
+INPUTMC | 1 | 0 | 9
+LCT | 1 | 4 | Internal_Name
+EQ | 3 | 
+   DQ<0>.T := Counter/CurrentState;	// (1 pt, 1 inp)
+   DQ<0>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<0>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 9 | Counter/CurrentState_MC
+ATTRIBUTES | 2189460224 | 0
+OUTPUTMC | 42 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15 | 2 | 15 | 2 | 14
+INPUTS | 0
+LCT | 1 | 4 | Internal_Name
+EQ | 3 | 
+   !Counter/CurrentState := Gnd;	// (0 pt, 0 inp)
+   Counter/CurrentState.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    Counter/CurrentState.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 5 | DQ<1>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 37 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 2 | Counter/CurrentState  | DQ<0>
+INPUTMC | 2 | 0 | 9 | 7 | 3
+LCT | 1 | 4 | Internal_Name
+EQ | 3 | 
+   DQ<1>.T := Counter/CurrentState & DQ<0>;	// (1 pt, 2 inp)
+   DQ<1>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<1>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 11 | DQ<2>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 36 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 3 | Counter/CurrentState  | DQ<0>  | DQ<1>
+INPUTMC | 3 | 0 | 9 | 7 | 3 | 7 | 5
+LCT | 1 | 4 | Internal_Name
+EQ | 3 | 
+   DQ<2>.T := Counter/CurrentState & DQ<0> & DQ<1>;	// (1 pt, 3 inp)
+   DQ<2>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<2>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 13 | DQ<3>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 35 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 4 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>
+INPUTMC | 4 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11
+LCT | 1 | 4 | Internal_Name
+EQ | 3 | 
+   DQ<3>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2>;	// (1 pt, 4 inp)
+   DQ<3>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<3>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 15 | DQ<4>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 34 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 5 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>
+INPUTMC | 5 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<4>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3>;	// (1 pt, 5 inp)
+   DQ<4>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<4>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 14 | DQ<5>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 33 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 6 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>
+INPUTMC | 6 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<5>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4>;	// (1 pt, 6 inp)
+   DQ<5>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<5>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 12 | DQ<6>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 32 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 7 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>
+INPUTMC | 7 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<6>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5>;	// (1 pt, 7 inp)
+   DQ<6>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<6>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 10 | DQ<7>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 31 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 8 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>
+INPUTMC | 8 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<7>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6>;	// (1 pt, 8 inp)
+   DQ<7>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<7>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 1 | 13 | DQ<10>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 28 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 11 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>
+INPUTMC | 11 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<10>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9>;	// (1 pt, 11 inp)
+   DQ<10>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<10>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 5 | DQ<8>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 30 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 9 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>
+INPUTMC | 9 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<8>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7>;	// (1 pt, 9 inp)
+   DQ<8>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<8>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 0 | DQ<9>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 29 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 10 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>
+INPUTMC | 10 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<9>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8>;	// (1 pt, 10 inp)
+   DQ<9>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<9>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 3 | DQ<11>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 27 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 12 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>
+INPUTMC | 12 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13
+LCT | 1 | 4 | Internal_Name
+EQ | 5 | 
+   DQ<11>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10>;	// (1 pt, 12 inp)
+   DQ<11>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<11>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 2 | CTRL<12>_MC
+ATTRIBUTES | 2189722370 | 0
+OUTPUTMC | 1 | 2 | 2
+INPUTS | 15 | Counter/CurrentState  | DQ<12>  | CTRL<12>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>
+INPUTMC | 15 | 0 | 9 | 0 | 5 | 2 | 2 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3
+LCT | 1 | 4 | Internal_Name
+EQ | 7 | 
+   CTRL<12> := Counter/CurrentState & DQ<12>
+	$ !Counter/CurrentState & CTRL<12>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11>;	// (3 pt, 15 inp)
+   CTRL<12>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    CTRL<12>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 11 | DQ<13>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 23 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 14 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>
+INPUTMC | 14 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5
+LCT | 1 | 4 | Internal_Name
+EQ | 5 | 
+   DQ<13>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12>;	// (1 pt, 14 inp)
+   DQ<13>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<13>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 14 | DQ<14>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 22 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 15 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>
+INPUTMC | 15 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11
+LCT | 1 | 4 | Internal_Name
+EQ | 5 | 
+   DQ<14>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13>;	// (1 pt, 15 inp)
+   DQ<14>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<14>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 1 | DQ<15>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 21 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 16 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>
+INPUTMC | 16 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14
+LCT | 1 | 4 | Internal_Name
+EQ | 5 | 
+   DQ<15>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14>;	// (1 pt, 16 inp)
+   DQ<15>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<15>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 2 | DQ<16>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 20 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 17 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>
+INPUTMC | 17 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1
+LCT | 1 | 4 | Internal_Name
+EQ | 5 | 
+   DQ<16>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15>;	// (1 pt, 17 inp)
+   DQ<16>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<16>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 1 | DQ<17>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 19 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 18 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>
+INPUTMC | 18 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2
+LCT | 1 | 4 | Internal_Name
+EQ | 6 | 
+   DQ<17>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16>;	// (1 pt, 18 inp)
+   DQ<17>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<17>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 15 | DQ<18>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 18 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 19 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>
+INPUTMC | 19 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1
+LCT | 1 | 4 | Internal_Name
+EQ | 6 | 
+   DQ<18>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17>;	// (1 pt, 19 inp)
+   DQ<18>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<18>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 13 | DQ<19>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 17 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 20 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>
+INPUTMC | 20 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15
+LCT | 1 | 4 | Internal_Name
+EQ | 6 | 
+   DQ<19>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18>;	// (1 pt, 20 inp)
+   DQ<19>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<19>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 11 | DQ<20>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 16 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 21 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>
+INPUTMC | 21 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13
+LCT | 1 | 4 | Internal_Name
+EQ | 6 | 
+   DQ<20>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19>;	// (1 pt, 21 inp)
+   DQ<20>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<20>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 5 | DQ<21>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 15 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 22 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>
+INPUTMC | 22 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11
+LCT | 1 | 4 | Internal_Name
+EQ | 6 | 
+   DQ<21>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20>;	// (1 pt, 22 inp)
+   DQ<21>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<21>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 4 | DQ<22>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 14 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 23 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>
+INPUTMC | 23 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5
+LCT | 1 | 4 | Internal_Name
+EQ | 6 | 
+   DQ<22>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21>;	// (1 pt, 23 inp)
+   DQ<22>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<22>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 3 | DQ<23>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 13 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 24 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>
+INPUTMC | 24 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4
+LCT | 1 | 4 | Internal_Name
+EQ | 7 | 
+   DQ<23>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22>;	// (1 pt, 24 inp)
+   DQ<23>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<23>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 2 | DQ<24>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 12 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 25 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>
+INPUTMC | 25 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3
+LCT | 1 | 4 | Internal_Name
+EQ | 7 | 
+   DQ<24>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23>;	// (1 pt, 25 inp)
+   DQ<24>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<24>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 1 | DQ<25>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 10 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 26 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>
+INPUTMC | 26 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2
+LCT | 1 | 4 | Internal_Name
+EQ | 7 | 
+   DQ<25>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24>;	// (1 pt, 26 inp)
+   DQ<25>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<25>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 13 | DQ<26>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 8 | 2 | 12 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 27 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>
+INPUTMC | 27 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1
+LCT | 1 | 4 | Internal_Name
+EQ | 7 | 
+   DQ<26>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25>;	// (1 pt, 27 inp)
+   DQ<26>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<26>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 12 | DQ<27>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 6 | 2 | 10 | 2 | 6 | 0 | 13 | 6 | 13 | 6 | 14 | 6 | 15
+INPUTS | 28 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>
+INPUTMC | 28 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13
+LCT | 1 | 4 | Internal_Name
+EQ | 7 | 
+   DQ<27>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26>;	// (1 pt, 28 inp)
+   DQ<27>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<27>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 10 | DQ<28>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 4 | 2 | 6 | 0 | 13 | 6 | 14 | 6 | 15
+INPUTS | 29 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>
+INPUTMC | 29 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12
+LCT | 1 | 4 | Internal_Name
+EQ | 7 | 
+   DQ<28>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27>;	// (1 pt, 29 inp)
+   DQ<28>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<28>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 6 | DQ<29>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 2 | 0 | 13 | 6 | 15
+INPUTS | 30 | Counter/CurrentState  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>  | DQ<28>
+INPUTMC | 30 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10
+LCT | 1 | 4 | Internal_Name
+EQ | 8 | 
+   DQ<29>.T := Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27> & 
+	DQ<28>;	// (1 pt, 30 inp)
+   DQ<29>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<29>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 5 | DQ<30>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 3 | 2 | 4 | 2 | 15 | 2 | 14
+INPUTS | 2 | Counter/CurrentState  | Counter/Counter_Madd__add0000__and0028
+INPUTMC | 2 | 0 | 9 | 0 | 13
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<30>.T := Counter/CurrentState & 
+	Counter/Counter_Madd__add0000__and0028;	// (1 pt, 2 inp)
+   DQ<30>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<30>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 13 | Counter/Counter_Madd__add0000__and0028_MC
+ATTRIBUTES | 536871680 | 0
+OUTPUTMC | 4 | 2 | 5 | 2 | 4 | 2 | 15 | 2 | 14
+INPUTS | 30 | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>  | DQ<28>  | DQ<29>
+INPUTMC | 30 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6
+EQ | 5 | 
+   Counter/Counter_Madd__add0000__and0028 = DQ<0> & DQ<1> & DQ<2> & DQ<3> & DQ<4> & DQ<5> & 
+	DQ<6> & DQ<7> & DQ<8> & DQ<9> & DQ<10> & DQ<11> & 
+	DQ<12> & DQ<13> & DQ<14> & DQ<15> & DQ<16> & DQ<17> & 
+	DQ<18> & DQ<19> & DQ<20> & DQ<21> & DQ<22> & DQ<23> & 
+	DQ<24> & DQ<25> & DQ<26> & DQ<27> & DQ<28> & DQ<29>;	// (1 pt, 30 inp)
+
+MACROCELL | 2 | 4 | DQ<31>_MC
+ATTRIBUTES | 2185528066 | 0
+OUTPUTMC | 1 | 2 | 14
+INPUTS | 3 | Counter/CurrentState  | Counter/Counter_Madd__add0000__and0028  | DQ<30>
+INPUTMC | 3 | 0 | 9 | 0 | 13 | 2 | 5
+LCT | 1 | 4 | Internal_Name
+EQ | 4 | 
+   DQ<31>.T := Counter/CurrentState & 
+	Counter/Counter_Madd__add0000__and0028 & DQ<30>;	// (1 pt, 3 inp)
+   DQ<31>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<31>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 4 | 12 | FlashCS_n_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 1 | 
+   !FlashCS_n = Gnd;	// (0 pt, 0 inp)
+
+MACROCELL | 2 | 3 | INT_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 1 | 
+   INT = Gnd;	// (0 pt, 0 inp)
+
+MACROCELL | 6 | 5 | LED<0>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 6 | 5
+INPUTS | 27 | Counter/CurrentState  | DQ<24>  | LED<0>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>
+INPUTMC | 27 | 0 | 9 | 5 | 2 | 6 | 5 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3
+LCT | 1 | 1 | Internal_Name
+EQ | 9 | 
+   LED<0> := Counter/CurrentState & !DQ<24>
+	$ !Counter/CurrentState & LED<0>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23>;	// (3 pt, 27 inp)
+   LED<0>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<0>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 6 | 10 | LED<1>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 6 | 10
+INPUTS | 28 | Counter/CurrentState  | DQ<25>  | LED<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>
+INPUTMC | 28 | 0 | 9 | 5 | 1 | 6 | 10 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2
+LCT | 1 | 1 | Internal_Name
+EQ | 9 | 
+   LED<1> := Counter/CurrentState & !DQ<25>
+	$ !Counter/CurrentState & LED<1>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24>;	// (3 pt, 28 inp)
+   LED<1>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<1>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 6 | 12 | LED<2>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 6 | 12
+INPUTS | 29 | Counter/CurrentState  | DQ<26>  | LED<2>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>
+INPUTMC | 29 | 0 | 9 | 2 | 13 | 6 | 12 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1
+LCT | 1 | 1 | Internal_Name
+EQ | 9 | 
+   LED<2> := Counter/CurrentState & !DQ<26>
+	$ !Counter/CurrentState & LED<2>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25>;	// (3 pt, 29 inp)
+   LED<2>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<2>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 6 | 13 | LED<3>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 6 | 13
+INPUTS | 30 | Counter/CurrentState  | DQ<27>  | LED<3>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>
+INPUTMC | 30 | 0 | 9 | 2 | 12 | 6 | 13 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13
+LCT | 1 | 1 | Internal_Name
+EQ | 9 | 
+   LED<3> := Counter/CurrentState & !DQ<27>
+	$ !Counter/CurrentState & LED<3>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26>;	// (3 pt, 30 inp)
+   LED<3>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<3>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 6 | 14 | LED<4>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 6 | 14
+INPUTS | 31 | Counter/CurrentState  | DQ<28>  | LED<4>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>
+INPUTMC | 31 | 0 | 9 | 2 | 10 | 6 | 14 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12
+LCT | 1 | 1 | Internal_Name
+EQ | 9 | 
+   LED<4> := Counter/CurrentState & !DQ<28>
+	$ !Counter/CurrentState & LED<4>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27>;	// (3 pt, 31 inp)
+   LED<4>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<4>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 6 | 15 | LED<5>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 6 | 15
+INPUTS | 32 | Counter/CurrentState  | DQ<29>  | LED<5>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>  | DQ<28>
+INPUTMC | 32 | 0 | 9 | 2 | 6 | 6 | 15 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10
+LCT | 1 | 1 | Internal_Name
+EQ | 10 | 
+   LED<5> := Counter/CurrentState & !DQ<29>
+	$ !Counter/CurrentState & LED<5>
+	# Counter/CurrentState & DQ<0> & DQ<1> & DQ<2> & 
+	DQ<3> & DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27> & 
+	DQ<28>;	// (3 pt, 32 inp)
+   LED<5>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<5>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 15 | LED<6>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 2 | 15
+INPUTS | 4 | Counter/CurrentState  | LED<6>  | Counter/Counter_Madd__add0000__and0028  | DQ<30>
+INPUTMC | 4 | 0 | 9 | 2 | 15 | 0 | 13 | 2 | 5
+LCT | 1 | 1 | Internal_Name
+EQ | 7 | 
+   LED<6> := !Counter/CurrentState & LED<6>
+	# Counter/CurrentState & 
+	Counter/Counter_Madd__add0000__and0028 & DQ<30>
+	# Counter/CurrentState & 
+	!Counter/Counter_Madd__add0000__and0028 & !DQ<30>;	// (3 pt, 4 inp)
+   LED<6>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<6>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 14 | LED<7>_MC
+ATTRIBUTES | 2172945158 | 0
+OUTPUTMC | 1 | 2 | 14
+INPUTS | 5 | Counter/CurrentState  | DQ<31>  | LED<7>  | Counter/Counter_Madd__add0000__and0028  | DQ<30>
+INPUTMC | 5 | 0 | 9 | 2 | 4 | 2 | 14 | 0 | 13 | 2 | 5
+LCT | 1 | 1 | Internal_Name
+EQ | 6 | 
+   LED<7> := Counter/CurrentState & !DQ<31>
+	$ !Counter/CurrentState & LED<7>
+	# Counter/CurrentState & 
+	Counter/Counter_Madd__add0000__and0028 & DQ<30>;	// (3 pt, 5 inp)
+   LED<7>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    LED<7>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 6 | 4 | TP_2_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 1 | 
+   !TP_2 = Gnd;	// (0 pt, 0 inp)
+
+MACROCELL | 6 | 0 | TX_MISO_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 2 | 
+   TX_MISO = Gnd;	// (0 pt, 0 inp)
+    TX_MISO.OE = Gnd;	// PTB	(1 pt, 1 inp)
+
+PIN | PCLK | 4096 | 64 | LVCMOS33 | 28 | 43 | 0 | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 7 | 12 | 2 | 2 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15 | 2 | 15 | 2 | 14
+PIN | CTRL<10> | 64 | 64 | LVCMOS33 | 9 | 0
+PIN | CTRL<4> | 64 | 64 | LVCMOS33 | 43 | 1 | 7 | 12
+PIN | CTRL<6> | 64 | 64 | LVCMOS33 | 33 | 1 | 7 | 12
+PIN | CTRL<0> | 536871040 | 0 | LVCMOS33 | 52
+PIN | CTRL<12> | 536871040 | 0 | LVCMOS33 | 2
+PIN | DQ<0> | 536871040 | 0 | LVCMOS33 | 61
+PIN | DQ<10> | 536871040 | 0 | LVCMOS33 | 29
+PIN | DQ<11> | 536871040 | 0 | LVCMOS33 | 14
+PIN | DQ<12> | 536871040 | 0 | LVCMOS33 | 12
+PIN | DQ<13> | 536871040 | 0 | LVCMOS33 | 10
+PIN | DQ<14> | 536871040 | 0 | LVCMOS33 | 6
+PIN | DQ<15> | 536871040 | 0 | LVCMOS33 | 3
+PIN | DQ<16> | 536871040 | 0 | LVCMOS33 | 64
+PIN | DQ<17> | 536871040 | 0 | LVCMOS33 | 65
+PIN | DQ<18> | 536871040 | 0 | LVCMOS33 | 67
+PIN | DQ<19> | 536871040 | 0 | LVCMOS33 | 69
+PIN | DQ<1> | 536871040 | 0 | LVCMOS33 | 59
+PIN | DQ<20> | 536871040 | 0 | LVCMOS33 | 71
+PIN | DQ<21> | 536871040 | 0 | LVCMOS33 | 74
+PIN | DQ<22> | 536871040 | 0 | LVCMOS33 | 75
+PIN | DQ<23> | 536871040 | 0 | LVCMOS33 | 76
+PIN | DQ<24> | 536871040 | 0 | LVCMOS33 | 77
+PIN | DQ<25> | 536871040 | 0 | LVCMOS33 | 80
+PIN | DQ<26> | 536871040 | 0 | LVCMOS33 | 117
+PIN | DQ<27> | 536871040 | 0 | LVCMOS33 | 118
+PIN | DQ<28> | 536871040 | 0 | LVCMOS33 | 120
+PIN | DQ<29> | 536871040 | 0 | LVCMOS33 | 121
+PIN | DQ<2> | 536871040 | 0 | LVCMOS33 | 55
+PIN | DQ<30> | 536871040 | 0 | LVCMOS33 | 122
+PIN | DQ<31> | 536871040 | 0 | LVCMOS33 | 123
+PIN | DQ<3> | 536871040 | 0 | LVCMOS33 | 51
+PIN | DQ<4> | 536871040 | 0 | LVCMOS33 | 49
+PIN | DQ<5> | 536871040 | 0 | LVCMOS33 | 47
+PIN | DQ<6> | 536871040 | 0 | LVCMOS33 | 44
+PIN | DQ<7> | 536871040 | 0 | LVCMOS33 | 42
+PIN | DQ<8> | 536871040 | 0 | LVCMOS33 | 40
+PIN | DQ<9> | 536871040 | 0 | LVCMOS33 | 34
+PIN | FlashCS_n | 536871040 | 0 | LVCMOS33 | 93
+PIN | INT | 536871040 | 0 | LVCMOS33 | 125
+PIN | LED<0> | 536871040 | 0 | LVCMOS33 | 104
+PIN | LED<1> | 536871040 | 0 | LVCMOS33 | 106
+PIN | LED<2> | 536871040 | 0 | LVCMOS33 | 110
+PIN | LED<3> | 536871040 | 0 | LVCMOS33 | 111
+PIN | LED<4> | 536871040 | 0 | LVCMOS33 | 112
+PIN | LED<5> | 536871040 | 0 | LVCMOS33 | 114
+PIN | LED<6> | 536871040 | 0 | LVCMOS33 | 115
+PIN | LED<7> | 536871040 | 0 | LVCMOS33 | 116
+PIN | TP_2 | 536871040 | 0 | LVCMOS33 | 103
+PIN | TX_MISO | 536871040 | 64 | LVCMOS33 | 99

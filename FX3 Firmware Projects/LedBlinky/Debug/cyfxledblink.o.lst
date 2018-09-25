@@ -1,0 +1,862 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"cyfxledblink.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	gpioThread,212,4
+  22              		.comm	dbgThread,212,4
+  23              		.section	.text.CyFxGpioInit,"ax",%progbits
+  24              		.align	2
+  26              	CyFxGpioInit:
+  27              	.LFB0:
+  28              		.file 1 "../cyfxledblink.c"
+   1:../cyfxledblink.c **** /*
+   2:../cyfxledblink.c **** ## Cypress USB 3.0 Platform source file (cyfxledblink.c)
+   3:../cyfxledblink.c **** ## ===========================
+   4:../cyfxledblink.c **** ##
+   5:../cyfxledblink.c **** ##  Copyright Cypress Semiconductor Corporation, 2010-2011,
+   6:../cyfxledblink.c **** ##  All Rights Reserved
+   7:../cyfxledblink.c **** ##  UNPUBLISHED, LICENSED SOFTWARE.
+   8:../cyfxledblink.c **** ##
+   9:../cyfxledblink.c **** ##  CONFIDENTIAL AND PROPRIETARY INFORMATION
+  10:../cyfxledblink.c **** ##  WHICH IS THE PROPERTY OF CYPRESS.
+  11:../cyfxledblink.c **** ##
+  12:../cyfxledblink.c **** ##  Use of this file is governed
+  13:../cyfxledblink.c **** ##  by the license agreement included in the file
+  14:../cyfxledblink.c **** ##
+  15:../cyfxledblink.c **** ##     <install>/license/license.txt
+  16:../cyfxledblink.c **** ##
+  17:../cyfxledblink.c **** ##  where <install> is the Cypress software
+  18:../cyfxledblink.c **** ##  installation root directory path.
+  19:../cyfxledblink.c **** ##
+  20:../cyfxledblink.c **** ## ===========================
+  21:../cyfxledblink.c **** */
+  22:../cyfxledblink.c **** 
+  23:../cyfxledblink.c **** #include "cyu3system.h"
+  24:../cyfxledblink.c **** #include "cyu3os.h"
+  25:../cyfxledblink.c **** #include "cyu3error.h"
+  26:../cyfxledblink.c **** #include "cyu3gpio.h"
+  27:../cyfxledblink.c **** #include "cyu3uart.h"
+  28:../cyfxledblink.c **** #include "cyu3utils.h"
+  29:../cyfxledblink.c **** #include "cyfxledblink.h"
+  30:../cyfxledblink.c **** 
+  31:../cyfxledblink.c **** CyU3PThread gpioThread;                  /* Application thread object. */
+  32:../cyfxledblink.c **** CyU3PThread dbgThread;                   /* Debug thread object. */
+  33:../cyfxledblink.c **** 
+  34:../cyfxledblink.c **** static void
+  35:../cyfxledblink.c **** CyFxGpioInit (
+  36:../cyfxledblink.c ****         void)
+  37:../cyfxledblink.c **** {
+  29              		.loc 1 37 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 32
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36 0004 04B08DE2 		add	fp, sp, #4
+  37              		.cfi_offset 14, -4
+  38              		.cfi_offset 11, -8
+  39              	.LCFI1:
+  40              		.cfi_def_cfa 11, 4
+  41 0008 20D04DE2 		sub	sp, sp, #32
+  38:../cyfxledblink.c ****     CyU3PGpioClock_t        gpioClock;
+  39:../cyfxledblink.c ****     CyU3PGpioSimpleConfig_t testConf = {CyFalse, CyTrue, CyTrue, CyFalse, CY_U3P_GPIO_NO_INTR};
+  42              		.loc 1 39 0
+  43 000c 70309FE5 		ldr	r3, .L2
+  44 0010 24C04BE2 		sub	ip, fp, #36
+  45 0014 03E0A0E1 		mov	lr, r3
+  46 0018 0F00BEE8 		ldmia	lr!, {r0, r1, r2, r3}
+  47 001c 0F00ACE8 		stmia	ip!, {r0, r1, r2, r3}
+  48 0020 00309EE5 		ldr	r3, [lr, #0]
+  49 0024 00308CE5 		str	r3, [ip, #0]
+  40:../cyfxledblink.c **** 
+  41:../cyfxledblink.c ****     /* Initialize the GPIO block and set GPIO 54 as an output. */
+  42:../cyfxledblink.c ****     gpioClock.fastClkDiv = 2;
+  50              		.loc 1 42 0
+  51 0028 0230A0E3 		mov	r3, #2
+  52 002c 10304BE5 		strb	r3, [fp, #-16]
+  43:../cyfxledblink.c ****     gpioClock.slowClkDiv = 32;
+  53              		.loc 1 43 0
+  54 0030 2030A0E3 		mov	r3, #32
+  55 0034 0F304BE5 		strb	r3, [fp, #-15]
+  44:../cyfxledblink.c ****     gpioClock.simpleDiv  = CY_U3P_GPIO_SIMPLE_DIV_BY_16;
+  56              		.loc 1 44 0
+  57 0038 0230A0E3 		mov	r3, #2
+  58 003c 08304BE5 		strb	r3, [fp, #-8]
+  45:../cyfxledblink.c ****     gpioClock.clkSrc     = CY_U3P_SYS_CLK_BY_2;
+  59              		.loc 1 45 0
+  60 0040 0230A0E3 		mov	r3, #2
+  61 0044 07304BE5 		strb	r3, [fp, #-7]
+  46:../cyfxledblink.c ****     gpioClock.halfDiv    = 0;
+  62              		.loc 1 46 0
+  63 0048 0030A0E3 		mov	r3, #0
+  64 004c 0C300BE5 		str	r3, [fp, #-12]
+  47:../cyfxledblink.c ****     CyU3PGpioInit (&gpioClock, NULL);
+  65              		.loc 1 47 0
+  66 0050 10304BE2 		sub	r3, fp, #16
+  67 0054 0300A0E1 		mov	r0, r3
+  68 0058 0010A0E3 		mov	r1, #0
+  69 005c FEFFFFEB 		bl	CyU3PGpioInit
+  48:../cyfxledblink.c **** 
+  49:../cyfxledblink.c ****     /* Override GPIO54 as a simple GPIO. */
+  50:../cyfxledblink.c ****     CyU3PDeviceGpioOverride (54, CyTrue);
+  70              		.loc 1 50 0
+  71 0060 3600A0E3 		mov	r0, #54
+  72 0064 0110A0E3 		mov	r1, #1
+  73 0068 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  51:../cyfxledblink.c **** 
+  52:../cyfxledblink.c ****     CyU3PGpioSetSimpleConfig (54, &testConf);
+  74              		.loc 1 52 0
+  75 006c 24304BE2 		sub	r3, fp, #36
+  76 0070 3600A0E3 		mov	r0, #54
+  77 0074 0310A0E1 		mov	r1, r3
+  78 0078 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+  53:../cyfxledblink.c **** }
+  79              		.loc 1 53 0
+  80 007c 04D04BE2 		sub	sp, fp, #4
+  81 0080 0088BDE8 		ldmfd	sp!, {fp, pc}
+  82              	.L3:
+  83              		.align	2
+  84              	.L2:
+  85 0084 00000000 		.word	C.2.8072
+  86              		.cfi_endproc
+  87              	.LFE0:
+  89              		.section	.text.CyFxDebugInit,"ax",%progbits
+  90              		.align	2
+  91              		.global	CyFxDebugInit
+  93              	CyFxDebugInit:
+  94              	.LFB1:
+  54:../cyfxledblink.c **** 
+  55:../cyfxledblink.c **** /* Initialize the debug module with UART. */
+  56:../cyfxledblink.c **** CyU3PReturnStatus_t
+  57:../cyfxledblink.c **** CyFxDebugInit (
+  58:../cyfxledblink.c ****         void)
+  59:../cyfxledblink.c **** {
+  95              		.loc 1 59 0
+  96              		.cfi_startproc
+  97              		@ args = 0, pretend = 0, frame = 32
+  98              		@ frame_needed = 1, uses_anonymous_args = 0
+  99 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 100              	.LCFI2:
+ 101              		.cfi_def_cfa_offset 8
+ 102 0004 04B08DE2 		add	fp, sp, #4
+ 103              		.cfi_offset 14, -4
+ 104              		.cfi_offset 11, -8
+ 105              	.LCFI3:
+ 106              		.cfi_def_cfa 11, 4
+ 107 0008 20D04DE2 		sub	sp, sp, #32
+  60:../cyfxledblink.c ****     CyU3PUartConfig_t uartConfig;
+  61:../cyfxledblink.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 108              		.loc 1 61 0
+ 109 000c 0030A0E3 		mov	r3, #0
+ 110 0010 08300BE5 		str	r3, [fp, #-8]
+  62:../cyfxledblink.c **** 
+  63:../cyfxledblink.c ****     /* Initialize and configure the UART for logging. */
+  64:../cyfxledblink.c ****     status = CyU3PUartInit ();
+ 111              		.loc 1 64 0
+ 112 0014 FEFFFFEB 		bl	CyU3PUartInit
+ 113 0018 08000BE5 		str	r0, [fp, #-8]
+  65:../cyfxledblink.c ****     if (status != CY_U3P_SUCCESS)
+ 114              		.loc 1 65 0
+ 115 001c 08301BE5 		ldr	r3, [fp, #-8]
+ 116 0020 000053E3 		cmp	r3, #0
+ 117 0024 0100000A 		beq	.L5
+  66:../cyfxledblink.c ****     {
+  67:../cyfxledblink.c ****         return status;
+ 118              		.loc 1 67 0
+ 119 0028 08301BE5 		ldr	r3, [fp, #-8]
+ 120 002c 2E0000EA 		b	.L6
+ 121              	.L5:
+  68:../cyfxledblink.c ****     }
+  69:../cyfxledblink.c **** 
+  70:../cyfxledblink.c ****     CyU3PMemSet ((uint8_t *)&uartConfig, 0, sizeof (uartConfig));
+ 122              		.loc 1 70 0
+ 123 0030 20304BE2 		sub	r3, fp, #32
+ 124 0034 0300A0E1 		mov	r0, r3
+ 125 0038 0010A0E3 		mov	r1, #0
+ 126 003c 1820A0E3 		mov	r2, #24
+ 127 0040 FEFFFFEB 		bl	CyU3PMemSet
+  71:../cyfxledblink.c ****     uartConfig.baudRate = CY_U3P_UART_BAUDRATE_115200;
+ 128              		.loc 1 71 0
+ 129 0044 AC309FE5 		ldr	r3, .L10
+ 130 0048 10300BE5 		str	r3, [fp, #-16]
+  72:../cyfxledblink.c ****     uartConfig.stopBit  = CY_U3P_UART_ONE_STOP_BIT;
+ 131              		.loc 1 72 0
+ 132 004c 0130A0E3 		mov	r3, #1
+ 133 0050 0C304BE5 		strb	r3, [fp, #-12]
+  73:../cyfxledblink.c ****     uartConfig.parity   = CY_U3P_UART_NO_PARITY;
+ 134              		.loc 1 73 0
+ 135 0054 0030A0E3 		mov	r3, #0
+ 136 0058 0B304BE5 		strb	r3, [fp, #-11]
+  74:../cyfxledblink.c ****     uartConfig.txEnable = CyTrue;
+ 137              		.loc 1 74 0
+ 138 005c 0130A0E3 		mov	r3, #1
+ 139 0060 20300BE5 		str	r3, [fp, #-32]
+  75:../cyfxledblink.c ****     uartConfig.rxEnable = CyFalse;
+ 140              		.loc 1 75 0
+ 141 0064 0030A0E3 		mov	r3, #0
+ 142 0068 1C300BE5 		str	r3, [fp, #-28]
+  76:../cyfxledblink.c ****     uartConfig.flowCtrl = CyFalse;
+ 143              		.loc 1 76 0
+ 144 006c 0030A0E3 		mov	r3, #0
+ 145 0070 18300BE5 		str	r3, [fp, #-24]
+  77:../cyfxledblink.c ****     uartConfig.isDma    = CyTrue;
+ 146              		.loc 1 77 0
+ 147 0074 0130A0E3 		mov	r3, #1
+ 148 0078 14300BE5 		str	r3, [fp, #-20]
+  78:../cyfxledblink.c ****     status = CyU3PUartSetConfig (&uartConfig, NULL);
+ 149              		.loc 1 78 0
+ 150 007c 20304BE2 		sub	r3, fp, #32
+ 151 0080 0300A0E1 		mov	r0, r3
+ 152 0084 0010A0E3 		mov	r1, #0
+ 153 0088 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 154 008c 08000BE5 		str	r0, [fp, #-8]
+  79:../cyfxledblink.c ****     if (status != CY_U3P_SUCCESS)
+ 155              		.loc 1 79 0
+ 156 0090 08301BE5 		ldr	r3, [fp, #-8]
+ 157 0094 000053E3 		cmp	r3, #0
+ 158 0098 0100000A 		beq	.L7
+  80:../cyfxledblink.c ****     {
+  81:../cyfxledblink.c ****         return status;
+ 159              		.loc 1 81 0
+ 160 009c 08301BE5 		ldr	r3, [fp, #-8]
+ 161 00a0 110000EA 		b	.L6
+ 162              	.L7:
+  82:../cyfxledblink.c ****     }
+  83:../cyfxledblink.c **** 
+  84:../cyfxledblink.c ****     /* Set the dma for an inifinity transfer */
+  85:../cyfxledblink.c ****     status = CyU3PUartTxSetBlockXfer (0xFFFFFFFF);
+ 163              		.loc 1 85 0
+ 164 00a4 0000E0E3 		mvn	r0, #0
+ 165 00a8 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 166 00ac 08000BE5 		str	r0, [fp, #-8]
+  86:../cyfxledblink.c ****     if (status != CY_U3P_SUCCESS)
+ 167              		.loc 1 86 0
+ 168 00b0 08301BE5 		ldr	r3, [fp, #-8]
+ 169 00b4 000053E3 		cmp	r3, #0
+ 170 00b8 0100000A 		beq	.L8
+  87:../cyfxledblink.c ****     {
+  88:../cyfxledblink.c ****         return status;
+ 171              		.loc 1 88 0
+ 172 00bc 08301BE5 		ldr	r3, [fp, #-8]
+ 173 00c0 090000EA 		b	.L6
+ 174              	.L8:
+  89:../cyfxledblink.c ****     }
+  90:../cyfxledblink.c **** 
+  91:../cyfxledblink.c ****     /* Start the debug module for printing log messages. */
+  92:../cyfxledblink.c ****     status = CyU3PDebugInit (CY_U3P_LPP_SOCKET_UART_CONS, 8);
+ 175              		.loc 1 92 0
+ 176 00c4 0300A0E3 		mov	r0, #3
+ 177 00c8 0810A0E3 		mov	r1, #8
+ 178 00cc FEFFFFEB 		bl	CyU3PDebugInit
+ 179 00d0 08000BE5 		str	r0, [fp, #-8]
+  93:../cyfxledblink.c **** 
+  94:../cyfxledblink.c ****     if (status == CY_U3P_SUCCESS)
+ 180              		.loc 1 94 0
+ 181 00d4 08301BE5 		ldr	r3, [fp, #-8]
+ 182 00d8 000053E3 		cmp	r3, #0
+ 183 00dc 0100001A 		bne	.L9
+  95:../cyfxledblink.c ****         CyU3PDebugPreamble (CyFalse);
+ 184              		.loc 1 95 0
+ 185 00e0 0000A0E3 		mov	r0, #0
+ 186 00e4 FEFFFFEB 		bl	CyU3PDebugPreamble
+ 187              	.L9:
+  96:../cyfxledblink.c **** 
+  97:../cyfxledblink.c ****     return status;
+ 188              		.loc 1 97 0
+ 189 00e8 08301BE5 		ldr	r3, [fp, #-8]
+ 190              	.L6:
+  98:../cyfxledblink.c **** }
+ 191              		.loc 1 98 0
+ 192 00ec 0300A0E1 		mov	r0, r3
+ 193 00f0 04D04BE2 		sub	sp, fp, #4
+ 194 00f4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 195              	.L11:
+ 196              		.align	2
+ 197              	.L10:
+ 198 00f8 00C20100 		.word	115200
+ 199              		.cfi_endproc
+ 200              	.LFE1:
+ 202              		.section	.rodata
+ 203              		.align	2
+ 204              	.LC0:
+ 205 0000 44656275 		.ascii	"Debug Thread: count=%d\015\012\000"
+ 205      67205468 
+ 205      72656164 
+ 205      3A20636F 
+ 205      756E743D 
+ 206              		.section	.text.DbgThread_Entry,"ax",%progbits
+ 207              		.align	2
+ 208              		.global	DbgThread_Entry
+ 210              	DbgThread_Entry:
+ 211              	.LFB2:
+  99:../cyfxledblink.c **** 
+ 100:../cyfxledblink.c **** void
+ 101:../cyfxledblink.c **** DbgThread_Entry (
+ 102:../cyfxledblink.c ****         uint32_t input)
+ 103:../cyfxledblink.c **** {
+ 212              		.loc 1 103 0
+ 213              		.cfi_startproc
+ 214              		@ args = 0, pretend = 0, frame = 16
+ 215              		@ frame_needed = 1, uses_anonymous_args = 0
+ 216 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 217              	.LCFI4:
+ 218              		.cfi_def_cfa_offset 8
+ 219 0004 04B08DE2 		add	fp, sp, #4
+ 220              		.cfi_offset 14, -4
+ 221              		.cfi_offset 11, -8
+ 222              	.LCFI5:
+ 223              		.cfi_def_cfa 11, 4
+ 224 0008 10D04DE2 		sub	sp, sp, #16
+ 225 000c 10000BE5 		str	r0, [fp, #-16]
+ 104:../cyfxledblink.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 226              		.loc 1 104 0
+ 227 0010 0030A0E3 		mov	r3, #0
+ 228 0014 0C300BE5 		str	r3, [fp, #-12]
+ 105:../cyfxledblink.c ****     uint16_t count = 0;
+ 229              		.loc 1 105 0
+ 230 0018 0030A0E3 		mov	r3, #0
+ 231 001c B6304BE1 		strh	r3, [fp, #-6]	@ movhi
+ 106:../cyfxledblink.c **** 
+ 107:../cyfxledblink.c ****     /* Initialize the debug interface. */
+ 108:../cyfxledblink.c ****     status = CyFxDebugInit ();
+ 232              		.loc 1 108 0
+ 233 0020 FEFFFFEB 		bl	CyFxDebugInit
+ 234 0024 0C000BE5 		str	r0, [fp, #-12]
+ 235 0028 000000EA 		b	.L14
+ 236              	.L15:
+ 109:../cyfxledblink.c **** //    if (status != CY_U3P_SUCCESS)
+ 110:../cyfxledblink.c **** //    {
+ 111:../cyfxledblink.c **** //        CyU3PDebugPrint (4, "%x: Application failed to initialize. Error code: %d.\n", status);
+ 112:../cyfxledblink.c **** //        while (1);
+ 113:../cyfxledblink.c **** //    }
+ 114:../cyfxledblink.c **** 
+ 115:../cyfxledblink.c ****     /* Initialize the GPIO module and set GPIO 54 as the thread activity GPIO for this thread. */
+ 116:../cyfxledblink.c **** //    CyFxGpioInit ();
+ 117:../cyfxledblink.c **** 
+ 118:../cyfxledblink.c **** //    if (CyU3PThreadSetActivityGpio (&dbgThread, 54) != CY_U3P_SUCCESS)
+ 119:../cyfxledblink.c **** //        CyU3PDeviceReset (CyFalse);
+ 120:../cyfxledblink.c **** 
+ 121:../cyfxledblink.c ****     for (;;)
+ 122:../cyfxledblink.c ****     {
+ 123:../cyfxledblink.c ****         CyU3PThreadSleep (500);
+ 124:../cyfxledblink.c **** 
+ 125:../cyfxledblink.c ****         count++;
+ 126:../cyfxledblink.c ****         if ((count & 0x0F) == 0)
+ 127:../cyfxledblink.c ****             CyU3PDebugPrint (2, "Debug Thread: count=%d\r\n", count++);
+ 128:../cyfxledblink.c **** //        if (count == 0)
+ 129:../cyfxledblink.c **** //            CyU3PDeviceReset (CyFalse);
+ 130:../cyfxledblink.c **** 
+ 131:../cyfxledblink.c **** //        CyU3PBusyWait (60000);
+ 132:../cyfxledblink.c ****     }
+ 237              		.loc 1 132 0
+ 238 002c 0000A0E1 		mov	r0, r0	@ nop
+ 239              	.L14:
+ 123:../cyfxledblink.c ****         CyU3PThreadSleep (500);
+ 240              		.loc 1 123 0
+ 241 0030 7D0FA0E3 		mov	r0, #500
+ 242 0034 FEFFFFEB 		bl	_tx_thread_sleep
+ 125:../cyfxledblink.c ****         count++;
+ 243              		.loc 1 125 0
+ 244 0038 B6305BE1 		ldrh	r3, [fp, #-6]	@ movhi
+ 245 003c 013083E2 		add	r3, r3, #1
+ 246 0040 B6304BE1 		strh	r3, [fp, #-6]	@ movhi
+ 126:../cyfxledblink.c ****         if ((count & 0x0F) == 0)
+ 247              		.loc 1 126 0
+ 248 0044 B6305BE1 		ldrh	r3, [fp, #-6]
+ 249 0048 0F3003E2 		and	r3, r3, #15
+ 250 004c 000053E3 		cmp	r3, #0
+ 251 0050 F5FFFF1A 		bne	.L15
+ 127:../cyfxledblink.c ****             CyU3PDebugPrint (2, "Debug Thread: count=%d\r\n", count++);
+ 252              		.loc 1 127 0
+ 253 0054 B6305BE1 		ldrh	r3, [fp, #-6]
+ 254 0058 B6205BE1 		ldrh	r2, [fp, #-6]	@ movhi
+ 255 005c 012082E2 		add	r2, r2, #1
+ 256 0060 B6204BE1 		strh	r2, [fp, #-6]	@ movhi
+ 257 0064 0200A0E3 		mov	r0, #2
+ 258 0068 08109FE5 		ldr	r1, .L16
+ 259 006c 0320A0E1 		mov	r2, r3
+ 260 0070 FEFFFFEB 		bl	CyU3PDebugPrint
+ 261              		.loc 1 132 0
+ 262 0074 EDFFFFEA 		b	.L14
+ 263              	.L17:
+ 264              		.align	2
+ 265              	.L16:
+ 266 0078 00000000 		.word	.LC0
+ 267              		.cfi_endproc
+ 268              	.LFE2:
+ 270              		.section	.rodata
+ 271 0019 000000   		.align	2
+ 272              	.LC1:
+ 273 001c 43505520 		.ascii	"CPU load=%d, dbg thread=%d, gpio thread=%d, drivers"
+ 273      6C6F6164 
+ 273      3D25642C 
+ 273      20646267 
+ 273      20746872 
+ 274 004f 3D25640D 		.ascii	"=%d\015\012\000"
+ 274      0A00
+ 275              		.section	.text.GpioThread_Entry,"ax",%progbits
+ 276              		.align	2
+ 277              		.global	GpioThread_Entry
+ 279              	GpioThread_Entry:
+ 280              	.LFB3:
+ 133:../cyfxledblink.c **** }
+ 134:../cyfxledblink.c **** 
+ 135:../cyfxledblink.c **** void
+ 136:../cyfxledblink.c **** GpioThread_Entry (
+ 137:../cyfxledblink.c ****         uint32_t input)
+ 138:../cyfxledblink.c **** {
+ 281              		.loc 1 138 0
+ 282              		.cfi_startproc
+ 283              		@ args = 0, pretend = 0, frame = 24
+ 284              		@ frame_needed = 1, uses_anonymous_args = 0
+ 285 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 286              	.LCFI6:
+ 287              		.cfi_def_cfa_offset 8
+ 288 0004 04B08DE2 		add	fp, sp, #4
+ 289              		.cfi_offset 14, -4
+ 290              		.cfi_offset 11, -8
+ 291              	.LCFI7:
+ 292              		.cfi_def_cfa 11, 4
+ 293 0008 20D04DE2 		sub	sp, sp, #32
+ 294 000c 18000BE5 		str	r0, [fp, #-24]
+ 295              	.L19:
+ 139:../cyfxledblink.c ****     uint32_t total, dbg, gpio, driver;
+ 140:../cyfxledblink.c **** 
+ 141:../cyfxledblink.c ****     for (;;)
+ 142:../cyfxledblink.c ****     {
+ 143:../cyfxledblink.c ****         CyU3PThreadSleep (2000);
+ 296              		.loc 1 143 0 discriminator 1
+ 297 0010 7D0EA0E3 		mov	r0, #2000
+ 298 0014 FEFFFFEB 		bl	_tx_thread_sleep
+ 144:../cyfxledblink.c **** 
+ 145:../cyfxledblink.c ****         total  = CyU3PDeviceGetCpuLoad ();
+ 299              		.loc 1 145 0 discriminator 1
+ 300 0018 FEFFFFEB 		bl	CyU3PDeviceGetCpuLoad
+ 301 001c 08000BE5 		str	r0, [fp, #-8]
+ 146:../cyfxledblink.c ****         dbg    = CyU3PDeviceGetThreadLoad (&dbgThread);
+ 302              		.loc 1 146 0 discriminator 1
+ 303 0020 40009FE5 		ldr	r0, .L20
+ 304 0024 FEFFFFEB 		bl	CyU3PDeviceGetThreadLoad
+ 305 0028 0C000BE5 		str	r0, [fp, #-12]
+ 147:../cyfxledblink.c ****         gpio   = CyU3PDeviceGetThreadLoad (&gpioThread);
+ 306              		.loc 1 147 0 discriminator 1
+ 307 002c 38009FE5 		ldr	r0, .L20+4
+ 308 0030 FEFFFFEB 		bl	CyU3PDeviceGetThreadLoad
+ 309 0034 10000BE5 		str	r0, [fp, #-16]
+ 148:../cyfxledblink.c ****         driver = CyU3PDeviceGetDriverLoad ();
+ 310              		.loc 1 148 0 discriminator 1
+ 311 0038 FEFFFFEB 		bl	CyU3PDeviceGetDriverLoad
+ 312 003c 14000BE5 		str	r0, [fp, #-20]
+ 149:../cyfxledblink.c **** 
+ 150:../cyfxledblink.c ****         CyU3PDebugPrint (2, "CPU load=%d, dbg thread=%d, gpio thread=%d, drivers=%d\r\n",
+ 313              		.loc 1 150 0 discriminator 1
+ 314 0040 10301BE5 		ldr	r3, [fp, #-16]
+ 315 0044 00308DE5 		str	r3, [sp, #0]
+ 316 0048 14301BE5 		ldr	r3, [fp, #-20]
+ 317 004c 04308DE5 		str	r3, [sp, #4]
+ 318 0050 0200A0E3 		mov	r0, #2
+ 319 0054 14109FE5 		ldr	r1, .L20+8
+ 320 0058 08201BE5 		ldr	r2, [fp, #-8]
+ 321 005c 0C301BE5 		ldr	r3, [fp, #-12]
+ 322 0060 FEFFFFEB 		bl	CyU3PDebugPrint
+ 151:../cyfxledblink.c ****                 total, dbg, gpio, driver);
+ 152:../cyfxledblink.c ****     }
+ 323              		.loc 1 152 0 discriminator 1
+ 324 0064 E9FFFFEA 		b	.L19
+ 325              	.L21:
+ 326              		.align	2
+ 327              	.L20:
+ 328 0068 00000000 		.word	dbgThread
+ 329 006c 00000000 		.word	gpioThread
+ 330 0070 1C000000 		.word	.LC1
+ 331              		.cfi_endproc
+ 332              	.LFE3:
+ 334              		.section	.rodata
+ 335 0055 000000   		.align	2
+ 336              	.LC2:
+ 337 0058 32313A44 		.ascii	"21:DebugThread\000"
+ 337      65627567 
+ 337      54687265 
+ 337      616400
+ 338 0067 00       		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 339              		.align	2
+ 340              		.global	CyFxApplicationDefine
+ 342              	CyFxApplicationDefine:
+ 343              	.LFB4:
+ 153:../cyfxledblink.c **** }
+ 154:../cyfxledblink.c **** 
+ 155:../cyfxledblink.c **** /* Application define function which creates the application threads. */
+ 156:../cyfxledblink.c **** void
+ 157:../cyfxledblink.c **** CyFxApplicationDefine (
+ 158:../cyfxledblink.c ****         void)
+ 159:../cyfxledblink.c **** {
+ 344              		.loc 1 159 0
+ 345              		.cfi_startproc
+ 346              		@ args = 0, pretend = 0, frame = 8
+ 347              		@ frame_needed = 1, uses_anonymous_args = 0
+ 348 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 349              	.LCFI8:
+ 350              		.cfi_def_cfa_offset 8
+ 351 0004 04B08DE2 		add	fp, sp, #4
+ 352              		.cfi_offset 14, -4
+ 353              		.cfi_offset 11, -8
+ 354              	.LCFI9:
+ 355              		.cfi_def_cfa 11, 4
+ 356 0008 28D04DE2 		sub	sp, sp, #40
+ 160:../cyfxledblink.c ****     void *ptr = NULL;
+ 357              		.loc 1 160 0
+ 358 000c 0030A0E3 		mov	r3, #0
+ 359 0010 0C300BE5 		str	r3, [fp, #-12]
+ 161:../cyfxledblink.c ****     uint32_t retThrdCreate = CY_U3P_ERROR_MEMORY_ERROR;
+ 360              		.loc 1 161 0
+ 361 0014 1030A0E3 		mov	r3, #16
+ 362 0018 08300BE5 		str	r3, [fp, #-8]
+ 162:../cyfxledblink.c **** 
+ 163:../cyfxledblink.c ****     /* Allocate the memory for the threads and create threads */
+ 164:../cyfxledblink.c ****     ptr = CyU3PMemAlloc (THREAD_STACK);
+ 363              		.loc 1 164 0
+ 364 001c 020BA0E3 		mov	r0, #2048
+ 365 0020 FEFFFFEB 		bl	CyU3PMemAlloc
+ 366 0024 0C000BE5 		str	r0, [fp, #-12]
+ 165:../cyfxledblink.c ****     if (ptr != NULL)
+ 367              		.loc 1 165 0
+ 368 0028 0C301BE5 		ldr	r3, [fp, #-12]
+ 369 002c 000053E3 		cmp	r3, #0
+ 370 0030 1300000A 		beq	.L23
+ 166:../cyfxledblink.c ****     {
+ 167:../cyfxledblink.c ****         retThrdCreate = CyU3PThreadCreate (
+ 371              		.loc 1 167 0
+ 372 0034 0C301BE5 		ldr	r3, [fp, #-12]
+ 373 0038 00308DE5 		str	r3, [sp, #0]
+ 374 003c 023BA0E3 		mov	r3, #2048
+ 375 0040 04308DE5 		str	r3, [sp, #4]
+ 376 0044 0830A0E3 		mov	r3, #8
+ 377 0048 08308DE5 		str	r3, [sp, #8]
+ 378 004c 0830A0E3 		mov	r3, #8
+ 379 0050 0C308DE5 		str	r3, [sp, #12]
+ 380 0054 0030A0E3 		mov	r3, #0
+ 381 0058 10308DE5 		str	r3, [sp, #16]
+ 382 005c 0130A0E3 		mov	r3, #1
+ 383 0060 14308DE5 		str	r3, [sp, #20]
+ 384 0064 D430A0E3 		mov	r3, #212
+ 385 0068 18308DE5 		str	r3, [sp, #24]
+ 386 006c 38009FE5 		ldr	r0, .L28
+ 387 0070 38109FE5 		ldr	r1, .L28+4
+ 388 0074 38209FE5 		ldr	r2, .L28+8
+ 389 0078 0030A0E3 		mov	r3, #0
+ 390 007c FEFFFFEB 		bl	_txe_thread_create
+ 391 0080 08000BE5 		str	r0, [fp, #-8]
+ 392              	.L23:
+ 168:../cyfxledblink.c ****                 &dbgThread,                            /* Thread structure. */
+ 169:../cyfxledblink.c ****                 "21:DebugThread",                      /* Thread ID and name. */        
+ 170:../cyfxledblink.c ****                 DbgThread_Entry,                       /* Thread entry function. */
+ 171:../cyfxledblink.c ****                 0,                                     /* Thread input parameter. */
+ 172:../cyfxledblink.c ****                 ptr,                                   /* Pointer to the allocated thread stack. */
+ 173:../cyfxledblink.c ****                 THREAD_STACK,                          /* Allocated thread stack size. */
+ 174:../cyfxledblink.c ****                 THREAD_PRIORITY,                       /* Thread priority. */
+ 175:../cyfxledblink.c ****                 THREAD_PRIORITY,                       /* Thread pre-emption threshold: No preempti
+ 176:../cyfxledblink.c ****                 CYU3P_NO_TIME_SLICE,                   /* No time slice. Thread will run until task
+ 177:../cyfxledblink.c ****                                                           completed or until the higher priority 
+ 178:../cyfxledblink.c ****                                                           thread gets active. */
+ 179:../cyfxledblink.c ****                 CYU3P_AUTO_START                       /* Start the thread immediately. */
+ 180:../cyfxledblink.c ****                 );
+ 181:../cyfxledblink.c ****     }
+ 182:../cyfxledblink.c **** 
+ 183:../cyfxledblink.c ****     /* Check the return code */
+ 184:../cyfxledblink.c ****     if (retThrdCreate != 0)
+ 393              		.loc 1 184 0
+ 394 0084 08301BE5 		ldr	r3, [fp, #-8]
+ 395 0088 000053E3 		cmp	r3, #0
+ 396 008c 0000000A 		beq	.L24
+ 397              	.L25:
+ 185:../cyfxledblink.c ****     {
+ 186:../cyfxledblink.c ****         /* Application cannot continue. Loop indefinitely */
+ 187:../cyfxledblink.c ****         while(1);
+ 398              		.loc 1 187 0 discriminator 1
+ 399 0090 FEFFFFEA 		b	.L25
+ 400              	.L24:
+ 188:../cyfxledblink.c ****     }
+ 189:../cyfxledblink.c **** #if (0)
+ 190:../cyfxledblink.c ****     /* Allocate the memory for the threads and create threads */
+ 191:../cyfxledblink.c ****     ptr = CyU3PMemAlloc (THREAD_STACK);
+ 192:../cyfxledblink.c ****     if (ptr != NULL)
+ 193:../cyfxledblink.c ****     {
+ 194:../cyfxledblink.c ****         retThrdCreate = CyU3PThreadCreate (
+ 195:../cyfxledblink.c ****                 &gpioThread,                           /* Thread structure. */
+ 196:../cyfxledblink.c ****                 "22:GpioThread",                       /* Thread ID and name. */        
+ 197:../cyfxledblink.c ****                 GpioThread_Entry,                      /* Thread entry function. */
+ 198:../cyfxledblink.c ****                 0,                                     /* Thread input parameter. */
+ 199:../cyfxledblink.c ****                 ptr,                                   /* Pointer to the allocated thread stack. */
+ 200:../cyfxledblink.c ****                 THREAD_STACK,                          /* Allocated thread stack size. */
+ 201:../cyfxledblink.c ****                 THREAD_PRIORITY,                       /* Thread priority. */
+ 202:../cyfxledblink.c ****                 THREAD_PRIORITY,                       /* Thread pre-emption threshold: No preempti
+ 203:../cyfxledblink.c ****                 CYU3P_NO_TIME_SLICE,                   /* No time slice. Thread will run until task
+ 204:../cyfxledblink.c ****                                                           completed or until the higher priority 
+ 205:../cyfxledblink.c ****                                                           thread gets active. */
+ 206:../cyfxledblink.c ****                 CYU3P_AUTO_START                       /* Start the thread immediately. */
+ 207:../cyfxledblink.c ****                 );
+ 208:../cyfxledblink.c ****     }
+ 209:../cyfxledblink.c **** #endif
+ 210:../cyfxledblink.c ****     /* Check the return code */
+ 211:../cyfxledblink.c ****     if (retThrdCreate != 0)
+ 401              		.loc 1 211 0
+ 402 0094 08301BE5 		ldr	r3, [fp, #-8]
+ 403 0098 000053E3 		cmp	r3, #0
+ 404 009c 0000000A 		beq	.L22
+ 405              	.L27:
+ 212:../cyfxledblink.c ****     {
+ 213:../cyfxledblink.c ****         /* Application cannot continue. Loop indefinitely */
+ 214:../cyfxledblink.c ****         while(1);
+ 406              		.loc 1 214 0 discriminator 1
+ 407 00a0 FEFFFFEA 		b	.L27
+ 408              	.L22:
+ 215:../cyfxledblink.c ****     }
+ 216:../cyfxledblink.c **** }
+ 409              		.loc 1 216 0
+ 410 00a4 04D04BE2 		sub	sp, fp, #4
+ 411 00a8 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 412              	.L29:
+ 413              		.align	2
+ 414              	.L28:
+ 415 00ac 00000000 		.word	dbgThread
+ 416 00b0 58000000 		.word	.LC2
+ 417 00b4 00000000 		.word	DbgThread_Entry
+ 418              		.cfi_endproc
+ 419              	.LFE4:
+ 421              		.section	.text.main,"ax",%progbits
+ 422              		.align	2
+ 423              		.global	main
+ 425              	main:
+ 426              	.LFB5:
+ 217:../cyfxledblink.c **** 
+ 218:../cyfxledblink.c **** /*
+ 219:../cyfxledblink.c ****  * Main function
+ 220:../cyfxledblink.c ****  */
+ 221:../cyfxledblink.c **** int
+ 222:../cyfxledblink.c **** main (void)
+ 223:../cyfxledblink.c **** {
+ 427              		.loc 1 223 0
+ 428              		.cfi_startproc
+ 429              		@ args = 0, pretend = 0, frame = 48
+ 430              		@ frame_needed = 1, uses_anonymous_args = 0
+ 431 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 432              	.LCFI10:
+ 433              		.cfi_def_cfa_offset 8
+ 434 0004 04B08DE2 		add	fp, sp, #4
+ 435              		.cfi_offset 14, -4
+ 436              		.cfi_offset 11, -8
+ 437              	.LCFI11:
+ 438              		.cfi_def_cfa 11, 4
+ 439 0008 30D04DE2 		sub	sp, sp, #48
+ 224:../cyfxledblink.c ****     CyU3PIoMatrixConfig_t io_cfg;
+ 225:../cyfxledblink.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 440              		.loc 1 225 0
+ 441 000c 0030A0E3 		mov	r3, #0
+ 442 0010 08300BE5 		str	r3, [fp, #-8]
+ 226:../cyfxledblink.c **** 
+ 227:../cyfxledblink.c ****     /* Initialize the device */
+ 228:../cyfxledblink.c ****     status = CyU3PDeviceInit (NULL);
+ 443              		.loc 1 228 0
+ 444 0014 0000A0E3 		mov	r0, #0
+ 445 0018 FEFFFFEB 		bl	CyU3PDeviceInit
+ 446 001c 08000BE5 		str	r0, [fp, #-8]
+ 229:../cyfxledblink.c ****     if (status != CY_U3P_SUCCESS)
+ 447              		.loc 1 229 0
+ 448 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 449 0024 000053E3 		cmp	r3, #0
+ 450 0028 0000000A 		beq	.L31
+ 230:../cyfxledblink.c ****     {
+ 231:../cyfxledblink.c ****         goto handle_fatal_error;
+ 451              		.loc 1 231 0
+ 452 002c 320000EA 		b	.L32
+ 453              	.L31:
+ 232:../cyfxledblink.c ****     }
+ 233:../cyfxledblink.c **** 
+ 234:../cyfxledblink.c ****     /* Initialize the caches. Enable both Instruction and Data caches. */
+ 235:../cyfxledblink.c ****     status = CyU3PDeviceCacheControl (CyTrue, CyTrue, CyTrue);
+ 454              		.loc 1 235 0
+ 455 0030 0100A0E3 		mov	r0, #1
+ 456 0034 0110A0E3 		mov	r1, #1
+ 457 0038 0120A0E3 		mov	r2, #1
+ 458 003c FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 459 0040 08000BE5 		str	r0, [fp, #-8]
+ 236:../cyfxledblink.c ****     if (status != CY_U3P_SUCCESS)
+ 460              		.loc 1 236 0
+ 461 0044 08301BE5 		ldr	r3, [fp, #-8]
+ 462 0048 000053E3 		cmp	r3, #0
+ 463 004c 0000000A 		beq	.L33
+ 237:../cyfxledblink.c ****     {
+ 238:../cyfxledblink.c ****         goto handle_fatal_error;
+ 464              		.loc 1 238 0
+ 465 0050 290000EA 		b	.L32
+ 466              	.L33:
+ 239:../cyfxledblink.c ****     }
+ 240:../cyfxledblink.c **** 
+ 241:../cyfxledblink.c ****     /* Configure the IO matrix for the device. */
+ 242:../cyfxledblink.c ****     CyU3PMemSet ((uint8_t *)&io_cfg, 0, sizeof(io_cfg));
+ 467              		.loc 1 242 0
+ 468 0054 30304BE2 		sub	r3, fp, #48
+ 469 0058 0300A0E1 		mov	r0, r3
+ 470 005c 0010A0E3 		mov	r1, #0
+ 471 0060 2820A0E3 		mov	r2, #40
+ 472 0064 FEFFFFEB 		bl	CyU3PMemSet
+ 243:../cyfxledblink.c ****     io_cfg.isDQ32Bit = CyFalse;
+ 473              		.loc 1 243 0
+ 474 0068 0030A0E3 		mov	r3, #0
+ 475 006c 30300BE5 		str	r3, [fp, #-48]
+ 244:../cyfxledblink.c ****     io_cfg.s0Mode = CY_U3P_SPORT_INACTIVE;
+ 476              		.loc 1 244 0
+ 477 0070 0030A0E3 		mov	r3, #0
+ 478 0074 1C304BE5 		strb	r3, [fp, #-28]
+ 245:../cyfxledblink.c ****     io_cfg.s1Mode = CY_U3P_SPORT_INACTIVE;
+ 479              		.loc 1 245 0
+ 480 0078 0030A0E3 		mov	r3, #0
+ 481 007c 1B304BE5 		strb	r3, [fp, #-27]
+ 246:../cyfxledblink.c ****     io_cfg.useUart   = CyTrue;
+ 482              		.loc 1 246 0
+ 483 0080 0130A0E3 		mov	r3, #1
+ 484 0084 2C300BE5 		str	r3, [fp, #-44]
+ 247:../cyfxledblink.c ****     io_cfg.useI2C    = CyFalse;
+ 485              		.loc 1 247 0
+ 486 0088 0030A0E3 		mov	r3, #0
+ 487 008c 28300BE5 		str	r3, [fp, #-40]
+ 248:../cyfxledblink.c ****     io_cfg.useI2S    = CyFalse;
+ 488              		.loc 1 248 0
+ 489 0090 0030A0E3 		mov	r3, #0
+ 490 0094 24300BE5 		str	r3, [fp, #-36]
+ 249:../cyfxledblink.c ****     io_cfg.useSpi    = CyFalse;
+ 491              		.loc 1 249 0
+ 492 0098 0030A0E3 		mov	r3, #0
+ 493 009c 20300BE5 		str	r3, [fp, #-32]
+ 250:../cyfxledblink.c ****     io_cfg.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+ 494              		.loc 1 250 0
+ 495 00a0 0130A0E3 		mov	r3, #1
+ 496 00a4 1A304BE5 		strb	r3, [fp, #-26]
+ 251:../cyfxledblink.c ****     /* No GPIOs are enabled. */
+ 252:../cyfxledblink.c ****     io_cfg.gpioSimpleEn[0]  = 0;
+ 497              		.loc 1 252 0
+ 498 00a8 0030A0E3 		mov	r3, #0
+ 499 00ac 18300BE5 		str	r3, [fp, #-24]
+ 253:../cyfxledblink.c ****     io_cfg.gpioSimpleEn[1]  = 0;
+ 500              		.loc 1 253 0
+ 501 00b0 0030A0E3 		mov	r3, #0
+ 502 00b4 14300BE5 		str	r3, [fp, #-20]
+ 254:../cyfxledblink.c ****     io_cfg.gpioComplexEn[0] = 0;
+ 503              		.loc 1 254 0
+ 504 00b8 0030A0E3 		mov	r3, #0
+ 505 00bc 10300BE5 		str	r3, [fp, #-16]
+ 255:../cyfxledblink.c ****     io_cfg.gpioComplexEn[1] = 0;
+ 506              		.loc 1 255 0
+ 507 00c0 0030A0E3 		mov	r3, #0
+ 508 00c4 0C300BE5 		str	r3, [fp, #-12]
+ 256:../cyfxledblink.c ****     status = CyU3PDeviceConfigureIOMatrix (&io_cfg);
+ 509              		.loc 1 256 0
+ 510 00c8 30304BE2 		sub	r3, fp, #48
+ 511 00cc 0300A0E1 		mov	r0, r3
+ 512 00d0 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 513 00d4 08000BE5 		str	r0, [fp, #-8]
+ 257:../cyfxledblink.c ****     if (status != CY_U3P_SUCCESS)
+ 514              		.loc 1 257 0
+ 515 00d8 08301BE5 		ldr	r3, [fp, #-8]
+ 516 00dc 000053E3 		cmp	r3, #0
+ 517 00e0 0000000A 		beq	.L34
+ 258:../cyfxledblink.c ****     {
+ 259:../cyfxledblink.c ****         goto handle_fatal_error;
+ 518              		.loc 1 259 0
+ 519 00e4 040000EA 		b	.L32
+ 520              	.L34:
+ 260:../cyfxledblink.c ****     }
+ 261:../cyfxledblink.c **** 
+ 262:../cyfxledblink.c ****     /* This is a non returnable call for initializing the RTOS kernel */
+ 263:../cyfxledblink.c ****     CyU3PKernelEntry ();
+ 521              		.loc 1 263 0
+ 522 00e8 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 264:../cyfxledblink.c **** 
+ 265:../cyfxledblink.c ****     /* Dummy return to make the compiler happy */
+ 266:../cyfxledblink.c ****     return 0;
+ 523              		.loc 1 266 0
+ 524 00ec 0030A0E3 		mov	r3, #0
+ 267:../cyfxledblink.c **** 
+ 268:../cyfxledblink.c **** handle_fatal_error:
+ 269:../cyfxledblink.c **** 
+ 270:../cyfxledblink.c ****     /* Cannot recover from this error. */
+ 271:../cyfxledblink.c ****     while (1);
+ 272:../cyfxledblink.c **** }
+ 525              		.loc 1 272 0
+ 526 00f0 0300A0E1 		mov	r0, r3
+ 527 00f4 04D04BE2 		sub	sp, fp, #4
+ 528 00f8 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 529              	.L32:
+ 271:../cyfxledblink.c ****     while (1);
+ 530              		.loc 1 271 0 discriminator 1
+ 531 00fc FEFFFFEA 		b	.L32
+ 532              		.cfi_endproc
+ 533              	.LFE5:
+ 535              		.section	.rodata.C.2.8072,"a",%progbits
+ 536              		.align	2
+ 539              	C.2.8072:
+ 540 0000 00000000 		.word	0
+ 541 0004 01000000 		.word	1
+ 542 0008 01000000 		.word	1
+ 543 000c 00000000 		.word	0
+ 544 0010 00       		.byte	0
+ 545 0011 000000   		.space	3
+ 546              		.text
+ 547              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 cyfxledblink.c
+                            *COM*:000000d4 gpioThread
+                            *COM*:000000d4 dbgThread
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:24     .text.CyFxGpioInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:26     .text.CyFxGpioInit:00000000 CyFxGpioInit
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:85     .text.CyFxGpioInit:00000084 $d
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:539    .rodata.C.2.8072:00000000 C.2.8072
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:90     .text.CyFxDebugInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:93     .text.CyFxDebugInit:00000000 CyFxDebugInit
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:198    .text.CyFxDebugInit:000000f8 $d
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:203    .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:207    .text.DbgThread_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:210    .text.DbgThread_Entry:00000000 DbgThread_Entry
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:266    .text.DbgThread_Entry:00000078 $d
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:276    .text.GpioThread_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:279    .text.GpioThread_Entry:00000000 GpioThread_Entry
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:328    .text.GpioThread_Entry:00000068 $d
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:339    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:342    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:415    .text.CyFxApplicationDefine:000000ac $d
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:422    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:425    .text.main:00000000 main
+C:\Users\John\AppData\Local\Temp\ccX6n4s7.s:536    .rodata.C.2.8072:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PGpioInit
+CyU3PDeviceGpioOverride
+CyU3PGpioSetSimpleConfig
+CyU3PUartInit
+CyU3PMemSet
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble
+_tx_thread_sleep
+CyU3PDebugPrint
+CyU3PDeviceGetCpuLoad
+CyU3PDeviceGetThreadLoad
+CyU3PDeviceGetDriverLoad
+CyU3PMemAlloc
+_txe_thread_create
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

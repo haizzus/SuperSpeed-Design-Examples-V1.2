@@ -1,0 +1,107 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;										;;
+;; Microsoft USB CDC ACM Driver Setup File					;;
+;; Cypress Semiconductor Corporation						;;
+;;										;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+[Version] 
+Signature="$Windows NT$" 
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318} 
+Provider=%MFGNAME% 
+DriverVer=05/15/2012,5.1.2600.7
+CatalogFile=CyWinCdc.cat
+
+[Manufacturer] 
+%MFGNAME%=DeviceList, NTamd64
+
+;------------------------------------------------------------------------------
+;  Vendor and Product ID Definitions
+;------------------------------------------------------------------------------
+; The VID and PID must match the device USB device descriptor and on the below 
+; lines in this file.  
+;------------------------------------------------------------------------------
+
+[DeviceList]
+%DESCRIPTION%=DriverInstall,USB\VID_04B4&PID_0008,USB\VID_04B4&PID_0009&MI_01,USB\VID_04B4&PID_0007&MI_00,USB\VID_04B4&PID_0005&MI_00,USB\VID_04B4&PID_0005&MI_02,USB\VID_04B4&PID_0003&MI_00,USB\VID_04B4&PID_0002&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_4242&PID_EC03
+; Need entry for my Composite example
+%DESCRIPTION%=DriverInstall,USB\VID_4242&PID_EC04&MI_00
+
+[DeviceList.NTamd64] 
+%DESCRIPTION%=DriverInstall,USB\VID_04B4&PID_0008,USB\VID_04B4&PID_0009&MI_01,USB\VID_04B4&PID_0007&MI_00,USB\VID_04B4&PID_0005&MI_00,USB\VID_04B4&PID_0005&MI_02,USB\VID_04B4&PID_0003&MI_00,USB\VID_04B4&PID_0002&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_4242&PID_EC03
+; Need entry for my Composite example
+%DESCRIPTION%=DriverInstall,USB\VID_4242&PID_EC04&MI_00
+
+
+;------------------------------------------------------------------------------
+;  Windows 32bit OSes Section
+;------------------------------------------------------------------------------
+[DriverInstall.nt] 
+include=mdmcpq.inf
+CopyFiles=FakeModemCopyFileSection 
+AddReg=DriverInstall.nt.AddReg 
+
+[DriverInstall.nt.AddReg] 
+HKR,,DevLoader,,*ntkern 
+HKR,,NTMPDriver,,%DRIVERFILENAME%.sys 
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider" 
+
+[DriverInstall.NT.Services]
+include=mdmcpq.inf 
+AddService=usbser, 0x00000002, DriverService_Install 
+
+
+;------------------------------------------------------------------------------
+;  Windows 64bit OSes Section
+;------------------------------------------------------------------------------
+[DriverInstall.NTamd64]
+include=mdmcpq.inf
+CopyFiles=FakeModemCopyFileSection
+AddReg=DriverInstall.NTamd64.AddReg 
+
+[DriverInstall.NTamd64.AddReg] 
+HKR,,DevLoader,,*ntkern 
+HKR,,NTMPDriver,,%DRIVERFILENAME%.sys 
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider" 
+
+[DriverInstall.NTamd64.Services] 
+include=mdmcpq.inf 
+AddService=usbser, 0x00000002, DriverService_Install 
+
+
+;------------------------------------------------------------------------------
+;  Common Sections
+;------------------------------------------------------------------------------
+
+[DestinationDirs] 
+DefaultDestDir=12 
+
+[SourceDisksNames]
+
+[SourceDisksFiles]
+
+[FakeModemCopyFileSection]
+
+[DriverService_Install] 
+DisplayName=%SERVICE% 
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\%DRIVERFILENAME%.sys 
+
+
+;------------------------------------------------------------------------------
+;  String Definitions
+;------------------------------------------------------------------------------
+;Modify these strings to customize your device
+;------------------------------------------------------------------------------
+[Strings]
+MFGFILENAME="Cypress CDC Device"
+DRIVERFILENAME ="usbser"
+MFGNAME="Cypress Semiconductor" ;This name shows up in the device manager properties for the device
+DESCRIPTION="USB Serial Port" ;This is the "friendly name" that shows up in the device manager
+SERVICE="USB Serial Adapter"

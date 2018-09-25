@@ -1,0 +1,1668 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"cyfx_rtos_eg.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	Thread1,212,4
+  22              		.comm	Thread2,212,4
+  23              		.comm	Thread3,212,4
+  24              		.comm	Thread4,212,4
+  25              		.comm	AppMutex,84,4
+  26              		.comm	AppSema,36,4
+  27              		.comm	AppEvent,60,4
+  28              		.section	.text.CyFxGpioInit,"ax",%progbits
+  29              		.align	2
+  31              	CyFxGpioInit:
+  32              	.LFB0:
+  33              		.file 1 "../cyfx_rtos_eg.c"
+   1:../cyfx_rtos_eg.c **** /*
+   2:../cyfx_rtos_eg.c **** ## Cypress USB 3.0 Platform source file (cyfx_rtos_eg.c)
+   3:../cyfx_rtos_eg.c **** ## ===========================
+   4:../cyfx_rtos_eg.c **** ##
+   5:../cyfx_rtos_eg.c **** ##  Copyright Cypress Semiconductor Corporation, 2010-2011,
+   6:../cyfx_rtos_eg.c **** ##  All Rights Reserved
+   7:../cyfx_rtos_eg.c **** ##  UNPUBLISHED, LICENSED SOFTWARE.
+   8:../cyfx_rtos_eg.c **** ##
+   9:../cyfx_rtos_eg.c **** ##  CONFIDENTIAL AND PROPRIETARY INFORMATION
+  10:../cyfx_rtos_eg.c **** ##  WHICH IS THE PROPERTY OF CYPRESS.
+  11:../cyfx_rtos_eg.c **** ##
+  12:../cyfx_rtos_eg.c **** ##  Use of this file is governed
+  13:../cyfx_rtos_eg.c **** ##  by the license agreement included in the file
+  14:../cyfx_rtos_eg.c **** ##
+  15:../cyfx_rtos_eg.c **** ##     <install>/license/license.txt
+  16:../cyfx_rtos_eg.c **** ##
+  17:../cyfx_rtos_eg.c **** ##  where <install> is the Cypress software
+  18:../cyfx_rtos_eg.c **** ##  installation root directory path.
+  19:../cyfx_rtos_eg.c **** ##
+  20:../cyfx_rtos_eg.c **** ## ===========================
+  21:../cyfx_rtos_eg.c **** */
+  22:../cyfx_rtos_eg.c **** 
+  23:../cyfx_rtos_eg.c **** #include "cyu3system.h"
+  24:../cyfx_rtos_eg.c **** #include "cyu3os.h"
+  25:../cyfx_rtos_eg.c **** #include "cyu3error.h"
+  26:../cyfx_rtos_eg.c **** #include "cyu3gpio.h"
+  27:../cyfx_rtos_eg.c **** #include "cyu3uart.h"
+  28:../cyfx_rtos_eg.c **** #include "cyu3utils.h"
+  29:../cyfx_rtos_eg.c **** #include "cyfx_rtos_eg.h"
+  30:../cyfx_rtos_eg.c **** 
+  31:../cyfx_rtos_eg.c **** CyU3PThread Thread1;                    /* Application thread number 1. */
+  32:../cyfx_rtos_eg.c **** CyU3PThread Thread2;                    /* Application thread number 2. */
+  33:../cyfx_rtos_eg.c **** CyU3PThread Thread3;                    /* Application thread number 3. */
+  34:../cyfx_rtos_eg.c **** CyU3PThread Thread4;                    /* Application thread number 4. */
+  35:../cyfx_rtos_eg.c **** 
+  36:../cyfx_rtos_eg.c **** CyU3PMutex      AppMutex;               /* Mutex used for testing. */
+  37:../cyfx_rtos_eg.c **** CyU3PSemaphore  AppSema;                /* Semaphore used for testing. */
+  38:../cyfx_rtos_eg.c **** CyU3PEvent      AppEvent;               /* Event group used for testing. */
+  39:../cyfx_rtos_eg.c **** 
+  40:../cyfx_rtos_eg.c **** #define APP_SEMA_COUNT                  (4)             /* Semaphore count. */
+  41:../cyfx_rtos_eg.c **** #define APP_EVENT_FLAG                  (1)             /* Event flag that the thread waits for. */
+  42:../cyfx_rtos_eg.c **** 
+  43:../cyfx_rtos_eg.c **** #define THREAD_ACTIVITY_GPIO            (54)            /* GPIO used for thread activity indication
+  44:../cyfx_rtos_eg.c **** #define MUTEX_ACTIVITY_GPIO             (53)            /* GPIO used for Mutex status indication. *
+  45:../cyfx_rtos_eg.c **** #define SEMAPHORE_ACTIVITY_GPIO         (52)            /* GPIO used for Semaphore status indicatio
+  46:../cyfx_rtos_eg.c **** #define EVENT_ACTIVITY_GPIO             (51)            /* GPIO used for Event Group status indicat
+  47:../cyfx_rtos_eg.c **** 
+  48:../cyfx_rtos_eg.c **** /* Initialize the GPIO module and enable all indicator pins as output pins with the default value o
+  49:../cyfx_rtos_eg.c **** static void
+  50:../cyfx_rtos_eg.c **** CyFxGpioInit (
+  51:../cyfx_rtos_eg.c ****         void)
+  52:../cyfx_rtos_eg.c **** {
+  34              		.loc 1 52 0
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 32
+  37              		@ frame_needed = 1, uses_anonymous_args = 0
+  38 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 8
+  41 0004 04B08DE2 		add	fp, sp, #4
+  42              		.cfi_offset 14, -4
+  43              		.cfi_offset 11, -8
+  44              	.LCFI1:
+  45              		.cfi_def_cfa 11, 4
+  46 0008 20D04DE2 		sub	sp, sp, #32
+  53:../cyfx_rtos_eg.c ****     CyU3PGpioClock_t        gpioClock;
+  54:../cyfx_rtos_eg.c ****     CyU3PGpioSimpleConfig_t testConf = {CyFalse, CyTrue, CyTrue, CyFalse, CY_U3P_GPIO_NO_INTR};
+  47              		.loc 1 54 0
+  48 000c C4309FE5 		ldr	r3, .L2
+  49 0010 24C04BE2 		sub	ip, fp, #36
+  50 0014 03E0A0E1 		mov	lr, r3
+  51 0018 0F00BEE8 		ldmia	lr!, {r0, r1, r2, r3}
+  52 001c 0F00ACE8 		stmia	ip!, {r0, r1, r2, r3}
+  53 0020 00309EE5 		ldr	r3, [lr, #0]
+  54 0024 00308CE5 		str	r3, [ip, #0]
+  55:../cyfx_rtos_eg.c **** 
+  56:../cyfx_rtos_eg.c ****     /* Initialize the GPIO block and set GPIO 54 as an output. */
+  57:../cyfx_rtos_eg.c ****     gpioClock.fastClkDiv = 2;
+  55              		.loc 1 57 0
+  56 0028 0230A0E3 		mov	r3, #2
+  57 002c 10304BE5 		strb	r3, [fp, #-16]
+  58:../cyfx_rtos_eg.c ****     gpioClock.slowClkDiv = 32;
+  58              		.loc 1 58 0
+  59 0030 2030A0E3 		mov	r3, #32
+  60 0034 0F304BE5 		strb	r3, [fp, #-15]
+  59:../cyfx_rtos_eg.c ****     gpioClock.simpleDiv  = CY_U3P_GPIO_SIMPLE_DIV_BY_16;
+  61              		.loc 1 59 0
+  62 0038 0230A0E3 		mov	r3, #2
+  63 003c 08304BE5 		strb	r3, [fp, #-8]
+  60:../cyfx_rtos_eg.c ****     gpioClock.clkSrc     = CY_U3P_SYS_CLK_BY_2;
+  64              		.loc 1 60 0
+  65 0040 0230A0E3 		mov	r3, #2
+  66 0044 07304BE5 		strb	r3, [fp, #-7]
+  61:../cyfx_rtos_eg.c ****     gpioClock.halfDiv    = 0;
+  67              		.loc 1 61 0
+  68 0048 0030A0E3 		mov	r3, #0
+  69 004c 0C300BE5 		str	r3, [fp, #-12]
+  62:../cyfx_rtos_eg.c ****     CyU3PGpioInit (&gpioClock, NULL);
+  70              		.loc 1 62 0
+  71 0050 10304BE2 		sub	r3, fp, #16
+  72 0054 0300A0E1 		mov	r0, r3
+  73 0058 0010A0E3 		mov	r1, #0
+  74 005c FEFFFFEB 		bl	CyU3PGpioInit
+  63:../cyfx_rtos_eg.c **** 
+  64:../cyfx_rtos_eg.c ****     /* Override and configure the thread status GPIO. */
+  65:../cyfx_rtos_eg.c ****     CyU3PDeviceGpioOverride (THREAD_ACTIVITY_GPIO, CyTrue);
+  75              		.loc 1 65 0
+  76 0060 3600A0E3 		mov	r0, #54
+  77 0064 0110A0E3 		mov	r1, #1
+  78 0068 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  66:../cyfx_rtos_eg.c ****     CyU3PGpioSetSimpleConfig (THREAD_ACTIVITY_GPIO, &testConf);
+  79              		.loc 1 66 0
+  80 006c 24304BE2 		sub	r3, fp, #36
+  81 0070 3600A0E3 		mov	r0, #54
+  82 0074 0310A0E1 		mov	r1, r3
+  83 0078 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+  67:../cyfx_rtos_eg.c **** 
+  68:../cyfx_rtos_eg.c ****     /* Override and configure the mutex status GPIO. */
+  69:../cyfx_rtos_eg.c ****     CyU3PDeviceGpioOverride (MUTEX_ACTIVITY_GPIO, CyTrue);
+  84              		.loc 1 69 0
+  85 007c 3500A0E3 		mov	r0, #53
+  86 0080 0110A0E3 		mov	r1, #1
+  87 0084 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  70:../cyfx_rtos_eg.c ****     CyU3PGpioSetSimpleConfig (MUTEX_ACTIVITY_GPIO, &testConf);
+  88              		.loc 1 70 0
+  89 0088 24304BE2 		sub	r3, fp, #36
+  90 008c 3500A0E3 		mov	r0, #53
+  91 0090 0310A0E1 		mov	r1, r3
+  92 0094 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+  71:../cyfx_rtos_eg.c **** 
+  72:../cyfx_rtos_eg.c ****     /* Override and configure the semaphore status GPIO. */
+  73:../cyfx_rtos_eg.c ****     CyU3PDeviceGpioOverride (SEMAPHORE_ACTIVITY_GPIO, CyTrue);
+  93              		.loc 1 73 0
+  94 0098 3400A0E3 		mov	r0, #52
+  95 009c 0110A0E3 		mov	r1, #1
+  96 00a0 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  74:../cyfx_rtos_eg.c ****     CyU3PGpioSetSimpleConfig (SEMAPHORE_ACTIVITY_GPIO, &testConf);
+  97              		.loc 1 74 0
+  98 00a4 24304BE2 		sub	r3, fp, #36
+  99 00a8 3400A0E3 		mov	r0, #52
+ 100 00ac 0310A0E1 		mov	r1, r3
+ 101 00b0 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+  75:../cyfx_rtos_eg.c **** 
+  76:../cyfx_rtos_eg.c ****     /* Override and configure the event status GPIO. */
+  77:../cyfx_rtos_eg.c ****     CyU3PDeviceGpioOverride (EVENT_ACTIVITY_GPIO, CyTrue);
+ 102              		.loc 1 77 0
+ 103 00b4 3300A0E3 		mov	r0, #51
+ 104 00b8 0110A0E3 		mov	r1, #1
+ 105 00bc FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  78:../cyfx_rtos_eg.c ****     CyU3PGpioSetSimpleConfig (EVENT_ACTIVITY_GPIO, &testConf);
+ 106              		.loc 1 78 0
+ 107 00c0 24304BE2 		sub	r3, fp, #36
+ 108 00c4 3300A0E3 		mov	r0, #51
+ 109 00c8 0310A0E1 		mov	r1, r3
+ 110 00cc FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+  79:../cyfx_rtos_eg.c **** }
+ 111              		.loc 1 79 0
+ 112 00d0 04D04BE2 		sub	sp, fp, #4
+ 113 00d4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 114              	.L3:
+ 115              		.align	2
+ 116              	.L2:
+ 117 00d8 00000000 		.word	C.3.8172
+ 118              		.cfi_endproc
+ 119              	.LFE0:
+ 121              		.section	.text.CyFxDebugInit,"ax",%progbits
+ 122              		.align	2
+ 123              		.global	CyFxDebugInit
+ 125              	CyFxDebugInit:
+ 126              	.LFB1:
+  80:../cyfx_rtos_eg.c **** 
+  81:../cyfx_rtos_eg.c **** /* Initialize the logger module with UART. */
+  82:../cyfx_rtos_eg.c **** CyU3PReturnStatus_t
+  83:../cyfx_rtos_eg.c **** CyFxDebugInit (
+  84:../cyfx_rtos_eg.c ****         void)
+  85:../cyfx_rtos_eg.c **** {
+ 127              		.loc 1 85 0
+ 128              		.cfi_startproc
+ 129              		@ args = 0, pretend = 0, frame = 32
+ 130              		@ frame_needed = 1, uses_anonymous_args = 0
+ 131 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 132              	.LCFI2:
+ 133              		.cfi_def_cfa_offset 8
+ 134 0004 04B08DE2 		add	fp, sp, #4
+ 135              		.cfi_offset 14, -4
+ 136              		.cfi_offset 11, -8
+ 137              	.LCFI3:
+ 138              		.cfi_def_cfa 11, 4
+ 139 0008 20D04DE2 		sub	sp, sp, #32
+  86:../cyfx_rtos_eg.c ****     CyU3PUartConfig_t uartConfig;
+  87:../cyfx_rtos_eg.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 140              		.loc 1 87 0
+ 141 000c 0030A0E3 		mov	r3, #0
+ 142 0010 08300BE5 		str	r3, [fp, #-8]
+  88:../cyfx_rtos_eg.c **** 
+  89:../cyfx_rtos_eg.c ****     /* Initialize and configure the UART for logging. */
+  90:../cyfx_rtos_eg.c ****     status = CyU3PUartInit ();
+ 143              		.loc 1 90 0
+ 144 0014 FEFFFFEB 		bl	CyU3PUartInit
+ 145 0018 08000BE5 		str	r0, [fp, #-8]
+  91:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 146              		.loc 1 91 0
+ 147 001c 08301BE5 		ldr	r3, [fp, #-8]
+ 148 0020 000053E3 		cmp	r3, #0
+ 149 0024 0100000A 		beq	.L5
+  92:../cyfx_rtos_eg.c ****     {
+  93:../cyfx_rtos_eg.c ****         return status;
+ 150              		.loc 1 93 0
+ 151 0028 08301BE5 		ldr	r3, [fp, #-8]
+ 152 002c 2E0000EA 		b	.L6
+ 153              	.L5:
+  94:../cyfx_rtos_eg.c ****     }
+  95:../cyfx_rtos_eg.c **** 
+  96:../cyfx_rtos_eg.c ****     CyU3PMemSet ((uint8_t *)&uartConfig, 0, sizeof (uartConfig));
+ 154              		.loc 1 96 0
+ 155 0030 20304BE2 		sub	r3, fp, #32
+ 156 0034 0300A0E1 		mov	r0, r3
+ 157 0038 0010A0E3 		mov	r1, #0
+ 158 003c 1820A0E3 		mov	r2, #24
+ 159 0040 FEFFFFEB 		bl	CyU3PMemSet
+  97:../cyfx_rtos_eg.c ****     uartConfig.baudRate = CY_U3P_UART_BAUDRATE_115200;
+ 160              		.loc 1 97 0
+ 161 0044 AC309FE5 		ldr	r3, .L10
+ 162 0048 10300BE5 		str	r3, [fp, #-16]
+  98:../cyfx_rtos_eg.c ****     uartConfig.stopBit  = CY_U3P_UART_ONE_STOP_BIT;
+ 163              		.loc 1 98 0
+ 164 004c 0130A0E3 		mov	r3, #1
+ 165 0050 0C304BE5 		strb	r3, [fp, #-12]
+  99:../cyfx_rtos_eg.c ****     uartConfig.parity   = CY_U3P_UART_NO_PARITY;
+ 166              		.loc 1 99 0
+ 167 0054 0030A0E3 		mov	r3, #0
+ 168 0058 0B304BE5 		strb	r3, [fp, #-11]
+ 100:../cyfx_rtos_eg.c ****     uartConfig.txEnable = CyTrue;
+ 169              		.loc 1 100 0
+ 170 005c 0130A0E3 		mov	r3, #1
+ 171 0060 20300BE5 		str	r3, [fp, #-32]
+ 101:../cyfx_rtos_eg.c ****     uartConfig.rxEnable = CyFalse;
+ 172              		.loc 1 101 0
+ 173 0064 0030A0E3 		mov	r3, #0
+ 174 0068 1C300BE5 		str	r3, [fp, #-28]
+ 102:../cyfx_rtos_eg.c ****     uartConfig.flowCtrl = CyFalse;
+ 175              		.loc 1 102 0
+ 176 006c 0030A0E3 		mov	r3, #0
+ 177 0070 18300BE5 		str	r3, [fp, #-24]
+ 103:../cyfx_rtos_eg.c ****     uartConfig.isDma    = CyTrue;
+ 178              		.loc 1 103 0
+ 179 0074 0130A0E3 		mov	r3, #1
+ 180 0078 14300BE5 		str	r3, [fp, #-20]
+ 104:../cyfx_rtos_eg.c ****     status = CyU3PUartSetConfig (&uartConfig, NULL);
+ 181              		.loc 1 104 0
+ 182 007c 20304BE2 		sub	r3, fp, #32
+ 183 0080 0300A0E1 		mov	r0, r3
+ 184 0084 0010A0E3 		mov	r1, #0
+ 185 0088 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 186 008c 08000BE5 		str	r0, [fp, #-8]
+ 105:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 187              		.loc 1 105 0
+ 188 0090 08301BE5 		ldr	r3, [fp, #-8]
+ 189 0094 000053E3 		cmp	r3, #0
+ 190 0098 0100000A 		beq	.L7
+ 106:../cyfx_rtos_eg.c ****     {
+ 107:../cyfx_rtos_eg.c ****         return status;
+ 191              		.loc 1 107 0
+ 192 009c 08301BE5 		ldr	r3, [fp, #-8]
+ 193 00a0 110000EA 		b	.L6
+ 194              	.L7:
+ 108:../cyfx_rtos_eg.c ****     }
+ 109:../cyfx_rtos_eg.c **** 
+ 110:../cyfx_rtos_eg.c ****     /* Set the dma for an inifinity transfer */
+ 111:../cyfx_rtos_eg.c ****     status = CyU3PUartTxSetBlockXfer (0xFFFFFFFF);
+ 195              		.loc 1 111 0
+ 196 00a4 0000E0E3 		mvn	r0, #0
+ 197 00a8 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 198 00ac 08000BE5 		str	r0, [fp, #-8]
+ 112:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 199              		.loc 1 112 0
+ 200 00b0 08301BE5 		ldr	r3, [fp, #-8]
+ 201 00b4 000053E3 		cmp	r3, #0
+ 202 00b8 0100000A 		beq	.L8
+ 113:../cyfx_rtos_eg.c ****     {
+ 114:../cyfx_rtos_eg.c ****         return status;
+ 203              		.loc 1 114 0
+ 204 00bc 08301BE5 		ldr	r3, [fp, #-8]
+ 205 00c0 090000EA 		b	.L6
+ 206              	.L8:
+ 115:../cyfx_rtos_eg.c ****     }
+ 116:../cyfx_rtos_eg.c **** 
+ 117:../cyfx_rtos_eg.c ****     /* Start the debug module for printing log messages. */
+ 118:../cyfx_rtos_eg.c ****     status = CyU3PDebugInit (CY_U3P_LPP_SOCKET_UART_CONS, 8);
+ 207              		.loc 1 118 0
+ 208 00c4 0300A0E3 		mov	r0, #3
+ 209 00c8 0810A0E3 		mov	r1, #8
+ 210 00cc FEFFFFEB 		bl	CyU3PDebugInit
+ 211 00d0 08000BE5 		str	r0, [fp, #-8]
+ 119:../cyfx_rtos_eg.c **** 
+ 120:../cyfx_rtos_eg.c ****     /* Disable the message context preamble as we will be using a standard serial console. */
+ 121:../cyfx_rtos_eg.c ****     if (status == CY_U3P_SUCCESS)
+ 212              		.loc 1 121 0
+ 213 00d4 08301BE5 		ldr	r3, [fp, #-8]
+ 214 00d8 000053E3 		cmp	r3, #0
+ 215 00dc 0100001A 		bne	.L9
+ 122:../cyfx_rtos_eg.c ****         CyU3PDebugPreamble (CyFalse);
+ 216              		.loc 1 122 0
+ 217 00e0 0000A0E3 		mov	r0, #0
+ 218 00e4 FEFFFFEB 		bl	CyU3PDebugPreamble
+ 219              	.L9:
+ 123:../cyfx_rtos_eg.c **** 
+ 124:../cyfx_rtos_eg.c ****     return status;
+ 220              		.loc 1 124 0
+ 221 00e8 08301BE5 		ldr	r3, [fp, #-8]
+ 222              	.L6:
+ 125:../cyfx_rtos_eg.c **** }
+ 223              		.loc 1 125 0
+ 224 00ec 0300A0E1 		mov	r0, r3
+ 225 00f0 04D04BE2 		sub	sp, fp, #4
+ 226 00f4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 227              	.L11:
+ 228              		.align	2
+ 229              	.L10:
+ 230 00f8 00C20100 		.word	115200
+ 231              		.cfi_endproc
+ 232              	.LFE1:
+ 234              		.section	.rodata
+ 235              		.align	2
+ 236              	.LC0:
+ 237 0000 25783A20 		.ascii	"%x: Application failed to initialize. Error code: %"
+ 237      4170706C 
+ 237      69636174 
+ 237      696F6E20 
+ 237      6661696C 
+ 238 0033 642E0A00 		.ascii	"d.\012\000"
+ 239 0037 00       		.align	2
+ 240              	.LC1:
+ 241 0038 4572726F 		.ascii	"Error: Failed to register thread monitoring GPIO, s"
+ 241      723A2046 
+ 241      61696C65 
+ 241      6420746F 
+ 241      20726567 
+ 242 006b 74617475 		.ascii	"tatus = %d\015\012\000"
+ 242      73203D20 
+ 242      25640D0A 
+ 242      00
+ 243              		.align	2
+ 244              	.LC2:
+ 245 0078 4572726F 		.ascii	"Error: Failed to register mutex monitoring GPIO, st"
+ 245      723A2046 
+ 245      61696C65 
+ 245      6420746F 
+ 245      20726567 
+ 246 00ab 61747573 		.ascii	"atus = %d\015\012\000"
+ 246      203D2025 
+ 246      640D0A00 
+ 247 00b7 00       		.align	2
+ 248              	.LC3:
+ 249 00b8 4572726F 		.ascii	"Error: Failed to register semaphore monitoring GPIO"
+ 249      723A2046 
+ 249      61696C65 
+ 249      6420746F 
+ 249      20726567 
+ 250 00eb 2C207374 		.ascii	", status = %d\015\012\000"
+ 250      61747573 
+ 250      203D2025 
+ 250      640D0A00 
+ 251 00fb 00       		.align	2
+ 252              	.LC4:
+ 253 00fc 4572726F 		.ascii	"Error: Failed to register event group monitoring GP"
+ 253      723A2046 
+ 253      61696C65 
+ 253      6420746F 
+ 253      20726567 
+ 254 012f 494F2C20 		.ascii	"IO, status = %d\015\012\000"
+ 254      73746174 
+ 254      7573203D 
+ 254      2025640D 
+ 254      0A00
+ 255 0141 000000   		.align	2
+ 256              	.LC5:
+ 257 0144 54687265 		.ascii	"Thread1: count=%d\015\012\000"
+ 257      6164313A 
+ 257      20636F75 
+ 257      6E743D25 
+ 257      640D0A00 
+ 258              		.section	.text.Thread1_Entry,"ax",%progbits
+ 259              		.align	2
+ 260              		.global	Thread1_Entry
+ 262              	Thread1_Entry:
+ 263              	.LFB2:
+ 126:../cyfx_rtos_eg.c **** 
+ 127:../cyfx_rtos_eg.c **** /* Thread1: Keep suspending/resuming the thread. */
+ 128:../cyfx_rtos_eg.c **** void
+ 129:../cyfx_rtos_eg.c **** Thread1_Entry (
+ 130:../cyfx_rtos_eg.c ****         uint32_t input)
+ 131:../cyfx_rtos_eg.c **** {
+ 264              		.loc 1 131 0
+ 265              		.cfi_startproc
+ 266              		@ args = 0, pretend = 0, frame = 16
+ 267              		@ frame_needed = 1, uses_anonymous_args = 0
+ 268 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 269              	.LCFI4:
+ 270              		.cfi_def_cfa_offset 8
+ 271 0004 04B08DE2 		add	fp, sp, #4
+ 272              		.cfi_offset 14, -4
+ 273              		.cfi_offset 11, -8
+ 274              	.LCFI5:
+ 275              		.cfi_def_cfa 11, 4
+ 276 0008 10D04DE2 		sub	sp, sp, #16
+ 277 000c 10000BE5 		str	r0, [fp, #-16]
+ 132:../cyfx_rtos_eg.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 278              		.loc 1 132 0
+ 279 0010 0030A0E3 		mov	r3, #0
+ 280 0014 0C300BE5 		str	r3, [fp, #-12]
+ 133:../cyfx_rtos_eg.c ****     uint16_t count = 0;
+ 281              		.loc 1 133 0
+ 282 0018 0030A0E3 		mov	r3, #0
+ 283 001c B6304BE1 		strh	r3, [fp, #-6]	@ movhi
+ 134:../cyfx_rtos_eg.c **** 
+ 135:../cyfx_rtos_eg.c ****     /* Initialize the debug interface. */
+ 136:../cyfx_rtos_eg.c ****     status = CyFxDebugInit ();
+ 284              		.loc 1 136 0
+ 285 0020 FEFFFFEB 		bl	CyFxDebugInit
+ 286 0024 0C000BE5 		str	r0, [fp, #-12]
+ 137:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 287              		.loc 1 137 0
+ 288 0028 0C301BE5 		ldr	r3, [fp, #-12]
+ 289 002c 000053E3 		cmp	r3, #0
+ 290 0030 0400000A 		beq	.L13
+ 138:../cyfx_rtos_eg.c ****     {
+ 139:../cyfx_rtos_eg.c ****         CyU3PDebugPrint (4, "%x: Application failed to initialize. Error code: %d.\n", status);
+ 291              		.loc 1 139 0
+ 292 0034 0400A0E3 		mov	r0, #4
+ 293 0038 20119FE5 		ldr	r1, .L21
+ 294 003c 0C201BE5 		ldr	r2, [fp, #-12]
+ 295 0040 FEFFFFEB 		bl	CyU3PDebugPrint
+ 296              	.L14:
+ 140:../cyfx_rtos_eg.c ****         while (1);
+ 297              		.loc 1 140 0 discriminator 1
+ 298 0044 FEFFFFEA 		b	.L14
+ 299              	.L13:
+ 141:../cyfx_rtos_eg.c ****     }
+ 142:../cyfx_rtos_eg.c **** 
+ 143:../cyfx_rtos_eg.c ****     /* Initialize the GPIO module and register the status indicator GPIOs for each of the objects. 
+ 144:../cyfx_rtos_eg.c ****     CyFxGpioInit ();
+ 300              		.loc 1 144 0
+ 301 0048 FEFFFFEB 		bl	CyFxGpioInit
+ 145:../cyfx_rtos_eg.c **** 
+ 146:../cyfx_rtos_eg.c ****     /* Thread status GPIO registration. */
+ 147:../cyfx_rtos_eg.c ****     status = CyU3PThreadSetActivityGpio (&Thread1, THREAD_ACTIVITY_GPIO);
+ 302              		.loc 1 147 0
+ 303 004c 10019FE5 		ldr	r0, .L21+4
+ 304 0050 3610A0E3 		mov	r1, #54
+ 305 0054 FEFFFFEB 		bl	tx_thread_set_profile_gpio
+ 306 0058 0C000BE5 		str	r0, [fp, #-12]
+ 148:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 307              		.loc 1 148 0
+ 308 005c 0C301BE5 		ldr	r3, [fp, #-12]
+ 309 0060 000053E3 		cmp	r3, #0
+ 310 0064 0300000A 		beq	.L15
+ 149:../cyfx_rtos_eg.c ****     {
+ 150:../cyfx_rtos_eg.c ****         CyU3PDebugPrint (2, "Error: Failed to register thread monitoring GPIO, status = %d\r\n", st
+ 311              		.loc 1 150 0
+ 312 0068 0200A0E3 		mov	r0, #2
+ 313 006c F4109FE5 		ldr	r1, .L21+8
+ 314 0070 0C201BE5 		ldr	r2, [fp, #-12]
+ 315 0074 FEFFFFEB 		bl	CyU3PDebugPrint
+ 316              	.L15:
+ 151:../cyfx_rtos_eg.c ****     }
+ 152:../cyfx_rtos_eg.c **** 
+ 153:../cyfx_rtos_eg.c ****     /* Mutex status GPIO registration. */
+ 154:../cyfx_rtos_eg.c ****     status = CyU3PMutexSetActivityGpio (&AppMutex, MUTEX_ACTIVITY_GPIO);
+ 317              		.loc 1 154 0
+ 318 0078 EC009FE5 		ldr	r0, .L21+12
+ 319 007c 3510A0E3 		mov	r1, #53
+ 320 0080 FEFFFFEB 		bl	tx_mutex_set_profile_gpio
+ 321 0084 0C000BE5 		str	r0, [fp, #-12]
+ 155:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 322              		.loc 1 155 0
+ 323 0088 0C301BE5 		ldr	r3, [fp, #-12]
+ 324 008c 000053E3 		cmp	r3, #0
+ 325 0090 0300000A 		beq	.L16
+ 156:../cyfx_rtos_eg.c ****     {
+ 157:../cyfx_rtos_eg.c ****         CyU3PDebugPrint (2, "Error: Failed to register mutex monitoring GPIO, status = %d\r\n", sta
+ 326              		.loc 1 157 0
+ 327 0094 0200A0E3 		mov	r0, #2
+ 328 0098 D0109FE5 		ldr	r1, .L21+16
+ 329 009c 0C201BE5 		ldr	r2, [fp, #-12]
+ 330 00a0 FEFFFFEB 		bl	CyU3PDebugPrint
+ 331              	.L16:
+ 158:../cyfx_rtos_eg.c ****     }
+ 159:../cyfx_rtos_eg.c **** 
+ 160:../cyfx_rtos_eg.c ****     /* Semaphore status GPIO registration. */
+ 161:../cyfx_rtos_eg.c ****     status = CyU3PSemaphoreSetActivityGpio (&AppSema, SEMAPHORE_ACTIVITY_GPIO);
+ 332              		.loc 1 161 0
+ 333 00a4 C8009FE5 		ldr	r0, .L21+20
+ 334 00a8 3410A0E3 		mov	r1, #52
+ 335 00ac FEFFFFEB 		bl	tx_semaphore_set_profile_gpio
+ 336 00b0 0C000BE5 		str	r0, [fp, #-12]
+ 162:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 337              		.loc 1 162 0
+ 338 00b4 0C301BE5 		ldr	r3, [fp, #-12]
+ 339 00b8 000053E3 		cmp	r3, #0
+ 340 00bc 0300000A 		beq	.L17
+ 163:../cyfx_rtos_eg.c ****     {
+ 164:../cyfx_rtos_eg.c ****         CyU3PDebugPrint (2, "Error: Failed to register semaphore monitoring GPIO, status = %d\r\n",
+ 341              		.loc 1 164 0
+ 342 00c0 0200A0E3 		mov	r0, #2
+ 343 00c4 AC109FE5 		ldr	r1, .L21+24
+ 344 00c8 0C201BE5 		ldr	r2, [fp, #-12]
+ 345 00cc FEFFFFEB 		bl	CyU3PDebugPrint
+ 346              	.L17:
+ 165:../cyfx_rtos_eg.c ****     }
+ 166:../cyfx_rtos_eg.c **** 
+ 167:../cyfx_rtos_eg.c ****     /* Event group status GPIO registration. */
+ 168:../cyfx_rtos_eg.c ****     status = CyU3PEventSetActivityGpio (&AppEvent, EVENT_ACTIVITY_GPIO);
+ 347              		.loc 1 168 0
+ 348 00d0 A4009FE5 		ldr	r0, .L21+28
+ 349 00d4 3310A0E3 		mov	r1, #51
+ 350 00d8 FEFFFFEB 		bl	tx_event_flags_set_profile_gpio
+ 351 00dc 0C000BE5 		str	r0, [fp, #-12]
+ 169:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 352              		.loc 1 169 0
+ 353 00e0 0C301BE5 		ldr	r3, [fp, #-12]
+ 354 00e4 000053E3 		cmp	r3, #0
+ 355 00e8 0300000A 		beq	.L18
+ 170:../cyfx_rtos_eg.c ****     {
+ 171:../cyfx_rtos_eg.c ****         CyU3PDebugPrint (2, "Error: Failed to register event group monitoring GPIO, status = %d\r\n
+ 356              		.loc 1 171 0
+ 357 00ec 0200A0E3 		mov	r0, #2
+ 358 00f0 88109FE5 		ldr	r1, .L21+32
+ 359 00f4 0C201BE5 		ldr	r2, [fp, #-12]
+ 360 00f8 FEFFFFEB 		bl	CyU3PDebugPrint
+ 361              	.L18:
+ 172:../cyfx_rtos_eg.c ****     }
+ 173:../cyfx_rtos_eg.c **** 
+ 174:../cyfx_rtos_eg.c ****     for (;;)
+ 175:../cyfx_rtos_eg.c ****     {
+ 176:../cyfx_rtos_eg.c ****         CyU3PThreadSleep (500);
+ 362              		.loc 1 176 0
+ 363 00fc 7D0FA0E3 		mov	r0, #500
+ 364 0100 FEFFFFEB 		bl	_tx_thread_sleep
+ 177:../cyfx_rtos_eg.c **** 
+ 178:../cyfx_rtos_eg.c ****         count++;
+ 365              		.loc 1 178 0
+ 366 0104 B6305BE1 		ldrh	r3, [fp, #-6]	@ movhi
+ 367 0108 013083E2 		add	r3, r3, #1
+ 368 010c B6304BE1 		strh	r3, [fp, #-6]	@ movhi
+ 179:../cyfx_rtos_eg.c ****         if ((count & 0x0F) == 0)
+ 369              		.loc 1 179 0
+ 370 0110 B6305BE1 		ldrh	r3, [fp, #-6]
+ 371 0114 0F3003E2 		and	r3, r3, #15
+ 372 0118 000053E3 		cmp	r3, #0
+ 373 011c 0700001A 		bne	.L19
+ 180:../cyfx_rtos_eg.c ****             CyU3PDebugPrint (2, "Thread1: count=%d\r\n", count++);
+ 374              		.loc 1 180 0
+ 375 0120 B6305BE1 		ldrh	r3, [fp, #-6]
+ 376 0124 B6205BE1 		ldrh	r2, [fp, #-6]	@ movhi
+ 377 0128 012082E2 		add	r2, r2, #1
+ 378 012c B6204BE1 		strh	r2, [fp, #-6]	@ movhi
+ 379 0130 0200A0E3 		mov	r0, #2
+ 380 0134 48109FE5 		ldr	r1, .L21+36
+ 381 0138 0320A0E1 		mov	r2, r3
+ 382 013c FEFFFFEB 		bl	CyU3PDebugPrint
+ 383              	.L19:
+ 181:../cyfx_rtos_eg.c ****         if (count == 0)
+ 384              		.loc 1 181 0
+ 385 0140 B6305BE1 		ldrh	r3, [fp, #-6]
+ 386 0144 000053E3 		cmp	r3, #0
+ 387 0148 0100001A 		bne	.L20
+ 182:../cyfx_rtos_eg.c ****             CyU3PDeviceReset (CyFalse);
+ 388              		.loc 1 182 0
+ 389 014c 0000A0E3 		mov	r0, #0
+ 390 0150 FEFFFFEB 		bl	CyU3PDeviceReset
+ 391              	.L20:
+ 183:../cyfx_rtos_eg.c **** 
+ 184:../cyfx_rtos_eg.c ****         CyU3PBusyWait (60000);
+ 392              		.loc 1 184 0
+ 393 0154 2C009FE5 		ldr	r0, .L21+40
+ 394 0158 FEFFFFEB 		bl	CyU3PBusyWait
+ 185:../cyfx_rtos_eg.c ****     }
+ 395              		.loc 1 185 0
+ 396 015c E6FFFFEA 		b	.L18
+ 397              	.L22:
+ 398              		.align	2
+ 399              	.L21:
+ 400 0160 00000000 		.word	.LC0
+ 401 0164 00000000 		.word	Thread1
+ 402 0168 38000000 		.word	.LC1
+ 403 016c 00000000 		.word	AppMutex
+ 404 0170 78000000 		.word	.LC2
+ 405 0174 00000000 		.word	AppSema
+ 406 0178 B8000000 		.word	.LC3
+ 407 017c 00000000 		.word	AppEvent
+ 408 0180 FC000000 		.word	.LC4
+ 409 0184 44010000 		.word	.LC5
+ 410 0188 60EA0000 		.word	60000
+ 411              		.cfi_endproc
+ 412              	.LFE2:
+ 414              		.section	.rodata
+ 415              		.align	2
+ 416              	.LC6:
+ 417 0158 54687265 		.ascii	"Thread2: CPU load=%d, thread1=%d, thread2=%d, drive"
+ 417      6164323A 
+ 417      20435055 
+ 417      206C6F61 
+ 417      643D2564 
+ 418 018b 72733D25 		.ascii	"rs=%d\015\012\000"
+ 418      640D0A00 
+ 419              		.section	.text.Thread2_Entry,"ax",%progbits
+ 420              		.align	2
+ 421              		.global	Thread2_Entry
+ 423              	Thread2_Entry:
+ 424              	.LFB3:
+ 186:../cyfx_rtos_eg.c **** }
+ 187:../cyfx_rtos_eg.c **** 
+ 188:../cyfx_rtos_eg.c **** /* Thread2: Print CPU load values, and perform mutex get/put operations. */
+ 189:../cyfx_rtos_eg.c **** void
+ 190:../cyfx_rtos_eg.c **** Thread2_Entry (
+ 191:../cyfx_rtos_eg.c ****         uint32_t input)
+ 192:../cyfx_rtos_eg.c **** {
+ 425              		.loc 1 192 0
+ 426              		.cfi_startproc
+ 427              		@ args = 0, pretend = 0, frame = 32
+ 428              		@ frame_needed = 1, uses_anonymous_args = 0
+ 429 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 430              	.LCFI6:
+ 431              		.cfi_def_cfa_offset 8
+ 432 0004 04B08DE2 		add	fp, sp, #4
+ 433              		.cfi_offset 14, -4
+ 434              		.cfi_offset 11, -8
+ 435              	.LCFI7:
+ 436              		.cfi_def_cfa 11, 4
+ 437 0008 28D04DE2 		sub	sp, sp, #40
+ 438 000c 20000BE5 		str	r0, [fp, #-32]
+ 193:../cyfx_rtos_eg.c ****     uint32_t total, thr1, thr2, driver;
+ 194:../cyfx_rtos_eg.c ****     CyBool_t isGet = CyTrue;
+ 439              		.loc 1 194 0
+ 440 0010 0130A0E3 		mov	r3, #1
+ 441 0014 08300BE5 		str	r3, [fp, #-8]
+ 442              	.L26:
+ 195:../cyfx_rtos_eg.c **** 
+ 196:../cyfx_rtos_eg.c ****     for (;;)
+ 197:../cyfx_rtos_eg.c ****     {
+ 198:../cyfx_rtos_eg.c ****         CyU3PThreadSleep (2000);
+ 443              		.loc 1 198 0
+ 444 0018 7D0EA0E3 		mov	r0, #2000
+ 445 001c FEFFFFEB 		bl	_tx_thread_sleep
+ 199:../cyfx_rtos_eg.c **** 
+ 200:../cyfx_rtos_eg.c ****         total  = CyU3PDeviceGetCpuLoad ();
+ 446              		.loc 1 200 0
+ 447 0020 FEFFFFEB 		bl	CyU3PDeviceGetCpuLoad
+ 448 0024 0C000BE5 		str	r0, [fp, #-12]
+ 201:../cyfx_rtos_eg.c ****         thr1   = CyU3PDeviceGetThreadLoad (&Thread1);
+ 449              		.loc 1 201 0
+ 450 0028 74009FE5 		ldr	r0, .L27
+ 451 002c FEFFFFEB 		bl	CyU3PDeviceGetThreadLoad
+ 452 0030 10000BE5 		str	r0, [fp, #-16]
+ 202:../cyfx_rtos_eg.c ****         thr2   = CyU3PDeviceGetThreadLoad (&Thread2);
+ 453              		.loc 1 202 0
+ 454 0034 6C009FE5 		ldr	r0, .L27+4
+ 455 0038 FEFFFFEB 		bl	CyU3PDeviceGetThreadLoad
+ 456 003c 14000BE5 		str	r0, [fp, #-20]
+ 203:../cyfx_rtos_eg.c ****         driver = CyU3PDeviceGetDriverLoad ();
+ 457              		.loc 1 203 0
+ 458 0040 FEFFFFEB 		bl	CyU3PDeviceGetDriverLoad
+ 459 0044 18000BE5 		str	r0, [fp, #-24]
+ 204:../cyfx_rtos_eg.c **** 
+ 205:../cyfx_rtos_eg.c ****         CyU3PDebugPrint (2, "Thread2: CPU load=%d, thread1=%d, thread2=%d, drivers=%d\r\n",
+ 460              		.loc 1 205 0
+ 461 0048 14301BE5 		ldr	r3, [fp, #-20]
+ 462 004c 00308DE5 		str	r3, [sp, #0]
+ 463 0050 18301BE5 		ldr	r3, [fp, #-24]
+ 464 0054 04308DE5 		str	r3, [sp, #4]
+ 465 0058 0200A0E3 		mov	r0, #2
+ 466 005c 48109FE5 		ldr	r1, .L27+8
+ 467 0060 0C201BE5 		ldr	r2, [fp, #-12]
+ 468 0064 10301BE5 		ldr	r3, [fp, #-16]
+ 469 0068 FEFFFFEB 		bl	CyU3PDebugPrint
+ 206:../cyfx_rtos_eg.c ****                 total, thr1, thr2, driver);
+ 207:../cyfx_rtos_eg.c **** 
+ 208:../cyfx_rtos_eg.c ****         /* Toggle the mutex status. */
+ 209:../cyfx_rtos_eg.c ****         if (isGet)
+ 470              		.loc 1 209 0
+ 471 006c 08301BE5 		ldr	r3, [fp, #-8]
+ 472 0070 000053E3 		cmp	r3, #0
+ 473 0074 0500000A 		beq	.L24
+ 210:../cyfx_rtos_eg.c ****         {
+ 211:../cyfx_rtos_eg.c ****             CyU3PMutexGet (&AppMutex, CYU3P_WAIT_FOREVER);
+ 474              		.loc 1 211 0
+ 475 0078 30009FE5 		ldr	r0, .L27+12
+ 476 007c 0010E0E3 		mvn	r1, #0
+ 477 0080 FEFFFFEB 		bl	_txe_mutex_get
+ 212:../cyfx_rtos_eg.c ****             isGet = CyFalse;
+ 478              		.loc 1 212 0
+ 479 0084 0030A0E3 		mov	r3, #0
+ 480 0088 08300BE5 		str	r3, [fp, #-8]
+ 213:../cyfx_rtos_eg.c ****         }
+ 214:../cyfx_rtos_eg.c ****         else
+ 215:../cyfx_rtos_eg.c ****         {
+ 216:../cyfx_rtos_eg.c ****             CyU3PMutexPut (&AppMutex);
+ 217:../cyfx_rtos_eg.c ****             isGet = CyTrue;
+ 218:../cyfx_rtos_eg.c ****         }
+ 219:../cyfx_rtos_eg.c ****     }
+ 481              		.loc 1 219 0
+ 482 008c E1FFFFEA 		b	.L26
+ 483              	.L24:
+ 216:../cyfx_rtos_eg.c ****             CyU3PMutexPut (&AppMutex);
+ 484              		.loc 1 216 0
+ 485 0090 18009FE5 		ldr	r0, .L27+12
+ 486 0094 FEFFFFEB 		bl	_txe_mutex_put
+ 217:../cyfx_rtos_eg.c ****             isGet = CyTrue;
+ 487              		.loc 1 217 0
+ 488 0098 0130A0E3 		mov	r3, #1
+ 489 009c 08300BE5 		str	r3, [fp, #-8]
+ 490              		.loc 1 219 0
+ 491 00a0 DCFFFFEA 		b	.L26
+ 492              	.L28:
+ 493              		.align	2
+ 494              	.L27:
+ 495 00a4 00000000 		.word	Thread1
+ 496 00a8 00000000 		.word	Thread2
+ 497 00ac 58010000 		.word	.LC6
+ 498 00b0 00000000 		.word	AppMutex
+ 499              		.cfi_endproc
+ 500              	.LFE3:
+ 502              		.section	.rodata
+ 503 0193 00       		.align	2
+ 504              	.LC7:
+ 505 0194 54687265 		.ascii	"Thread3\015\012\000"
+ 505      6164330D 
+ 505      0A00
+ 506              		.section	.text.Thread3_Entry,"ax",%progbits
+ 507              		.align	2
+ 508              		.global	Thread3_Entry
+ 510              	Thread3_Entry:
+ 511              	.LFB4:
+ 220:../cyfx_rtos_eg.c **** }
+ 221:../cyfx_rtos_eg.c **** 
+ 222:../cyfx_rtos_eg.c **** /* Thread 3: Perform Semaphore Get/Put operations. */
+ 223:../cyfx_rtos_eg.c **** void
+ 224:../cyfx_rtos_eg.c **** Thread3_Entry (
+ 225:../cyfx_rtos_eg.c ****         uint32_t input)
+ 226:../cyfx_rtos_eg.c **** {
+ 512              		.loc 1 226 0
+ 513              		.cfi_startproc
+ 514              		@ args = 0, pretend = 0, frame = 16
+ 515              		@ frame_needed = 1, uses_anonymous_args = 0
+ 516 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 517              	.LCFI8:
+ 518              		.cfi_def_cfa_offset 8
+ 519 0004 04B08DE2 		add	fp, sp, #4
+ 520              		.cfi_offset 14, -4
+ 521              		.cfi_offset 11, -8
+ 522              	.LCFI9:
+ 523              		.cfi_def_cfa 11, 4
+ 524 0008 10D04DE2 		sub	sp, sp, #16
+ 525 000c 10000BE5 		str	r0, [fp, #-16]
+ 227:../cyfx_rtos_eg.c ****     uint32_t count = APP_SEMA_COUNT;
+ 526              		.loc 1 227 0
+ 527 0010 0430A0E3 		mov	r3, #4
+ 528 0014 08300BE5 		str	r3, [fp, #-8]
+ 529              	.L34:
+ 228:../cyfx_rtos_eg.c **** 
+ 229:../cyfx_rtos_eg.c ****     for (;;)
+ 230:../cyfx_rtos_eg.c ****     {
+ 231:../cyfx_rtos_eg.c ****         CyU3PThreadSleep (1000);
+ 530              		.loc 1 231 0
+ 531 0018 FA0FA0E3 		mov	r0, #1000
+ 532 001c FEFFFFEB 		bl	_tx_thread_sleep
+ 232:../cyfx_rtos_eg.c **** 
+ 233:../cyfx_rtos_eg.c ****         if (count > 0)
+ 533              		.loc 1 233 0
+ 534 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 535 0024 000053E3 		cmp	r3, #0
+ 536 0028 0B00000A 		beq	.L32
+ 234:../cyfx_rtos_eg.c ****         {
+ 235:../cyfx_rtos_eg.c ****             count--;
+ 537              		.loc 1 235 0
+ 538 002c 08301BE5 		ldr	r3, [fp, #-8]
+ 539 0030 013043E2 		sub	r3, r3, #1
+ 540 0034 08300BE5 		str	r3, [fp, #-8]
+ 236:../cyfx_rtos_eg.c ****             CyU3PSemaphoreGet (&AppSema, CYU3P_WAIT_FOREVER);
+ 541              		.loc 1 236 0
+ 542 0038 38009FE5 		ldr	r0, .L35
+ 543 003c 0010E0E3 		mvn	r1, #0
+ 544 0040 FEFFFFEB 		bl	_txe_semaphore_get
+ 237:../cyfx_rtos_eg.c ****         }
+ 238:../cyfx_rtos_eg.c ****         else
+ 239:../cyfx_rtos_eg.c ****         {
+ 240:../cyfx_rtos_eg.c ****             while (count < APP_SEMA_COUNT)
+ 241:../cyfx_rtos_eg.c ****             {
+ 242:../cyfx_rtos_eg.c ****                 CyU3PSemaphorePut (&AppSema);
+ 243:../cyfx_rtos_eg.c ****                 count++;
+ 244:../cyfx_rtos_eg.c ****             }
+ 245:../cyfx_rtos_eg.c **** 
+ 246:../cyfx_rtos_eg.c ****             CyU3PDebugPrint (2, "Thread3\r\n");
+ 247:../cyfx_rtos_eg.c ****         }
+ 248:../cyfx_rtos_eg.c ****     }
+ 545              		.loc 1 248 0
+ 546 0044 F3FFFFEA 		b	.L34
+ 547              	.L33:
+ 242:../cyfx_rtos_eg.c ****                 CyU3PSemaphorePut (&AppSema);
+ 548              		.loc 1 242 0
+ 549 0048 28009FE5 		ldr	r0, .L35
+ 550 004c FEFFFFEB 		bl	_txe_semaphore_put
+ 243:../cyfx_rtos_eg.c ****                 count++;
+ 551              		.loc 1 243 0
+ 552 0050 08301BE5 		ldr	r3, [fp, #-8]
+ 553 0054 013083E2 		add	r3, r3, #1
+ 554 0058 08300BE5 		str	r3, [fp, #-8]
+ 555              	.L32:
+ 240:../cyfx_rtos_eg.c ****             while (count < APP_SEMA_COUNT)
+ 556              		.loc 1 240 0 discriminator 1
+ 557 005c 08301BE5 		ldr	r3, [fp, #-8]
+ 558 0060 030053E3 		cmp	r3, #3
+ 559 0064 F7FFFF9A 		bls	.L33
+ 246:../cyfx_rtos_eg.c ****             CyU3PDebugPrint (2, "Thread3\r\n");
+ 560              		.loc 1 246 0
+ 561 0068 0200A0E3 		mov	r0, #2
+ 562 006c 08109FE5 		ldr	r1, .L35+4
+ 563 0070 FEFFFFEB 		bl	CyU3PDebugPrint
+ 564              		.loc 1 248 0
+ 565 0074 E7FFFFEA 		b	.L34
+ 566              	.L36:
+ 567              		.align	2
+ 568              	.L35:
+ 569 0078 00000000 		.word	AppSema
+ 570 007c 94010000 		.word	.LC7
+ 571              		.cfi_endproc
+ 572              	.LFE4:
+ 574              		.section	.rodata
+ 575 019e 0000     		.align	2
+ 576              	.LC8:
+ 577 01a0 54687265 		.ascii	"Thread4: flag=%d\015\012\000"
+ 577      6164343A 
+ 577      20666C61 
+ 577      673D2564 
+ 577      0D0A00
+ 578              		.section	.text.Thread4_Entry,"ax",%progbits
+ 579              		.align	2
+ 580              		.global	Thread4_Entry
+ 582              	Thread4_Entry:
+ 583              	.LFB5:
+ 249:../cyfx_rtos_eg.c **** }
+ 250:../cyfx_rtos_eg.c **** 
+ 251:../cyfx_rtos_eg.c **** /* Thread 4: Perform event group set/get operations. */
+ 252:../cyfx_rtos_eg.c **** void
+ 253:../cyfx_rtos_eg.c **** Thread4_Entry (
+ 254:../cyfx_rtos_eg.c ****         uint32_t input)
+ 255:../cyfx_rtos_eg.c **** {
+ 584              		.loc 1 255 0
+ 585              		.cfi_startproc
+ 586              		@ args = 0, pretend = 0, frame = 16
+ 587              		@ frame_needed = 1, uses_anonymous_args = 0
+ 588 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 589              	.LCFI10:
+ 590              		.cfi_def_cfa_offset 8
+ 591 0004 04B08DE2 		add	fp, sp, #4
+ 592              		.cfi_offset 14, -4
+ 593              		.cfi_offset 11, -8
+ 594              	.LCFI11:
+ 595              		.cfi_def_cfa 11, 4
+ 596 0008 18D04DE2 		sub	sp, sp, #24
+ 597 000c 10000BE5 		str	r0, [fp, #-16]
+ 256:../cyfx_rtos_eg.c ****     uint32_t flag;
+ 257:../cyfx_rtos_eg.c ****     CyBool_t isSet = CyTrue;
+ 598              		.loc 1 257 0
+ 599 0010 0130A0E3 		mov	r3, #1
+ 600 0014 08300BE5 		str	r3, [fp, #-8]
+ 601              	.L40:
+ 258:../cyfx_rtos_eg.c **** 
+ 259:../cyfx_rtos_eg.c ****     for (;;)
+ 260:../cyfx_rtos_eg.c ****     {
+ 261:../cyfx_rtos_eg.c ****         CyU3PThreadSleep (3000);
+ 602              		.loc 1 261 0
+ 603 0018 64009FE5 		ldr	r0, .L41
+ 604 001c FEFFFFEB 		bl	_tx_thread_sleep
+ 262:../cyfx_rtos_eg.c **** 
+ 263:../cyfx_rtos_eg.c ****         if (isSet)
+ 605              		.loc 1 263 0
+ 606 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 607 0024 000053E3 		cmp	r3, #0
+ 608 0028 0600000A 		beq	.L38
+ 264:../cyfx_rtos_eg.c ****         {
+ 265:../cyfx_rtos_eg.c ****             CyU3PEventSet (&AppEvent, APP_EVENT_FLAG, CYU3P_EVENT_OR);
+ 609              		.loc 1 265 0
+ 610 002c 54009FE5 		ldr	r0, .L41+4
+ 611 0030 0110A0E3 		mov	r1, #1
+ 612 0034 0020A0E3 		mov	r2, #0
+ 613 0038 FEFFFFEB 		bl	_txe_event_flags_set
+ 266:../cyfx_rtos_eg.c ****             isSet = CyFalse;
+ 614              		.loc 1 266 0
+ 615 003c 0030A0E3 		mov	r3, #0
+ 616 0040 08300BE5 		str	r3, [fp, #-8]
+ 267:../cyfx_rtos_eg.c ****         }
+ 268:../cyfx_rtos_eg.c ****         else
+ 269:../cyfx_rtos_eg.c ****         {
+ 270:../cyfx_rtos_eg.c ****             CyU3PEventGet (&AppEvent, APP_EVENT_FLAG, CYU3P_EVENT_AND_CLEAR, &flag, CYU3P_WAIT_FORE
+ 271:../cyfx_rtos_eg.c ****             CyU3PDebugPrint (2, "Thread4: flag=%d\r\n", flag);
+ 272:../cyfx_rtos_eg.c ****             isSet = CyTrue;
+ 273:../cyfx_rtos_eg.c ****         }
+ 274:../cyfx_rtos_eg.c ****     }
+ 617              		.loc 1 274 0
+ 618 0044 F3FFFFEA 		b	.L40
+ 619              	.L38:
+ 270:../cyfx_rtos_eg.c ****             CyU3PEventGet (&AppEvent, APP_EVENT_FLAG, CYU3P_EVENT_AND_CLEAR, &flag, CYU3P_WAIT_FORE
+ 620              		.loc 1 270 0
+ 621 0048 0C304BE2 		sub	r3, fp, #12
+ 622 004c 0020E0E3 		mvn	r2, #0
+ 623 0050 00208DE5 		str	r2, [sp, #0]
+ 624 0054 2C009FE5 		ldr	r0, .L41+4
+ 625 0058 0110A0E3 		mov	r1, #1
+ 626 005c 0320A0E3 		mov	r2, #3
+ 627 0060 FEFFFFEB 		bl	_txe_event_flags_get
+ 271:../cyfx_rtos_eg.c ****             CyU3PDebugPrint (2, "Thread4: flag=%d\r\n", flag);
+ 628              		.loc 1 271 0
+ 629 0064 0C301BE5 		ldr	r3, [fp, #-12]
+ 630 0068 0200A0E3 		mov	r0, #2
+ 631 006c 18109FE5 		ldr	r1, .L41+8
+ 632 0070 0320A0E1 		mov	r2, r3
+ 633 0074 FEFFFFEB 		bl	CyU3PDebugPrint
+ 272:../cyfx_rtos_eg.c ****             isSet = CyTrue;
+ 634              		.loc 1 272 0
+ 635 0078 0130A0E3 		mov	r3, #1
+ 636 007c 08300BE5 		str	r3, [fp, #-8]
+ 637              		.loc 1 274 0
+ 638 0080 E4FFFFEA 		b	.L40
+ 639              	.L42:
+ 640              		.align	2
+ 641              	.L41:
+ 642 0084 B80B0000 		.word	3000
+ 643 0088 00000000 		.word	AppEvent
+ 644 008c A0010000 		.word	.LC8
+ 645              		.cfi_endproc
+ 646              	.LFE5:
+ 648              		.section	.rodata
+ 649 01b3 00       		.align	2
+ 650              	.LC9:
+ 651 01b4 32313A41 		.ascii	"21:App Thread 1\000"
+ 651      70702054 
+ 651      68726561 
+ 651      64203100 
+ 652              		.align	2
+ 653              	.LC10:
+ 654 01c4 32323A41 		.ascii	"22:App Thread 2\000"
+ 654      70702054 
+ 654      68726561 
+ 654      64203200 
+ 655              		.align	2
+ 656              	.LC11:
+ 657 01d4 32333A41 		.ascii	"23:App Thread 3\000"
+ 657      70702054 
+ 657      68726561 
+ 657      64203300 
+ 658              		.align	2
+ 659              	.LC12:
+ 660 01e4 32343A41 		.ascii	"24:App Thread 4\000"
+ 660      70702054 
+ 660      68726561 
+ 660      64203400 
+ 661              		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 662              		.align	2
+ 663              		.global	CyFxApplicationDefine
+ 665              	CyFxApplicationDefine:
+ 666              	.LFB6:
+ 275:../cyfx_rtos_eg.c **** }
+ 276:../cyfx_rtos_eg.c **** 
+ 277:../cyfx_rtos_eg.c **** /* Application define function which creates the application threads. */
+ 278:../cyfx_rtos_eg.c **** void
+ 279:../cyfx_rtos_eg.c **** CyFxApplicationDefine (
+ 280:../cyfx_rtos_eg.c ****         void)
+ 281:../cyfx_rtos_eg.c **** {
+ 667              		.loc 1 281 0
+ 668              		.cfi_startproc
+ 669              		@ args = 0, pretend = 0, frame = 8
+ 670              		@ frame_needed = 1, uses_anonymous_args = 0
+ 671 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 672              	.LCFI12:
+ 673              		.cfi_def_cfa_offset 8
+ 674 0004 04B08DE2 		add	fp, sp, #4
+ 675              		.cfi_offset 14, -4
+ 676              		.cfi_offset 11, -8
+ 677              	.LCFI13:
+ 678              		.cfi_def_cfa 11, 4
+ 679 0008 28D04DE2 		sub	sp, sp, #40
+ 282:../cyfx_rtos_eg.c ****     void *ptr    = NULL;
+ 680              		.loc 1 282 0
+ 681 000c 0030A0E3 		mov	r3, #0
+ 682 0010 0C300BE5 		str	r3, [fp, #-12]
+ 283:../cyfx_rtos_eg.c ****     uint32_t ret = CY_U3P_ERROR_MEMORY_ERROR;
+ 683              		.loc 1 283 0
+ 684 0014 1030A0E3 		mov	r3, #16
+ 685 0018 08300BE5 		str	r3, [fp, #-8]
+ 284:../cyfx_rtos_eg.c **** 
+ 285:../cyfx_rtos_eg.c ****     /* Create the mutex object. */
+ 286:../cyfx_rtos_eg.c ****     ret = CyU3PMutexCreate (&AppMutex, CYU3P_NO_INHERIT);
+ 686              		.loc 1 286 0
+ 687 001c A8029FE5 		ldr	r0, .L68
+ 688 0020 0010A0E3 		mov	r1, #0
+ 689 0024 0020A0E3 		mov	r2, #0
+ 690 0028 5430A0E3 		mov	r3, #84
+ 691 002c FEFFFFEB 		bl	_txe_mutex_create
+ 692 0030 08000BE5 		str	r0, [fp, #-8]
+ 287:../cyfx_rtos_eg.c ****     if (ret != 0)
+ 693              		.loc 1 287 0
+ 694 0034 08301BE5 		ldr	r3, [fp, #-8]
+ 695 0038 000053E3 		cmp	r3, #0
+ 696 003c 9100001A 		bne	.L61
+ 697              	.L44:
+ 288:../cyfx_rtos_eg.c ****     {
+ 289:../cyfx_rtos_eg.c ****         goto InitFail;
+ 290:../cyfx_rtos_eg.c ****     }
+ 291:../cyfx_rtos_eg.c **** 
+ 292:../cyfx_rtos_eg.c ****     /* Create the semaphore object. */
+ 293:../cyfx_rtos_eg.c ****     ret = CyU3PSemaphoreCreate (&AppSema, APP_SEMA_COUNT);
+ 698              		.loc 1 293 0
+ 699 0040 88029FE5 		ldr	r0, .L68+4
+ 700 0044 0010A0E3 		mov	r1, #0
+ 701 0048 0420A0E3 		mov	r2, #4
+ 702 004c 2430A0E3 		mov	r3, #36
+ 703 0050 FEFFFFEB 		bl	_txe_semaphore_create
+ 704 0054 08000BE5 		str	r0, [fp, #-8]
+ 294:../cyfx_rtos_eg.c ****     if (ret != 0)
+ 705              		.loc 1 294 0
+ 706 0058 08301BE5 		ldr	r3, [fp, #-8]
+ 707 005c 000053E3 		cmp	r3, #0
+ 708 0060 8A00001A 		bne	.L62
+ 709              	.L46:
+ 295:../cyfx_rtos_eg.c ****     {
+ 296:../cyfx_rtos_eg.c ****         goto InitFail;
+ 297:../cyfx_rtos_eg.c ****     }
+ 298:../cyfx_rtos_eg.c **** 
+ 299:../cyfx_rtos_eg.c ****     /* Create the event group. */
+ 300:../cyfx_rtos_eg.c ****     ret = CyU3PEventCreate (&AppEvent);
+ 710              		.loc 1 300 0
+ 711 0064 68029FE5 		ldr	r0, .L68+8
+ 712 0068 0010A0E3 		mov	r1, #0
+ 713 006c 3C20A0E3 		mov	r2, #60
+ 714 0070 FEFFFFEB 		bl	_txe_event_flags_create
+ 715 0074 08000BE5 		str	r0, [fp, #-8]
+ 301:../cyfx_rtos_eg.c ****     if (ret != 0)
+ 716              		.loc 1 301 0
+ 717 0078 08301BE5 		ldr	r3, [fp, #-8]
+ 718 007c 000053E3 		cmp	r3, #0
+ 719 0080 8400001A 		bne	.L63
+ 720              	.L47:
+ 302:../cyfx_rtos_eg.c ****     {
+ 303:../cyfx_rtos_eg.c ****         goto InitFail;
+ 304:../cyfx_rtos_eg.c ****     }
+ 305:../cyfx_rtos_eg.c **** 
+ 306:../cyfx_rtos_eg.c ****     /* Create thread number 1. */
+ 307:../cyfx_rtos_eg.c ****     ptr = CyU3PMemAlloc (THREAD_STACK);
+ 721              		.loc 1 307 0
+ 722 0084 020CA0E3 		mov	r0, #512
+ 723 0088 FEFFFFEB 		bl	CyU3PMemAlloc
+ 724 008c 0C000BE5 		str	r0, [fp, #-12]
+ 308:../cyfx_rtos_eg.c ****     if (ptr != NULL)
+ 725              		.loc 1 308 0
+ 726 0090 0C301BE5 		ldr	r3, [fp, #-12]
+ 727 0094 000053E3 		cmp	r3, #0
+ 728 0098 1400000A 		beq	.L48
+ 309:../cyfx_rtos_eg.c ****     {
+ 310:../cyfx_rtos_eg.c ****         ret = CyU3PThreadCreate (
+ 729              		.loc 1 310 0
+ 730 009c 0C301BE5 		ldr	r3, [fp, #-12]
+ 731 00a0 00308DE5 		str	r3, [sp, #0]
+ 732 00a4 023CA0E3 		mov	r3, #512
+ 733 00a8 04308DE5 		str	r3, [sp, #4]
+ 734 00ac 0830A0E3 		mov	r3, #8
+ 735 00b0 08308DE5 		str	r3, [sp, #8]
+ 736 00b4 0830A0E3 		mov	r3, #8
+ 737 00b8 0C308DE5 		str	r3, [sp, #12]
+ 738 00bc 0030A0E3 		mov	r3, #0
+ 739 00c0 10308DE5 		str	r3, [sp, #16]
+ 740 00c4 0130A0E3 		mov	r3, #1
+ 741 00c8 14308DE5 		str	r3, [sp, #20]
+ 742 00cc D430A0E3 		mov	r3, #212
+ 743 00d0 18308DE5 		str	r3, [sp, #24]
+ 744 00d4 FC019FE5 		ldr	r0, .L68+12
+ 745 00d8 FC119FE5 		ldr	r1, .L68+16
+ 746 00dc FC219FE5 		ldr	r2, .L68+20
+ 747 00e0 0030A0E3 		mov	r3, #0
+ 748 00e4 FEFFFFEB 		bl	_txe_thread_create
+ 749 00e8 08000BE5 		str	r0, [fp, #-8]
+ 750 00ec 010000EA 		b	.L49
+ 751              	.L48:
+ 311:../cyfx_rtos_eg.c ****                 &Thread1,                              /* Thread structure. */
+ 312:../cyfx_rtos_eg.c ****                 "21:App Thread 1",                     /* Thread ID and name. */        
+ 313:../cyfx_rtos_eg.c ****                 Thread1_Entry,                         /* Thread entry function. */
+ 314:../cyfx_rtos_eg.c ****                 0,                                     /* Thread input parameter. */
+ 315:../cyfx_rtos_eg.c ****                 ptr,                                   /* Pointer to the allocated thread stack. */
+ 316:../cyfx_rtos_eg.c ****                 THREAD_STACK,                          /* Allocated thread stack size. */
+ 317:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread priority. */
+ 318:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread pre-emption threshold: No preempti
+ 319:../cyfx_rtos_eg.c ****                 CYU3P_NO_TIME_SLICE,                   /* No time slice. */
+ 320:../cyfx_rtos_eg.c ****                 CYU3P_AUTO_START                       /* Start the thread immediately. */
+ 321:../cyfx_rtos_eg.c ****                 );
+ 322:../cyfx_rtos_eg.c ****     }
+ 323:../cyfx_rtos_eg.c ****     else
+ 324:../cyfx_rtos_eg.c ****     {
+ 325:../cyfx_rtos_eg.c ****         ret = CY_U3P_ERROR_MEMORY_ERROR;
+ 752              		.loc 1 325 0
+ 753 00f0 1030A0E3 		mov	r3, #16
+ 754 00f4 08300BE5 		str	r3, [fp, #-8]
+ 755              	.L49:
+ 326:../cyfx_rtos_eg.c ****     }
+ 327:../cyfx_rtos_eg.c **** 
+ 328:../cyfx_rtos_eg.c ****     /* Check the return code */
+ 329:../cyfx_rtos_eg.c ****     if (ret != 0)
+ 756              		.loc 1 329 0
+ 757 00f8 08301BE5 		ldr	r3, [fp, #-8]
+ 758 00fc 000053E3 		cmp	r3, #0
+ 759 0100 6600001A 		bne	.L64
+ 760              	.L50:
+ 330:../cyfx_rtos_eg.c ****     {
+ 331:../cyfx_rtos_eg.c ****         goto InitFail;
+ 332:../cyfx_rtos_eg.c ****     }
+ 333:../cyfx_rtos_eg.c **** 
+ 334:../cyfx_rtos_eg.c ****     /* Create thread number 2. */
+ 335:../cyfx_rtos_eg.c ****     ptr = CyU3PMemAlloc (THREAD_STACK);
+ 761              		.loc 1 335 0
+ 762 0104 020CA0E3 		mov	r0, #512
+ 763 0108 FEFFFFEB 		bl	CyU3PMemAlloc
+ 764 010c 0C000BE5 		str	r0, [fp, #-12]
+ 336:../cyfx_rtos_eg.c ****     if (ptr != NULL)
+ 765              		.loc 1 336 0
+ 766 0110 0C301BE5 		ldr	r3, [fp, #-12]
+ 767 0114 000053E3 		cmp	r3, #0
+ 768 0118 1400000A 		beq	.L51
+ 337:../cyfx_rtos_eg.c ****     {
+ 338:../cyfx_rtos_eg.c ****         ret = CyU3PThreadCreate (
+ 769              		.loc 1 338 0
+ 770 011c 0C301BE5 		ldr	r3, [fp, #-12]
+ 771 0120 00308DE5 		str	r3, [sp, #0]
+ 772 0124 023CA0E3 		mov	r3, #512
+ 773 0128 04308DE5 		str	r3, [sp, #4]
+ 774 012c 0830A0E3 		mov	r3, #8
+ 775 0130 08308DE5 		str	r3, [sp, #8]
+ 776 0134 0830A0E3 		mov	r3, #8
+ 777 0138 0C308DE5 		str	r3, [sp, #12]
+ 778 013c 0030A0E3 		mov	r3, #0
+ 779 0140 10308DE5 		str	r3, [sp, #16]
+ 780 0144 0130A0E3 		mov	r3, #1
+ 781 0148 14308DE5 		str	r3, [sp, #20]
+ 782 014c D430A0E3 		mov	r3, #212
+ 783 0150 18308DE5 		str	r3, [sp, #24]
+ 784 0154 88019FE5 		ldr	r0, .L68+24
+ 785 0158 88119FE5 		ldr	r1, .L68+28
+ 786 015c 88219FE5 		ldr	r2, .L68+32
+ 787 0160 0030A0E3 		mov	r3, #0
+ 788 0164 FEFFFFEB 		bl	_txe_thread_create
+ 789 0168 08000BE5 		str	r0, [fp, #-8]
+ 790 016c 010000EA 		b	.L52
+ 791              	.L51:
+ 339:../cyfx_rtos_eg.c ****                 &Thread2,                              /* Thread structure. */
+ 340:../cyfx_rtos_eg.c ****                 "22:App Thread 2",                     /* Thread ID and name. */        
+ 341:../cyfx_rtos_eg.c ****                 Thread2_Entry,                         /* Thread entry function. */
+ 342:../cyfx_rtos_eg.c ****                 0,                                     /* Thread input parameter. */
+ 343:../cyfx_rtos_eg.c ****                 ptr,                                   /* Pointer to the allocated thread stack. */
+ 344:../cyfx_rtos_eg.c ****                 THREAD_STACK,                          /* Allocated thread stack size. */
+ 345:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread priority. */
+ 346:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread pre-emption threshold: No preempti
+ 347:../cyfx_rtos_eg.c ****                 CYU3P_NO_TIME_SLICE,                   /* No time slice. */
+ 348:../cyfx_rtos_eg.c ****                 CYU3P_AUTO_START                       /* Start the thread immediately. */
+ 349:../cyfx_rtos_eg.c ****                 );
+ 350:../cyfx_rtos_eg.c ****     }
+ 351:../cyfx_rtos_eg.c ****     else
+ 352:../cyfx_rtos_eg.c ****     {
+ 353:../cyfx_rtos_eg.c ****         ret = CY_U3P_ERROR_MEMORY_ERROR;
+ 792              		.loc 1 353 0
+ 793 0170 1030A0E3 		mov	r3, #16
+ 794 0174 08300BE5 		str	r3, [fp, #-8]
+ 795              	.L52:
+ 354:../cyfx_rtos_eg.c ****     }
+ 355:../cyfx_rtos_eg.c **** 
+ 356:../cyfx_rtos_eg.c ****     /* Check the return code */
+ 357:../cyfx_rtos_eg.c ****     if (ret != 0)
+ 796              		.loc 1 357 0
+ 797 0178 08301BE5 		ldr	r3, [fp, #-8]
+ 798 017c 000053E3 		cmp	r3, #0
+ 799 0180 4800001A 		bne	.L65
+ 800              	.L53:
+ 358:../cyfx_rtos_eg.c ****     {
+ 359:../cyfx_rtos_eg.c ****         goto InitFail;
+ 360:../cyfx_rtos_eg.c ****     }
+ 361:../cyfx_rtos_eg.c **** 
+ 362:../cyfx_rtos_eg.c ****     /* Create thread number 3. */
+ 363:../cyfx_rtos_eg.c ****     ptr = CyU3PMemAlloc (THREAD_STACK);
+ 801              		.loc 1 363 0
+ 802 0184 020CA0E3 		mov	r0, #512
+ 803 0188 FEFFFFEB 		bl	CyU3PMemAlloc
+ 804 018c 0C000BE5 		str	r0, [fp, #-12]
+ 364:../cyfx_rtos_eg.c ****     if (ptr != NULL)
+ 805              		.loc 1 364 0
+ 806 0190 0C301BE5 		ldr	r3, [fp, #-12]
+ 807 0194 000053E3 		cmp	r3, #0
+ 808 0198 1400000A 		beq	.L54
+ 365:../cyfx_rtos_eg.c ****     {
+ 366:../cyfx_rtos_eg.c ****         ret = CyU3PThreadCreate (
+ 809              		.loc 1 366 0
+ 810 019c 0C301BE5 		ldr	r3, [fp, #-12]
+ 811 01a0 00308DE5 		str	r3, [sp, #0]
+ 812 01a4 023CA0E3 		mov	r3, #512
+ 813 01a8 04308DE5 		str	r3, [sp, #4]
+ 814 01ac 0830A0E3 		mov	r3, #8
+ 815 01b0 08308DE5 		str	r3, [sp, #8]
+ 816 01b4 0830A0E3 		mov	r3, #8
+ 817 01b8 0C308DE5 		str	r3, [sp, #12]
+ 818 01bc 0030A0E3 		mov	r3, #0
+ 819 01c0 10308DE5 		str	r3, [sp, #16]
+ 820 01c4 0130A0E3 		mov	r3, #1
+ 821 01c8 14308DE5 		str	r3, [sp, #20]
+ 822 01cc D430A0E3 		mov	r3, #212
+ 823 01d0 18308DE5 		str	r3, [sp, #24]
+ 824 01d4 14019FE5 		ldr	r0, .L68+36
+ 825 01d8 14119FE5 		ldr	r1, .L68+40
+ 826 01dc 14219FE5 		ldr	r2, .L68+44
+ 827 01e0 0030A0E3 		mov	r3, #0
+ 828 01e4 FEFFFFEB 		bl	_txe_thread_create
+ 829 01e8 08000BE5 		str	r0, [fp, #-8]
+ 830 01ec 010000EA 		b	.L55
+ 831              	.L54:
+ 367:../cyfx_rtos_eg.c ****                 &Thread3,                              /* Thread structure. */
+ 368:../cyfx_rtos_eg.c ****                 "23:App Thread 3",                     /* Thread ID and name. */        
+ 369:../cyfx_rtos_eg.c ****                 Thread3_Entry,                         /* Thread entry function. */
+ 370:../cyfx_rtos_eg.c ****                 0,                                     /* Thread input parameter. */
+ 371:../cyfx_rtos_eg.c ****                 ptr,                                   /* Pointer to the allocated thread stack. */
+ 372:../cyfx_rtos_eg.c ****                 THREAD_STACK,                          /* Allocated thread stack size. */
+ 373:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread priority. */
+ 374:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread pre-emption threshold: No preempti
+ 375:../cyfx_rtos_eg.c ****                 CYU3P_NO_TIME_SLICE,                   /* No time slice. */
+ 376:../cyfx_rtos_eg.c ****                 CYU3P_AUTO_START                       /* Start the thread immediately. */
+ 377:../cyfx_rtos_eg.c ****                 );
+ 378:../cyfx_rtos_eg.c ****     }
+ 379:../cyfx_rtos_eg.c ****     else
+ 380:../cyfx_rtos_eg.c ****     {
+ 381:../cyfx_rtos_eg.c ****         ret = CY_U3P_ERROR_MEMORY_ERROR;
+ 832              		.loc 1 381 0
+ 833 01f0 1030A0E3 		mov	r3, #16
+ 834 01f4 08300BE5 		str	r3, [fp, #-8]
+ 835              	.L55:
+ 382:../cyfx_rtos_eg.c ****     }
+ 383:../cyfx_rtos_eg.c **** 
+ 384:../cyfx_rtos_eg.c ****     /* Check the return code */
+ 385:../cyfx_rtos_eg.c ****     if (ret != 0)
+ 836              		.loc 1 385 0
+ 837 01f8 08301BE5 		ldr	r3, [fp, #-8]
+ 838 01fc 000053E3 		cmp	r3, #0
+ 839 0200 2A00001A 		bne	.L66
+ 840              	.L56:
+ 386:../cyfx_rtos_eg.c ****     {
+ 387:../cyfx_rtos_eg.c ****         goto InitFail;
+ 388:../cyfx_rtos_eg.c ****     }
+ 389:../cyfx_rtos_eg.c **** 
+ 390:../cyfx_rtos_eg.c ****     /* Create thread number 4. */
+ 391:../cyfx_rtos_eg.c ****     ptr = CyU3PMemAlloc (THREAD_STACK);
+ 841              		.loc 1 391 0
+ 842 0204 020CA0E3 		mov	r0, #512
+ 843 0208 FEFFFFEB 		bl	CyU3PMemAlloc
+ 844 020c 0C000BE5 		str	r0, [fp, #-12]
+ 392:../cyfx_rtos_eg.c ****     if (ptr != NULL)
+ 845              		.loc 1 392 0
+ 846 0210 0C301BE5 		ldr	r3, [fp, #-12]
+ 847 0214 000053E3 		cmp	r3, #0
+ 848 0218 1400000A 		beq	.L57
+ 393:../cyfx_rtos_eg.c ****     {
+ 394:../cyfx_rtos_eg.c ****         ret = CyU3PThreadCreate (
+ 849              		.loc 1 394 0
+ 850 021c 0C301BE5 		ldr	r3, [fp, #-12]
+ 851 0220 00308DE5 		str	r3, [sp, #0]
+ 852 0224 023CA0E3 		mov	r3, #512
+ 853 0228 04308DE5 		str	r3, [sp, #4]
+ 854 022c 0830A0E3 		mov	r3, #8
+ 855 0230 08308DE5 		str	r3, [sp, #8]
+ 856 0234 0830A0E3 		mov	r3, #8
+ 857 0238 0C308DE5 		str	r3, [sp, #12]
+ 858 023c 0030A0E3 		mov	r3, #0
+ 859 0240 10308DE5 		str	r3, [sp, #16]
+ 860 0244 0130A0E3 		mov	r3, #1
+ 861 0248 14308DE5 		str	r3, [sp, #20]
+ 862 024c D430A0E3 		mov	r3, #212
+ 863 0250 18308DE5 		str	r3, [sp, #24]
+ 864 0254 A0009FE5 		ldr	r0, .L68+48
+ 865 0258 A0109FE5 		ldr	r1, .L68+52
+ 866 025c A0209FE5 		ldr	r2, .L68+56
+ 867 0260 0030A0E3 		mov	r3, #0
+ 868 0264 FEFFFFEB 		bl	_txe_thread_create
+ 869 0268 08000BE5 		str	r0, [fp, #-8]
+ 870 026c 010000EA 		b	.L58
+ 871              	.L57:
+ 395:../cyfx_rtos_eg.c ****                 &Thread4,                              /* Thread structure. */
+ 396:../cyfx_rtos_eg.c ****                 "24:App Thread 4",                     /* Thread ID and name. */        
+ 397:../cyfx_rtos_eg.c ****                 Thread4_Entry,                         /* Thread entry function. */
+ 398:../cyfx_rtos_eg.c ****                 0,                                     /* Thread input parameter. */
+ 399:../cyfx_rtos_eg.c ****                 ptr,                                   /* Pointer to the allocated thread stack. */
+ 400:../cyfx_rtos_eg.c ****                 THREAD_STACK,                          /* Allocated thread stack size. */
+ 401:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread priority. */
+ 402:../cyfx_rtos_eg.c ****                 THREAD_PRIORITY,                       /* Thread pre-emption threshold: No preempti
+ 403:../cyfx_rtos_eg.c ****                 CYU3P_NO_TIME_SLICE,                   /* No time slice. */
+ 404:../cyfx_rtos_eg.c ****                 CYU3P_AUTO_START                       /* Start the thread immediately. */
+ 405:../cyfx_rtos_eg.c ****                 );
+ 406:../cyfx_rtos_eg.c ****     }
+ 407:../cyfx_rtos_eg.c ****     else
+ 408:../cyfx_rtos_eg.c ****     {
+ 409:../cyfx_rtos_eg.c ****         ret = CY_U3P_ERROR_MEMORY_ERROR;
+ 872              		.loc 1 409 0
+ 873 0270 1030A0E3 		mov	r3, #16
+ 874 0274 08300BE5 		str	r3, [fp, #-8]
+ 875              	.L58:
+ 410:../cyfx_rtos_eg.c ****     }
+ 411:../cyfx_rtos_eg.c **** 
+ 412:../cyfx_rtos_eg.c ****     /* Check the return code */
+ 413:../cyfx_rtos_eg.c ****     if (ret != 0)
+ 876              		.loc 1 413 0
+ 877 0278 08301BE5 		ldr	r3, [fp, #-8]
+ 878 027c 000053E3 		cmp	r3, #0
+ 879 0280 0E00000A 		beq	.L67
+ 414:../cyfx_rtos_eg.c ****     {
+ 415:../cyfx_rtos_eg.c ****         goto InitFail;
+ 880              		.loc 1 415 0
+ 881 0284 0A0000EA 		b	.L45
+ 882              	.L61:
+ 289:../cyfx_rtos_eg.c ****         goto InitFail;
+ 883              		.loc 1 289 0
+ 884 0288 0000A0E1 		mov	r0, r0	@ nop
+ 885 028c 080000EA 		b	.L45
+ 886              	.L62:
+ 296:../cyfx_rtos_eg.c ****         goto InitFail;
+ 887              		.loc 1 296 0
+ 888 0290 0000A0E1 		mov	r0, r0	@ nop
+ 889 0294 060000EA 		b	.L45
+ 890              	.L63:
+ 303:../cyfx_rtos_eg.c ****         goto InitFail;
+ 891              		.loc 1 303 0
+ 892 0298 0000A0E1 		mov	r0, r0	@ nop
+ 893 029c 040000EA 		b	.L45
+ 894              	.L64:
+ 331:../cyfx_rtos_eg.c ****         goto InitFail;
+ 895              		.loc 1 331 0
+ 896 02a0 0000A0E1 		mov	r0, r0	@ nop
+ 897 02a4 020000EA 		b	.L45
+ 898              	.L65:
+ 359:../cyfx_rtos_eg.c ****         goto InitFail;
+ 899              		.loc 1 359 0
+ 900 02a8 0000A0E1 		mov	r0, r0	@ nop
+ 901 02ac 000000EA 		b	.L45
+ 902              	.L66:
+ 387:../cyfx_rtos_eg.c ****         goto InitFail;
+ 903              		.loc 1 387 0
+ 904 02b0 0000A0E1 		mov	r0, r0	@ nop
+ 905              	.L45:
+ 416:../cyfx_rtos_eg.c ****     }
+ 417:../cyfx_rtos_eg.c **** 
+ 418:../cyfx_rtos_eg.c ****     return;
+ 419:../cyfx_rtos_eg.c **** 
+ 420:../cyfx_rtos_eg.c **** InitFail:
+ 421:../cyfx_rtos_eg.c ****     /* As the initialization failed, there is nothing much we can do. Just reset the device
+ 422:../cyfx_rtos_eg.c ****      * so that we go back to the boot-loader. */
+ 423:../cyfx_rtos_eg.c ****     CyU3PDeviceReset (CyFalse);
+ 906              		.loc 1 423 0
+ 907 02b4 0000A0E3 		mov	r0, #0
+ 908 02b8 FEFFFFEB 		bl	CyU3PDeviceReset
+ 909 02bc 000000EA 		b	.L43
+ 910              	.L67:
+ 418:../cyfx_rtos_eg.c ****     return;
+ 911              		.loc 1 418 0
+ 912 02c0 0000A0E1 		mov	r0, r0	@ nop
+ 913              	.L43:
+ 424:../cyfx_rtos_eg.c **** }
+ 914              		.loc 1 424 0
+ 915 02c4 04D04BE2 		sub	sp, fp, #4
+ 916 02c8 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 917              	.L69:
+ 918              		.align	2
+ 919              	.L68:
+ 920 02cc 00000000 		.word	AppMutex
+ 921 02d0 00000000 		.word	AppSema
+ 922 02d4 00000000 		.word	AppEvent
+ 923 02d8 00000000 		.word	Thread1
+ 924 02dc B4010000 		.word	.LC9
+ 925 02e0 00000000 		.word	Thread1_Entry
+ 926 02e4 00000000 		.word	Thread2
+ 927 02e8 C4010000 		.word	.LC10
+ 928 02ec 00000000 		.word	Thread2_Entry
+ 929 02f0 00000000 		.word	Thread3
+ 930 02f4 D4010000 		.word	.LC11
+ 931 02f8 00000000 		.word	Thread3_Entry
+ 932 02fc 00000000 		.word	Thread4
+ 933 0300 E4010000 		.word	.LC12
+ 934 0304 00000000 		.word	Thread4_Entry
+ 935              		.cfi_endproc
+ 936              	.LFE6:
+ 938              		.section	.text.main,"ax",%progbits
+ 939              		.align	2
+ 940              		.global	main
+ 942              	main:
+ 943              	.LFB7:
+ 425:../cyfx_rtos_eg.c **** 
+ 426:../cyfx_rtos_eg.c **** /*
+ 427:../cyfx_rtos_eg.c ****  * Main function
+ 428:../cyfx_rtos_eg.c ****  */
+ 429:../cyfx_rtos_eg.c **** int
+ 430:../cyfx_rtos_eg.c **** main (void)
+ 431:../cyfx_rtos_eg.c **** {
+ 944              		.loc 1 431 0
+ 945              		.cfi_startproc
+ 946              		@ args = 0, pretend = 0, frame = 48
+ 947              		@ frame_needed = 1, uses_anonymous_args = 0
+ 948 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 949              	.LCFI14:
+ 950              		.cfi_def_cfa_offset 8
+ 951 0004 04B08DE2 		add	fp, sp, #4
+ 952              		.cfi_offset 14, -4
+ 953              		.cfi_offset 11, -8
+ 954              	.LCFI15:
+ 955              		.cfi_def_cfa 11, 4
+ 956 0008 30D04DE2 		sub	sp, sp, #48
+ 432:../cyfx_rtos_eg.c ****     CyU3PIoMatrixConfig_t io_cfg;
+ 433:../cyfx_rtos_eg.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 957              		.loc 1 433 0
+ 958 000c 0030A0E3 		mov	r3, #0
+ 959 0010 08300BE5 		str	r3, [fp, #-8]
+ 434:../cyfx_rtos_eg.c **** 
+ 435:../cyfx_rtos_eg.c ****     /* Initialize the device */
+ 436:../cyfx_rtos_eg.c ****     status = CyU3PDeviceInit (NULL);
+ 960              		.loc 1 436 0
+ 961 0014 0000A0E3 		mov	r0, #0
+ 962 0018 FEFFFFEB 		bl	CyU3PDeviceInit
+ 963 001c 08000BE5 		str	r0, [fp, #-8]
+ 437:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 964              		.loc 1 437 0
+ 965 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 966 0024 000053E3 		cmp	r3, #0
+ 967 0028 0000000A 		beq	.L71
+ 438:../cyfx_rtos_eg.c ****     {
+ 439:../cyfx_rtos_eg.c ****         goto handle_fatal_error;
+ 968              		.loc 1 439 0
+ 969 002c 320000EA 		b	.L72
+ 970              	.L71:
+ 440:../cyfx_rtos_eg.c ****     }
+ 441:../cyfx_rtos_eg.c **** 
+ 442:../cyfx_rtos_eg.c ****     /* Initialize the caches. Enable both Instruction and Data caches. */
+ 443:../cyfx_rtos_eg.c ****     status = CyU3PDeviceCacheControl (CyTrue, CyTrue, CyTrue);
+ 971              		.loc 1 443 0
+ 972 0030 0100A0E3 		mov	r0, #1
+ 973 0034 0110A0E3 		mov	r1, #1
+ 974 0038 0120A0E3 		mov	r2, #1
+ 975 003c FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 976 0040 08000BE5 		str	r0, [fp, #-8]
+ 444:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 977              		.loc 1 444 0
+ 978 0044 08301BE5 		ldr	r3, [fp, #-8]
+ 979 0048 000053E3 		cmp	r3, #0
+ 980 004c 0000000A 		beq	.L73
+ 445:../cyfx_rtos_eg.c ****     {
+ 446:../cyfx_rtos_eg.c ****         goto handle_fatal_error;
+ 981              		.loc 1 446 0
+ 982 0050 290000EA 		b	.L72
+ 983              	.L73:
+ 447:../cyfx_rtos_eg.c ****     }
+ 448:../cyfx_rtos_eg.c **** 
+ 449:../cyfx_rtos_eg.c ****     /* Configure the IO matrix for the device. */
+ 450:../cyfx_rtos_eg.c ****     CyU3PMemSet ((uint8_t *)&io_cfg, 0, sizeof(io_cfg));
+ 984              		.loc 1 450 0
+ 985 0054 30304BE2 		sub	r3, fp, #48
+ 986 0058 0300A0E1 		mov	r0, r3
+ 987 005c 0010A0E3 		mov	r1, #0
+ 988 0060 2820A0E3 		mov	r2, #40
+ 989 0064 FEFFFFEB 		bl	CyU3PMemSet
+ 451:../cyfx_rtos_eg.c ****     io_cfg.isDQ32Bit = CyFalse;
+ 990              		.loc 1 451 0
+ 991 0068 0030A0E3 		mov	r3, #0
+ 992 006c 30300BE5 		str	r3, [fp, #-48]
+ 452:../cyfx_rtos_eg.c ****     io_cfg.s0Mode = CY_U3P_SPORT_INACTIVE;
+ 993              		.loc 1 452 0
+ 994 0070 0030A0E3 		mov	r3, #0
+ 995 0074 1C304BE5 		strb	r3, [fp, #-28]
+ 453:../cyfx_rtos_eg.c ****     io_cfg.s1Mode = CY_U3P_SPORT_INACTIVE;
+ 996              		.loc 1 453 0
+ 997 0078 0030A0E3 		mov	r3, #0
+ 998 007c 1B304BE5 		strb	r3, [fp, #-27]
+ 454:../cyfx_rtos_eg.c ****     io_cfg.useUart   = CyTrue;
+ 999              		.loc 1 454 0
+ 1000 0080 0130A0E3 		mov	r3, #1
+ 1001 0084 2C300BE5 		str	r3, [fp, #-44]
+ 455:../cyfx_rtos_eg.c ****     io_cfg.useI2C    = CyFalse;
+ 1002              		.loc 1 455 0
+ 1003 0088 0030A0E3 		mov	r3, #0
+ 1004 008c 28300BE5 		str	r3, [fp, #-40]
+ 456:../cyfx_rtos_eg.c ****     io_cfg.useI2S    = CyFalse;
+ 1005              		.loc 1 456 0
+ 1006 0090 0030A0E3 		mov	r3, #0
+ 1007 0094 24300BE5 		str	r3, [fp, #-36]
+ 457:../cyfx_rtos_eg.c ****     io_cfg.useSpi    = CyFalse;
+ 1008              		.loc 1 457 0
+ 1009 0098 0030A0E3 		mov	r3, #0
+ 1010 009c 20300BE5 		str	r3, [fp, #-32]
+ 458:../cyfx_rtos_eg.c ****     io_cfg.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+ 1011              		.loc 1 458 0
+ 1012 00a0 0130A0E3 		mov	r3, #1
+ 1013 00a4 1A304BE5 		strb	r3, [fp, #-26]
+ 459:../cyfx_rtos_eg.c ****     /* No GPIOs are enabled. */
+ 460:../cyfx_rtos_eg.c ****     io_cfg.gpioSimpleEn[0]  = 0;
+ 1014              		.loc 1 460 0
+ 1015 00a8 0030A0E3 		mov	r3, #0
+ 1016 00ac 18300BE5 		str	r3, [fp, #-24]
+ 461:../cyfx_rtos_eg.c ****     io_cfg.gpioSimpleEn[1]  = 0;
+ 1017              		.loc 1 461 0
+ 1018 00b0 0030A0E3 		mov	r3, #0
+ 1019 00b4 14300BE5 		str	r3, [fp, #-20]
+ 462:../cyfx_rtos_eg.c ****     io_cfg.gpioComplexEn[0] = 0;
+ 1020              		.loc 1 462 0
+ 1021 00b8 0030A0E3 		mov	r3, #0
+ 1022 00bc 10300BE5 		str	r3, [fp, #-16]
+ 463:../cyfx_rtos_eg.c ****     io_cfg.gpioComplexEn[1] = 0;
+ 1023              		.loc 1 463 0
+ 1024 00c0 0030A0E3 		mov	r3, #0
+ 1025 00c4 0C300BE5 		str	r3, [fp, #-12]
+ 464:../cyfx_rtos_eg.c ****     status = CyU3PDeviceConfigureIOMatrix (&io_cfg);
+ 1026              		.loc 1 464 0
+ 1027 00c8 30304BE2 		sub	r3, fp, #48
+ 1028 00cc 0300A0E1 		mov	r0, r3
+ 1029 00d0 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 1030 00d4 08000BE5 		str	r0, [fp, #-8]
+ 465:../cyfx_rtos_eg.c ****     if (status != CY_U3P_SUCCESS)
+ 1031              		.loc 1 465 0
+ 1032 00d8 08301BE5 		ldr	r3, [fp, #-8]
+ 1033 00dc 000053E3 		cmp	r3, #0
+ 1034 00e0 0000000A 		beq	.L74
+ 466:../cyfx_rtos_eg.c ****     {
+ 467:../cyfx_rtos_eg.c ****         goto handle_fatal_error;
+ 1035              		.loc 1 467 0
+ 1036 00e4 040000EA 		b	.L72
+ 1037              	.L74:
+ 468:../cyfx_rtos_eg.c ****     }
+ 469:../cyfx_rtos_eg.c **** 
+ 470:../cyfx_rtos_eg.c ****     /* This is a non returnable call for initializing the RTOS kernel */
+ 471:../cyfx_rtos_eg.c ****     CyU3PKernelEntry ();
+ 1038              		.loc 1 471 0
+ 1039 00e8 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 472:../cyfx_rtos_eg.c **** 
+ 473:../cyfx_rtos_eg.c ****     /* Dummy return to make the compiler happy */
+ 474:../cyfx_rtos_eg.c ****     return 0;
+ 1040              		.loc 1 474 0
+ 1041 00ec 0030A0E3 		mov	r3, #0
+ 475:../cyfx_rtos_eg.c **** 
+ 476:../cyfx_rtos_eg.c **** handle_fatal_error:
+ 477:../cyfx_rtos_eg.c **** 
+ 478:../cyfx_rtos_eg.c ****     /* Cannot recover from this error. */
+ 479:../cyfx_rtos_eg.c ****     while (1);
+ 480:../cyfx_rtos_eg.c **** }
+ 1042              		.loc 1 480 0
+ 1043 00f0 0300A0E1 		mov	r0, r3
+ 1044 00f4 04D04BE2 		sub	sp, fp, #4
+ 1045 00f8 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 1046              	.L72:
+ 479:../cyfx_rtos_eg.c ****     while (1);
+ 1047              		.loc 1 479 0 discriminator 1
+ 1048 00fc FEFFFFEA 		b	.L72
+ 1049              		.cfi_endproc
+ 1050              	.LFE7:
+ 1052              		.section	.rodata.C.3.8172,"a",%progbits
+ 1053              		.align	2
+ 1056              	C.3.8172:
+ 1057 0000 00000000 		.word	0
+ 1058 0004 01000000 		.word	1
+ 1059 0008 01000000 		.word	1
+ 1060 000c 00000000 		.word	0
+ 1061 0010 00       		.byte	0
+ 1062 0011 000000   		.space	3
+ 1063              		.text
+ 1064              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 cyfx_rtos_eg.c
+                            *COM*:000000d4 Thread1
+                            *COM*:000000d4 Thread2
+                            *COM*:000000d4 Thread3
+                            *COM*:000000d4 Thread4
+                            *COM*:00000054 AppMutex
+                            *COM*:00000024 AppSema
+                            *COM*:0000003c AppEvent
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:29     .text.CyFxGpioInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:31     .text.CyFxGpioInit:00000000 CyFxGpioInit
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:117    .text.CyFxGpioInit:000000d8 $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:1056   .rodata.C.3.8172:00000000 C.3.8172
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:122    .text.CyFxDebugInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:125    .text.CyFxDebugInit:00000000 CyFxDebugInit
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:230    .text.CyFxDebugInit:000000f8 $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:235    .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:259    .text.Thread1_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:262    .text.Thread1_Entry:00000000 Thread1_Entry
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:400    .text.Thread1_Entry:00000160 $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:420    .text.Thread2_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:423    .text.Thread2_Entry:00000000 Thread2_Entry
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:495    .text.Thread2_Entry:000000a4 $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:507    .text.Thread3_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:510    .text.Thread3_Entry:00000000 Thread3_Entry
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:569    .text.Thread3_Entry:00000078 $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:579    .text.Thread4_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:582    .text.Thread4_Entry:00000000 Thread4_Entry
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:642    .text.Thread4_Entry:00000084 $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:662    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:665    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:920    .text.CyFxApplicationDefine:000002cc $d
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:939    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:942    .text.main:00000000 main
+C:\Users\John\AppData\Local\Temp\ccqY7ed1.s:1053   .rodata.C.3.8172:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PGpioInit
+CyU3PDeviceGpioOverride
+CyU3PGpioSetSimpleConfig
+CyU3PUartInit
+CyU3PMemSet
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble
+CyU3PDebugPrint
+tx_thread_set_profile_gpio
+tx_mutex_set_profile_gpio
+tx_semaphore_set_profile_gpio
+tx_event_flags_set_profile_gpio
+_tx_thread_sleep
+CyU3PDeviceReset
+CyU3PBusyWait
+CyU3PDeviceGetCpuLoad
+CyU3PDeviceGetThreadLoad
+CyU3PDeviceGetDriverLoad
+_txe_mutex_get
+_txe_mutex_put
+_txe_semaphore_get
+_txe_semaphore_put
+_txe_event_flags_set
+_txe_event_flags_get
+_txe_mutex_create
+_txe_semaphore_create
+_txe_event_flags_create
+CyU3PMemAlloc
+_txe_thread_create
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

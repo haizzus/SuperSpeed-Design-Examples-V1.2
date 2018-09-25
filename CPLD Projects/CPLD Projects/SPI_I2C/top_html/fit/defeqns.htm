@@ -1,0 +1,364 @@
+<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>
+<h3 align='center'>Equations</h3>
+<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>
+<tr><td>
+</td></tr><tr><td>
+********** Mapped Logic **********
+</td></tr><tr><td>
+</td></tr><tr><td>
+FlashCS_n <= NOT ((NOT SPI_SSN AND NOT CTRL(8) AND NOT CTRL(9)));
+</td></tr><tr><td>
+</td></tr><tr><td>
+INT <= '0';
+</td></tr><tr><td>
+FDCPE_LED0: FDCPE port map (LED(0),RX_MOSI,SPI_SCK,'0',CTRL(10),User(6));
+</td></tr><tr><td>
+FDCPE_LED1: FDCPE port map (LED(1),spi_slave/mosi_r(0),SPI_SCK,CTRL(10),'0',User(6));
+</td></tr><tr><td>
+FDCPE_LED2: FDCPE port map (LED(2),spi_slave/mosi_r(1),SPI_SCK,'0',CTRL(10),User(6));
+</td></tr><tr><td>
+FDCPE_LED3: FDCPE port map (LED(3),spi_slave/mosi_r(2),SPI_SCK,CTRL(10),'0',User(6));
+</td></tr><tr><td>
+FDCPE_LED4: FDCPE port map (LED(4),spi_slave/mosi_r(3),SPI_SCK,'0',CTRL(10),User(6));
+</td></tr><tr><td>
+FDCPE_LED5: FDCPE port map (LED(5),spi_slave/mosi_r(4),SPI_SCK,CTRL(10),'0',User(6));
+</td></tr><tr><td>
+FDCPE_LED6: FDCPE port map (LED(6),spi_slave/mosi_r(5),SPI_SCK,'0',CTRL(10),User(6));
+</td></tr><tr><td>
+FDCPE_LED7: FDCPE port map (LED(7),spi_slave/mosi_r(6),SPI_SCK,CTRL(10),'0',User(6));
+</td></tr><tr><td>
+FDCPE_TX_MISO: FDCPE port map (TX_MISO_I,TX_MISO,SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TX_MISO <= ((spi_slave/miso_r(6) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(7))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT User(1) AND User(2) AND User(7) AND User(4)));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TX_MISO <= TX_MISO_I when TX_MISO_OE = '1' else 'Z';
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TX_MISO_OE <= User(7);
+</td></tr><tr><td>
+FDCPE_User0: FDCPE port map (User(0),User_D(0),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User_D(0) <= ((spi_slave/miso_r(6) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(7))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT User(1) AND User(2) AND User(7) AND User(4)));
+</td></tr><tr><td>
+</td></tr><tr><td>
+User(1) <= (NOT SPI_SSN AND CTRL(8) AND NOT CTRL(9));
+</td></tr><tr><td>
+</td></tr><tr><td>
+User(2) <= (NOT SPI_SSN AND NOT CTRL(8) AND CTRL(9));
+</td></tr><tr><td>
+</td></tr><tr><td>
+User(3) <= (NOT spi_slave/mosi_r(8) AND User(7));
+</td></tr><tr><td>
+</td></tr><tr><td>
+User(4) <= (NOT spi_slave/mosi_r(7) AND NOT spi_slave/mosi_r(6) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT spi_slave/mosi_r(5) AND NOT spi_slave/mosi_r(4) AND NOT spi_slave/mosi_r(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT spi_slave/mosi_r(2) AND spi_slave/mosi_r(1) AND NOT spi_slave/mosi_r(8));
+</td></tr><tr><td>
+</td></tr><tr><td>
+User(5) <= ((User(1) AND Button(0))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT User(1) AND User(2) AND User(0)));
+</td></tr><tr><td>
+</td></tr><tr><td>
+User(6) <= (spi_slave/mosi_r(7) AND NOT spi_slave/mosi_r(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	User(1));
+</td></tr><tr><td>
+</td></tr><tr><td>
+User(7) <= NOT ((NOT User(1) AND NOT User(2)));
+</td></tr><tr><td>
+FDCPE_ack_out: FDCPE port map (ack_out,ack_out_D,I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ack_out_D <= ((i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND NOT i2c_slave/present_state_FSM_FFd2)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2));
+</td></tr><tr><td>
+</td></tr><tr><td>
+I2C_SDA <= NOT (((ack_out)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (out_en AND NOT sda_out)));FDCPE_i2c_slave/data_in0: FDCPE port map (i2c_slave/data_in(0),I2C_SDA.PIN,I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in); -- Open Drain
+</td></tr><tr><td>
+FDCPE_i2c_slave/data_in1: FDCPE port map (i2c_slave/data_in(1),i2c_slave/data_in(0),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+</td></tr><tr><td>
+FDCPE_i2c_slave/data_in2: FDCPE port map (i2c_slave/data_in(2),i2c_slave/data_in(1),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+</td></tr><tr><td>
+FDCPE_i2c_slave/data_in3: FDCPE port map (i2c_slave/data_in(3),i2c_slave/data_in(2),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+</td></tr><tr><td>
+FDCPE_i2c_slave/data_in4: FDCPE port map (i2c_slave/data_in(4),i2c_slave/data_in(3),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+</td></tr><tr><td>
+FDCPE_i2c_slave/data_in5: FDCPE port map (i2c_slave/data_in(5),i2c_slave/data_in(4),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+</td></tr><tr><td>
+FDCPE_i2c_slave/data_in6: FDCPE port map (i2c_slave/data_in(6),i2c_slave/data_in(5),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+</td></tr><tr><td>
+FDCPE_i2c_slave/data_in7: FDCPE port map (i2c_slave/data_in(7),i2c_slave/data_in(6),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input0: FDCPE port map (i2c_slave/gpio_input(0),Button(0),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input1: FDCPE port map (i2c_slave/gpio_input(1),Button(1),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input2: FDCPE port map (i2c_slave/gpio_input(2),Button(2),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input3: FDCPE port map (i2c_slave/gpio_input(3),Button(3),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input4: FDCPE port map (i2c_slave/gpio_input(4),Button(4),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input5: FDCPE port map (i2c_slave/gpio_input(5),Button(5),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input6: FDCPE port map (i2c_slave/gpio_input(6),Button(6),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FDCPE_i2c_slave/gpio_input7: FDCPE port map (i2c_slave/gpio_input(7),Button(7),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+</td></tr><tr><td>
+FTCPE_i2c_slave/index0: FTCPE port map (i2c_slave/index(0),i2c_slave/index_T(0),I2C_SCL,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/index_T(0) <= NOT (((i2c_slave/index(0) AND i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(0) AND i2c_slave/index(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2)));
+</td></tr><tr><td>
+FDCPE_i2c_slave/index1: FDCPE port map (i2c_slave/index(1),i2c_slave/index_D(1),I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/index_D(1) <= NOT (((i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(0) AND i2c_slave/index(1))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND NOT i2c_slave/index(1))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2)));
+</td></tr><tr><td>
+FDCPE_i2c_slave/index2: FDCPE port map (i2c_slave/index(2),i2c_slave/index_D(2),I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/index_D(2) <= NOT (((i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(1))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(1))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)));
+</td></tr><tr><td>
+FTCPE_i2c_slave/index3: FTCPE port map (i2c_slave/index(3),i2c_slave/index_T(3),I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/index_T(3) <= ((i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(0) AND i2c_slave/index(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(0) AND i2c_slave/index(3) AND i2c_slave/index(1))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(1) AND NOT i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(1) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(1) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(2) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(3) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(4) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(5) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(6) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(7) AND i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start));
+</td></tr><tr><td>
+FDCPE_i2c_slave/latch_data_out: FDCPE port map (i2c_slave/latch_data_out,i2c_slave/latch_data_out_D,I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/latch_data_out_D <= (i2c_slave/data_in(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2);
+</td></tr><tr><td>
+</td></tr><tr><td>
+i2c_slave/out_en_not0001 <= ((NOT i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/present_state_FSM_FFd2)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND i2c_slave/present_state_FSM_FFd2)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/data_in(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start));
+</td></tr><tr><td>
+FDCPE_i2c_slave/present_state_FSM_FFd1: FDCPE port map (i2c_slave/present_state_FSM_FFd1,i2c_slave/present_state_FSM_FFd1_D,I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/present_state_FSM_FFd1_D <= ((i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(3) AND NOT i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND NOT i2c_slave/index(1) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(2) AND i2c_slave/index(0) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start));
+</td></tr><tr><td>
+FDCPE_i2c_slave/present_state_FSM_FFd2: FDCPE port map (i2c_slave/present_state_FSM_FFd2,i2c_slave/present_state_FSM_FFd2_D,I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/present_state_FSM_FFd2_D <= ((i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2));
+</td></tr><tr><td>
+FDCPE_i2c_slave/shift_data_in: FDCPE port map (i2c_slave/shift_data_in,i2c_slave/shift_data_in_D,I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2c_slave/shift_data_in_D <= ((i2c_slave/shift_data_in AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/shift_data_in_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/start AND i2c_slave/shift_data_in_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/present_state_FSM_FFd2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/start AND i2c_slave/shift_data_in_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/data_in(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start AND i2c_slave/shift_data_in_not0001));
+</td></tr><tr><td>
+</td></tr><tr><td>
+i2c_slave/shift_data_in_not0001 <= ((i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/start)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/present_state_FSM_FFd1 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/present_state_FSM_FFd2)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/out_en_not0001)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/data_in(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND NOT i2c_slave/start));
+</td></tr><tr><td>
+FDCPE_i2c_slave/start: FDCPE port map (i2c_slave/start,I2C_SCL,I2C_SDA.PIN,i2c_slave/start_rst,'0','1');
+</td></tr><tr><td>
+FDCPE_i2c_slave/start_rst: FDCPE port map (i2c_slave/start_rst,i2c_slave/start,I2C_SCL,'0','0','1');
+</td></tr><tr><td>
+FDCPE_out_en: FDCPE port map (out_en,out_en_D,I2C_SCL,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out_en_D <= ((NOT i2c_slave/out_en_not0001 AND out_en)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/data_in(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start AND i2c_slave/out_en_not0001));
+</td></tr><tr><td>
+FDCPE_sda_out: FDCPE port map (sda_out,sda_out_D,I2C_SCL,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sda_out_D <= ((NOT out_en AND sda_out)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(0))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(2))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(1))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(6))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(5))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(7)));
+</td></tr><tr><td>
+FDCPE_spi_slave/miso_r0: FDCPE port map (spi_slave/miso_r(0),spi_slave/miso_r_D(0),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spi_slave/miso_r_D(0) <= (User(4) AND User(5));
+</td></tr><tr><td>
+FDCPE_spi_slave/miso_r1: FDCPE port map (spi_slave/miso_r(1),spi_slave/miso_r_D(1),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spi_slave/miso_r_D(1) <= ((spi_slave/miso_r(0) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(1)));
+</td></tr><tr><td>
+FDCPE_spi_slave/miso_r2: FDCPE port map (spi_slave/miso_r(2),spi_slave/miso_r_D(2),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spi_slave/miso_r_D(2) <= ((spi_slave/miso_r(1) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(2))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT User(1) AND User(2) AND User(4)));
+</td></tr><tr><td>
+FDCPE_spi_slave/miso_r3: FDCPE port map (spi_slave/miso_r(3),spi_slave/miso_r_D(3),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spi_slave/miso_r_D(3) <= ((spi_slave/miso_r(2) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(3) AND NOT User(1) AND User(2) AND User(4)));
+</td></tr><tr><td>
+FDCPE_spi_slave/miso_r4: FDCPE port map (spi_slave/miso_r(4),spi_slave/miso_r_D(4),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spi_slave/miso_r_D(4) <= ((spi_slave/miso_r(3) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT User(1) AND User(2) AND User(4)));
+</td></tr><tr><td>
+FDCPE_spi_slave/miso_r5: FDCPE port map (spi_slave/miso_r(5),spi_slave/miso_r_D(5),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spi_slave/miso_r_D(5) <= ((spi_slave/miso_r(4) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(5))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT User(1) AND User(2) AND User(4) AND User(5)));
+</td></tr><tr><td>
+FDCPE_spi_slave/miso_r6: FDCPE port map (spi_slave/miso_r(6),spi_slave/miso_r_D(6),SPI_SCK,SPI_SSN,'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spi_slave/miso_r_D(6) <= ((spi_slave/miso_r(5) AND NOT User(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (User(1) AND User(4) AND Button(6))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT User(1) AND User(2) AND User(6) AND User(4)));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r0: FDCPE port map (spi_slave/mosi_r(0),RX_MOSI,SPI_SCK,'0',SPI_SSN,User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r1: FDCPE port map (spi_slave/mosi_r(1),spi_slave/mosi_r(0),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r2: FDCPE port map (spi_slave/mosi_r(2),spi_slave/mosi_r(1),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r3: FDCPE port map (spi_slave/mosi_r(3),spi_slave/mosi_r(2),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r4: FDCPE port map (spi_slave/mosi_r(4),spi_slave/mosi_r(3),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r5: FDCPE port map (spi_slave/mosi_r(5),spi_slave/mosi_r(4),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r6: FDCPE port map (spi_slave/mosi_r(6),spi_slave/mosi_r(5),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r7: FDCPE port map (spi_slave/mosi_r(7),spi_slave/mosi_r(6),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+FDCPE_spi_slave/mosi_r8: FDCPE port map (spi_slave/mosi_r(8),spi_slave/mosi_r(7),SPI_SCK,SPI_SSN,'0',User(3));
+</td></tr><tr><td>
+</td></tr><tr><td>
+Register Legend:
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDDCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FTCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FTDCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDCP  (Q,D,G,CLR,PRE); 
+</td></tr><tr><td>
+</td></tr>
+</table>
+<form><span class="pgRef"><table width="90%" align="center"><tr>
+<td align="left"><input type="button" onclick="javascript:parent.leftnav.showTop()" onmouseover="window.status='goto top of page'; return true;" onmouseout="window.status=''" value="back to top"></td>
+<td align="right"><input type="button" onclick="window.print()" onmouseover="window.status='print page'; return true;" onmouseout="window.status=''" value="print page"></td>
+</tr></table></span></form>
+</body></html>

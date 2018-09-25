@@ -1,0 +1,235 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Xilinx_ports_glue.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.global	PortMap
+  22              		.section	.rodata.PortMap,"a",%progbits
+  23              		.align	2
+  26              	PortMap:
+  27 0000 3200     		.short	50
+  28 0002 3900     		.short	57
+  29 0004 3400     		.short	52
+  30 0006 0000     		.section	.text.setPort,"ax",%progbits
+  31              		.align	2
+  32              		.global	setPort
+  34              	setPort:
+  35              	.LFB0:
+  36              		.file 1 "../Xilinx_ports_glue.c"
+   1:../Xilinx_ports_glue.c **** /*
+   2:../Xilinx_ports_glue.c ****  * Xilinx_ports_glue.c
+   3:../Xilinx_ports_glue.c ****  *
+   4:../Xilinx_ports_glue.c ****  *  Created on: Jun 6, 2014
+   5:../Xilinx_ports_glue.c ****  *      Author: John
+   6:../Xilinx_ports_glue.c ****  */
+   7:../Xilinx_ports_glue.c **** 
+   8:../Xilinx_ports_glue.c **** #include "Application.h"
+   9:../Xilinx_ports_glue.c **** // I have to implement the routines declared in Xilinx\ports.h for my environment
+  10:../Xilinx_ports_glue.c **** 
+  11:../Xilinx_ports_glue.c **** #define printf(x) DebugPrint(4, x)
+  12:../Xilinx_ports_glue.c **** 
+  13:../Xilinx_ports_glue.c **** const short PortMap[] = { JTAG_TCK, JTAG_TMS, JTAG_TDI };
+  14:../Xilinx_ports_glue.c **** 
+  15:../Xilinx_ports_glue.c **** /* set the port "p" (TCK, TMS, or TDI) to val (0 or 1) */
+  16:../Xilinx_ports_glue.c **** void setPort(short p, short val)
+  17:../Xilinx_ports_glue.c **** {
+  37              		.loc 1 17 0
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 8
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 8
+  44 0004 04B08DE2 		add	fp, sp, #4
+  45              		.cfi_offset 14, -4
+  46              		.cfi_offset 11, -8
+  47              	.LCFI1:
+  48              		.cfi_def_cfa 11, 4
+  49 0008 08D04DE2 		sub	sp, sp, #8
+  50 000c 0020A0E1 		mov	r2, r0
+  51 0010 0130A0E1 		mov	r3, r1
+  52 0014 B6204BE1 		strh	r2, [fp, #-6]	@ movhi
+  53 0018 B8304BE1 		strh	r3, [fp, #-8]	@ movhi
+  18:../Xilinx_ports_glue.c **** 	CyU3PGpioSetValue(PortMap[p], val);
+  54              		.loc 1 18 0
+  55 001c F6305BE1 		ldrsh	r3, [fp, #-6]
+  56 0020 24209FE5 		ldr	r2, .L2
+  57 0024 8330A0E1 		mov	r3, r3, asl #1
+  58 0028 033082E0 		add	r3, r2, r3
+  59 002c B030D3E1 		ldrh	r3, [r3, #0]
+  60 0030 FF2003E2 		and	r2, r3, #255
+  61 0034 F8305BE1 		ldrsh	r3, [fp, #-8]
+  62 0038 0200A0E1 		mov	r0, r2
+  63 003c 0310A0E1 		mov	r1, r3
+  64 0040 FEFFFFEB 		bl	CyU3PGpioSetValue
+  19:../Xilinx_ports_glue.c **** }
+  65              		.loc 1 19 0
+  66 0044 04D04BE2 		sub	sp, fp, #4
+  67 0048 0088BDE8 		ldmfd	sp!, {fp, pc}
+  68              	.L3:
+  69              		.align	2
+  70              	.L2:
+  71 004c 00000000 		.word	PortMap
+  72              		.cfi_endproc
+  73              	.LFE0:
+  75              		.section	.text.readTDOBit,"ax",%progbits
+  76              		.align	2
+  77              		.global	readTDOBit
+  79              	readTDOBit:
+  80              	.LFB1:
+  20:../Xilinx_ports_glue.c **** 
+  21:../Xilinx_ports_glue.c **** /* read the TDO bit and store it in val */
+  22:../Xilinx_ports_glue.c **** unsigned char readTDOBit(void)
+  23:../Xilinx_ports_glue.c **** {
+  81              		.loc 1 23 0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 8
+  84              		@ frame_needed = 1, uses_anonymous_args = 0
+  85 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  86              	.LCFI2:
+  87              		.cfi_def_cfa_offset 8
+  88 0004 04B08DE2 		add	fp, sp, #4
+  89              		.cfi_offset 14, -4
+  90              		.cfi_offset 11, -8
+  91              	.LCFI3:
+  92              		.cfi_def_cfa 11, 4
+  93 0008 08D04DE2 		sub	sp, sp, #8
+  24:../Xilinx_ports_glue.c **** 	CyBool_t Value;
+  25:../Xilinx_ports_glue.c **** 	CyU3PGpioGetValue(JTAG_TDO, &Value);
+  94              		.loc 1 25 0
+  95 000c 08304BE2 		sub	r3, fp, #8
+  96 0010 3300A0E3 		mov	r0, #51
+  97 0014 0310A0E1 		mov	r1, r3
+  98 0018 FEFFFFEB 		bl	CyU3PGpioGetValue
+  26:../Xilinx_ports_glue.c **** 	return (unsigned char)(Value);
+  99              		.loc 1 26 0
+ 100 001c 08301BE5 		ldr	r3, [fp, #-8]
+ 101 0020 FF3003E2 		and	r3, r3, #255
+  27:../Xilinx_ports_glue.c **** }
+ 102              		.loc 1 27 0
+ 103 0024 0300A0E1 		mov	r0, r3
+ 104 0028 04D04BE2 		sub	sp, fp, #4
+ 105 002c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 106              		.cfi_endproc
+ 107              	.LFE1:
+ 109              		.section	.text.pulseClock,"ax",%progbits
+ 110              		.align	2
+ 111              		.global	pulseClock
+ 113              	pulseClock:
+ 114              	.LFB2:
+  28:../Xilinx_ports_glue.c **** 
+  29:../Xilinx_ports_glue.c **** /* make clock go down->up->down*/
+  30:../Xilinx_ports_glue.c **** void pulseClock(void)
+  31:../Xilinx_ports_glue.c **** {
+ 115              		.loc 1 31 0
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 1, uses_anonymous_args = 0
+ 119 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 120              	.LCFI4:
+ 121              		.cfi_def_cfa_offset 8
+ 122 0004 04B08DE2 		add	fp, sp, #4
+ 123              		.cfi_offset 14, -4
+ 124              		.cfi_offset 11, -8
+ 125              	.LCFI5:
+ 126              		.cfi_def_cfa 11, 4
+  32:../Xilinx_ports_glue.c **** 	setPort(JTAG_TCK, 0);
+ 127              		.loc 1 32 0
+ 128 0008 3200A0E3 		mov	r0, #50
+ 129 000c 0010A0E3 		mov	r1, #0
+ 130 0010 FEFFFFEB 		bl	setPort
+  33:../Xilinx_ports_glue.c **** 	setPort(JTAG_TCK, 1);
+ 131              		.loc 1 33 0
+ 132 0014 3200A0E3 		mov	r0, #50
+ 133 0018 0110A0E3 		mov	r1, #1
+ 134 001c FEFFFFEB 		bl	setPort
+  34:../Xilinx_ports_glue.c **** 	setPort(JTAG_TCK, 0);
+ 135              		.loc 1 34 0
+ 136 0020 3200A0E3 		mov	r0, #50
+ 137 0024 0010A0E3 		mov	r1, #0
+ 138 0028 FEFFFFEB 		bl	setPort
+  35:../Xilinx_ports_glue.c **** }
+ 139              		.loc 1 35 0
+ 140 002c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 141              		.cfi_endproc
+ 142              	.LFE2:
+ 144              		.section	.text.waitTime,"ax",%progbits
+ 145              		.align	2
+ 146              		.global	waitTime
+ 148              	waitTime:
+ 149              	.LFB3:
+  36:../Xilinx_ports_glue.c **** 
+  37:../Xilinx_ports_glue.c **** /* read the next byte of data from the xsvf file */
+  38:../Xilinx_ports_glue.c **** //void readByte(unsigned char *data)
+  39:../Xilinx_ports_glue.c **** //{
+  40:../Xilinx_ports_glue.c **** //	*data = GetDataByte();
+  41:../Xilinx_ports_glue.c **** //}
+  42:../Xilinx_ports_glue.c **** 
+  43:../Xilinx_ports_glue.c **** void waitTime(long microsec)
+  44:../Xilinx_ports_glue.c **** {
+ 150              		.loc 1 44 0
+ 151              		.cfi_startproc
+ 152              		@ args = 0, pretend = 0, frame = 8
+ 153              		@ frame_needed = 1, uses_anonymous_args = 0
+ 154 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 155              	.LCFI6:
+ 156              		.cfi_def_cfa_offset 8
+ 157 0004 04B08DE2 		add	fp, sp, #4
+ 158              		.cfi_offset 14, -4
+ 159              		.cfi_offset 11, -8
+ 160              	.LCFI7:
+ 161              		.cfi_def_cfa 11, 4
+ 162 0008 08D04DE2 		sub	sp, sp, #8
+ 163 000c 08000BE5 		str	r0, [fp, #-8]
+  45:../Xilinx_ports_glue.c **** 	CyU3PThreadSleep((microsec+999)/1000);
+ 164              		.loc 1 45 0
+ 165 0010 08301BE5 		ldr	r3, [fp, #-8]
+ 166 0014 F93F83E2 		add	r3, r3, #996
+ 167 0018 033083E2 		add	r3, r3, #3
+ 168 001c 1C209FE5 		ldr	r2, .L7
+ 169 0020 9312C2E0 		smull	r1, r2, r3, r2
+ 170 0024 4223A0E1 		mov	r2, r2, asr #6
+ 171 0028 C33FA0E1 		mov	r3, r3, asr #31
+ 172 002c 023063E0 		rsb	r3, r3, r2
+ 173 0030 0300A0E1 		mov	r0, r3
+ 174 0034 FEFFFFEB 		bl	_tx_thread_sleep
+  46:../Xilinx_ports_glue.c **** }
+ 175              		.loc 1 46 0
+ 176 0038 04D04BE2 		sub	sp, fp, #4
+ 177 003c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 178              	.L8:
+ 179              		.align	2
+ 180              	.L7:
+ 181 0040 D34D6210 		.word	274877907
+ 182              		.cfi_endproc
+ 183              	.LFE3:
+ 185              		.text
+ 186              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Xilinx_ports_glue.c
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:26     .rodata.PortMap:00000000 PortMap
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:23     .rodata.PortMap:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:31     .text.setPort:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:34     .text.setPort:00000000 setPort
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:71     .text.setPort:0000004c $d
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:76     .text.readTDOBit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:79     .text.readTDOBit:00000000 readTDOBit
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:110    .text.pulseClock:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:113    .text.pulseClock:00000000 pulseClock
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:145    .text.waitTime:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:148    .text.waitTime:00000000 waitTime
+C:\Users\John\AppData\Local\Temp\ccRTN3mP.s:181    .text.waitTime:00000040 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PGpioSetValue
+CyU3PGpioGetValue
+_tx_thread_sleep

@@ -1,0 +1,70 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"USB_Handler.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.text.InitializeUSB,"ax",%progbits
+  22              		.align	2
+  23              		.global	InitializeUSB
+  25              	InitializeUSB:
+  26              	.LFB0:
+  27              		.file 1 "../USB_Handler.c"
+   1:../USB_Handler.c **** /*
+   2:../USB_Handler.c ****  * USB Handler.c
+   3:../USB_Handler.c ****  *
+   4:../USB_Handler.c ****  */
+   5:../USB_Handler.c **** 
+   6:../USB_Handler.c **** #include "Application.h"
+   7:../USB_Handler.c **** 
+   8:../USB_Handler.c **** // Declare external functions
+   9:../USB_Handler.c **** extern void StartApplication(void);
+  10:../USB_Handler.c **** 
+  11:../USB_Handler.c **** 
+  12:../USB_Handler.c **** // Spin up USB, let the USB driver handle enumeration
+  13:../USB_Handler.c **** CyU3PReturnStatus_t InitializeUSB(void)
+  14:../USB_Handler.c **** {
+  28              		.loc 1 14 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35 0004 04B08DE2 		add	fp, sp, #4
+  36              		.cfi_offset 14, -4
+  37              		.cfi_offset 11, -8
+  38              	.LCFI1:
+  39              		.cfi_def_cfa 11, 4
+  15:../USB_Handler.c **** 	// This is a place holder for the routine that connects to USB
+  16:../USB_Handler.c **** 	// It is not used in this example
+  17:../USB_Handler.c **** 	// Fake a connection and positive status
+  18:../USB_Handler.c **** 	StartApplication();
+  40              		.loc 1 18 0
+  41 0008 FEFFFFEB 		bl	StartApplication
+  19:../USB_Handler.c **** 	return CY_U3P_SUCCESS;
+  42              		.loc 1 19 0
+  43 000c 0030A0E3 		mov	r3, #0
+  20:../USB_Handler.c **** }
+  44              		.loc 1 20 0
+  45 0010 0300A0E1 		mov	r0, r3
+  46 0014 0088BDE8 		ldmfd	sp!, {fp, pc}
+  47              		.cfi_endproc
+  48              	.LFE0:
+  50              		.text
+  51              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 USB_Handler.c
+C:\Users\John\AppData\Local\Temp\cceFIwyS.s:22     .text.InitializeUSB:00000000 $a
+C:\Users\John\AppData\Local\Temp\cceFIwyS.s:25     .text.InitializeUSB:00000000 InitializeUSB
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+StartApplication

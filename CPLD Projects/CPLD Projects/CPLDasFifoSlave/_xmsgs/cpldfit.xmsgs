@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="Cpld" num="0" delta="new" >Unable to retrieve the path to the iSE Project Repository. Will use the default filename of &apos;<arg fmt="%s" index="1">top.ise</arg>&apos;.
+</msg>
+
+<msg type="info" file="Cpld" num="0" delta="new" >Inferring BUFG constraint for signal &apos;<arg fmt="%s" index="1">PCLK</arg>&apos; based upon the LOC constraint &apos;<arg fmt="%s" index="2">P22</arg>&apos;. It is recommended that you declare this BUFG explicitedly in your design. Note that for certain device families the output of a BUFG constraint can not drive a gated clock, and the BUFG constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">Button&lt;0&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">Button&lt;1&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">Button&lt;2&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">Button&lt;3&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">Button&lt;4&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">Button&lt;5&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">Button&lt;7&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">CTRL&lt;11&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">CTRL&lt;12&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">CTRL&lt;2&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">CTRL&lt;8&gt;</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;7&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;6&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;5&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;4&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;3&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;2&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;1&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">User&lt;0&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">INT</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">CTRL&lt;7&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">CTRL&lt;6&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">CTRL&lt;5&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="968" delta="old" >PULLUP specified for non tristated output &apos;<arg fmt="%s" index="1">CTRL&lt;3&gt;</arg>&apos; is ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="829" delta="old" >Signal &apos;<arg fmt="%s" index="1">TX_MISO_MC.TRST</arg>&apos; has been minimized to &apos;<arg fmt="%s" index="2">GND</arg>&apos;.
+</msg>
+
+</messages>
+

@@ -1,0 +1,964 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"RunApplication.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ThreadHandle,504,4
+  22              		.comm	StackPtr,12,4
+  23              		.comm	SPI_CS_Mutex,56,4
+  24              		.section	.rodata
+  25              		.align	2
+  26              	.LC0:
+  27 0000 52657475 		.ascii	"Return SPI_CS Mutex\000"
+  27      726E2053 
+  27      50495F43 
+  27      53204D75 
+  27      74657800 
+  28              		.align	2
+  29              	.LC1:
+  30 0014 47657420 		.ascii	"Get SPI_CS Mutex\000"
+  30      5350495F 
+  30      4353204D 
+  30      75746578 
+  30      00
+  31              		.section	.text.SelectSPI_Device,"ax",%progbits
+  32              		.align	2
+  33              		.global	SelectSPI_Device
+  35              	SelectSPI_Device:
+  36              	.LFB0:
+  37              		.file 1 "../RunApplication.c"
+   1:../RunApplication.c **** // SPI Example - this example uses the CPLD board and the SPI connection
+   2:../RunApplication.c **** //
+   3:../RunApplication.c **** // The CPLD should have a SPI image in it (I2C_Slave_And_SPI.xsvf is the best choice)
+   4:../RunApplication.c **** //
+   5:../RunApplication.c **** // Since UART is not available when SPI is used this example uses an I2C Debug Console
+   6:../RunApplication.c **** //
+   7:../RunApplication.c **** //
+   8:../RunApplication.c **** // john@usb-by-example.com
+   9:../RunApplication.c **** //
+  10:../RunApplication.c **** 
+  11:../RunApplication.c **** #include "Application.h"
+  12:../RunApplication.c **** 
+  13:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(uint8_t TraceLevel);
+  14:../RunApplication.c **** extern CyU3PReturnStatus_t I2C_DebugInit(uint8_t TraceLevel);
+  15:../RunApplication.c **** extern CyU3PReturnStatus_t I2C_DebugPrint(uint8_t Priority, char* Message, ...);
+  16:../RunApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  17:../RunApplication.c **** extern void IndicateError(uint16_t ErrorCode);
+  18:../RunApplication.c **** extern void CheckForCommand(void);
+  19:../RunApplication.c **** 
+  20:../RunApplication.c **** CyU3PThread ThreadHandle[APP_THREADS];		// Handles to my Application Threads
+  21:../RunApplication.c **** void *StackPtr[APP_THREADS];				// Each thread has its own stack
+  22:../RunApplication.c **** CyU3PMutex SPI_CS_Mutex;					// Used to control access to a shared resource
+  23:../RunApplication.c **** 
+  24:../RunApplication.c **** void SelectSPI_Device(uint32_t DeviceID)
+  25:../RunApplication.c **** {
+  38              		.loc 1 25 0
+  39              		.cfi_startproc
+  40              		@ args = 0, pretend = 0, frame = 16
+  41              		@ frame_needed = 1, uses_anonymous_args = 0
+  42 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  43              	.LCFI0:
+  44              		.cfi_def_cfa_offset 8
+  45 0004 04B08DE2 		add	fp, sp, #4
+  46              		.cfi_offset 14, -4
+  47              		.cfi_offset 11, -8
+  48              	.LCFI1:
+  49              		.cfi_def_cfa 11, 4
+  50 0008 10D04DE2 		sub	sp, sp, #16
+  51 000c 10000BE5 		str	r0, [fp, #-16]
+  26:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+  27:../RunApplication.c **** 	// I use CTRL[9:8] as Address lines for SPI Devices, these have been assigned as GPIOs
+  28:../RunApplication.c ****     // The address is pre-selected prior to any SPI commands, CPLD routes SSN
+  29:../RunApplication.c **** 	// I use a Mutex to ensure that only one thread can control these lines at any one time
+  30:../RunApplication.c ****     // Call with DeviceID = -1 to Deselect the device ASAP
+  31:../RunApplication.c ****     if (DeviceID == -1)
+  52              		.loc 1 31 0
+  53 0010 10301BE5 		ldr	r3, [fp, #-16]
+  54 0014 010073E3 		cmn	r3, #1
+  55 0018 0C00001A 		bne	.L2
+  32:../RunApplication.c ****     {
+  33:../RunApplication.c ****     	// Deselect the SPI device
+  34:../RunApplication.c **** 		Status = CyU3PMutexPut(&SPI_CS_Mutex);
+  56              		.loc 1 34 0
+  57 001c 7C009FE5 		ldr	r0, .L4
+  58 0020 FEFFFFEB 		bl	_txe_mutex_put
+  59 0024 08000BE5 		str	r0, [fp, #-8]
+  35:../RunApplication.c **** 		CheckStatus("Return SPI_CS Mutex", Status);
+  60              		.loc 1 35 0
+  61 0028 74009FE5 		ldr	r0, .L4+4
+  62 002c 08101BE5 		ldr	r1, [fp, #-8]
+  63 0030 FEFFFFEB 		bl	CheckStatus
+  36:../RunApplication.c **** 		CyU3PGpioSimpleSetValue(SPI_Address0, 1);
+  64              		.loc 1 36 0
+  65 0034 1900A0E3 		mov	r0, #25
+  66 0038 0110A0E3 		mov	r1, #1
+  67 003c FEFFFFEB 		bl	CyU3PGpioSimpleSetValue
+  37:../RunApplication.c **** 		CyU3PGpioSimpleSetValue(SPI_Address1, 1);
+  68              		.loc 1 37 0
+  69 0040 1A00A0E3 		mov	r0, #26
+  70 0044 0110A0E3 		mov	r1, #1
+  71 0048 FEFFFFEB 		bl	CyU3PGpioSimpleSetValue
+  72 004c 110000EA 		b	.L1
+  73              	.L2:
+  38:../RunApplication.c ****     }
+  39:../RunApplication.c ****     else
+  40:../RunApplication.c ****     {
+  41:../RunApplication.c **** 		Status = CyU3PMutexGet(&SPI_CS_Mutex, CYU3P_WAIT_FOREVER);
+  74              		.loc 1 41 0
+  75 0050 48009FE5 		ldr	r0, .L4
+  76 0054 0010E0E3 		mvn	r1, #0
+  77 0058 FEFFFFEB 		bl	_txe_mutex_get
+  78 005c 08000BE5 		str	r0, [fp, #-8]
+  42:../RunApplication.c **** 		CheckStatus("Get SPI_CS Mutex", Status);
+  79              		.loc 1 42 0
+  80 0060 40009FE5 		ldr	r0, .L4+8
+  81 0064 08101BE5 		ldr	r1, [fp, #-8]
+  82 0068 FEFFFFEB 		bl	CheckStatus
+  43:../RunApplication.c **** 		CyU3PGpioSimpleSetValue(SPI_Address0, DeviceID & 1);
+  83              		.loc 1 43 0
+  84 006c 10301BE5 		ldr	r3, [fp, #-16]
+  85 0070 013003E2 		and	r3, r3, #1
+  86 0074 1900A0E3 		mov	r0, #25
+  87 0078 0310A0E1 		mov	r1, r3
+  88 007c FEFFFFEB 		bl	CyU3PGpioSimpleSetValue
+  44:../RunApplication.c **** 		CyU3PGpioSimpleSetValue(SPI_Address1, (DeviceID>>1) & 1);
+  89              		.loc 1 44 0
+  90 0080 10301BE5 		ldr	r3, [fp, #-16]
+  91 0084 A330A0E1 		mov	r3, r3, lsr #1
+  92 0088 013003E2 		and	r3, r3, #1
+  93 008c 1A00A0E3 		mov	r0, #26
+  94 0090 0310A0E1 		mov	r1, r3
+  95 0094 FEFFFFEB 		bl	CyU3PGpioSimpleSetValue
+  96              	.L1:
+  45:../RunApplication.c **** 	}
+  46:../RunApplication.c **** }
+  97              		.loc 1 46 0
+  98 0098 04D04BE2 		sub	sp, fp, #4
+  99 009c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 100              	.L5:
+ 101              		.align	2
+ 102              	.L4:
+ 103 00a0 00000000 		.word	SPI_CS_Mutex
+ 104 00a4 00000000 		.word	.LC0
+ 105 00a8 14000000 		.word	.LC1
+ 106              		.cfi_endproc
+ 107              	.LFE0:
+ 109              		.section	.rodata
+ 110 0025 000000   		.align	2
+ 111              	.LC2:
+ 112 0028 436F6E66 		.ascii	"Configure SPI Channel\000"
+ 112      69677572 
+ 112      65205350 
+ 112      49204368 
+ 112      616E6E65 
+ 113              		.section	.text.ConfigureSPI,"ax",%progbits
+ 114              		.align	2
+ 115              		.global	ConfigureSPI
+ 117              	ConfigureSPI:
+ 118              	.LFB1:
+  47:../RunApplication.c **** 
+  48:../RunApplication.c **** CyU3PReturnStatus_t ConfigureSPI(uint8_t Mode)
+  49:../RunApplication.c **** {
+ 119              		.loc 1 49 0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 40
+ 122              		@ frame_needed = 1, uses_anonymous_args = 0
+ 123 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 124              	.LCFI2:
+ 125              		.cfi_def_cfa_offset 8
+ 126 0004 04B08DE2 		add	fp, sp, #4
+ 127              		.cfi_offset 14, -4
+ 128              		.cfi_offset 11, -8
+ 129              	.LCFI3:
+ 130              		.cfi_def_cfa 11, 4
+ 131 0008 28D04DE2 		sub	sp, sp, #40
+ 132 000c 0030A0E1 		mov	r3, r0
+ 133 0010 25304BE5 		strb	r3, [fp, #-37]
+  50:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+  51:../RunApplication.c ****     CyU3PSpiConfig_t spiConfig;
+  52:../RunApplication.c **** 	CyU3PMemSet ((uint8_t *)&spiConfig, 0, sizeof(spiConfig));
+ 134              		.loc 1 52 0
+ 135 0014 24304BE2 		sub	r3, fp, #36
+ 136 0018 0300A0E1 		mov	r0, r3
+ 137 001c 0010A0E3 		mov	r1, #0
+ 138 0020 1C20A0E3 		mov	r2, #28
+ 139 0024 FEFFFFEB 		bl	CyU3PMemSet
+  53:../RunApplication.c **** 	spiConfig.clock      = 1000000;						// Run at 33MHz
+ 140              		.loc 1 53 0
+ 141 0028 78309FE5 		ldr	r3, .L9
+ 142 002c 10300BE5 		str	r3, [fp, #-16]
+  54:../RunApplication.c **** 	spiConfig.wordLen    = 8;								// Byte transfers
+ 143              		.loc 1 54 0
+ 144 0030 0830A0E3 		mov	r3, #8
+ 145 0034 0C304BE5 		strb	r3, [fp, #-12]
+  55:../RunApplication.c **** //	spiConfig.isLsbFirst = CyFalse;
+  56:../RunApplication.c **** 	spiConfig.cpol       = CyTrue;
+ 146              		.loc 1 56 0
+ 147 0038 0130A0E3 		mov	r3, #1
+ 148 003c 20300BE5 		str	r3, [fp, #-32]
+  57:../RunApplication.c **** //	spiConfig.ssnPol     = CyFalse;
+  58:../RunApplication.c **** //	spiConfig.cpha       = CyFalse;
+  59:../RunApplication.c **** 	spiConfig.leadTime   = CY_U3P_SPI_SSN_LAG_LEAD_ONE_CLK;
+ 149              		.loc 1 59 0
+ 150 0040 0230A0E3 		mov	r3, #2
+ 151 0044 13304BE5 		strb	r3, [fp, #-19]
+  60:../RunApplication.c **** 	spiConfig.lagTime    = CY_U3P_SPI_SSN_LAG_LEAD_ONE_CLK;
+ 152              		.loc 1 60 0
+ 153 0048 0230A0E3 		mov	r3, #2
+ 154 004c 12304BE5 		strb	r3, [fp, #-18]
+  61:../RunApplication.c ****     if (Mode == RegisterMode) spiConfig.ssnCtrl = CY_U3P_SPI_SSN_CTRL_HW_EACH_WORD;	// Single byte 
+ 155              		.loc 1 61 0
+ 156 0050 25305BE5 		ldrb	r3, [fp, #-37]	@ zero_extendqisi2
+ 157 0054 000053E3 		cmp	r3, #0
+ 158 0058 0100001A 		bne	.L7
+ 159              		.loc 1 61 0 is_stmt 0 discriminator 1
+ 160 005c 0230A0E3 		mov	r3, #2
+ 161 0060 14304BE5 		strb	r3, [fp, #-20]
+ 162              	.L7:
+  62:../RunApplication.c ****     if (Mode == DMA_Mode) spiConfig.ssnCtrl = CY_U3P_SPI_SSN_CTRL_HW_END_OF_XFER;	// Block transfer
+ 163              		.loc 1 62 0 is_stmt 1
+ 164 0064 25305BE5 		ldrb	r3, [fp, #-37]	@ zero_extendqisi2
+ 165 0068 010053E3 		cmp	r3, #1
+ 166 006c 0100001A 		bne	.L8
+ 167              		.loc 1 62 0 is_stmt 0 discriminator 1
+ 168 0070 0130A0E3 		mov	r3, #1
+ 169 0074 14304BE5 		strb	r3, [fp, #-20]
+ 170              	.L8:
+  63:../RunApplication.c **** 	Status = CyU3PSpiSetConfig(&spiConfig, NULL);
+ 171              		.loc 1 63 0 is_stmt 1
+ 172 0078 24304BE2 		sub	r3, fp, #36
+ 173 007c 0300A0E1 		mov	r0, r3
+ 174 0080 0010A0E3 		mov	r1, #0
+ 175 0084 FEFFFFEB 		bl	CyU3PSpiSetConfig
+ 176 0088 08000BE5 		str	r0, [fp, #-8]
+  64:../RunApplication.c **** 	CheckStatus("Configure SPI Channel", Status);
+ 177              		.loc 1 64 0
+ 178 008c 18009FE5 		ldr	r0, .L9+4
+ 179 0090 08101BE5 		ldr	r1, [fp, #-8]
+ 180 0094 FEFFFFEB 		bl	CheckStatus
+  65:../RunApplication.c **** 	return Status;
+ 181              		.loc 1 65 0
+ 182 0098 08301BE5 		ldr	r3, [fp, #-8]
+  66:../RunApplication.c **** }
+ 183              		.loc 1 66 0
+ 184 009c 0300A0E1 		mov	r0, r3
+ 185 00a0 04D04BE2 		sub	sp, fp, #4
+ 186 00a4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 187              	.L10:
+ 188              		.align	2
+ 189              	.L9:
+ 190 00a8 40420F00 		.word	1000000
+ 191 00ac 28000000 		.word	.LC2
+ 192              		.cfi_endproc
+ 193              	.LFE1:
+ 195              		.section	.rodata
+ 196 003e 0000     		.align	2
+ 197              	.LC3:
+ 198 0040 43726561 		.ascii	"Create Mutex\000"
+ 198      7465204D 
+ 198      75746578 
+ 198      00
+ 199 004d 000000   		.align	2
+ 200              	.LC4:
+ 201 0050 4F766572 		.ascii	"Override SPI_Address0\000"
+ 201      72696465 
+ 201      20535049 
+ 201      5F416464 
+ 201      72657373 
+ 202 0066 0000     		.align	2
+ 203              	.LC5:
+ 204 0068 4F766572 		.ascii	"Override SPI_Address1\000"
+ 204      72696465 
+ 204      20535049 
+ 204      5F416464 
+ 204      72657373 
+ 205 007e 0000     		.align	2
+ 206              	.LC6:
+ 207 0080 436F6E66 		.ascii	"Configure SPI_Address0\000"
+ 207      69677572 
+ 207      65205350 
+ 207      495F4164 
+ 207      64726573 
+ 208 0097 00       		.align	2
+ 209              	.LC7:
+ 210 0098 436F6E66 		.ascii	"Configure SPI_Address1\000"
+ 210      69677572 
+ 210      65205350 
+ 210      495F4164 
+ 210      64726573 
+ 211 00af 00       		.align	2
+ 212              	.LC8:
+ 213 00b0 53746172 		.ascii	"Start SPI Driver\000"
+ 213      74205350 
+ 213      49204472 
+ 213      69766572 
+ 213      00
+ 214              		.section	.text.InitializeSPI,"ax",%progbits
+ 215              		.align	2
+ 216              		.global	InitializeSPI
+ 218              	InitializeSPI:
+ 219              	.LFB2:
+  67:../RunApplication.c **** 
+  68:../RunApplication.c **** CyU3PReturnStatus_t InitializeSPI(void)
+  69:../RunApplication.c **** {
+ 220              		.loc 1 69 0
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 24
+ 223              		@ frame_needed = 1, uses_anonymous_args = 0
+ 224 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 225              	.LCFI4:
+ 226              		.cfi_def_cfa_offset 8
+ 227 0004 04B08DE2 		add	fp, sp, #4
+ 228              		.cfi_offset 14, -4
+ 229              		.cfi_offset 11, -8
+ 230              	.LCFI5:
+ 231              		.cfi_def_cfa 11, 4
+ 232 0008 18D04DE2 		sub	sp, sp, #24
+  70:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+  71:../RunApplication.c ****     CyU3PGpioSimpleConfig_t gpioConfig;
+  72:../RunApplication.c **** 
+  73:../RunApplication.c ****     // I need a Mutex to allow control over the SPI CS Lines
+  74:../RunApplication.c ****     Status = CyU3PMutexCreate(&SPI_CS_Mutex, CYU3P_INHERIT);
+ 233              		.loc 1 74 0
+ 234 000c F4009FE5 		ldr	r0, .L13
+ 235 0010 0010A0E3 		mov	r1, #0
+ 236 0014 0120A0E3 		mov	r2, #1
+ 237 0018 3830A0E3 		mov	r3, #56
+ 238 001c FEFFFFEB 		bl	_txe_mutex_create
+ 239 0020 08000BE5 		str	r0, [fp, #-8]
+  75:../RunApplication.c ****     CheckStatus("Create Mutex", Status);
+ 240              		.loc 1 75 0
+ 241 0024 E0009FE5 		ldr	r0, .L13+4
+ 242 0028 08101BE5 		ldr	r1, [fp, #-8]
+ 243 002c FEFFFFEB 		bl	CheckStatus
+  76:../RunApplication.c ****     // Reallocate CTRL[9:8] = GPIO[26:25] to be SPI address select lines
+  77:../RunApplication.c ****     Status = CyU3PDeviceGpioOverride(SPI_Address0, CyTrue);
+ 244              		.loc 1 77 0
+ 245 0030 1900A0E3 		mov	r0, #25
+ 246 0034 0110A0E3 		mov	r1, #1
+ 247 0038 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 248 003c 08000BE5 		str	r0, [fp, #-8]
+  78:../RunApplication.c ****     CheckStatus("Override SPI_Address0", Status);
+ 249              		.loc 1 78 0
+ 250 0040 C8009FE5 		ldr	r0, .L13+8
+ 251 0044 08101BE5 		ldr	r1, [fp, #-8]
+ 252 0048 FEFFFFEB 		bl	CheckStatus
+  79:../RunApplication.c ****     Status = CyU3PDeviceGpioOverride(SPI_Address1, CyTrue);
+ 253              		.loc 1 79 0
+ 254 004c 1A00A0E3 		mov	r0, #26
+ 255 0050 0110A0E3 		mov	r1, #1
+ 256 0054 FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 257 0058 08000BE5 		str	r0, [fp, #-8]
+  80:../RunApplication.c ****     CheckStatus("Override SPI_Address1", Status);
+ 258              		.loc 1 80 0
+ 259 005c B0009FE5 		ldr	r0, .L13+12
+ 260 0060 08101BE5 		ldr	r1, [fp, #-8]
+ 261 0064 FEFFFFEB 		bl	CheckStatus
+  81:../RunApplication.c ****     CyU3PMemSet((uint8_t *)&gpioConfig, 0, sizeof(gpioConfig));
+ 262              		.loc 1 81 0
+ 263 0068 1C304BE2 		sub	r3, fp, #28
+ 264 006c 0300A0E1 		mov	r0, r3
+ 265 0070 0010A0E3 		mov	r1, #0
+ 266 0074 1420A0E3 		mov	r2, #20
+ 267 0078 FEFFFFEB 		bl	CyU3PMemSet
+  82:../RunApplication.c ****     gpioConfig.driveLowEn = CyTrue;
+ 268              		.loc 1 82 0
+ 269 007c 0130A0E3 		mov	r3, #1
+ 270 0080 18300BE5 		str	r3, [fp, #-24]
+  83:../RunApplication.c ****     gpioConfig.driveHighEn = CyTrue;
+ 271              		.loc 1 83 0
+ 272 0084 0130A0E3 		mov	r3, #1
+ 273 0088 14300BE5 		str	r3, [fp, #-20]
+  84:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(SPI_Address0, &gpioConfig);
+ 274              		.loc 1 84 0
+ 275 008c 1C304BE2 		sub	r3, fp, #28
+ 276 0090 1900A0E3 		mov	r0, #25
+ 277 0094 0310A0E1 		mov	r1, r3
+ 278 0098 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 279 009c 08000BE5 		str	r0, [fp, #-8]
+  85:../RunApplication.c ****     CheckStatus("Configure SPI_Address0", Status);
+ 280              		.loc 1 85 0
+ 281 00a0 70009FE5 		ldr	r0, .L13+16
+ 282 00a4 08101BE5 		ldr	r1, [fp, #-8]
+ 283 00a8 FEFFFFEB 		bl	CheckStatus
+  86:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(SPI_Address1, &gpioConfig);
+ 284              		.loc 1 86 0
+ 285 00ac 1C304BE2 		sub	r3, fp, #28
+ 286 00b0 1A00A0E3 		mov	r0, #26
+ 287 00b4 0310A0E1 		mov	r1, r3
+ 288 00b8 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 289 00bc 08000BE5 		str	r0, [fp, #-8]
+  87:../RunApplication.c ****     CheckStatus("Configure SPI_Address1", Status);
+ 290              		.loc 1 87 0
+ 291 00c0 54009FE5 		ldr	r0, .L13+20
+ 292 00c4 08101BE5 		ldr	r1, [fp, #-8]
+ 293 00c8 FEFFFFEB 		bl	CheckStatus
+  88:../RunApplication.c **** 
+  89:../RunApplication.c ****     // Start the SPI device driver then configure the master SPI port
+  90:../RunApplication.c ****     Status = CyU3PSpiInit();
+ 294              		.loc 1 90 0
+ 295 00cc FEFFFFEB 		bl	CyU3PSpiInit
+ 296 00d0 08000BE5 		str	r0, [fp, #-8]
+  91:../RunApplication.c ****     CheckStatus("Start SPI Driver", Status);
+ 297              		.loc 1 91 0
+ 298 00d4 44009FE5 		ldr	r0, .L13+24
+ 299 00d8 08101BE5 		ldr	r1, [fp, #-8]
+ 300 00dc FEFFFFEB 		bl	CheckStatus
+  92:../RunApplication.c **** 
+  93:../RunApplication.c ****     if (Status == CY_U3P_SUCCESS) Status = ConfigureSPI(0);
+ 301              		.loc 1 93 0
+ 302 00e0 08301BE5 		ldr	r3, [fp, #-8]
+ 303 00e4 000053E3 		cmp	r3, #0
+ 304 00e8 0200001A 		bne	.L12
+ 305              		.loc 1 93 0 is_stmt 0 discriminator 1
+ 306 00ec 0000A0E3 		mov	r0, #0
+ 307 00f0 FEFFFFEB 		bl	ConfigureSPI
+ 308 00f4 08000BE5 		str	r0, [fp, #-8]
+ 309              	.L12:
+  94:../RunApplication.c **** 	return Status;
+ 310              		.loc 1 94 0 is_stmt 1
+ 311 00f8 08301BE5 		ldr	r3, [fp, #-8]
+  95:../RunApplication.c **** }
+ 312              		.loc 1 95 0
+ 313 00fc 0300A0E1 		mov	r0, r3
+ 314 0100 04D04BE2 		sub	sp, fp, #4
+ 315 0104 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 316              	.L14:
+ 317              		.align	2
+ 318              	.L13:
+ 319 0108 00000000 		.word	SPI_CS_Mutex
+ 320 010c 40000000 		.word	.LC3
+ 321 0110 50000000 		.word	.LC4
+ 322 0114 68000000 		.word	.LC5
+ 323 0118 80000000 		.word	.LC6
+ 324 011c 98000000 		.word	.LC7
+ 325 0120 B0000000 		.word	.LC8
+ 326              		.cfi_endproc
+ 327              	.LFE2:
+ 329              		.section	.text.ReadSwitchesWriteLED_Thread,"ax",%progbits
+ 330              		.align	2
+ 331              		.global	ReadSwitchesWriteLED_Thread
+ 333              	ReadSwitchesWriteLED_Thread:
+ 334              	.LFB3:
+  96:../RunApplication.c **** 
+  97:../RunApplication.c **** void ReadSwitchesWriteLED_Thread(void)
+  98:../RunApplication.c **** {
+ 335              		.loc 1 98 0
+ 336              		.cfi_startproc
+ 337              		@ args = 0, pretend = 0, frame = 16
+ 338              		@ frame_needed = 1, uses_anonymous_args = 0
+ 339 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 340              	.LCFI6:
+ 341              		.cfi_def_cfa_offset 8
+ 342 0004 04B08DE2 		add	fp, sp, #4
+ 343              		.cfi_offset 14, -4
+ 344              		.cfi_offset 11, -8
+ 345              	.LCFI7:
+ 346              		.cfi_def_cfa 11, 4
+ 347 0008 10D04DE2 		sub	sp, sp, #16
+  99:../RunApplication.c **** 	CyU3PReturnStatus_t Status;
+ 100:../RunApplication.c **** 	uint32_t* SPI_DataIn_Register = (uint32_t*)0x0E0000C14;
+ 348              		.loc 1 100 0
+ 349 000c 64309FE5 		ldr	r3, .L17
+ 350 0010 08300BE5 		str	r3, [fp, #-8]
+ 101:../RunApplication.c **** 	uint8_t Value = 0;
+ 351              		.loc 1 101 0
+ 352 0014 0030A0E3 		mov	r3, #0
+ 353 0018 11304BE5 		strb	r3, [fp, #-17]
+ 354              	.L16:
+ 102:../RunApplication.c **** 	uint32_t InValue;
+ 103:../RunApplication.c **** 	// Use register mode for single byte Read and Writes
+ 104:../RunApplication.c **** 	while (1)
+ 105:../RunApplication.c **** 	{
+ 106:../RunApplication.c **** 		SelectSPI_Device(SwitchesLEDs);
+ 355              		.loc 1 106 0 discriminator 1
+ 356 001c 0100A0E3 		mov	r0, #1
+ 357 0020 FEFFFFEB 		bl	SelectSPI_Device
+ 107:../RunApplication.c **** 		Status = ConfigureSPI(RegisterMode);
+ 358              		.loc 1 107 0 discriminator 1
+ 359 0024 0000A0E3 		mov	r0, #0
+ 360 0028 FEFFFFEB 		bl	ConfigureSPI
+ 361 002c 0C000BE5 		str	r0, [fp, #-12]
+ 108:../RunApplication.c **** 		// The Cypress API is "Transmit" or "Receive", my CPLD does both at the same time
+ 109:../RunApplication.c **** 		Status = CyU3PSpiTransmitWords(&Value, 1);
+ 362              		.loc 1 109 0 discriminator 1
+ 363 0030 11304BE2 		sub	r3, fp, #17
+ 364 0034 0300A0E1 		mov	r0, r3
+ 365 0038 0110A0E3 		mov	r1, #1
+ 366 003c FEFFFFEB 		bl	CyU3PSpiTransmitWords
+ 367 0040 0C000BE5 		str	r0, [fp, #-12]
+ 110:../RunApplication.c **** 		// Retrieve the input byte from the SPI DataIn Register
+ 111:../RunApplication.c **** 		InValue = *SPI_DataIn_Register & 0x0FF;
+ 368              		.loc 1 111 0 discriminator 1
+ 369 0044 08301BE5 		ldr	r3, [fp, #-8]
+ 370 0048 003093E5 		ldr	r3, [r3, #0]
+ 371 004c FF3003E2 		and	r3, r3, #255
+ 372 0050 10300BE5 		str	r3, [fp, #-16]
+ 112:../RunApplication.c **** 		// There was a problem with InValue so, for now, show a counter on the LEDs
+ 113:../RunApplication.c **** //		DebugPrint(4,"%d=", InValue);
+ 114:../RunApplication.c **** //		Status = CyU3PSpiReceiveWords((uint8_t*)&InValue, 1);
+ 115:../RunApplication.c **** //		DebugPrint(4,"%d.", InValue);
+ 116:../RunApplication.c **** 		Value--;
+ 373              		.loc 1 116 0 discriminator 1
+ 374 0054 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 375 0058 013043E2 		sub	r3, r3, #1
+ 376 005c FF3003E2 		and	r3, r3, #255
+ 377 0060 11304BE5 		strb	r3, [fp, #-17]
+ 117:../RunApplication.c **** 		SelectSPI_Device(-1);
+ 378              		.loc 1 117 0 discriminator 1
+ 379 0064 0000E0E3 		mvn	r0, #0
+ 380 0068 FEFFFFEB 		bl	SelectSPI_Device
+ 118:../RunApplication.c **** 		CyU3PThreadSleep(100);
+ 381              		.loc 1 118 0 discriminator 1
+ 382 006c 6400A0E3 		mov	r0, #100
+ 383 0070 FEFFFFEB 		bl	_tx_thread_sleep
+ 119:../RunApplication.c **** 	}
+ 384              		.loc 1 119 0 discriminator 1
+ 385 0074 E8FFFFEA 		b	.L16
+ 386              	.L18:
+ 387              		.align	2
+ 388              	.L17:
+ 389 0078 140C00E0 		.word	-536867820
+ 390              		.cfi_endproc
+ 391              	.LFE3:
+ 393              		.section	.rodata
+ 394 00c1 000000   		.align	2
+ 395              	.LC9:
+ 396 00c4 44656275 		.ascii	"Debug Console Initialized\000"
+ 396      6720436F 
+ 396      6E736F6C 
+ 396      6520496E 
+ 396      69746961 
+ 397 00de 0000     		.align	2
+ 398              	.LC10:
+ 399 00e0 4932435F 		.ascii	"I2C_DebugInit\000"
+ 399      44656275 
+ 399      67496E69 
+ 399      7400
+ 400 00ee 0000     		.align	2
+ 401              	.LC11:
+ 402 00f0 0A535049 		.ascii	"\012SPI Example\012Application started with %d\012\000"
+ 402      20457861 
+ 402      6D706C65 
+ 402      0A417070 
+ 402      6C696361 
+ 403 011a 0000     		.align	2
+ 404              	.LC12:
+ 405 011c 44697361 		.ascii	"Disable UART\000"
+ 405      626C6520 
+ 405      55415254 
+ 405      00
+ 406 0129 000000   		.align	2
+ 407              	.LC13:
+ 408 012c 496E6974 		.ascii	"Initialize_SPI\000"
+ 408      69616C69 
+ 408      7A655F53 
+ 408      504900
+ 409 013b 00       		.align	2
+ 410              	.LC14:
+ 411 013c 32303A52 		.ascii	"20:ReadSwitchesWriteLEDs\000"
+ 411      65616453 
+ 411      77697463 
+ 411      68657357 
+ 411      72697465 
+ 412 0155 000000   		.align	2
+ 413              	.LC15:
+ 414 0158 25642C20 		.ascii	"%d, \000"
+ 414      00
+ 415 015d 000000   		.align	2
+ 416              	.LC16:
+ 417 0160 0A417070 		.ascii	"\012Application failed to initialize. Error code: %"
+ 417      6C696361 
+ 417      74696F6E 
+ 417      20666169 
+ 417      6C656420 
+ 418 0190 642E0A00 		.ascii	"d.\012\000"
+ 419              		.section	.text.ApplicationThread,"ax",%progbits
+ 420              		.align	2
+ 421              		.global	ApplicationThread
+ 423              	ApplicationThread:
+ 424              	.LFB4:
+ 120:../RunApplication.c **** }
+ 121:../RunApplication.c **** 
+ 122:../RunApplication.c **** void ApplicationThread (uint32_t Value)
+ 123:../RunApplication.c **** {
+ 425              		.loc 1 123 0
+ 426              		.cfi_startproc
+ 427              		@ args = 0, pretend = 0, frame = 16
+ 428              		@ frame_needed = 1, uses_anonymous_args = 0
+ 429 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 430              	.LCFI8:
+ 431              		.cfi_def_cfa_offset 8
+ 432 0004 04B08DE2 		add	fp, sp, #4
+ 433              		.cfi_offset 14, -4
+ 434              		.cfi_offset 11, -8
+ 435              	.LCFI9:
+ 436              		.cfi_def_cfa 11, 4
+ 437 0008 30D04DE2 		sub	sp, sp, #48
+ 438 000c 10000BE5 		str	r0, [fp, #-16]
+ 124:../RunApplication.c **** 	int32_t Seconds = 0;
+ 439              		.loc 1 124 0
+ 440 0010 0030A0E3 		mov	r3, #0
+ 441 0014 08300BE5 		str	r3, [fp, #-8]
+ 125:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+ 126:../RunApplication.c **** 
+ 127:../RunApplication.c ****     // Start up the UART Console - I couldn't get the application to start without this
+ 128:../RunApplication.c **** 	Status = InitializeDebugConsole(6);
+ 442              		.loc 1 128 0
+ 443 0018 0600A0E3 		mov	r0, #6
+ 444 001c FEFFFFEB 		bl	InitializeDebugConsole
+ 445 0020 0C000BE5 		str	r0, [fp, #-12]
+ 129:../RunApplication.c ****     CheckStatus("Debug Console Initialized", Status);
+ 446              		.loc 1 129 0
+ 447 0024 10019FE5 		ldr	r0, .L23
+ 448 0028 0C101BE5 		ldr	r1, [fp, #-12]
+ 449 002c FEFFFFEB 		bl	CheckStatus
+ 130:../RunApplication.c **** 
+ 131:../RunApplication.c ****     if (Status == CY_U3P_SUCCESS)
+ 450              		.loc 1 131 0
+ 451 0030 0C301BE5 		ldr	r3, [fp, #-12]
+ 452 0034 000053E3 		cmp	r3, #0
+ 453 0038 3A00001A 		bne	.L20
+ 132:../RunApplication.c ****     {
+ 133:../RunApplication.c **** 
+ 134:../RunApplication.c ****     	// Start up the I2C Console
+ 135:../RunApplication.c ****     	Status = I2C_DebugInit(8);
+ 454              		.loc 1 135 0
+ 455 003c 0800A0E3 		mov	r0, #8
+ 456 0040 FEFFFFEB 		bl	I2C_DebugInit
+ 457 0044 0C000BE5 		str	r0, [fp, #-12]
+ 136:../RunApplication.c ****         CheckStatus("I2C_DebugInit", Status);
+ 458              		.loc 1 136 0
+ 459 0048 F0009FE5 		ldr	r0, .L23+4
+ 460 004c 0C101BE5 		ldr	r1, [fp, #-12]
+ 461 0050 FEFFFFEB 		bl	CheckStatus
+ 137:../RunApplication.c ****         // DebugPrint is now directed at the I2C Debug Console
+ 138:../RunApplication.c ****         DebugPrint(4, "\nSPI Example\nApplication started with %d\n", Value);
+ 462              		.loc 1 138 0
+ 463 0054 0400A0E3 		mov	r0, #4
+ 464 0058 E4109FE5 		ldr	r1, .L23+8
+ 465 005c 10201BE5 		ldr	r2, [fp, #-16]
+ 466 0060 FEFFFFEB 		bl	I2C_DebugPrint
+ 139:../RunApplication.c **** 
+ 140:../RunApplication.c **** 	   // Now turn off the UART console - this shouldn't be on!
+ 141:../RunApplication.c ****         Status = CyU3PDebugDeInit();
+ 467              		.loc 1 141 0
+ 468 0064 FEFFFFEB 		bl	CyU3PDebugDeInit
+ 469 0068 0C000BE5 		str	r0, [fp, #-12]
+ 142:../RunApplication.c ****         CheckStatus("Disable UART", Status);
+ 470              		.loc 1 142 0
+ 471 006c D4009FE5 		ldr	r0, .L23+12
+ 472 0070 0C101BE5 		ldr	r1, [fp, #-12]
+ 473 0074 FEFFFFEB 		bl	CheckStatus
+ 143:../RunApplication.c ****         CyU3PThreadSleep(1000);
+ 474              		.loc 1 143 0
+ 475 0078 FA0FA0E3 		mov	r0, #1000
+ 476 007c FEFFFFEB 		bl	_tx_thread_sleep
+ 144:../RunApplication.c ****         Status = InitializeSPI();
+ 477              		.loc 1 144 0
+ 478 0080 FEFFFFEB 		bl	InitializeSPI
+ 479 0084 0C000BE5 		str	r0, [fp, #-12]
+ 145:../RunApplication.c ****         CheckStatus("Initialize_SPI", Status);
+ 480              		.loc 1 145 0
+ 481 0088 BC009FE5 		ldr	r0, .L23+16
+ 482 008c 0C101BE5 		ldr	r1, [fp, #-12]
+ 483 0090 FEFFFFEB 		bl	CheckStatus
+ 146:../RunApplication.c **** 
+ 147:../RunApplication.c ****         // Start a thread to transfer SPI switched to SPI LEDs
+ 148:../RunApplication.c ****         StackPtr[1] = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 484              		.loc 1 148 0
+ 485 0094 010BA0E3 		mov	r0, #1024
+ 486 0098 FEFFFFEB 		bl	CyU3PMemAlloc
+ 487 009c 0020A0E1 		mov	r2, r0
+ 488 00a0 A8309FE5 		ldr	r3, .L23+20
+ 489 00a4 042083E5 		str	r2, [r3, #4]
+ 149:../RunApplication.c ****         CyU3PThreadCreate(&ThreadHandle[1],			// Handle for this Thread
+ 490              		.loc 1 149 0
+ 491 00a8 A4309FE5 		ldr	r3, .L23+24
+ 492 00ac 9C209FE5 		ldr	r2, .L23+20
+ 493 00b0 042092E5 		ldr	r2, [r2, #4]
+ 494 00b4 00208DE5 		str	r2, [sp, #0]
+ 495 00b8 012BA0E3 		mov	r2, #1024
+ 496 00bc 04208DE5 		str	r2, [sp, #4]
+ 497 00c0 0F20A0E3 		mov	r2, #15
+ 498 00c4 08208DE5 		str	r2, [sp, #8]
+ 499 00c8 0F20A0E3 		mov	r2, #15
+ 500 00cc 0C208DE5 		str	r2, [sp, #12]
+ 501 00d0 0020A0E3 		mov	r2, #0
+ 502 00d4 10208DE5 		str	r2, [sp, #16]
+ 503 00d8 0120A0E3 		mov	r2, #1
+ 504 00dc 14208DE5 		str	r2, [sp, #20]
+ 505 00e0 A820A0E3 		mov	r2, #168
+ 506 00e4 18208DE5 		str	r2, [sp, #24]
+ 507 00e8 68009FE5 		ldr	r0, .L23+28
+ 508 00ec 68109FE5 		ldr	r1, .L23+32
+ 509 00f0 0320A0E1 		mov	r2, r3
+ 510 00f4 2A30A0E3 		mov	r3, #42
+ 511 00f8 FEFFFFEB 		bl	_txe_thread_create
+ 512              	.L21:
+ 150:../RunApplication.c ****                 "20:ReadSwitchesWriteLEDs",			// Thread ID and name
+ 151:../RunApplication.c ****                 ReadSwitchesWriteLED_Thread,  		// Thread function
+ 152:../RunApplication.c ****                 42,                             	// Parameter passed to Thread
+ 153:../RunApplication.c ****                 StackPtr[1],                       	// Pointer to the allocated thread stack
+ 154:../RunApplication.c ****                 APPLICATION_THREAD_STACK,			// Allocated thread stack size
+ 155:../RunApplication.c ****                 APPLICATION_THREAD_PRIORITY,		// Thread priority
+ 156:../RunApplication.c ****                 APPLICATION_THREAD_PRIORITY,		// = Thread priority so no preemption
+ 157:../RunApplication.c ****                 CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+ 158:../RunApplication.c ****                 CYU3P_AUTO_START);                	// Start the thread immediately
+ 159:../RunApplication.c **** 
+ 160:../RunApplication.c ****         // Now run forever
+ 161:../RunApplication.c ****     	while (1)
+ 162:../RunApplication.c ****     	{
+ 163:../RunApplication.c ****     		CyU3PThreadSleep(1000);
+ 513              		.loc 1 163 0 discriminator 1
+ 514 00fc FA0FA0E3 		mov	r0, #1000
+ 515 0100 FEFFFFEB 		bl	_tx_thread_sleep
+ 164:../RunApplication.c **** 			DebugPrint(4, "%d, ", Seconds);
+ 516              		.loc 1 164 0 discriminator 1
+ 517 0104 0400A0E3 		mov	r0, #4
+ 518 0108 50109FE5 		ldr	r1, .L23+36
+ 519 010c 08201BE5 		ldr	r2, [fp, #-8]
+ 520 0110 FEFFFFEB 		bl	I2C_DebugPrint
+ 165:../RunApplication.c **** 			Seconds++;
+ 521              		.loc 1 165 0 discriminator 1
+ 522 0114 08301BE5 		ldr	r3, [fp, #-8]
+ 523 0118 013083E2 		add	r3, r3, #1
+ 524 011c 08300BE5 		str	r3, [fp, #-8]
+ 166:../RunApplication.c **** 			CheckForCommand();		// Check for commands in Main context and execute them in Main context
+ 525              		.loc 1 166 0 discriminator 1
+ 526 0120 FEFFFFEB 		bl	CheckForCommand
+ 167:../RunApplication.c ****     	}
+ 527              		.loc 1 167 0 discriminator 1
+ 528 0124 F4FFFFEA 		b	.L21
+ 529              	.L20:
+ 168:../RunApplication.c ****     }
+ 169:../RunApplication.c ****     DebugPrint(4, "\nApplication failed to initialize. Error code: %d.\n", Status);
+ 530              		.loc 1 169 0
+ 531 0128 0400A0E3 		mov	r0, #4
+ 532 012c 30109FE5 		ldr	r1, .L23+40
+ 533 0130 0C201BE5 		ldr	r2, [fp, #-12]
+ 534 0134 FEFFFFEB 		bl	I2C_DebugPrint
+ 535              	.L22:
+ 170:../RunApplication.c ****     while (1);		// Hang here
+ 536              		.loc 1 170 0 discriminator 1
+ 537 0138 FEFFFFEA 		b	.L22
+ 538              	.L24:
+ 539              		.align	2
+ 540              	.L23:
+ 541 013c C4000000 		.word	.LC9
+ 542 0140 E0000000 		.word	.LC10
+ 543 0144 F0000000 		.word	.LC11
+ 544 0148 1C010000 		.word	.LC12
+ 545 014c 2C010000 		.word	.LC13
+ 546 0150 00000000 		.word	StackPtr
+ 547 0154 00000000 		.word	ReadSwitchesWriteLED_Thread
+ 548 0158 A8000000 		.word	ThreadHandle+168
+ 549 015c 3C010000 		.word	.LC14
+ 550 0160 58010000 		.word	.LC15
+ 551 0164 60010000 		.word	.LC16
+ 552              		.cfi_endproc
+ 553              	.LFE4:
+ 555              		.section	.rodata
+ 556              		.align	2
+ 557              	.LC17:
+ 558 0194 4F766572 		.ascii	"Override CPLD_RESET\000"
+ 558      72696465 
+ 558      2043504C 
+ 558      445F5245 
+ 558      53455400 
+ 559              		.align	2
+ 560              	.LC18:
+ 561 01a8 31353A53 		.ascii	"15:SPI_Example\000"
+ 561      50495F45 
+ 561      78616D70 
+ 561      6C6500
+ 562 01b7 00       		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 563              		.align	2
+ 564              		.global	CyFxApplicationDefine
+ 566              	CyFxApplicationDefine:
+ 567              	.LFB5:
+ 171:../RunApplication.c **** }
+ 172:../RunApplication.c **** 
+ 173:../RunApplication.c **** // ApplicationDefine function called by RTOS to startup the application threads
+ 174:../RunApplication.c **** void CyFxApplicationDefine(void)
+ 175:../RunApplication.c **** {
+ 568              		.loc 1 175 0
+ 569              		.cfi_startproc
+ 570              		@ args = 0, pretend = 0, frame = 24
+ 571              		@ frame_needed = 1, uses_anonymous_args = 0
+ 572 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 573              	.LCFI10:
+ 574              		.cfi_def_cfa_offset 8
+ 575 0004 04B08DE2 		add	fp, sp, #4
+ 576              		.cfi_offset 14, -4
+ 577              		.cfi_offset 11, -8
+ 578              	.LCFI11:
+ 579              		.cfi_def_cfa 11, 4
+ 580 0008 38D04DE2 		sub	sp, sp, #56
+ 176:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+ 177:../RunApplication.c ****     CyU3PGpioSimpleConfig_t gpioConfig;
+ 178:../RunApplication.c ****     // If I get here then RTOS has started correctly, turn off ErrorIndicator
+ 179:../RunApplication.c ****     IndicateError(0);
+ 581              		.loc 1 179 0
+ 582 000c 0000A0E3 		mov	r0, #0
+ 583 0010 FEFFFFEB 		bl	IndicateError
+ 180:../RunApplication.c **** 
+ 181:../RunApplication.c ****     // This examples uses the CPLD which must be RESET
+ 182:../RunApplication.c ****     // I have reallocated CTRL[10] = GPIO[27] for this
+ 183:../RunApplication.c ****     Status = CyU3PDeviceGpioOverride(CPLD_RESET, CyTrue);
+ 584              		.loc 1 183 0
+ 585 0014 1B00A0E3 		mov	r0, #27
+ 586 0018 0110A0E3 		mov	r1, #1
+ 587 001c FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+ 588 0020 08000BE5 		str	r0, [fp, #-8]
+ 184:../RunApplication.c ****     CheckStatus("Override CPLD_RESET", Status);
+ 589              		.loc 1 184 0
+ 590 0024 C4009FE5 		ldr	r0, .L26
+ 591 0028 08101BE5 		ldr	r1, [fp, #-8]
+ 592 002c FEFFFFEB 		bl	CheckStatus
+ 185:../RunApplication.c ****     CyU3PMemSet((uint8_t *)&gpioConfig, 0, sizeof(gpioConfig));
+ 593              		.loc 1 185 0
+ 594 0030 1C304BE2 		sub	r3, fp, #28
+ 595 0034 0300A0E1 		mov	r0, r3
+ 596 0038 0010A0E3 		mov	r1, #0
+ 597 003c 1420A0E3 		mov	r2, #20
+ 598 0040 FEFFFFEB 		bl	CyU3PMemSet
+ 186:../RunApplication.c ****     gpioConfig.outValue = CyTrue;
+ 599              		.loc 1 186 0
+ 600 0044 0130A0E3 		mov	r3, #1
+ 601 0048 1C300BE5 		str	r3, [fp, #-28]
+ 187:../RunApplication.c ****     gpioConfig.driveLowEn = CyTrue;
+ 602              		.loc 1 187 0
+ 603 004c 0130A0E3 		mov	r3, #1
+ 604 0050 18300BE5 		str	r3, [fp, #-24]
+ 188:../RunApplication.c ****     gpioConfig.driveHighEn = CyTrue;
+ 605              		.loc 1 188 0
+ 606 0054 0130A0E3 		mov	r3, #1
+ 607 0058 14300BE5 		str	r3, [fp, #-20]
+ 189:../RunApplication.c ****     Status = CyU3PGpioSetSimpleConfig(CPLD_RESET, &gpioConfig);
+ 608              		.loc 1 189 0
+ 609 005c 1C304BE2 		sub	r3, fp, #28
+ 610 0060 1B00A0E3 		mov	r0, #27
+ 611 0064 0310A0E1 		mov	r1, r3
+ 612 0068 FEFFFFEB 		bl	CyU3PGpioSetSimpleConfig
+ 613 006c 08000BE5 		str	r0, [fp, #-8]
+ 190:../RunApplication.c ****     CyU3PThreadSleep(10);
+ 614              		.loc 1 190 0
+ 615 0070 0A00A0E3 		mov	r0, #10
+ 616 0074 FEFFFFEB 		bl	_tx_thread_sleep
+ 191:../RunApplication.c **** 	CyU3PGpioSimpleSetValue(CPLD_RESET, 0);
+ 617              		.loc 1 191 0
+ 618 0078 1B00A0E3 		mov	r0, #27
+ 619 007c 0010A0E3 		mov	r1, #0
+ 620 0080 FEFFFFEB 		bl	CyU3PGpioSimpleSetValue
+ 192:../RunApplication.c **** 
+ 193:../RunApplication.c ****     // Create an Application thread
+ 194:../RunApplication.c ****     StackPtr[0] = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 621              		.loc 1 194 0
+ 622 0084 010BA0E3 		mov	r0, #1024
+ 623 0088 FEFFFFEB 		bl	CyU3PMemAlloc
+ 624 008c 0020A0E1 		mov	r2, r0
+ 625 0090 5C309FE5 		ldr	r3, .L26+4
+ 626 0094 002083E5 		str	r2, [r3, #0]
+ 195:../RunApplication.c ****     CyU3PThreadCreate(&ThreadHandle[0],			// Handle for this Thread
+ 627              		.loc 1 195 0
+ 628 0098 54309FE5 		ldr	r3, .L26+4
+ 629 009c 003093E5 		ldr	r3, [r3, #0]
+ 630 00a0 00308DE5 		str	r3, [sp, #0]
+ 631 00a4 013BA0E3 		mov	r3, #1024
+ 632 00a8 04308DE5 		str	r3, [sp, #4]
+ 633 00ac 0F30A0E3 		mov	r3, #15
+ 634 00b0 08308DE5 		str	r3, [sp, #8]
+ 635 00b4 0F30A0E3 		mov	r3, #15
+ 636 00b8 0C308DE5 		str	r3, [sp, #12]
+ 637 00bc 0030A0E3 		mov	r3, #0
+ 638 00c0 10308DE5 		str	r3, [sp, #16]
+ 639 00c4 0130A0E3 		mov	r3, #1
+ 640 00c8 14308DE5 		str	r3, [sp, #20]
+ 641 00cc A830A0E3 		mov	r3, #168
+ 642 00d0 18308DE5 		str	r3, [sp, #24]
+ 643 00d4 1C009FE5 		ldr	r0, .L26+8
+ 644 00d8 1C109FE5 		ldr	r1, .L26+12
+ 645 00dc 1C209FE5 		ldr	r2, .L26+16
+ 646 00e0 2A30A0E3 		mov	r3, #42
+ 647 00e4 FEFFFFEB 		bl	_txe_thread_create
+ 196:../RunApplication.c ****             "15:SPI_Example",                	// Thread ID and name
+ 197:../RunApplication.c ****             ApplicationThread,  				// Thread function
+ 198:../RunApplication.c ****             42,                             	// Parameter passed to Thread
+ 199:../RunApplication.c ****             StackPtr[0],                       	// Pointer to the allocated thread stack
+ 200:../RunApplication.c ****             APPLICATION_THREAD_STACK,			// Allocated thread stack size
+ 201:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,		// Thread priority
+ 202:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,		// = Thread priority so no preemption
+ 203:../RunApplication.c ****             CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+ 204:../RunApplication.c ****             CYU3P_AUTO_START);                	// Start the thread immediately
+ 205:../RunApplication.c **** }
+ 648              		.loc 1 205 0
+ 649 00e8 04D04BE2 		sub	sp, fp, #4
+ 650 00ec 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 651              	.L27:
+ 652              		.align	2
+ 653              	.L26:
+ 654 00f0 94010000 		.word	.LC17
+ 655 00f4 00000000 		.word	StackPtr
+ 656 00f8 00000000 		.word	ThreadHandle
+ 657 00fc A8010000 		.word	.LC18
+ 658 0100 00000000 		.word	ApplicationThread
+ 659              		.cfi_endproc
+ 660              	.LFE5:
+ 662              		.text
+ 663              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 RunApplication.c
+                            *COM*:000001f8 ThreadHandle
+                            *COM*:0000000c StackPtr
+                            *COM*:00000038 SPI_CS_Mutex
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:25     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:32     .text.SelectSPI_Device:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:35     .text.SelectSPI_Device:00000000 SelectSPI_Device
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:103    .text.SelectSPI_Device:000000a0 $d
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:114    .text.ConfigureSPI:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:117    .text.ConfigureSPI:00000000 ConfigureSPI
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:190    .text.ConfigureSPI:000000a8 $d
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:215    .text.InitializeSPI:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:218    .text.InitializeSPI:00000000 InitializeSPI
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:319    .text.InitializeSPI:00000108 $d
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:330    .text.ReadSwitchesWriteLED_Thread:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:333    .text.ReadSwitchesWriteLED_Thread:00000000 ReadSwitchesWriteLED_Thread
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:389    .text.ReadSwitchesWriteLED_Thread:00000078 $d
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:420    .text.ApplicationThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:423    .text.ApplicationThread:00000000 ApplicationThread
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:541    .text.ApplicationThread:0000013c $d
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:563    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:566    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\cc9Bvjif.s:654    .text.CyFxApplicationDefine:000000f0 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+_txe_mutex_put
+CheckStatus
+CyU3PGpioSimpleSetValue
+_txe_mutex_get
+CyU3PMemSet
+CyU3PSpiSetConfig
+_txe_mutex_create
+CyU3PDeviceGpioOverride
+CyU3PGpioSetSimpleConfig
+CyU3PSpiInit
+CyU3PSpiTransmitWords
+_tx_thread_sleep
+InitializeDebugConsole
+I2C_DebugInit
+I2C_DebugPrint
+CyU3PDebugDeInit
+CyU3PMemAlloc
+_txe_thread_create
+CheckForCommand
+IndicateError

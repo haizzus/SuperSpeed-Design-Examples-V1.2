@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<GPIFIITimingSimulation version="1">
+  <Clock>100</Clock>
+  <BufferSize>512</BufferSize>
+  <WaterMark>0</WaterMark>
+  <Macro Name="MACRO0" DisplayName="MACRO0" RepeatCount="1">
+    <State StateId="STATE8" WaitNumber="0" />
+  </Macro>
+  <Scenario Name="Write" CurrentThread="Thread1">
+    <State StateId="STARTSTATE0" WaitNumber="0" />
+    <State StateId="STATE1" WaitNumber="0" />
+    <State StateId="STATE8" WaitNumber="0" />
+  </Scenario>
+  <Scenario Name="ShortPkt" CurrentThread="Thread0">
+    <State StateId="STARTSTATE0" WaitNumber="0" />
+    <State StateId="STATE1" WaitNumber="0" />
+    <State StateId="STATE8" WaitNumber="0" />
+  </Scenario>
+  <Scenario Name="BurstWrite" CurrentThread="Thread0">
+    <State StateId="STARTSTATE0" WaitNumber="0" />
+    <State StateId="STATE1" WaitNumber="0" />
+    <State StateId="STATE8" WaitNumber="0" />
+  </Scenario>
+</GPIFIITimingSimulation>

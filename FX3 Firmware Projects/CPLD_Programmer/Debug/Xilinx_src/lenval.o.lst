@@ -1,0 +1,697 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"lenval.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.text.value,"ax",%progbits
+  22              		.align	2
+  23              		.global	value
+  25              	value:
+  26              	.LFB0:
+  27              		.file 1 "../Xilinx_src/lenval.c"
+   1:../Xilinx_src/lenval.c **** /*******************************************************/
+   2:../Xilinx_src/lenval.c **** /* file: lenval.c                                      */
+   3:../Xilinx_src/lenval.c **** /* abstract:  This file contains routines for using    */
+   4:../Xilinx_src/lenval.c **** /*            the lenVal data structure.               */
+   5:../Xilinx_src/lenval.c **** /*******************************************************/
+   6:../Xilinx_src/lenval.c **** #include "lenval.h"
+   7:../Xilinx_src/lenval.c **** #include "ports.h"
+   8:../Xilinx_src/lenval.c **** 
+   9:../Xilinx_src/lenval.c **** /*****************************************************************************
+  10:../Xilinx_src/lenval.c **** * Function:     value
+  11:../Xilinx_src/lenval.c **** * Description:  Extract the long value from the lenval array.
+  12:../Xilinx_src/lenval.c **** * Parameters:   plvValue    - ptr to lenval.
+  13:../Xilinx_src/lenval.c **** * Returns:      long        - the extracted value.
+  14:../Xilinx_src/lenval.c **** *****************************************************************************/
+  15:../Xilinx_src/lenval.c **** long value( lenVal*     plvValue )
+  16:../Xilinx_src/lenval.c **** {
+  28              		.loc 1 16 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 04B02DE5 		str	fp, [sp, #-4]!
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 4
+  36 0004 00B08DE2 		add	fp, sp, #0
+  37              		.cfi_offset 11, -4
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_register 11
+  40 0008 14D04DE2 		sub	sp, sp, #20
+  41 000c 10000BE5 		str	r0, [fp, #-16]
+  17:../Xilinx_src/lenval.c **** 	long    lValue;         /* result to hold the accumulated result */
+  18:../Xilinx_src/lenval.c **** 	short   sIndex;
+  19:../Xilinx_src/lenval.c **** 
+  20:../Xilinx_src/lenval.c ****     lValue  = 0;
+  42              		.loc 1 20 0
+  43 0010 0030A0E3 		mov	r3, #0
+  44 0014 08300BE5 		str	r3, [fp, #-8]
+  21:../Xilinx_src/lenval.c **** 	for ( sIndex = 0; sIndex < plvValue->len ; ++sIndex )
+  45              		.loc 1 21 0
+  46 0018 0030A0E3 		mov	r3, #0
+  47 001c BA304BE1 		strh	r3, [fp, #-10]	@ movhi
+  48 0020 0E0000EA 		b	.L2
+  49              	.L3:
+  22:../Xilinx_src/lenval.c **** 	{
+  23:../Xilinx_src/lenval.c **** 		lValue <<= 8;                       /* shift the accumulated result */
+  50              		.loc 1 23 0 discriminator 2
+  51 0024 08301BE5 		ldr	r3, [fp, #-8]
+  52 0028 0334A0E1 		mov	r3, r3, asl #8
+  53 002c 08300BE5 		str	r3, [fp, #-8]
+  24:../Xilinx_src/lenval.c **** 		lValue |= plvValue->val[ sIndex];   /* get the last byte first */
+  54              		.loc 1 24 0 discriminator 2
+  55 0030 FA205BE1 		ldrsh	r2, [fp, #-10]
+  56 0034 10101BE5 		ldr	r1, [fp, #-16]
+  57 0038 0230A0E3 		mov	r3, #2
+  58 003c 022081E0 		add	r2, r1, r2
+  59 0040 033082E0 		add	r3, r2, r3
+  60 0044 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+  61 0048 08201BE5 		ldr	r2, [fp, #-8]
+  62 004c 033082E1 		orr	r3, r2, r3
+  63 0050 08300BE5 		str	r3, [fp, #-8]
+  21:../Xilinx_src/lenval.c **** 	for ( sIndex = 0; sIndex < plvValue->len ; ++sIndex )
+  64              		.loc 1 21 0 discriminator 2
+  65 0054 BA305BE1 		ldrh	r3, [fp, #-10]	@ movhi
+  66 0058 013083E2 		add	r3, r3, #1
+  67 005c BA304BE1 		strh	r3, [fp, #-10]	@ movhi
+  68              	.L2:
+  21:../Xilinx_src/lenval.c **** 	for ( sIndex = 0; sIndex < plvValue->len ; ++sIndex )
+  69              		.loc 1 21 0 is_stmt 0 discriminator 1
+  70 0060 10301BE5 		ldr	r3, [fp, #-16]
+  71 0064 B030D3E1 		ldrh	r3, [r3, #0]
+  72 0068 FA205BE1 		ldrsh	r2, [fp, #-10]
+  73 006c 0338A0E1 		mov	r3, r3, asl #16
+  74 0070 4338A0E1 		mov	r3, r3, asr #16
+  75 0074 030052E1 		cmp	r2, r3
+  76 0078 E9FFFFBA 		blt	.L3
+  25:../Xilinx_src/lenval.c **** 	}
+  26:../Xilinx_src/lenval.c **** 
+  27:../Xilinx_src/lenval.c **** 	return( lValue );
+  77              		.loc 1 27 0 is_stmt 1
+  78 007c 08301BE5 		ldr	r3, [fp, #-8]
+  28:../Xilinx_src/lenval.c **** }
+  79              		.loc 1 28 0
+  80 0080 0300A0E1 		mov	r0, r3
+  81 0084 00D08BE2 		add	sp, fp, #0
+  82 0088 04B09DE4 		ldmfd	sp!, {fp}
+  83 008c 1EFF2FE1 		bx	lr
+  84              		.cfi_endproc
+  85              	.LFE0:
+  87              		.section	.text.initLenVal,"ax",%progbits
+  88              		.align	2
+  89              		.global	initLenVal
+  91              	initLenVal:
+  92              	.LFB1:
+  29:../Xilinx_src/lenval.c **** 
+  30:../Xilinx_src/lenval.c **** /*****************************************************************************
+  31:../Xilinx_src/lenval.c **** * Function:     initLenVal
+  32:../Xilinx_src/lenval.c **** * Description:  Initialize the lenval array with the given value.
+  33:../Xilinx_src/lenval.c **** *               Assumes lValue is less than 256.
+  34:../Xilinx_src/lenval.c **** * Parameters:   plv         - ptr to lenval.
+  35:../Xilinx_src/lenval.c **** *               lValue      - the value to set.
+  36:../Xilinx_src/lenval.c **** * Returns:      void.
+  37:../Xilinx_src/lenval.c **** *****************************************************************************/
+  38:../Xilinx_src/lenval.c **** void initLenVal( lenVal*    plv,
+  39:../Xilinx_src/lenval.c ****                  long       lValue )
+  40:../Xilinx_src/lenval.c **** {
+  93              		.loc 1 40 0
+  94              		.cfi_startproc
+  95              		@ args = 0, pretend = 0, frame = 8
+  96              		@ frame_needed = 1, uses_anonymous_args = 0
+  97              		@ link register save eliminated.
+  98 0000 04B02DE5 		str	fp, [sp, #-4]!
+  99              	.LCFI2:
+ 100              		.cfi_def_cfa_offset 4
+ 101 0004 00B08DE2 		add	fp, sp, #0
+ 102              		.cfi_offset 11, -4
+ 103              	.LCFI3:
+ 104              		.cfi_def_cfa_register 11
+ 105 0008 0CD04DE2 		sub	sp, sp, #12
+ 106 000c 08000BE5 		str	r0, [fp, #-8]
+ 107 0010 0C100BE5 		str	r1, [fp, #-12]
+  41:../Xilinx_src/lenval.c **** 	plv->len    = 1;
+ 108              		.loc 1 41 0
+ 109 0014 08301BE5 		ldr	r3, [fp, #-8]
+ 110 0018 0120A0E3 		mov	r2, #1
+ 111 001c B020C3E1 		strh	r2, [r3, #0]	@ movhi
+  42:../Xilinx_src/lenval.c **** 	plv->val[0] = (unsigned char)lValue;
+ 112              		.loc 1 42 0
+ 113 0020 0C301BE5 		ldr	r3, [fp, #-12]
+ 114 0024 FF2003E2 		and	r2, r3, #255
+ 115 0028 08301BE5 		ldr	r3, [fp, #-8]
+ 116 002c 0220C3E5 		strb	r2, [r3, #2]
+  43:../Xilinx_src/lenval.c **** }
+ 117              		.loc 1 43 0
+ 118 0030 00D08BE2 		add	sp, fp, #0
+ 119 0034 04B09DE4 		ldmfd	sp!, {fp}
+ 120 0038 1EFF2FE1 		bx	lr
+ 121              		.cfi_endproc
+ 122              	.LFE1:
+ 124              		.section	.text.EqualLenVal,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	EqualLenVal
+ 128              	EqualLenVal:
+ 129              	.LFB2:
+  44:../Xilinx_src/lenval.c **** 
+  45:../Xilinx_src/lenval.c **** /*****************************************************************************
+  46:../Xilinx_src/lenval.c **** * Function:     EqualLenVal
+  47:../Xilinx_src/lenval.c **** * Description:  Compare two lenval arrays with an optional mask.
+  48:../Xilinx_src/lenval.c **** * Parameters:   plvTdoExpected  - ptr to lenval #1.
+  49:../Xilinx_src/lenval.c **** *               plvTdoCaptured  - ptr to lenval #2.
+  50:../Xilinx_src/lenval.c **** *               plvTdoMask      - optional ptr to mask (=0 if no mask).
+  51:../Xilinx_src/lenval.c **** * Returns:      short   - 0 = mismatch; 1 = equal.
+  52:../Xilinx_src/lenval.c **** *****************************************************************************/
+  53:../Xilinx_src/lenval.c **** short EqualLenVal( lenVal*  plvTdoExpected,
+  54:../Xilinx_src/lenval.c ****                    lenVal*  plvTdoCaptured,
+  55:../Xilinx_src/lenval.c ****                    lenVal*  plvTdoMask )
+  56:../Xilinx_src/lenval.c **** {
+ 130              		.loc 1 56 0
+ 131              		.cfi_startproc
+ 132              		@ args = 0, pretend = 0, frame = 24
+ 133              		@ frame_needed = 1, uses_anonymous_args = 0
+ 134              		@ link register save eliminated.
+ 135 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 136              	.LCFI4:
+ 137              		.cfi_def_cfa_offset 4
+ 138 0004 00B08DE2 		add	fp, sp, #0
+ 139              		.cfi_offset 11, -4
+ 140              	.LCFI5:
+ 141              		.cfi_def_cfa_register 11
+ 142 0008 1CD04DE2 		sub	sp, sp, #28
+ 143 000c 10000BE5 		str	r0, [fp, #-16]
+ 144 0010 14100BE5 		str	r1, [fp, #-20]
+ 145 0014 18200BE5 		str	r2, [fp, #-24]
+  57:../Xilinx_src/lenval.c ****     short           sEqual;
+  58:../Xilinx_src/lenval.c **** 	short           sIndex;
+  59:../Xilinx_src/lenval.c ****     unsigned char   ucByteVal1;
+  60:../Xilinx_src/lenval.c ****     unsigned char   ucByteVal2;
+  61:../Xilinx_src/lenval.c ****     unsigned char   ucByteMask;
+  62:../Xilinx_src/lenval.c **** 
+  63:../Xilinx_src/lenval.c ****     sEqual  = 1;
+ 146              		.loc 1 63 0
+ 147 0018 0130A0E3 		mov	r3, #1
+ 148 001c B6304BE1 		strh	r3, [fp, #-6]	@ movhi
+  64:../Xilinx_src/lenval.c ****     sIndex  = plvTdoExpected->len;
+ 149              		.loc 1 64 0
+ 150 0020 10301BE5 		ldr	r3, [fp, #-16]
+ 151 0024 B030D3E1 		ldrh	r3, [r3, #0]	@ movhi
+ 152 0028 B8304BE1 		strh	r3, [fp, #-8]	@ movhi
+  65:../Xilinx_src/lenval.c **** 
+  66:../Xilinx_src/lenval.c ****     while ( sEqual && sIndex-- )
+ 153              		.loc 1 66 0
+ 154 002c 250000EA 		b	.L6
+ 155              	.L9:
+  67:../Xilinx_src/lenval.c ****     {
+  68:../Xilinx_src/lenval.c ****         ucByteVal1  = plvTdoExpected->val[ sIndex ];
+ 156              		.loc 1 68 0
+ 157 0030 F8205BE1 		ldrsh	r2, [fp, #-8]
+ 158 0034 10101BE5 		ldr	r1, [fp, #-16]
+ 159 0038 0230A0E3 		mov	r3, #2
+ 160 003c 022081E0 		add	r2, r1, r2
+ 161 0040 033082E0 		add	r3, r2, r3
+ 162 0044 0030D3E5 		ldrb	r3, [r3, #0]
+ 163 0048 09304BE5 		strb	r3, [fp, #-9]
+  69:../Xilinx_src/lenval.c ****         ucByteVal2  = plvTdoCaptured->val[ sIndex ];
+ 164              		.loc 1 69 0
+ 165 004c F8205BE1 		ldrsh	r2, [fp, #-8]
+ 166 0050 14101BE5 		ldr	r1, [fp, #-20]
+ 167 0054 0230A0E3 		mov	r3, #2
+ 168 0058 022081E0 		add	r2, r1, r2
+ 169 005c 033082E0 		add	r3, r2, r3
+ 170 0060 0030D3E5 		ldrb	r3, [r3, #0]
+ 171 0064 0A304BE5 		strb	r3, [fp, #-10]
+  70:../Xilinx_src/lenval.c ****         if ( plvTdoMask )
+ 172              		.loc 1 70 0
+ 173 0068 18301BE5 		ldr	r3, [fp, #-24]
+ 174 006c 000053E3 		cmp	r3, #0
+ 175 0070 0E00000A 		beq	.L7
+  71:../Xilinx_src/lenval.c ****         {
+  72:../Xilinx_src/lenval.c ****             ucByteMask  = plvTdoMask->val[ sIndex ];
+ 176              		.loc 1 72 0
+ 177 0074 F8205BE1 		ldrsh	r2, [fp, #-8]
+ 178 0078 18101BE5 		ldr	r1, [fp, #-24]
+ 179 007c 0230A0E3 		mov	r3, #2
+ 180 0080 022081E0 		add	r2, r1, r2
+ 181 0084 033082E0 		add	r3, r2, r3
+ 182 0088 0030D3E5 		ldrb	r3, [r3, #0]
+ 183 008c 0B304BE5 		strb	r3, [fp, #-11]
+  73:../Xilinx_src/lenval.c ****             ucByteVal1  &= ucByteMask;
+ 184              		.loc 1 73 0
+ 185 0090 09205BE5 		ldrb	r2, [fp, #-9]
+ 186 0094 0B305BE5 		ldrb	r3, [fp, #-11]
+ 187 0098 033002E0 		and	r3, r2, r3
+ 188 009c 09304BE5 		strb	r3, [fp, #-9]
+  74:../Xilinx_src/lenval.c ****             ucByteVal2  &= ucByteMask;
+ 189              		.loc 1 74 0
+ 190 00a0 0A205BE5 		ldrb	r2, [fp, #-10]
+ 191 00a4 0B305BE5 		ldrb	r3, [fp, #-11]
+ 192 00a8 033002E0 		and	r3, r2, r3
+ 193 00ac 0A304BE5 		strb	r3, [fp, #-10]
+ 194              	.L7:
+  75:../Xilinx_src/lenval.c ****         }
+  76:../Xilinx_src/lenval.c ****         if ( ucByteVal1 != ucByteVal2 )
+ 195              		.loc 1 76 0
+ 196 00b0 09205BE5 		ldrb	r2, [fp, #-9]	@ zero_extendqisi2
+ 197 00b4 0A305BE5 		ldrb	r3, [fp, #-10]	@ zero_extendqisi2
+ 198 00b8 030052E1 		cmp	r2, r3
+ 199 00bc 0100000A 		beq	.L6
+  77:../Xilinx_src/lenval.c ****         {
+  78:../Xilinx_src/lenval.c ****             sEqual  = 0;
+ 200              		.loc 1 78 0
+ 201 00c0 0030A0E3 		mov	r3, #0
+ 202 00c4 B6304BE1 		strh	r3, [fp, #-6]	@ movhi
+ 203              	.L6:
+  66:../Xilinx_src/lenval.c ****     while ( sEqual && sIndex-- )
+ 204              		.loc 1 66 0 discriminator 1
+ 205 00c8 F6305BE1 		ldrsh	r3, [fp, #-6]
+ 206 00cc 000053E3 		cmp	r3, #0
+ 207 00d0 0900000A 		beq	.L8
+  66:../Xilinx_src/lenval.c ****     while ( sEqual && sIndex-- )
+ 208              		.loc 1 66 0 is_stmt 0 discriminator 2
+ 209 00d4 F8305BE1 		ldrsh	r3, [fp, #-8]
+ 210 00d8 000053E3 		cmp	r3, #0
+ 211 00dc 0030A003 		moveq	r3, #0
+ 212 00e0 0130A013 		movne	r3, #1
+ 213 00e4 FF3003E2 		and	r3, r3, #255
+ 214 00e8 B8205BE1 		ldrh	r2, [fp, #-8]	@ movhi
+ 215 00ec 012042E2 		sub	r2, r2, #1
+ 216 00f0 B8204BE1 		strh	r2, [fp, #-8]	@ movhi
+ 217 00f4 000053E3 		cmp	r3, #0
+ 218 00f8 CCFFFF1A 		bne	.L9
+ 219              	.L8:
+  79:../Xilinx_src/lenval.c ****         }
+  80:../Xilinx_src/lenval.c ****     }
+  81:../Xilinx_src/lenval.c **** 
+  82:../Xilinx_src/lenval.c **** 	return( sEqual );
+ 220              		.loc 1 82 0 is_stmt 1
+ 221 00fc B6305BE1 		ldrh	r3, [fp, #-6]
+ 222 0100 0338A0E1 		mov	r3, r3, asl #16
+ 223 0104 4338A0E1 		mov	r3, r3, asr #16
+  83:../Xilinx_src/lenval.c **** }
+ 224              		.loc 1 83 0
+ 225 0108 0300A0E1 		mov	r0, r3
+ 226 010c 00D08BE2 		add	sp, fp, #0
+ 227 0110 04B09DE4 		ldmfd	sp!, {fp}
+ 228 0114 1EFF2FE1 		bx	lr
+ 229              		.cfi_endproc
+ 230              	.LFE2:
+ 232              		.section	.text.RetBit,"ax",%progbits
+ 233              		.align	2
+ 234              		.global	RetBit
+ 236              	RetBit:
+ 237              	.LFB3:
+  84:../Xilinx_src/lenval.c **** 
+  85:../Xilinx_src/lenval.c **** 
+  86:../Xilinx_src/lenval.c **** /*****************************************************************************
+  87:../Xilinx_src/lenval.c **** * Function:     RetBit
+  88:../Xilinx_src/lenval.c **** * Description:  return the (byte, bit) of lv (reading from left to right).
+  89:../Xilinx_src/lenval.c **** * Parameters:   plv     - ptr to lenval.
+  90:../Xilinx_src/lenval.c **** *               iByte   - the byte to get the bit from.
+  91:../Xilinx_src/lenval.c **** *               iBit    - the bit number (0=msb)
+  92:../Xilinx_src/lenval.c **** * Returns:      short   - the bit value.
+  93:../Xilinx_src/lenval.c **** *****************************************************************************/
+  94:../Xilinx_src/lenval.c **** short RetBit( lenVal*   plv,
+  95:../Xilinx_src/lenval.c ****               int       iByte,
+  96:../Xilinx_src/lenval.c ****               int       iBit )
+  97:../Xilinx_src/lenval.c **** {
+ 238              		.loc 1 97 0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 16
+ 241              		@ frame_needed = 1, uses_anonymous_args = 0
+ 242              		@ link register save eliminated.
+ 243 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 244              	.LCFI6:
+ 245              		.cfi_def_cfa_offset 4
+ 246 0004 00B08DE2 		add	fp, sp, #0
+ 247              		.cfi_offset 11, -4
+ 248              	.LCFI7:
+ 249              		.cfi_def_cfa_register 11
+ 250 0008 14D04DE2 		sub	sp, sp, #20
+ 251 000c 08000BE5 		str	r0, [fp, #-8]
+ 252 0010 0C100BE5 		str	r1, [fp, #-12]
+ 253 0014 10200BE5 		str	r2, [fp, #-16]
+  98:../Xilinx_src/lenval.c ****     /* assert( ( iByte >= 0 ) && ( iByte < plv->len ) ); */
+  99:../Xilinx_src/lenval.c ****     /* assert( ( iBit >= 0 ) && ( iBit < 8 ) ); */
+ 100:../Xilinx_src/lenval.c ****     return( (short)( ( plv->val[ iByte ] >> ( 7 - iBit ) ) & 0x1 ) );
+ 254              		.loc 1 100 0
+ 255 0018 08201BE5 		ldr	r2, [fp, #-8]
+ 256 001c 0C301BE5 		ldr	r3, [fp, #-12]
+ 257 0020 033082E0 		add	r3, r2, r3
+ 258 0024 0230D3E5 		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 259 0028 0320A0E1 		mov	r2, r3
+ 260 002c 10301BE5 		ldr	r3, [fp, #-16]
+ 261 0030 073063E2 		rsb	r3, r3, #7
+ 262 0034 5233A0E1 		mov	r3, r2, asr r3
+ 263 0038 0338A0E1 		mov	r3, r3, asl #16
+ 264 003c 2338A0E1 		mov	r3, r3, lsr #16
+ 265 0040 013003E2 		and	r3, r3, #1
+ 266 0044 0338A0E1 		mov	r3, r3, asl #16
+ 267 0048 2338A0E1 		mov	r3, r3, lsr #16
+ 268 004c 0338A0E1 		mov	r3, r3, asl #16
+ 269 0050 4338A0E1 		mov	r3, r3, asr #16
+ 101:../Xilinx_src/lenval.c **** }
+ 270              		.loc 1 101 0
+ 271 0054 0300A0E1 		mov	r0, r3
+ 272 0058 00D08BE2 		add	sp, fp, #0
+ 273 005c 04B09DE4 		ldmfd	sp!, {fp}
+ 274 0060 1EFF2FE1 		bx	lr
+ 275              		.cfi_endproc
+ 276              	.LFE3:
+ 278              		.section	.text.SetBit,"ax",%progbits
+ 279              		.align	2
+ 280              		.global	SetBit
+ 282              	SetBit:
+ 283              	.LFB4:
+ 102:../Xilinx_src/lenval.c **** 
+ 103:../Xilinx_src/lenval.c **** /*****************************************************************************
+ 104:../Xilinx_src/lenval.c **** * Function:     SetBit
+ 105:../Xilinx_src/lenval.c **** * Description:  set the (byte, bit) of lv equal to val
+ 106:../Xilinx_src/lenval.c **** * Example:      SetBit("00000000",byte, 1) equals "01000000".
+ 107:../Xilinx_src/lenval.c **** * Parameters:   plv     - ptr to lenval.
+ 108:../Xilinx_src/lenval.c **** *               iByte   - the byte to get the bit from.
+ 109:../Xilinx_src/lenval.c **** *               iBit    - the bit number (0=msb).
+ 110:../Xilinx_src/lenval.c **** *               sVal    - the bit value to set.
+ 111:../Xilinx_src/lenval.c **** * Returns:      void.
+ 112:../Xilinx_src/lenval.c **** *****************************************************************************/
+ 113:../Xilinx_src/lenval.c **** void SetBit( lenVal*    plv,
+ 114:../Xilinx_src/lenval.c ****              int        iByte,
+ 115:../Xilinx_src/lenval.c ****              int        iBit,
+ 116:../Xilinx_src/lenval.c ****              short      sVal )
+ 117:../Xilinx_src/lenval.c **** {
+ 284              		.loc 1 117 0
+ 285              		.cfi_startproc
+ 286              		@ args = 0, pretend = 0, frame = 24
+ 287              		@ frame_needed = 1, uses_anonymous_args = 0
+ 288              		@ link register save eliminated.
+ 289 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 290              	.LCFI8:
+ 291              		.cfi_def_cfa_offset 4
+ 292 0004 00B08DE2 		add	fp, sp, #0
+ 293              		.cfi_offset 11, -4
+ 294              	.LCFI9:
+ 295              		.cfi_def_cfa_register 11
+ 296 0008 1CD04DE2 		sub	sp, sp, #28
+ 297 000c 10000BE5 		str	r0, [fp, #-16]
+ 298 0010 14100BE5 		str	r1, [fp, #-20]
+ 299 0014 18200BE5 		str	r2, [fp, #-24]
+ 300 0018 BA314BE1 		strh	r3, [fp, #-26]	@ movhi
+ 118:../Xilinx_src/lenval.c ****     unsigned char   ucByteVal;
+ 119:../Xilinx_src/lenval.c ****     unsigned char   ucBitMask;
+ 120:../Xilinx_src/lenval.c **** 
+ 121:../Xilinx_src/lenval.c ****     ucBitMask   = (unsigned char)(1 << ( 7 - iBit ));
+ 301              		.loc 1 121 0
+ 302 001c 18301BE5 		ldr	r3, [fp, #-24]
+ 303 0020 073063E2 		rsb	r3, r3, #7
+ 304 0024 0120A0E3 		mov	r2, #1
+ 305 0028 1233A0E1 		mov	r3, r2, asl r3
+ 306 002c 06304BE5 		strb	r3, [fp, #-6]
+ 122:../Xilinx_src/lenval.c ****     ucByteVal   = (unsigned char)(plv->val[ iByte ] & (~ucBitMask));
+ 307              		.loc 1 122 0
+ 308 0030 10201BE5 		ldr	r2, [fp, #-16]
+ 309 0034 14301BE5 		ldr	r3, [fp, #-20]
+ 310 0038 033082E0 		add	r3, r2, r3
+ 311 003c 0230D3E5 		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 312 0040 FF2003E2 		and	r2, r3, #255
+ 313 0044 06305BE5 		ldrb	r3, [fp, #-6]
+ 314 0048 0330E0E1 		mvn	r3, r3
+ 315 004c FF3003E2 		and	r3, r3, #255
+ 316 0050 FF3003E2 		and	r3, r3, #255
+ 317 0054 033002E0 		and	r3, r2, r3
+ 318 0058 FF3003E2 		and	r3, r3, #255
+ 319 005c 05304BE5 		strb	r3, [fp, #-5]
+ 123:../Xilinx_src/lenval.c **** 
+ 124:../Xilinx_src/lenval.c ****     if ( sVal )
+ 320              		.loc 1 124 0
+ 321 0060 FA315BE1 		ldrsh	r3, [fp, #-26]
+ 322 0064 000053E3 		cmp	r3, #0
+ 323 0068 0300000A 		beq	.L12
+ 125:../Xilinx_src/lenval.c ****     {
+ 126:../Xilinx_src/lenval.c ****         ucByteVal   |= ucBitMask;
+ 324              		.loc 1 126 0
+ 325 006c 05205BE5 		ldrb	r2, [fp, #-5]
+ 326 0070 06305BE5 		ldrb	r3, [fp, #-6]
+ 327 0074 033082E1 		orr	r3, r2, r3
+ 328 0078 05304BE5 		strb	r3, [fp, #-5]
+ 329              	.L12:
+ 127:../Xilinx_src/lenval.c ****     }
+ 128:../Xilinx_src/lenval.c ****     plv->val[ iByte ]   = ucByteVal;
+ 330              		.loc 1 128 0
+ 331 007c 10201BE5 		ldr	r2, [fp, #-16]
+ 332 0080 14301BE5 		ldr	r3, [fp, #-20]
+ 333 0084 033082E0 		add	r3, r2, r3
+ 334 0088 05205BE5 		ldrb	r2, [fp, #-5]
+ 335 008c 0220C3E5 		strb	r2, [r3, #2]
+ 129:../Xilinx_src/lenval.c **** }
+ 336              		.loc 1 129 0
+ 337 0090 00D08BE2 		add	sp, fp, #0
+ 338 0094 04B09DE4 		ldmfd	sp!, {fp}
+ 339 0098 1EFF2FE1 		bx	lr
+ 340              		.cfi_endproc
+ 341              	.LFE4:
+ 343              		.section	.text.addVal,"ax",%progbits
+ 344              		.align	2
+ 345              		.global	addVal
+ 347              	addVal:
+ 348              	.LFB5:
+ 130:../Xilinx_src/lenval.c **** 
+ 131:../Xilinx_src/lenval.c **** /*****************************************************************************
+ 132:../Xilinx_src/lenval.c **** * Function:     AddVal
+ 133:../Xilinx_src/lenval.c **** * Description:  add val1 to val2 and store in resVal;
+ 134:../Xilinx_src/lenval.c **** *               assumes val1 and val2  are of equal length.
+ 135:../Xilinx_src/lenval.c **** * Parameters:   plvResVal   - ptr to result.
+ 136:../Xilinx_src/lenval.c **** *               plvVal1     - ptr of addendum.
+ 137:../Xilinx_src/lenval.c **** *               plvVal2     - ptr of addendum.
+ 138:../Xilinx_src/lenval.c **** * Returns:      void.
+ 139:../Xilinx_src/lenval.c **** *****************************************************************************/
+ 140:../Xilinx_src/lenval.c **** void addVal( lenVal*    plvResVal,
+ 141:../Xilinx_src/lenval.c ****              lenVal*    plvVal1,
+ 142:../Xilinx_src/lenval.c ****              lenVal*    plvVal2 )
+ 143:../Xilinx_src/lenval.c **** {
+ 349              		.loc 1 143 0
+ 350              		.cfi_startproc
+ 351              		@ args = 0, pretend = 0, frame = 32
+ 352              		@ frame_needed = 1, uses_anonymous_args = 0
+ 353              		@ link register save eliminated.
+ 354 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 355              	.LCFI10:
+ 356              		.cfi_def_cfa_offset 4
+ 357 0004 00B08DE2 		add	fp, sp, #0
+ 358              		.cfi_offset 11, -4
+ 359              	.LCFI11:
+ 360              		.cfi_def_cfa_register 11
+ 361 0008 24D04DE2 		sub	sp, sp, #36
+ 362 000c 18000BE5 		str	r0, [fp, #-24]
+ 363 0010 1C100BE5 		str	r1, [fp, #-28]
+ 364 0014 20200BE5 		str	r2, [fp, #-32]
+ 144:../Xilinx_src/lenval.c **** 	unsigned char   ucCarry;
+ 145:../Xilinx_src/lenval.c ****     unsigned short  usSum;
+ 146:../Xilinx_src/lenval.c ****     unsigned short  usVal1;
+ 147:../Xilinx_src/lenval.c ****     unsigned short  usVal2;
+ 148:../Xilinx_src/lenval.c **** 	short           sIndex;
+ 149:../Xilinx_src/lenval.c **** 	
+ 150:../Xilinx_src/lenval.c **** 	plvResVal->len  = plvVal1->len;         /* set up length of result */
+ 365              		.loc 1 150 0
+ 366 0018 1C301BE5 		ldr	r3, [fp, #-28]
+ 367 001c B020D3E1 		ldrh	r2, [r3, #0]
+ 368 0020 18301BE5 		ldr	r3, [fp, #-24]
+ 369 0024 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 151:../Xilinx_src/lenval.c **** 	
+ 152:../Xilinx_src/lenval.c **** 	/* start at least significant bit and add bytes    */
+ 153:../Xilinx_src/lenval.c ****     ucCarry = 0;
+ 370              		.loc 1 153 0
+ 371 0028 0030A0E3 		mov	r3, #0
+ 372 002c 05304BE5 		strb	r3, [fp, #-5]
+ 154:../Xilinx_src/lenval.c ****     sIndex  = plvVal1->len;
+ 373              		.loc 1 154 0
+ 374 0030 1C301BE5 		ldr	r3, [fp, #-28]
+ 375 0034 B030D3E1 		ldrh	r3, [r3, #0]	@ movhi
+ 376 0038 B8304BE1 		strh	r3, [fp, #-8]	@ movhi
+ 155:../Xilinx_src/lenval.c ****     while ( sIndex-- )
+ 377              		.loc 1 155 0
+ 378 003c 260000EA 		b	.L14
+ 379              	.L17:
+ 156:../Xilinx_src/lenval.c ****     {
+ 157:../Xilinx_src/lenval.c **** 		usVal1  = plvVal1->val[ sIndex ];   /* i'th byte of val1 */
+ 380              		.loc 1 157 0
+ 381 0040 F8205BE1 		ldrsh	r2, [fp, #-8]
+ 382 0044 1C101BE5 		ldr	r1, [fp, #-28]
+ 383 0048 0230A0E3 		mov	r3, #2
+ 384 004c 022081E0 		add	r2, r1, r2
+ 385 0050 033082E0 		add	r3, r2, r3
+ 386 0054 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 387 0058 BA304BE1 		strh	r3, [fp, #-10]	@ movhi
+ 158:../Xilinx_src/lenval.c **** 		usVal2  = plvVal2->val[ sIndex ];   /* i'th byte of val2 */
+ 388              		.loc 1 158 0
+ 389 005c F8205BE1 		ldrsh	r2, [fp, #-8]
+ 390 0060 20101BE5 		ldr	r1, [fp, #-32]
+ 391 0064 0230A0E3 		mov	r3, #2
+ 392 0068 022081E0 		add	r2, r1, r2
+ 393 006c 033082E0 		add	r3, r2, r3
+ 394 0070 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 395 0074 BC304BE1 		strh	r3, [fp, #-12]	@ movhi
+ 159:../Xilinx_src/lenval.c **** 		
+ 160:../Xilinx_src/lenval.c **** 		/* add the two bytes plus carry from previous addition */
+ 161:../Xilinx_src/lenval.c **** 		usSum   = (unsigned short)( usVal1 + usVal2 + ucCarry );
+ 396              		.loc 1 161 0
+ 397 0078 BA205BE1 		ldrh	r2, [fp, #-10]	@ movhi
+ 398 007c BC305BE1 		ldrh	r3, [fp, #-12]	@ movhi
+ 399 0080 033082E0 		add	r3, r2, r3
+ 400 0084 0338A0E1 		mov	r3, r3, asl #16
+ 401 0088 2328A0E1 		mov	r2, r3, lsr #16
+ 402 008c 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 403 0090 0338A0E1 		mov	r3, r3, asl #16
+ 404 0094 2338A0E1 		mov	r3, r3, lsr #16
+ 405 0098 033082E0 		add	r3, r2, r3
+ 406 009c BE304BE1 		strh	r3, [fp, #-14]	@ movhi
+ 162:../Xilinx_src/lenval.c **** 		
+ 163:../Xilinx_src/lenval.c **** 		/* set up carry for next byte */
+ 164:../Xilinx_src/lenval.c **** 		ucCarry = (unsigned char)( ( usSum > 255 ) ? 1 : 0 );
+ 407              		.loc 1 164 0
+ 408 00a0 BE305BE1 		ldrh	r3, [fp, #-14]
+ 409 00a4 FF0053E3 		cmp	r3, #255
+ 410 00a8 0100009A 		bls	.L15
+ 411              		.loc 1 164 0 is_stmt 0 discriminator 1
+ 412 00ac 0130A0E3 		mov	r3, #1
+ 413 00b0 000000EA 		b	.L16
+ 414              	.L15:
+ 415              		.loc 1 164 0 discriminator 2
+ 416 00b4 0030A0E3 		mov	r3, #0
+ 417              	.L16:
+ 418              		.loc 1 164 0 discriminator 3
+ 419 00b8 05304BE5 		strb	r3, [fp, #-5]
+ 165:../Xilinx_src/lenval.c **** 		
+ 166:../Xilinx_src/lenval.c ****         /* set the i'th byte of the result */
+ 167:../Xilinx_src/lenval.c **** 		plvResVal->val[ sIndex ]    = (unsigned char)usSum;
+ 420              		.loc 1 167 0 is_stmt 1 discriminator 3
+ 421 00bc F8105BE1 		ldrsh	r1, [fp, #-8]
+ 422 00c0 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
+ 423 00c4 FF2003E2 		and	r2, r3, #255
+ 424 00c8 18001BE5 		ldr	r0, [fp, #-24]
+ 425 00cc 0230A0E3 		mov	r3, #2
+ 426 00d0 011080E0 		add	r1, r0, r1
+ 427 00d4 033081E0 		add	r3, r1, r3
+ 428 00d8 0020C3E5 		strb	r2, [r3, #0]
+ 429              	.L14:
+ 155:../Xilinx_src/lenval.c ****     while ( sIndex-- )
+ 430              		.loc 1 155 0 discriminator 1
+ 431 00dc F8305BE1 		ldrsh	r3, [fp, #-8]
+ 432 00e0 000053E3 		cmp	r3, #0
+ 433 00e4 0030A003 		moveq	r3, #0
+ 434 00e8 0130A013 		movne	r3, #1
+ 435 00ec FF3003E2 		and	r3, r3, #255
+ 436 00f0 B8205BE1 		ldrh	r2, [fp, #-8]	@ movhi
+ 437 00f4 012042E2 		sub	r2, r2, #1
+ 438 00f8 B8204BE1 		strh	r2, [fp, #-8]	@ movhi
+ 439 00fc 000053E3 		cmp	r3, #0
+ 440 0100 CEFFFF1A 		bne	.L17
+ 168:../Xilinx_src/lenval.c ****     }
+ 169:../Xilinx_src/lenval.c **** }
+ 441              		.loc 1 169 0
+ 442 0104 00D08BE2 		add	sp, fp, #0
+ 443 0108 04B09DE4 		ldmfd	sp!, {fp}
+ 444 010c 1EFF2FE1 		bx	lr
+ 445              		.cfi_endproc
+ 446              	.LFE5:
+ 448              		.section	.text.readVal,"ax",%progbits
+ 449              		.align	2
+ 450              		.global	readVal
+ 452              	readVal:
+ 453              	.LFB6:
+ 170:../Xilinx_src/lenval.c **** 
+ 171:../Xilinx_src/lenval.c **** /*****************************************************************************
+ 172:../Xilinx_src/lenval.c **** * Function:     readVal
+ 173:../Xilinx_src/lenval.c **** * Description:  read from XSVF numBytes bytes of data into x.
+ 174:../Xilinx_src/lenval.c **** * Parameters:   plv         - ptr to lenval in which to put the bytes read.
+ 175:../Xilinx_src/lenval.c **** *               sNumBytes   - the number of bytes to read.
+ 176:../Xilinx_src/lenval.c **** * Returns:      void.
+ 177:../Xilinx_src/lenval.c **** *****************************************************************************/
+ 178:../Xilinx_src/lenval.c **** void readVal( lenVal*   plv,
+ 179:../Xilinx_src/lenval.c ****               short     sNumBytes )
+ 180:../Xilinx_src/lenval.c **** {
+ 454              		.loc 1 180 0
+ 455              		.cfi_startproc
+ 456              		@ args = 0, pretend = 0, frame = 16
+ 457              		@ frame_needed = 1, uses_anonymous_args = 0
+ 458 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 459              	.LCFI12:
+ 460              		.cfi_def_cfa_offset 8
+ 461 0004 04B08DE2 		add	fp, sp, #4
+ 462              		.cfi_offset 14, -4
+ 463              		.cfi_offset 11, -8
+ 464              	.LCFI13:
+ 465              		.cfi_def_cfa 11, 4
+ 466 0008 10D04DE2 		sub	sp, sp, #16
+ 467 000c 10000BE5 		str	r0, [fp, #-16]
+ 468 0010 0130A0E1 		mov	r3, r1
+ 469 0014 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+ 181:../Xilinx_src/lenval.c ****     unsigned char*  pucVal;
+ 182:../Xilinx_src/lenval.c **** 	
+ 183:../Xilinx_src/lenval.c ****     plv->len    = sNumBytes;        /* set the length of the lenVal        */
+ 470              		.loc 1 183 0
+ 471 0018 10301BE5 		ldr	r3, [fp, #-16]
+ 472 001c B2215BE1 		ldrh	r2, [fp, #-18]	@ movhi
+ 473 0020 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 184:../Xilinx_src/lenval.c ****     for ( pucVal = plv->val; sNumBytes; --sNumBytes, ++pucVal )
+ 474              		.loc 1 184 0
+ 475 0024 10301BE5 		ldr	r3, [fp, #-16]
+ 476 0028 023083E2 		add	r3, r3, #2
+ 477 002c 08300BE5 		str	r3, [fp, #-8]
+ 478 0030 070000EA 		b	.L19
+ 479              	.L20:
+ 185:../Xilinx_src/lenval.c ****     {
+ 186:../Xilinx_src/lenval.c ****         /* read a byte of data into the lenVal */
+ 187:../Xilinx_src/lenval.c **** 		readByte( pucVal );
+ 480              		.loc 1 187 0 discriminator 2
+ 481 0034 08001BE5 		ldr	r0, [fp, #-8]
+ 482 0038 FEFFFFEB 		bl	readByte
+ 184:../Xilinx_src/lenval.c ****     for ( pucVal = plv->val; sNumBytes; --sNumBytes, ++pucVal )
+ 483              		.loc 1 184 0 discriminator 2
+ 484 003c B2315BE1 		ldrh	r3, [fp, #-18]	@ movhi
+ 485 0040 013043E2 		sub	r3, r3, #1
+ 486 0044 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+ 487 0048 08301BE5 		ldr	r3, [fp, #-8]
+ 488 004c 013083E2 		add	r3, r3, #1
+ 489 0050 08300BE5 		str	r3, [fp, #-8]
+ 490              	.L19:
+ 184:../Xilinx_src/lenval.c ****     for ( pucVal = plv->val; sNumBytes; --sNumBytes, ++pucVal )
+ 491              		.loc 1 184 0 is_stmt 0 discriminator 1
+ 492 0054 F2315BE1 		ldrsh	r3, [fp, #-18]
+ 493 0058 000053E3 		cmp	r3, #0
+ 494 005c F4FFFF1A 		bne	.L20
+ 188:../Xilinx_src/lenval.c ****     }
+ 189:../Xilinx_src/lenval.c **** }
+ 495              		.loc 1 189 0 is_stmt 1
+ 496 0060 04D04BE2 		sub	sp, fp, #4
+ 497 0064 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 498              		.cfi_endproc
+ 499              	.LFE6:
+ 501              		.text
+ 502              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 lenval.c
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:22     .text.value:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:25     .text.value:00000000 value
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:88     .text.initLenVal:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:91     .text.initLenVal:00000000 initLenVal
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:125    .text.EqualLenVal:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:128    .text.EqualLenVal:00000000 EqualLenVal
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:233    .text.RetBit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:236    .text.RetBit:00000000 RetBit
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:279    .text.SetBit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:282    .text.SetBit:00000000 SetBit
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:344    .text.addVal:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:347    .text.addVal:00000000 addVal
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:449    .text.readVal:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccZtRsAM.s:452    .text.readVal:00000000 readVal
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+readByte

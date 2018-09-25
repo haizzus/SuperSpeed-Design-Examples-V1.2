@@ -1,0 +1,252 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"StartUp.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.rodata
+  22              		.align	2
+  23              	.LC0:
+  24 0000 31313A43 		.ascii	"11:CDC_Interface\000"
+  24      44435F49 
+  24      6E746572 
+  24      66616365 
+  24      00
+  25 0011 000000   		.section	.text.CyFxApplicationDefine,"ax",%progbits
+  26              		.align	2
+  27              		.global	CyFxApplicationDefine
+  29              	CyFxApplicationDefine:
+  30              	.LFB0:
+  31              		.file 1 "../StartUp.c"
+   1:../StartUp.c  **** /*
+   2:../StartUp.c  ****  * StartUp.c
+   3:../StartUp.c  ****  *
+   4:../StartUp.c  ****  *      Author: john@USB-By-Example.com
+   5:../StartUp.c  ****  */
+   6:../StartUp.c  **** 
+   7:../StartUp.c  **** #include "Application.h"
+   8:../StartUp.c  **** 
+   9:../StartUp.c  **** extern void ApplicationThread_Entry (uint32_t Value);
+  10:../StartUp.c  **** extern CyU3PThread ApplicationThread;
+  11:../StartUp.c  **** 
+  12:../StartUp.c  **** // ApplicationDefine function called by RTOS to startup the application threads
+  13:../StartUp.c  **** void CyFxApplicationDefine(void)
+  14:../StartUp.c  **** {
+  32              		.loc 1 14 0
+  33              		.cfi_startproc
+  34              		@ args = 0, pretend = 0, frame = 8
+  35              		@ frame_needed = 1, uses_anonymous_args = 0
+  36 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39 0004 04B08DE2 		add	fp, sp, #4
+  40              		.cfi_offset 14, -4
+  41              		.cfi_offset 11, -8
+  42              	.LCFI1:
+  43              		.cfi_def_cfa 11, 4
+  44 0008 28D04DE2 		sub	sp, sp, #40
+  15:../StartUp.c  ****     void *StackPtr = NULL;
+  45              		.loc 1 15 0
+  46 000c 0030A0E3 		mov	r3, #0
+  47 0010 08300BE5 		str	r3, [fp, #-8]
+  16:../StartUp.c  ****     uint32_t Status = CY_U3P_SUCCESS;
+  48              		.loc 1 16 0
+  49 0014 0030A0E3 		mov	r3, #0
+  50 0018 0C300BE5 		str	r3, [fp, #-12]
+  17:../StartUp.c  **** 
+  18:../StartUp.c  ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+  51              		.loc 1 18 0
+  52 001c 010AA0E3 		mov	r0, #4096
+  53 0020 FEFFFFEB 		bl	CyU3PMemAlloc
+  54 0024 08000BE5 		str	r0, [fp, #-8]
+  19:../StartUp.c  ****     Status = CyU3PThreadCreate (&ApplicationThread, // Handle to my Application Thread
+  55              		.loc 1 19 0
+  56 0028 08301BE5 		ldr	r3, [fp, #-8]
+  57 002c 00308DE5 		str	r3, [sp, #0]
+  58 0030 013AA0E3 		mov	r3, #4096
+  59 0034 04308DE5 		str	r3, [sp, #4]
+  60 0038 0830A0E3 		mov	r3, #8
+  61 003c 08308DE5 		str	r3, [sp, #8]
+  62 0040 0830A0E3 		mov	r3, #8
+  63 0044 0C308DE5 		str	r3, [sp, #12]
+  64 0048 0030A0E3 		mov	r3, #0
+  65 004c 10308DE5 		str	r3, [sp, #16]
+  66 0050 0130A0E3 		mov	r3, #1
+  67 0054 14308DE5 		str	r3, [sp, #20]
+  68 0058 D430A0E3 		mov	r3, #212
+  69 005c 18308DE5 		str	r3, [sp, #24]
+  70 0060 28009FE5 		ldr	r0, .L4
+  71 0064 28109FE5 		ldr	r1, .L4+4
+  72 0068 28209FE5 		ldr	r2, .L4+8
+  73 006c 2A30A0E3 		mov	r3, #42
+  74 0070 FEFFFFEB 		bl	_txe_thread_create
+  75 0074 0C000BE5 		str	r0, [fp, #-12]
+  20:../StartUp.c  ****             "11:CDC_Interface",                		// Thread ID and name
+  21:../StartUp.c  ****             ApplicationThread_Entry,     			// Thread entry function
+  22:../StartUp.c  ****             42,                             		// Parameter passed to Thread
+  23:../StartUp.c  ****             StackPtr,                       		// Pointer to the allocated thread stack
+  24:../StartUp.c  ****             APPLICATION_THREAD_STACK,               // Allocated thread stack size
+  25:../StartUp.c  ****             APPLICATION_THREAD_PRIORITY,            // Thread priority
+  26:../StartUp.c  ****             APPLICATION_THREAD_PRIORITY,            // = Thread priority so no preemption
+  27:../StartUp.c  ****             CYU3P_NO_TIME_SLICE,            		// Time slice no supported
+  28:../StartUp.c  ****             CYU3P_AUTO_START                		// Start the thread immediately
+  29:../StartUp.c  ****             );
+  30:../StartUp.c  **** 
+  31:../StartUp.c  ****     if (Status != CY_U3P_SUCCESS)
+  76              		.loc 1 31 0
+  77 0078 0C301BE5 		ldr	r3, [fp, #-12]
+  78 007c 000053E3 		cmp	r3, #0
+  79 0080 0000000A 		beq	.L1
+  80              	.L3:
+  32:../StartUp.c  ****     {
+  33:../StartUp.c  ****         /* Thread creation failed with the Status = error code */
+  34:../StartUp.c  **** 
+  35:../StartUp.c  ****         /* Add custom recovery or debug actions here */
+  36:../StartUp.c  **** 
+  37:../StartUp.c  ****         /* Application cannot continue. Loop indefinitely */
+  38:../StartUp.c  ****         while(1);
+  81              		.loc 1 38 0 discriminator 1
+  82 0084 FEFFFFEA 		b	.L3
+  83              	.L1:
+  39:../StartUp.c  ****     }
+  40:../StartUp.c  **** }
+  84              		.loc 1 40 0
+  85 0088 04D04BE2 		sub	sp, fp, #4
+  86 008c 0088BDE8 		ldmfd	sp!, {fp, pc}
+  87              	.L5:
+  88              		.align	2
+  89              	.L4:
+  90 0090 00000000 		.word	ApplicationThread
+  91 0094 00000000 		.word	.LC0
+  92 0098 00000000 		.word	ApplicationThread_Entry
+  93              		.cfi_endproc
+  94              	.LFE0:
+  96              		.section	.text.main,"ax",%progbits
+  97              		.align	2
+  98              		.global	main
+ 100              	main:
+ 101              	.LFB1:
+  41:../StartUp.c  **** 
+  42:../StartUp.c  **** 
+  43:../StartUp.c  **** // Main sets up the CPU environment the starts the RTOS
+  44:../StartUp.c  **** int main (void)
+  45:../StartUp.c  **** {
+ 102              		.loc 1 45 0
+ 103              		.cfi_startproc
+ 104              		@ args = 0, pretend = 0, frame = 48
+ 105              		@ frame_needed = 1, uses_anonymous_args = 0
+ 106 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 107              	.LCFI2:
+ 108              		.cfi_def_cfa_offset 8
+ 109 0004 04B08DE2 		add	fp, sp, #4
+ 110              		.cfi_offset 14, -4
+ 111              		.cfi_offset 11, -8
+ 112              	.LCFI3:
+ 113              		.cfi_def_cfa 11, 4
+ 114 0008 30D04DE2 		sub	sp, sp, #48
+  46:../StartUp.c  ****     CyU3PIoMatrixConfig_t io_cfg;
+  47:../StartUp.c  ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 115              		.loc 1 47 0
+ 116 000c 0030A0E3 		mov	r3, #0
+ 117 0010 08300BE5 		str	r3, [fp, #-8]
+  48:../StartUp.c  **** 
+  49:../StartUp.c  ****     Status = CyU3PDeviceInit(NULL);		// Setup with default clock parameters
+ 118              		.loc 1 49 0
+ 119 0014 0000A0E3 		mov	r0, #0
+ 120 0018 FEFFFFEB 		bl	CyU3PDeviceInit
+ 121 001c 08000BE5 		str	r0, [fp, #-8]
+  50:../StartUp.c  ****     if (Status == CY_U3P_SUCCESS)
+ 122              		.loc 1 50 0
+ 123 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 124 0024 000053E3 		cmp	r3, #0
+ 125 0028 1800001A 		bne	.L7
+  51:../StartUp.c  ****     {
+  52:../StartUp.c  **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);
+ 126              		.loc 1 52 0
+ 127 002c 0100A0E3 		mov	r0, #1
+ 128 0030 0110A0E3 		mov	r1, #1
+ 129 0034 0120A0E3 		mov	r2, #1
+ 130 0038 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 131 003c 08000BE5 		str	r0, [fp, #-8]
+  53:../StartUp.c  **** 		if (Status == CY_U3P_SUCCESS)
+ 132              		.loc 1 53 0
+ 133 0040 08301BE5 		ldr	r3, [fp, #-8]
+ 134 0044 000053E3 		cmp	r3, #0
+ 135 0048 1000001A 		bne	.L7
+  54:../StartUp.c  **** 		{
+  55:../StartUp.c  **** 			CyU3PMemSet((uint8_t *)&io_cfg, 0, sizeof(io_cfg));
+ 136              		.loc 1 55 0
+ 137 004c 30304BE2 		sub	r3, fp, #48
+ 138 0050 0300A0E1 		mov	r0, r3
+ 139 0054 0010A0E3 		mov	r1, #0
+ 140 0058 2820A0E3 		mov	r2, #40
+ 141 005c FEFFFFEB 		bl	CyU3PMemSet
+  56:../StartUp.c  **** //r			io_cfg.isDQ32Bit = CyFalse;
+  57:../StartUp.c  **** //r			io_cfg.s0Mode 	 = CY_U3P_SPORT_INACTIVE;
+  58:../StartUp.c  **** //r			io_cfg.s1Mode	 = CY_U3P_SPORT_INACTIVE;
+  59:../StartUp.c  **** 			io_cfg.useUart   = CyTrue;
+ 142              		.loc 1 59 0
+ 143 0060 0130A0E3 		mov	r3, #1
+ 144 0064 2C300BE5 		str	r3, [fp, #-44]
+  60:../StartUp.c  **** //r			io_cfg.useI2C    = CyFalse;
+  61:../StartUp.c  **** //r			io_cfg.useI2S    = CyFalse;
+  62:../StartUp.c  **** //r			io_cfg.useSpi    = CyFalse;
+  63:../StartUp.c  **** 			io_cfg.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+ 145              		.loc 1 63 0
+ 146 0068 0130A0E3 		mov	r3, #1
+ 147 006c 1A304BE5 		strb	r3, [fp, #-26]
+  64:../StartUp.c  **** //r			io_cfg.gpioSimpleEn[0]  = 0;
+  65:../StartUp.c  **** //r			io_cfg.gpioSimpleEn[1]  = 0;
+  66:../StartUp.c  **** //r			io_cfg.gpioComplexEn[0] = 0;
+  67:../StartUp.c  **** //r			io_cfg.gpioComplexEn[1] = 0;
+  68:../StartUp.c  **** 			Status = CyU3PDeviceConfigureIOMatrix(&io_cfg);
+ 148              		.loc 1 68 0
+ 149 0070 30304BE2 		sub	r3, fp, #48
+ 150 0074 0300A0E1 		mov	r0, r3
+ 151 0078 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 152 007c 08000BE5 		str	r0, [fp, #-8]
+  69:../StartUp.c  **** 			if (Status == CY_U3P_SUCCESS) CyU3PKernelEntry();	// Start RTOS, this does not return
+ 153              		.loc 1 69 0
+ 154 0080 08301BE5 		ldr	r3, [fp, #-8]
+ 155 0084 000053E3 		cmp	r3, #0
+ 156 0088 0000001A 		bne	.L7
+ 157              		.loc 1 69 0 is_stmt 0 discriminator 1
+ 158 008c FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 159              	.L7:
+  70:../StartUp.c  **** 		}
+  71:../StartUp.c  **** 	}
+  72:../StartUp.c  ****     // Get here on a failure, can't recover, just hang here
+  73:../StartUp.c  ****     while (1);
+ 160              		.loc 1 73 0 is_stmt 1 discriminator 1
+ 161 0090 FEFFFFEA 		b	.L7
+ 162              		.cfi_endproc
+ 163              	.LFE1:
+ 165              		.text
+ 166              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 StartUp.c
+C:\Users\John\AppData\Local\Temp\ccCPGdlS.s:22     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccCPGdlS.s:26     .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccCPGdlS.s:29     .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\ccCPGdlS.s:90     .text.CyFxApplicationDefine:00000090 $d
+C:\Users\John\AppData\Local\Temp\ccCPGdlS.s:97     .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccCPGdlS.s:100    .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PMemAlloc
+_txe_thread_create
+ApplicationThread
+ApplicationThread_Entry
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PMemSet
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

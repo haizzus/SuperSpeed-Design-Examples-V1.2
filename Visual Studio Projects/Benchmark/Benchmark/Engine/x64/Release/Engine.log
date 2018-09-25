@@ -1,0 +1,40 @@
+﻿Build started 9/23/2015 3:49:36 PM.
+     1>Project "C:\Projects\FX3 Issues\Benchmark\Benchmark\Engine\Engine.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.0\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _WINDLL /D _MBCS /EHa /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc110.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /errorReport:prompt /clr:nostdlib AbstractConsumer.cpp AbstractProducer.cpp FileConsumer.cpp FileProducer.cpp FixedMemoryProducer.cpp OverlappedIO.cpp RecycleBinConsumer.cpp USBConsumer.cpp USBEngine.cpp USBProducer.cpp
+         AbstractConsumer.cpp
+         AbstractProducer.cpp
+         FileConsumer.cpp
+         FileProducer.cpp
+         FixedMemoryProducer.cpp
+         OverlappedIO.cpp
+         RecycleBinConsumer.cpp
+         USBConsumer.cpp
+         USBEngine.cpp
+         USBProducer.cpp
+         Generating Code...
+     1>c:\program files (x86)\windows kits\8.0\include\um\winnt.h(2643): warning C4793: '_InterlockedAdd64' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\winnt.h(2643): warning C4793: '_InterlockedAdd64' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\CL.exe /c /Zi /clr /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _WINDLL /D _MBCS /EHa /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc110.pdb" /TP /errorReport:prompt "C:\Users\jega\AppData\Local\Temp\.NETFramework,Version=v4.0.AssemblyAttributes.cpp"
+         .NETFramework,Version=v4.0.AssemblyAttributes.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\x64\Release\Engine.dll" /NOLOGO CyAPI.lib setupapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\x64\Release\Engine.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X64 /DLL x64\Release\AbstractConsumer.obj
+         x64\Release\AbstractProducer.obj
+         x64\Release\FileConsumer.obj
+         x64\Release\FileProducer.obj
+         x64\Release\FixedMemoryProducer.obj
+         x64\Release\OverlappedIO.obj
+         x64\Release\RecycleBinConsumer.obj
+         x64\Release\USBConsumer.obj
+         x64\Release\USBEngine.obj
+         x64\Release\USBProducer.obj
+         "x64\Release\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
+         Engine.vcxproj -> C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\x64\Release\Engine.dll
+     1>Done Building Project "C:\Projects\FX3 Issues\Benchmark\Benchmark\Engine\Engine.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:11.23

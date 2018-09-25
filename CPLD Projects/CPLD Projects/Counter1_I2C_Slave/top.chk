@@ -1,0 +1,154 @@
+
+----------------------------------------
+|  P a r t i t i o n    S u c c e e d  |
+----------------------------------------
+0 Group(s)
+
+GCLK0: 13=PCLK.p
+----------------- B l o c k 0 ------------------
+PLApt(45/56), Fanin(34/38), Clk(1/3), Bct(2/4), Pin(5/10), Mcell(16/16)
+PLApts[45/53] 53 85 95 96 1 2 98 106 111 78 90 79 80 89 93 81 84 107 103 31 104 108 86 109 110 32 115 97 105 112 87 88 82 83 94 100 114 52 101 102 116 117 () 33 () () () () () 91 () () 34
+Fanins[34] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<1>.n DQ<2>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n i2c_slave/data_in<0>.n i2c_slave/data_in<1>.n i2c_slave/data_in<2>.n i2c_slave/data_in<3>.n i2c_slave/data_in<4>.n i2c_slave/data_in<5>.n i2c_slave/data_in<6>.n i2c_slave/data_in<7>.n i2c_slave/index<0>.n i2c_slave/index<1>.n i2c_slave/index<2>.n i2c_slave/index<3>.n i2c_slave/latch_data_in.n i2c_slave/present_state_FSM_FFd1.n i2c_slave/present_state_FSM_FFd2.n i2c_slave/shift_data_in.n i2c_slave/start.n out_en.n CTRL<10>.p I2C_SCL.p
+clk[1] PCLK 
+CTC: (pt=1) I2C_SCL ;
+CTR: (pt=2) CTRL<10> ;
+CTS: 
+CTE: 
+vref: [0]
+Signal[17] [DQ<14>(115),DQ<14>(4)] [DQ<13>(112),DQ<13>(7)] [DQ<12>(106),DQ<12>(9)] [DQ<11>(104),DQ<11>(11)]  
+           [CTRL<10>(6)] [I2C_LEDs<1>(114)] [i2c_slave/data_in<2>(110)] [i2c_slave/shift_data_in(109)]  
+           [i2c_slave/present_state_FSM_FFd2(108)] [out_en(107)] [i2c_slave/index<3>(102)]  
+           [i2c_slave/present_state_FSM_FFd1(116)] [ack_out(113)] [i2c_slave/index<2>(111)]  
+           [i2c_slave/latch_data_out(105)] [i2c_slave/index<1>(103)] [i2c_slave/latch_data_in(101)] 
+Signal[17] [ 0: i2c_slave/latch_data_in(101) (13)  ][ 1: i2c_slave/index<3>(102)  ][ 2:  
+           i2c_slave/index<1>(103) (12)  ][ 3: DQ<11>(104) DQ<11>(11)  ][ 4: i2c_slave/latch_data_out(105)  
+           (10)  ][ 5: DQ<12>(106) DQ<12>(9)  ][ 6: out_en(107)  ][ 7: i2c_slave/present_state_FSM_FFd2(108)  
+            ][ 8: i2c_slave/shift_data_in(109)  ][ 9: i2c_slave/data_in<2>(110)  ][ 10:  
+           i2c_slave/index<2>(111) (8)  ][ 11: DQ<13>(112) DQ<13>(7)  ][ 12: ack_out(113) CTRL<10>(6)  ] 
+           [ 13: I2C_LEDs<1>(114)  ][ 14: DQ<14>(115) DQ<14>(4)  ][ 15:  
+           i2c_slave/present_state_FSM_FFd1(116) (3)  ]
+----------------- B l o c k 1 ------------------
+PLApt(35/56), Fanin(38/38), Clk(1/3), Bct(3/4), Pin(2/10), Mcell(16/16)
+PLApts[35/56] 55 56 58 59 1 2 2 54 57 60 52 99 113 69 70 71 72 73 74 91 75 76 52 77 () 91 () () 91 () () 52 () () 91 () () 52 () () 52 () () 91 () () 91 () () 30 () () 91 () () 52
+Fanins[38] DQ<0>.n DQ<1>.n DQ<2>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n i2c_slave/data_in<0>.n i2c_slave/data_in<2>.n i2c_slave/data_in<3>.n i2c_slave/data_in<4>.n i2c_slave/data_in<5>.n i2c_slave/data_in<6>.n i2c_slave/data_in<7>.n i2c_slave/gpio_input<0>.n i2c_slave/gpio_input<1>.n i2c_slave/gpio_input<2>.n i2c_slave/gpio_input<3>.n i2c_slave/gpio_input<4>.n i2c_slave/gpio_input<5>.n i2c_slave/gpio_input<6>.n i2c_slave/gpio_input<7>.n i2c_slave/index<0>.n i2c_slave/index<1>.n i2c_slave/index<2>.n i2c_slave/index<3>.n i2c_slave/latch_data_in.n i2c_slave/present_state_FSM_FFd1.n i2c_slave/present_state_FSM_FFd2.n i2c_slave/shift_data_in.n i2c_slave/start.n out_en.n sda_out.n CTRL<10>.p I2C_SCL.p
+clk[1] PCLK 
+CTC: (pt=1) I2C_SCL ;
+CTR: (pt=2) CTRL<10> ;
+CTS: (pt=2) CTRL<10> ;
+CTE: 
+vref: [0]
+Signal[17] [DQ<10>(130),DQ<10>(23)] [PCLK(22)] [I2C_LEDs<3>(128)] [i2c_slave/data_in<4>(126)]  
+           [I2C_LEDs<4>(125)] [i2c_slave/data_in<5>(124)] [I2C_LEDs<6>(123)] [i2c_slave/data_in<7>(117)]  
+           [i2c_slave/data_in<1>(132)] [I2C_LEDs<0>(131)] [I2C_LEDs<2>(129)] [i2c_slave/data_in<3>(127)]  
+           [I2C_LEDs<5>(122)] [i2c_slave/data_in<6>(121)] [I2C_LEDs<7>(120)] [i2c_slave/index<0>(119)]  
+           [sda_out(118)] 
+Signal[17] [ 0: i2c_slave/data_in<7>(117)  ][ 1: sda_out(118) (14)  ][ 2: i2c_slave/index<0>(119) (15)  ] 
+           [ 3: I2C_LEDs<7>(120) (16)  ][ 4: i2c_slave/data_in<6>(121) (17)  ][ 5: I2C_LEDs<5>(122) (18)  ] 
+           [ 6: I2C_LEDs<6>(123)  ][ 7: i2c_slave/data_in<5>(124)  ][ 8: I2C_LEDs<4>(125)  ][ 9:  
+           i2c_slave/data_in<4>(126)  ][ 10: i2c_slave/data_in<3>(127) (19)  ][ 11: I2C_LEDs<3>(128)  ][ 12:  
+           I2C_LEDs<2>(129) PCLK(22)  ][ 13: DQ<10>(130) DQ<10>(23)  ][ 14: I2C_LEDs<0>(131) (24)  ][ 15:  
+           i2c_slave/data_in<1>(132) (27)  ]
+----------------- B l o c k 2 ------------------
+PLApt(14/56), Fanin(38/38), Clk(1/3), Bct(2/4), Pin(10/11), Mcell(11/16)
+PLApts[14/50] 20 67 23 68 1 2 () () () () () () () 35 () () () () () () () () 51 () () 50 () () 49 () () () () () () () () () () () 48 () () 93 () () 47 () () 46
+Fanins[38] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<17>.n DQ<18>.n DQ<19>.n DQ<1>.n DQ<20>.n DQ<21>.n DQ<22>.n DQ<23>.n DQ<24>.n DQ<25>.n DQ<26>.n DQ<27>.n DQ<28>.n DQ<29>.n DQ<2>.n DQ<30>.n DQ<31>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n I2C_LEDs<6>.n I2C_LEDs<7>.n i2c_slave/start.n Button<7>.p CTRL<10>.p I2C_SCL.p
+clk[1] PCLK 
+CTC: (pt=1) I2C_SCL ;
+CTR: (pt=2) CTRL<10> ;
+CTS: 
+CTE: 
+vref: [0]
+Signal[11] [DQ<31>(137),DQ<31>(97)] [DQ<30>(138),DQ<30>(96)] [DQ<29>(139),DQ<29>(95)]  
+           [DQ<28>(143),DQ<28>(94)] [DQ<27>(145),DQ<27>(93)] [DQ<26>(146),DQ<26>(92)]  
+           [DQ<15>(134),DQ<15>(2)] [LED<6>(148),LED<6>(90)] [LED<7>(147),LED<7>(91)] [INT(136),INT(99)]  
+           [i2c_slave/start_rst(144)] 
+Signal[11] [ 0:  ][ 1: DQ<15>(134) DQ<15>(2)  ][ 2: (1)  ][ 3: INT(136) INT(99)  ][ 4: DQ<31>(137)  
+           DQ<31>(97)  ][ 5: DQ<30>(138) DQ<30>(96)  ][ 6: DQ<29>(139) DQ<29>(95)  ][ 7:  ][ 8:  ][ 9:  ] 
+           [ 10: DQ<28>(143) DQ<28>(94)  ][ 11: i2c_slave/start_rst(144)  ][ 12: DQ<27>(145) DQ<27>(93)  ] 
+           [ 13: DQ<26>(146) DQ<26>(92)  ][ 14: LED<7>(147) LED<7>(91)  ][ 15: LED<6>(148) LED<6>(90)  ]
+----------------- B l o c k 3 ------------------
+PLApt(12/56), Fanin(17/38), Clk(1/3), Bct(2/4), Pin(7/11), Mcell(7/16)
+PLApts[12/53] 118 119 () () 1 2 () () () () 29 () () () () () () () () 52 120 () 3 () () 28 () () () () () () () () () () () () () () 27 () () () () () 26 () () () () () 25
+Fanins[17] DQ<0>.n DQ<1>.n DQ<2>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n ack_out.n i2c_slave/shift_data_in.n i2c_slave/start_rst.n out_en.n sda_out.n CTRL<10>.p I2C_SCL.p I2C_SDA.p
+clk[1] PCLK 
+CTC: (pt=1) I2C_SCL ;
+CTR: (pt=2) CTRL<10> ;
+CTS: 
+CTE: 
+vref: [0]
+Signal[ 9] [DQ<9>(149),DQ<9>(28)] [DQ<8>(154),DQ<8>(32)] [DQ<7>(159),DQ<7>(34)] [DQ<6>(161),DQ<6>(36)]  
+           [DQ<5>(163),DQ<5>(39)] [I2C_SDA(152),i2c_slave/data_in<0>,I2C_SDA(29)]  
+           [i2c_slave/start,I2C_SCL(30)] 
+Signal[ 9] [ 0: DQ<9>(149) DQ<9>(28)  ][ 1:  ][ 2:  ][ 3: I2C_SDA(152) i2c_slave/data_in<0>(152) I2C_SDA(29)  
+            ][ 4: i2c_slave/start(153) I2C_SCL(30)  ][ 5: DQ<8>(154) DQ<8>(32)  ][ 6: (33)  ][ 7:  ][ 8:  ] 
+           [ 9:  ][ 10: DQ<7>(159) DQ<7>(34)  ][ 11: (35)  ][ 12: DQ<6>(161) DQ<6>(36)  ][ 13: (37)  ][ 14:  
+           DQ<5>(163) DQ<5>(39)  ][ 15: (40)  ]
+----------------- B l o c k 4 ------------------
+PLApt(9/56), Fanin(3/38), Clk(0/3), Bct(2/4), Pin(8/10), Mcell(8/16)
+PLApts[9/44] () () () () 1 2 () () () () 92 () () 92 () () 92 () () () () () 92 () () () () () 92 () () () () () () () () () () () 92 () () 92
+Fanins[ 3] i2c_slave/latch_data_out.n CTRL<10>.p I2C_SCL.p
+clk[0] 
+CTC: (pt=1) I2C_SCL ;
+CTR: (pt=2) CTRL<10> ;
+CTS: 
+CTE: 
+vref: [0]
+Signal[15] [FlashCS_n(177),FlashCS_n(73)] [i2c_slave/gpio_input<0>,Button<0>(72)]  
+           [i2c_slave/gpio_input<1>,Button<1>(71)] [i2c_slave/gpio_input<2>,Button<2>(70)]  
+           [i2c_slave/gpio_input<3>,Button<3>(68)] [i2c_slave/gpio_input<4>,Button<4>(67)]  
+           [i2c_slave/gpio_input<5>,Button<5>(66)] [i2c_slave/gpio_input<6>,Button<6>(65)] 
+Signal[15] [ 0: i2c_slave/gpio_input<6>(165) Button<6>(65)  ][ 1: i2c_slave/gpio_input<5>(166) Button<5>(66)  
+            ][ 2: i2c_slave/gpio_input<4>(167) Button<4>(67)  ][ 3:  ][ 4: i2c_slave/gpio_input<3>(169)  
+           Button<3>(68)  ][ 5:  ][ 6: i2c_slave/gpio_input<2>(171) Button<2>(70)  ][ 7:  ][ 8:  ][ 9:  ] 
+           [ 10: i2c_slave/gpio_input<1>(175) Button<1>(71)  ][ 11: i2c_slave/gpio_input<0>(176)  
+           Button<0>(72)  ][ 12: FlashCS_n(177) FlashCS_n(73)  ][ 13: (74)  ][ 14: (76)  ][ 15:  ]
+----------------- B l o c k 5 ------------------
+PLApt(11/56), Fanin(28/38), Clk(1/3), Bct(2/4), Pin(9/9), Mcell(9/16)
+PLApts[11/56] () () () () 1 2 () () () () 92 () () 45 () () 44 () () 43 () () 42 () () 41 () () () () () () () () () () () () () () () () () 40 () () () () () 39 () () () () () 38
+Fanins[28] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<17>.n DQ<18>.n DQ<19>.n DQ<1>.n DQ<20>.n DQ<21>.n DQ<22>.n DQ<23>.n DQ<24>.n DQ<2>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n i2c_slave/latch_data_out.n CTRL<10>.p I2C_SCL.p
+clk[1] PCLK 
+CTC: (pt=1) I2C_SCL ;
+CTR: (pt=2) CTRL<10> ;
+CTS: 
+CTE: 
+vref: [0]
+Signal[10] [DQ<25>(182),DQ<25>(63)] [DQ<24>(183),DQ<24>(61)] [DQ<23>(184),DQ<23>(60)]  
+           [DQ<22>(185),DQ<22>(59)] [DQ<21>(186),DQ<21>(58)] [DQ<20>(192),DQ<20>(56)]  
+           [DQ<19>(194),DQ<19>(55)] [DQ<18>(196),DQ<18>(54)] [i2c_slave/gpio_input<7>,Button<7>(64)] 
+Signal[10] [ 0: i2c_slave/gpio_input<7>(181) Button<7>(64)  ][ 1: DQ<25>(182) DQ<25>(63)  ][ 2: DQ<24>(183)  
+           DQ<24>(61)  ][ 3: DQ<23>(184) DQ<23>(60)  ][ 4: DQ<22>(185) DQ<22>(59)  ][ 5: DQ<21>(186)  
+           DQ<21>(58)  ][ 6:  ][ 7:  ][ 8:  ][ 9:  ][ 10:  ][ 11: DQ<20>(192) DQ<20>(56)  ][ 12:  ][ 13:  
+           DQ<19>(194) DQ<19>(55)  ][ 14:  ][ 15: DQ<18>(196) DQ<18>(54)  ]
+----------------- B l o c k 6 ------------------
+PLApt(12/56), Fanin(13/38), Clk(0/3), Bct(0/4), Pin(7/10), Mcell(7/16)
+PLApts[12/12] 14 61 15 62 16 63 17 64 18 65 19 66
+Fanins[13] DQ<24>.n DQ<25>.n DQ<26>.n DQ<27>.n DQ<28>.n DQ<29>.n I2C_LEDs<0>.n I2C_LEDs<1>.n I2C_LEDs<2>.n I2C_LEDs<3>.n I2C_LEDs<4>.n I2C_LEDs<5>.n Button<7>.p
+clk[0] 
+CTC: 
+CTR: 
+CTS: 
+CTE: 
+vref: [0]
+Signal[ 7] [LED<0>(202),LED<0>(81)] [LED<1>(207),LED<1>(82)] [LED<2>(209),LED<2>(85)]  
+           [LED<3>(210),LED<3>(86)] [LED<4>(211),LED<4>(87)] [LED<5>(212),LED<5>(89)]  
+           [TX_MISO(197),TX_MISO(77)] 
+Signal[ 7] [ 0: TX_MISO(197) TX_MISO(77)  ][ 1: (78)  ][ 2:  ][ 3: (79)  ][ 4: (80)  ][ 5: LED<0>(202)  
+           LED<0>(81)  ][ 6:  ][ 7:  ][ 8:  ][ 9:  ][ 10: LED<1>(207) LED<1>(82)  ][ 11:  ][ 12: LED<2>(209)  
+           LED<2>(85)  ][ 13: LED<3>(210) LED<3>(86)  ][ 14: LED<4>(211) LED<4>(87)  ][ 15: LED<5>(212)  
+           LED<5>(89)  ]
+----------------- B l o c k 7 ------------------
+PLApt(8/56), Fanin(18/38), Clk(1/3), Bct(2/4), Pin(8/9), Mcell(8/16)
+PLApts[8/56] () () () () () 2 2 () () () () () () 37 () () 36 () () () () () () () () 12 () () () () () () () () () () () () () () () () () 21 () () () () () 22 () () () () () 24
+Fanins[18] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<1>.n DQ<2>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n CTRL<10>.p
+clk[1] PCLK 
+CTC: 
+CTR: (pt=2) CTRL<10> ;
+CTS: (pt=2) CTRL<10> ;
+CTE: 
+vref: [0]
+Signal[ 8] [DQ<17>(214),DQ<17>(53)] [DQ<16>(215),DQ<16>(52)] [DQ<4>(228),DQ<4>(41)] [DQ<3>(226),DQ<3>(43)]  
+           [DQ<2>(224),DQ<2>(46)] [DQ<1>(218),DQ<1>(49)] [DQ<0>(216),DQ<0>(50)] [CTRL<0>(225),CTRL<0>(44)] 
+Signal[ 8] [ 0:  ][ 1: DQ<17>(214) DQ<17>(53)  ][ 2: DQ<16>(215) DQ<16>(52)  ][ 3: DQ<0>(216) DQ<0>(50)  ] 
+           [ 4:  ][ 5: DQ<1>(218) DQ<1>(49)  ][ 6:  ][ 7:  ][ 8:  ][ 9:  ][ 10:  ][ 11: DQ<2>(224) DQ<2>(46)  
+            ][ 12: CTRL<0>(225) CTRL<0>(44)  ][ 13: DQ<3>(226) DQ<3>(43)  ][ 14: (42)  ][ 15: DQ<4>(228)  
+           DQ<4>(41)  ]

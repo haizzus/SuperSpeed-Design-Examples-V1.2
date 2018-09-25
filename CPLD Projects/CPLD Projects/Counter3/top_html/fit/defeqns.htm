@@ -1,0 +1,293 @@
+<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>
+<h3 align='center'>Equations</h3>
+<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>
+<tr><td>
+</td></tr><tr><td>
+********** Mapped Logic **********
+</td></tr><tr><td>
+FDCPE_CTRL0: FDCPE port map (CTRL(0),CTRL_D(0),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRL_D(0) <= ((DQ(12) AND CTRL(0) AND NOT CTRL(6))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT DQ(12) AND CTRL(0) AND NOT CTRL(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND NOT CTRL(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND NOT DQ(12) AND NOT CTRL(6)));
+</td></tr><tr><td>
+FDCPE_CTRL12: FDCPE port map (CTRL(12),CTRL_D(12),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CTRL_D(12) <= (Counter/CurrentState AND DQ(12))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND CTRL(12))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11)));
+</td></tr><tr><td>
+</td></tr><tr><td>
+Counter/Counter_Madd__add0000__and0028 <= (DQ(0) AND DQ(1) AND DQ(2) AND DQ(3) AND DQ(4) AND DQ(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND DQ(10) AND DQ(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND DQ(16) AND DQ(17) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND DQ(22) AND DQ(23) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(24) AND DQ(25) AND DQ(26) AND DQ(27) AND DQ(28) AND DQ(29));
+</td></tr><tr><td>
+FDCPE_Counter/CurrentState: FDCPE port map (Counter/CurrentState,NOT '0',PCLK,CTRL(10),'0','1');
+</td></tr><tr><td>
+FTCPE_DQ0: FTCPE port map (DQ(0),Counter/CurrentState,PCLK,CTRL(10),'0','1');
+</td></tr><tr><td>
+FTCPE_DQ1: FTCPE port map (DQ(1),DQ_T(1),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(1) <= (Counter/CurrentState AND DQ(0));
+</td></tr><tr><td>
+FTCPE_DQ2: FTCPE port map (DQ(2),DQ_T(2),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(2) <= (Counter/CurrentState AND DQ(0) AND DQ(1));
+</td></tr><tr><td>
+FTCPE_DQ3: FTCPE port map (DQ(3),DQ_T(3),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(3) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2));
+</td></tr><tr><td>
+FTCPE_DQ4: FTCPE port map (DQ(4),DQ_T(4),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(4) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3));
+</td></tr><tr><td>
+FTCPE_DQ5: FTCPE port map (DQ(5),DQ_T(5),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(5) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4));
+</td></tr><tr><td>
+FTCPE_DQ6: FTCPE port map (DQ(6),DQ_T(6),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(6) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5));
+</td></tr><tr><td>
+FTCPE_DQ7: FTCPE port map (DQ(7),DQ_T(7),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(7) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6));
+</td></tr><tr><td>
+FTCPE_DQ8: FTCPE port map (DQ(8),DQ_T(8),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(8) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7));
+</td></tr><tr><td>
+FTCPE_DQ9: FTCPE port map (DQ(9),DQ_T(9),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(9) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8));
+</td></tr><tr><td>
+FTCPE_DQ10: FTCPE port map (DQ(10),DQ_T(10),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(10) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9));
+</td></tr><tr><td>
+FTCPE_DQ11: FTCPE port map (DQ(11),DQ_T(11),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(11) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10));
+</td></tr><tr><td>
+FTCPE_DQ12: FTCPE port map (DQ(12),DQ_T(12),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(12) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11));
+</td></tr><tr><td>
+FTCPE_DQ13: FTCPE port map (DQ(13),DQ_T(13),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(13) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12));
+</td></tr><tr><td>
+FTCPE_DQ14: FTCPE port map (DQ(14),DQ_T(14),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(14) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13));
+</td></tr><tr><td>
+FTCPE_DQ15: FTCPE port map (DQ(15),DQ_T(15),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(15) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14));
+</td></tr><tr><td>
+FTCPE_DQ16: FTCPE port map (DQ(16),DQ_T(16),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(16) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15));
+</td></tr><tr><td>
+FTCPE_DQ17: FTCPE port map (DQ(17),DQ_T(17),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(17) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16));
+</td></tr><tr><td>
+FTCPE_DQ18: FTCPE port map (DQ(18),DQ_T(18),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(18) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17));
+</td></tr><tr><td>
+FTCPE_DQ19: FTCPE port map (DQ(19),DQ_T(19),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(19) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18));
+</td></tr><tr><td>
+FTCPE_DQ20: FTCPE port map (DQ(20),DQ_T(20),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(20) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19));
+</td></tr><tr><td>
+FTCPE_DQ21: FTCPE port map (DQ(21),DQ_T(21),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(21) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20));
+</td></tr><tr><td>
+FTCPE_DQ22: FTCPE port map (DQ(22),DQ_T(22),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(22) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21));
+</td></tr><tr><td>
+FTCPE_DQ23: FTCPE port map (DQ(23),DQ_T(23),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(23) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22));
+</td></tr><tr><td>
+FTCPE_DQ24: FTCPE port map (DQ(24),DQ_T(24),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(24) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23));
+</td></tr><tr><td>
+FTCPE_DQ25: FTCPE port map (DQ(25),DQ_T(25),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(25) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24));
+</td></tr><tr><td>
+FTCPE_DQ26: FTCPE port map (DQ(26),DQ_T(26),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(26) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25));
+</td></tr><tr><td>
+FTCPE_DQ27: FTCPE port map (DQ(27),DQ_T(27),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(27) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25) AND DQ(26));
+</td></tr><tr><td>
+FTCPE_DQ28: FTCPE port map (DQ(28),DQ_T(28),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(28) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25) AND DQ(26) AND DQ(27));
+</td></tr><tr><td>
+FTCPE_DQ29: FTCPE port map (DQ(29),DQ_T(29),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(29) <= (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25) AND DQ(26) AND DQ(27) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(28));
+</td></tr><tr><td>
+FTCPE_DQ30: FTCPE port map (DQ(30),DQ_T(30),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(30) <= (Counter/CurrentState AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Counter/Counter_Madd__add0000__and0028);
+</td></tr><tr><td>
+FTCPE_DQ31: FTCPE port map (DQ(31),DQ_T(31),PCLK,CTRL(10),'0','1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ_T(31) <= (Counter/CurrentState AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Counter/Counter_Madd__add0000__and0028 AND DQ(30));
+</td></tr><tr><td>
+</td></tr><tr><td>
+FlashCS_n <= NOT ('0');
+</td></tr><tr><td>
+</td></tr><tr><td>
+INT <= '0';
+</td></tr><tr><td>
+FDCPE_LED0: FDCPE port map (LED(0),LED_D(0),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(0) <= (Counter/CurrentState AND NOT DQ(24))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND LED(0))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23)));
+</td></tr><tr><td>
+FDCPE_LED1: FDCPE port map (LED(1),LED_D(1),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(1) <= (Counter/CurrentState AND NOT DQ(25))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND LED(1))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24)));
+</td></tr><tr><td>
+FDCPE_LED2: FDCPE port map (LED(2),LED_D(2),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(2) <= (Counter/CurrentState AND NOT DQ(26))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND LED(2))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25)));
+</td></tr><tr><td>
+FDCPE_LED3: FDCPE port map (LED(3),LED_D(3),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(3) <= (Counter/CurrentState AND NOT DQ(27))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND LED(3))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25) AND DQ(26)));
+</td></tr><tr><td>
+FDCPE_LED4: FDCPE port map (LED(4),LED_D(4),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(4) <= (Counter/CurrentState AND NOT DQ(28))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND LED(4))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25) AND DQ(26) AND DQ(27)));
+</td></tr><tr><td>
+FDCPE_LED5: FDCPE port map (LED(5),LED_D(5),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(5) <= (Counter/CurrentState AND NOT DQ(29))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND LED(5))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND DQ(0) AND DQ(1) AND DQ(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(3) AND DQ(4) AND DQ(5) AND DQ(6) AND DQ(7) AND DQ(8) AND DQ(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(10) AND DQ(11) AND DQ(12) AND DQ(13) AND DQ(14) AND DQ(15) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(16) AND DQ(17) AND DQ(18) AND DQ(19) AND DQ(20) AND DQ(21) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(22) AND DQ(23) AND DQ(24) AND DQ(25) AND DQ(26) AND DQ(27) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DQ(28)));
+</td></tr><tr><td>
+FDCPE_LED6: FDCPE port map (LED(6),LED_D(6),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(6) <= ((NOT Counter/CurrentState AND LED(6))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Counter/Counter_Madd__add0000__and0028 AND DQ(30))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT Counter/Counter_Madd__add0000__and0028 AND NOT DQ(30)));
+</td></tr><tr><td>
+FDCPE_LED7: FDCPE port map (LED(7),LED_D(7),PCLK,'0',CTRL(10),'1');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(7) <= (Counter/CurrentState AND NOT DQ(31))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	XOR ((NOT Counter/CurrentState AND LED(7))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (Counter/CurrentState AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Counter/Counter_Madd__add0000__and0028 AND DQ(30)));
+</td></tr><tr><td>
+</td></tr><tr><td>
+TP_2 <= NOT ('0');
+</td></tr><tr><td>
+</td></tr><tr><td>
+TX_MISO_I <= '0';
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TX_MISO <= TX_MISO_I when TX_MISO_OE = '1' else 'Z';
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TX_MISO_OE <= '0';
+</td></tr><tr><td>
+</td></tr><tr><td>
+Register Legend:
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDDCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FTCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FTDCPE (Q,D,C,CLR,PRE,CE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDCP  (Q,D,G,CLR,PRE); 
+</td></tr><tr><td>
+</td></tr>
+</table>
+<form><span class="pgRef"><table width="90%" align="center"><tr>
+<td align="left"><input type="button" onclick="javascript:parent.leftnav.showTop()" onmouseover="window.status='goto top of page'; return true;" onmouseout="window.status=''" value="back to top"></td>
+<td align="right"><input type="button" onclick="window.print()" onmouseover="window.status='print page'; return true;" onmouseout="window.status=''" value="print page"></td>
+</tr></table></span></form>
+</body></html>

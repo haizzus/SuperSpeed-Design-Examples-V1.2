@@ -1,0 +1,2 @@
+verilog work "FifoSlaveCounter.v"
+verilog work "top.v"

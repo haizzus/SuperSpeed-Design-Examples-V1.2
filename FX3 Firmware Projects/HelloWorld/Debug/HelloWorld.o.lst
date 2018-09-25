@@ -1,0 +1,961 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"HelloWorld.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ApplicationThread,168,4
+  22              		.global	glDebugTxEnabled
+  23              		.section	.bss.glDebugTxEnabled,"aw",%nobits
+  24              		.align	2
+  27              	glDebugTxEnabled:
+  28 0000 00000000 		.space	4
+  29              		.comm	glUARTtoCPU_Handle,160,4
+  30              		.comm	glConsoleInBuffer,32,4
+  31              		.comm	glConsoleInIndex,4,4
+  32              		.section	.rodata
+  33              		.align	2
+  34              	.LC0:
+  35 0000 0A257320 		.ascii	"\012%s Successful\000"
+  35      53756363 
+  35      65737366 
+  35      756C00
+  36 000f 00       		.align	2
+  37              	.LC1:
+  38 0010 0A257320 		.ascii	"\012%s failed, Status = %d\012\000"
+  38      6661696C 
+  38      65642C20 
+  38      53746174 
+  38      7573203D 
+  39 0029 000000   		.align	2
+  40              	.LC2:
+  41 002c 3F00     		.ascii	"?\000"
+  42              		.section	.text.CheckStatus,"ax",%progbits
+  43              		.align	2
+  44              		.global	CheckStatus
+  46              	CheckStatus:
+  47              	.LFB0:
+  48              		.file 1 "../HelloWorld.c"
+   1:../HelloWorld.c **** // HelloWorld.c - starter project to get used to the tools
+   2:../HelloWorld.c **** //
+   3:../HelloWorld.c **** // john@usb-by-example.com
+   4:../HelloWorld.c **** //
+   5:../HelloWorld.c **** 
+   6:../HelloWorld.c **** 
+   7:../HelloWorld.c **** #include "cyu3system.h"
+   8:../HelloWorld.c **** #include "cyu3os.h"
+   9:../HelloWorld.c **** #include "cyu3dma.h"
+  10:../HelloWorld.c **** #include "cyu3error.h"
+  11:../HelloWorld.c **** #include "cyu3uart.h"
+  12:../HelloWorld.c **** #include "HelloWorld.h"
+  13:../HelloWorld.c **** 
+  14:../HelloWorld.c **** CyU3PThread ApplicationThread;			// Handle to my Application Thread
+  15:../HelloWorld.c **** CyBool_t glDebugTxEnabled = CyFalse;	// Set true once I can output messages to the Console
+  16:../HelloWorld.c **** CyU3PDmaChannel glUARTtoCPU_Handle;		// Handle needed by Uart Callback routine
+  17:../HelloWorld.c **** char glConsoleInBuffer[32];				// Buffer for user Console Input
+  18:../HelloWorld.c **** uint32_t glConsoleInIndex;				// Index into ConsoleIn buffer
+  19:../HelloWorld.c **** 
+  20:../HelloWorld.c **** void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status)
+  21:../HelloWorld.c **** // In this initial debugging stage I stall on an un-successful system call, else I display progress
+  22:../HelloWorld.c **** // Note that this assumes that there were no errors bringing up the Debug Console
+  23:../HelloWorld.c **** {
+  49              		.loc 1 23 0
+  50              		.cfi_startproc
+  51              		@ args = 0, pretend = 0, frame = 8
+  52              		@ frame_needed = 1, uses_anonymous_args = 0
+  53 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  54              	.LCFI0:
+  55              		.cfi_def_cfa_offset 8
+  56 0004 04B08DE2 		add	fp, sp, #4
+  57              		.cfi_offset 14, -4
+  58              		.cfi_offset 11, -8
+  59              	.LCFI1:
+  60              		.cfi_def_cfa 11, 4
+  61 0008 08D04DE2 		sub	sp, sp, #8
+  62 000c 08000BE5 		str	r0, [fp, #-8]
+  63 0010 0C100BE5 		str	r1, [fp, #-12]
+  24:../HelloWorld.c **** 	if (glDebugTxEnabled)				// Need to wait until ConsoleOut is enabled
+  64              		.loc 1 24 0
+  65 0014 60309FE5 		ldr	r3, .L5
+  66 0018 003093E5 		ldr	r3, [r3, #0]
+  67 001c 000053E3 		cmp	r3, #0
+  68 0020 1300000A 		beq	.L1
+  25:../HelloWorld.c **** 	{
+  26:../HelloWorld.c **** 		if (Status == CY_U3P_SUCCESS)
+  69              		.loc 1 26 0
+  70 0024 0C301BE5 		ldr	r3, [fp, #-12]
+  71 0028 000053E3 		cmp	r3, #0
+  72 002c 0500001A 		bne	.L3
+  27:../HelloWorld.c **** 		{
+  28:../HelloWorld.c **** 			CyU3PDebugPrint(4, "\n%s Successful", StringPtr);
+  73              		.loc 1 28 0
+  74 0030 0400A0E3 		mov	r0, #4
+  75 0034 44109FE5 		ldr	r1, .L5+4
+  76 0038 08201BE5 		ldr	r2, [fp, #-8]
+  77 003c FEFFFFEB 		bl	CyU3PDebugPrint
+  29:../HelloWorld.c **** 			return;
+  78              		.loc 1 29 0
+  79 0040 0000A0E1 		mov	r0, r0	@ nop
+  80 0044 0A0000EA 		b	.L1
+  81              	.L3:
+  30:../HelloWorld.c **** 		}
+  31:../HelloWorld.c **** 		// else hang here
+  32:../HelloWorld.c **** 		CyU3PDebugPrint(4, "\n%s failed, Status = %d\n", StringPtr, Status);
+  82              		.loc 1 32 0
+  83 0048 0400A0E3 		mov	r0, #4
+  84 004c 30109FE5 		ldr	r1, .L5+8
+  85 0050 08201BE5 		ldr	r2, [fp, #-8]
+  86 0054 0C301BE5 		ldr	r3, [fp, #-12]
+  87 0058 FEFFFFEB 		bl	CyU3PDebugPrint
+  88              	.L4:
+  33:../HelloWorld.c **** 		while (1)
+  34:../HelloWorld.c **** 		{
+  35:../HelloWorld.c **** 			CyU3PDebugPrint(4, "?");
+  89              		.loc 1 35 0 discriminator 1
+  90 005c 0400A0E3 		mov	r0, #4
+  91 0060 20109FE5 		ldr	r1, .L5+12
+  92 0064 FEFFFFEB 		bl	CyU3PDebugPrint
+  36:../HelloWorld.c **** 			CyU3PThreadSleep (1000);
+  93              		.loc 1 36 0 discriminator 1
+  94 0068 FA0FA0E3 		mov	r0, #1000
+  95 006c FEFFFFEB 		bl	_tx_thread_sleep
+  37:../HelloWorld.c **** 		}
+  96              		.loc 1 37 0 discriminator 1
+  97 0070 F9FFFFEA 		b	.L4
+  98              	.L1:
+  38:../HelloWorld.c **** 	}
+  39:../HelloWorld.c **** }
+  99              		.loc 1 39 0
+ 100 0074 04D04BE2 		sub	sp, fp, #4
+ 101 0078 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 102              	.L6:
+ 103              		.align	2
+ 104              	.L5:
+ 105 007c 00000000 		.word	glDebugTxEnabled
+ 106 0080 00000000 		.word	.LC0
+ 107 0084 10000000 		.word	.LC1
+ 108 0088 2C000000 		.word	.LC2
+ 109              		.cfi_endproc
+ 110              	.LFE0:
+ 112              		.section	.rodata
+ 113 002e 0000     		.align	2
+ 114              	.LC3:
+ 115 0030 256300   		.ascii	"%c\000"
+ 116 0033 00       		.align	2
+ 117              	.LC4:
+ 118 0034 0A496E70 		.ascii	"\012Input: '%s'\000"
+ 118      75743A20 
+ 118      27257327 
+ 118      00
+ 119              		.section	.text.UartCallback,"ax",%progbits
+ 120              		.align	2
+ 121              		.global	UartCallback
+ 123              	UartCallback:
+ 124              	.LFB1:
+  40:../HelloWorld.c **** 
+  41:../HelloWorld.c **** void UartCallback(CyU3PUartEvt_t Event, CyU3PUartError_t Error)
+  42:../HelloWorld.c **** // Handle characters typed in by the developer
+  43:../HelloWorld.c **** // Later we will respond to commands terminated with a <CR>
+  44:../HelloWorld.c **** {
+ 125              		.loc 1 44 0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 24
+ 128              		@ frame_needed = 1, uses_anonymous_args = 0
+ 129 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 130              	.LCFI2:
+ 131              		.cfi_def_cfa_offset 8
+ 132 0004 04B08DE2 		add	fp, sp, #4
+ 133              		.cfi_offset 14, -4
+ 134              		.cfi_offset 11, -8
+ 135              	.LCFI3:
+ 136              		.cfi_def_cfa 11, 4
+ 137 0008 18D04DE2 		sub	sp, sp, #24
+ 138 000c 0020A0E1 		mov	r2, r0
+ 139 0010 0130A0E1 		mov	r3, r1
+ 140 0014 15204BE5 		strb	r2, [fp, #-21]
+ 141 0018 16304BE5 		strb	r3, [fp, #-22]
+  45:../HelloWorld.c **** 	CyU3PDmaBuffer_t ConsoleInDmaBuffer;
+  46:../HelloWorld.c **** 	char InputChar;
+  47:../HelloWorld.c **** 	if (Event == CY_U3P_UART_EVENT_RX_DONE)
+ 142              		.loc 1 47 0
+ 143 001c 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+ 144 0020 000053E3 		cmp	r3, #0
+ 145 0024 3800001A 		bne	.L7
+  48:../HelloWorld.c ****     {
+  49:../HelloWorld.c **** 		CyU3PDmaChannelSetWrapUp(&glUARTtoCPU_Handle);
+ 146              		.loc 1 49 0
+ 147 0028 E4009FE5 		ldr	r0, .L12
+ 148 002c FEFFFFEB 		bl	CyU3PDmaChannelSetWrapUp
+  50:../HelloWorld.c **** 		CyU3PDmaChannelGetBuffer(&glUARTtoCPU_Handle, &ConsoleInDmaBuffer, CYU3P_NO_WAIT);
+ 149              		.loc 1 50 0
+ 150 0030 14304BE2 		sub	r3, fp, #20
+ 151 0034 D8009FE5 		ldr	r0, .L12
+ 152 0038 0310A0E1 		mov	r1, r3
+ 153 003c 0020A0E3 		mov	r2, #0
+ 154 0040 FEFFFFEB 		bl	CyU3PDmaChannelGetBuffer
+  51:../HelloWorld.c **** 		InputChar = (char)*ConsoleInDmaBuffer.buffer;
+ 155              		.loc 1 51 0
+ 156 0044 14301BE5 		ldr	r3, [fp, #-20]
+ 157 0048 0030D3E5 		ldrb	r3, [r3, #0]
+ 158 004c 05304BE5 		strb	r3, [fp, #-5]
+  52:../HelloWorld.c **** 		CyU3PDebugPrint(4, "%c", InputChar);			// Echo the character
+ 159              		.loc 1 52 0
+ 160 0050 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 161 0054 0400A0E3 		mov	r0, #4
+ 162 0058 B8109FE5 		ldr	r1, .L12+4
+ 163 005c 0320A0E1 		mov	r2, r3
+ 164 0060 FEFFFFEB 		bl	CyU3PDebugPrint
+  53:../HelloWorld.c **** 		if (InputChar == 0x0d)
+ 165              		.loc 1 53 0
+ 166 0064 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 167 0068 0D0053E3 		cmp	r3, #13
+ 168 006c 0700001A 		bne	.L9
+  54:../HelloWorld.c **** 		{
+  55:../HelloWorld.c **** 			CyU3PDebugPrint(4, "\nInput: '%s'", &glConsoleInBuffer[0]);
+ 169              		.loc 1 55 0
+ 170 0070 0400A0E3 		mov	r0, #4
+ 171 0074 A0109FE5 		ldr	r1, .L12+8
+ 172 0078 A0209FE5 		ldr	r2, .L12+12
+ 173 007c FEFFFFEB 		bl	CyU3PDebugPrint
+  56:../HelloWorld.c **** 			glConsoleInIndex = 0;
+ 174              		.loc 1 56 0
+ 175 0080 9C309FE5 		ldr	r3, .L12+16
+ 176 0084 0020A0E3 		mov	r2, #0
+ 177 0088 002083E5 		str	r2, [r3, #0]
+ 178 008c 1A0000EA 		b	.L10
+ 179              	.L9:
+  57:../HelloWorld.c **** 		}
+  58:../HelloWorld.c **** 		else
+  59:../HelloWorld.c **** 		{
+  60:../HelloWorld.c **** 			glConsoleInBuffer[glConsoleInIndex] = InputChar;
+ 180              		.loc 1 60 0
+ 181 0090 8C309FE5 		ldr	r3, .L12+16
+ 182 0094 003093E5 		ldr	r3, [r3, #0]
+ 183 0098 80209FE5 		ldr	r2, .L12+12
+ 184 009c 05105BE5 		ldrb	r1, [fp, #-5]
+ 185 00a0 0310C2E7 		strb	r1, [r2, r3]
+  61:../HelloWorld.c **** 			if (glConsoleInIndex++ < sizeof(glConsoleInBuffer)) glConsoleInBuffer[glConsoleInIndex] = 0;
+ 186              		.loc 1 61 0
+ 187 00a4 78309FE5 		ldr	r3, .L12+16
+ 188 00a8 003093E5 		ldr	r3, [r3, #0]
+ 189 00ac 1F0053E3 		cmp	r3, #31
+ 190 00b0 0020A083 		movhi	r2, #0
+ 191 00b4 0120A093 		movls	r2, #1
+ 192 00b8 FF2002E2 		and	r2, r2, #255
+ 193 00bc 011083E2 		add	r1, r3, #1
+ 194 00c0 5C309FE5 		ldr	r3, .L12+16
+ 195 00c4 001083E5 		str	r1, [r3, #0]
+ 196 00c8 000052E3 		cmp	r2, #0
+ 197 00cc 0500000A 		beq	.L11
+ 198              		.loc 1 61 0 is_stmt 0 discriminator 1
+ 199 00d0 4C309FE5 		ldr	r3, .L12+16
+ 200 00d4 003093E5 		ldr	r3, [r3, #0]
+ 201 00d8 40209FE5 		ldr	r2, .L12+12
+ 202 00dc 0010A0E3 		mov	r1, #0
+ 203 00e0 0310C2E7 		strb	r1, [r2, r3]
+ 204 00e4 040000EA 		b	.L10
+ 205              	.L11:
+  62:../HelloWorld.c **** 			else glConsoleInIndex--;
+ 206              		.loc 1 62 0 is_stmt 1
+ 207 00e8 34309FE5 		ldr	r3, .L12+16
+ 208 00ec 003093E5 		ldr	r3, [r3, #0]
+ 209 00f0 012043E2 		sub	r2, r3, #1
+ 210 00f4 28309FE5 		ldr	r3, .L12+16
+ 211 00f8 002083E5 		str	r2, [r3, #0]
+ 212              	.L10:
+  63:../HelloWorld.c **** 		}
+  64:../HelloWorld.c **** 		CyU3PDmaChannelDiscardBuffer(&glUARTtoCPU_Handle);
+ 213              		.loc 1 64 0
+ 214 00fc 10009FE5 		ldr	r0, .L12
+ 215 0100 FEFFFFEB 		bl	CyU3PDmaChannelDiscardBuffer
+  65:../HelloWorld.c **** 		CyU3PUartRxSetBlockXfer(1);
+ 216              		.loc 1 65 0
+ 217 0104 0100A0E3 		mov	r0, #1
+ 218 0108 FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 219              	.L7:
+  66:../HelloWorld.c ****     }
+  67:../HelloWorld.c **** }
+ 220              		.loc 1 67 0
+ 221 010c 04D04BE2 		sub	sp, fp, #4
+ 222 0110 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 223              	.L13:
+ 224              		.align	2
+ 225              	.L12:
+ 226 0114 00000000 		.word	glUARTtoCPU_Handle
+ 227 0118 30000000 		.word	.LC3
+ 228 011c 34000000 		.word	.LC4
+ 229 0120 00000000 		.word	glConsoleInBuffer
+ 230 0124 00000000 		.word	glConsoleInIndex
+ 231              		.cfi_endproc
+ 232              	.LFE1:
+ 234              		.section	.rodata
+ 235 0041 000000   		.align	2
+ 236              	.LC5:
+ 237 0044 43795533 		.ascii	"CyU3PUartInit\000"
+ 237      50556172 
+ 237      74496E69 
+ 237      7400
+ 238 0052 0000     		.align	2
+ 239              	.LC6:
+ 240 0054 43795533 		.ascii	"CyU3PUartSetConfig\000"
+ 240      50556172 
+ 240      74536574 
+ 240      436F6E66 
+ 240      696700
+ 241 0067 00       		.align	2
+ 242              	.LC7:
+ 243 0068 43795533 		.ascii	"CyU3PUartTxSetBlockXfer\000"
+ 243      50556172 
+ 243      74547853 
+ 243      6574426C 
+ 243      6F636B58 
+ 244              		.align	2
+ 245              	.LC8:
+ 246 0080 436F6E73 		.ascii	"ConsoleOutEnabled\000"
+ 246      6F6C654F 
+ 246      7574456E 
+ 246      61626C65 
+ 246      6400
+ 247 0092 0000     		.align	2
+ 248              	.LC9:
+ 249 0094 43795533 		.ascii	"CyU3PUartRxSetBlockXfer\000"
+ 249      50556172 
+ 249      74527853 
+ 249      6574426C 
+ 249      6F636B58 
+ 250              		.align	2
+ 251              	.LC10:
+ 252 00ac 43726561 		.ascii	"CreateDebugRxDmaChannel\000"
+ 252      74654465 
+ 252      62756752 
+ 252      78446D61 
+ 252      4368616E 
+ 253              		.align	2
+ 254              	.LC11:
+ 255 00c4 436F6E73 		.ascii	"ConsoleInEnabled\000"
+ 255      6F6C6549 
+ 255      6E456E61 
+ 255      626C6564 
+ 255      00
+ 256              		.section	.text.InitializeDebugConsole,"ax",%progbits
+ 257              		.align	2
+ 258              		.global	InitializeDebugConsole
+ 260              	InitializeDebugConsole:
+ 261              	.LFB2:
+  68:../HelloWorld.c **** 
+  69:../HelloWorld.c **** // Spin up the DEBUG Console, Out and In
+  70:../HelloWorld.c **** CyU3PReturnStatus_t InitializeDebugConsole(void)
+  71:../HelloWorld.c **** {
+ 262              		.loc 1 71 0
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 56
+ 265              		@ frame_needed = 1, uses_anonymous_args = 0
+ 266 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 267              	.LCFI4:
+ 268              		.cfi_def_cfa_offset 8
+ 269 0004 04B08DE2 		add	fp, sp, #4
+ 270              		.cfi_offset 14, -4
+ 271              		.cfi_offset 11, -8
+ 272              	.LCFI5:
+ 273              		.cfi_def_cfa 11, 4
+ 274 0008 38D04DE2 		sub	sp, sp, #56
+  72:../HelloWorld.c ****     CyU3PUartConfig_t uartConfig;
+  73:../HelloWorld.c ****     CyU3PDmaChannelConfig_t dmaConfig;
+  74:../HelloWorld.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 275              		.loc 1 74 0
+ 276 000c 0030A0E3 		mov	r3, #0
+ 277 0010 08300BE5 		str	r3, [fp, #-8]
+  75:../HelloWorld.c **** 
+  76:../HelloWorld.c ****     Status = CyU3PUartInit();										// Start the UART driver
+ 278              		.loc 1 76 0
+ 279 0014 FEFFFFEB 		bl	CyU3PUartInit
+ 280 0018 08000BE5 		str	r0, [fp, #-8]
+  77:../HelloWorld.c ****     CheckStatus("CyU3PUartInit", Status);
+ 281              		.loc 1 77 0
+ 282 001c 78019FE5 		ldr	r0, .L18
+ 283 0020 08101BE5 		ldr	r1, [fp, #-8]
+ 284 0024 FEFFFFEB 		bl	CheckStatus
+  78:../HelloWorld.c **** 
+  79:../HelloWorld.c ****     CyU3PMemSet ((uint8_t *)&uartConfig, 0, sizeof (uartConfig));
+ 285              		.loc 1 79 0
+ 286 0028 20304BE2 		sub	r3, fp, #32
+ 287 002c 0300A0E1 		mov	r0, r3
+ 288 0030 0010A0E3 		mov	r1, #0
+ 289 0034 1820A0E3 		mov	r2, #24
+ 290 0038 FEFFFFEB 		bl	CyU3PMemSet
+  80:../HelloWorld.c **** 	uartConfig.baudRate = CY_U3P_UART_BAUDRATE_115200;
+ 291              		.loc 1 80 0
+ 292 003c 5C319FE5 		ldr	r3, .L18+4
+ 293 0040 10300BE5 		str	r3, [fp, #-16]
+  81:../HelloWorld.c **** 	uartConfig.stopBit  = CY_U3P_UART_ONE_STOP_BIT;
+ 294              		.loc 1 81 0
+ 295 0044 0130A0E3 		mov	r3, #1
+ 296 0048 0C304BE5 		strb	r3, [fp, #-12]
+  82:../HelloWorld.c **** //r	uartConfig.parity   = CY_U3P_UART_NO_PARITY;
+  83:../HelloWorld.c **** 	uartConfig.txEnable = CyTrue;
+ 297              		.loc 1 83 0
+ 298 004c 0130A0E3 		mov	r3, #1
+ 299 0050 20300BE5 		str	r3, [fp, #-32]
+  84:../HelloWorld.c **** 	uartConfig.rxEnable = CyTrue;
+ 300              		.loc 1 84 0
+ 301 0054 0130A0E3 		mov	r3, #1
+ 302 0058 1C300BE5 		str	r3, [fp, #-28]
+  85:../HelloWorld.c **** //r	uartConfig.flowCtrl = CyFalse;
+  86:../HelloWorld.c **** 	uartConfig.isDma    = CyTrue;
+ 303              		.loc 1 86 0
+ 304 005c 0130A0E3 		mov	r3, #1
+ 305 0060 14300BE5 		str	r3, [fp, #-20]
+  87:../HelloWorld.c **** 	Status = CyU3PUartSetConfig(&uartConfig, UartCallback);			// Configure the UART hardware
+ 306              		.loc 1 87 0
+ 307 0064 20304BE2 		sub	r3, fp, #32
+ 308 0068 0300A0E1 		mov	r0, r3
+ 309 006c 30119FE5 		ldr	r1, .L18+8
+ 310 0070 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 311 0074 08000BE5 		str	r0, [fp, #-8]
+  88:../HelloWorld.c ****     CheckStatus("CyU3PUartSetConfig", Status);
+ 312              		.loc 1 88 0
+ 313 0078 28019FE5 		ldr	r0, .L18+12
+ 314 007c 08101BE5 		ldr	r1, [fp, #-8]
+ 315 0080 FEFFFFEB 		bl	CheckStatus
+  89:../HelloWorld.c **** 
+  90:../HelloWorld.c ****     Status = CyU3PUartTxSetBlockXfer(0xFFFFFFFF);					// Send as much data as I need to
+ 316              		.loc 1 90 0
+ 317 0084 0000E0E3 		mvn	r0, #0
+ 318 0088 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 319 008c 08000BE5 		str	r0, [fp, #-8]
+  91:../HelloWorld.c ****     CheckStatus("CyU3PUartTxSetBlockXfer", Status);
+ 320              		.loc 1 91 0
+ 321 0090 14019FE5 		ldr	r0, .L18+16
+ 322 0094 08101BE5 		ldr	r1, [fp, #-8]
+ 323 0098 FEFFFFEB 		bl	CheckStatus
+  92:../HelloWorld.c **** 
+  93:../HelloWorld.c **** 	Status = CyU3PDebugInit(CY_U3P_LPP_SOCKET_UART_CONS, 8);		// Attach the Debug driver above the UAR
+ 324              		.loc 1 93 0
+ 325 009c 0300A0E3 		mov	r0, #3
+ 326 00a0 0810A0E3 		mov	r1, #8
+ 327 00a4 FEFFFFEB 		bl	CyU3PDebugInit
+ 328 00a8 08000BE5 		str	r0, [fp, #-8]
+  94:../HelloWorld.c **** 	if (Status == CY_U3P_SUCCESS) glDebugTxEnabled = CyTrue;
+ 329              		.loc 1 94 0
+ 330 00ac 08301BE5 		ldr	r3, [fp, #-8]
+ 331 00b0 000053E3 		cmp	r3, #0
+ 332 00b4 0200001A 		bne	.L15
+ 333              		.loc 1 94 0 is_stmt 0 discriminator 1
+ 334 00b8 F0309FE5 		ldr	r3, .L18+20
+ 335 00bc 0120A0E3 		mov	r2, #1
+ 336 00c0 002083E5 		str	r2, [r3, #0]
+ 337              	.L15:
+  95:../HelloWorld.c ****     CheckStatus("ConsoleOutEnabled", Status);
+ 338              		.loc 1 95 0 is_stmt 1
+ 339 00c4 E8009FE5 		ldr	r0, .L18+24
+ 340 00c8 08101BE5 		ldr	r1, [fp, #-8]
+ 341 00cc FEFFFFEB 		bl	CheckStatus
+  96:../HelloWorld.c **** 	CyU3PDebugPreamble(CyFalse);									// Skip preamble, debug info is targeted for a person
+ 342              		.loc 1 96 0
+ 343 00d0 0000A0E3 		mov	r0, #0
+ 344 00d4 FEFFFFEB 		bl	CyU3PDebugPreamble
+  97:../HelloWorld.c **** 
+  98:../HelloWorld.c **** 	// Now setup a DMA channel to receive characters from the Uart Rx
+  99:../HelloWorld.c ****     Status = CyU3PUartRxSetBlockXfer(1);
+ 345              		.loc 1 99 0
+ 346 00d8 0100A0E3 		mov	r0, #1
+ 347 00dc FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 348 00e0 08000BE5 		str	r0, [fp, #-8]
+ 100:../HelloWorld.c ****     CheckStatus("CyU3PUartRxSetBlockXfer", Status);
+ 349              		.loc 1 100 0
+ 350 00e4 CC009FE5 		ldr	r0, .L18+28
+ 351 00e8 08101BE5 		ldr	r1, [fp, #-8]
+ 352 00ec FEFFFFEB 		bl	CheckStatus
+ 101:../HelloWorld.c **** 	CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 353              		.loc 1 101 0
+ 354 00f0 3C304BE2 		sub	r3, fp, #60
+ 355 00f4 0300A0E1 		mov	r0, r3
+ 356 00f8 0010A0E3 		mov	r1, #0
+ 357 00fc 1C20A0E3 		mov	r2, #28
+ 358 0100 FEFFFFEB 		bl	CyU3PMemSet
+ 102:../HelloWorld.c **** 	dmaConfig.size  		= 16;									// Minimum size allowed, I only need 1 byte
+ 359              		.loc 1 102 0
+ 360 0104 1030A0E3 		mov	r3, #16
+ 361 0108 BC334BE1 		strh	r3, [fp, #-60]	@ movhi
+ 103:../HelloWorld.c **** 	dmaConfig.count 		= 1;									// I can't type faster than the Uart Callback routine!
+ 362              		.loc 1 103 0
+ 363 010c 0130A0E3 		mov	r3, #1
+ 364 0110 BA334BE1 		strh	r3, [fp, #-58]	@ movhi
+ 104:../HelloWorld.c **** 	dmaConfig.prodSckId		= CY_U3P_LPP_SOCKET_UART_PROD;
+ 365              		.loc 1 104 0
+ 366 0114 0630A0E3 		mov	r3, #6
+ 367 0118 B8334BE1 		strh	r3, [fp, #-56]	@ movhi
+ 105:../HelloWorld.c **** 	dmaConfig.consSckId 	= CY_U3P_CPU_SOCKET_CONS;
+ 368              		.loc 1 105 0
+ 369 011c 3F3CA0E3 		mov	r3, #16128
+ 370 0120 B6334BE1 		strh	r3, [fp, #-54]	@ movhi
+ 106:../HelloWorld.c **** 	dmaConfig.dmaMode 		= CY_U3P_DMA_MODE_BYTE;
+ 371              		.loc 1 106 0
+ 372 0124 0030A0E3 		mov	r3, #0
+ 373 0128 2C304BE5 		strb	r3, [fp, #-44]
+ 107:../HelloWorld.c **** 	dmaConfig.notification	= CY_U3P_DMA_CB_PROD_EVENT;
+ 374              		.loc 1 107 0
+ 375 012c 0830A0E3 		mov	r3, #8
+ 376 0130 28300BE5 		str	r3, [fp, #-40]
+ 108:../HelloWorld.c **** 	Status = CyU3PDmaChannelCreate(&glUARTtoCPU_Handle, CY_U3P_DMA_TYPE_MANUAL_IN, &dmaConfig);
+ 377              		.loc 1 108 0
+ 378 0134 3C304BE2 		sub	r3, fp, #60
+ 379 0138 7C009FE5 		ldr	r0, .L18+32
+ 380 013c 0310A0E3 		mov	r1, #3
+ 381 0140 0320A0E1 		mov	r2, r3
+ 382 0144 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 383 0148 08000BE5 		str	r0, [fp, #-8]
+ 109:../HelloWorld.c ****     CheckStatus("CreateDebugRxDmaChannel", Status);
+ 384              		.loc 1 109 0
+ 385 014c 6C009FE5 		ldr	r0, .L18+36
+ 386 0150 08101BE5 		ldr	r1, [fp, #-8]
+ 387 0154 FEFFFFEB 		bl	CheckStatus
+ 110:../HelloWorld.c ****     if (Status != CY_U3P_SUCCESS) CyU3PDmaChannelDestroy(&glUARTtoCPU_Handle);
+ 388              		.loc 1 110 0
+ 389 0158 08301BE5 		ldr	r3, [fp, #-8]
+ 390 015c 000053E3 		cmp	r3, #0
+ 391 0160 0200000A 		beq	.L16
+ 392              		.loc 1 110 0 is_stmt 0 discriminator 1
+ 393 0164 50009FE5 		ldr	r0, .L18+32
+ 394 0168 FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+ 395 016c 060000EA 		b	.L17
+ 396              	.L16:
+ 111:../HelloWorld.c ****     else
+ 112:../HelloWorld.c ****     {
+ 113:../HelloWorld.c **** 		Status = CyU3PDmaChannelSetXfer(&glUARTtoCPU_Handle, 0);
+ 397              		.loc 1 113 0 is_stmt 1
+ 398 0170 44009FE5 		ldr	r0, .L18+32
+ 399 0174 0010A0E3 		mov	r1, #0
+ 400 0178 FEFFFFEB 		bl	CyU3PDmaChannelSetXfer
+ 401 017c 08000BE5 		str	r0, [fp, #-8]
+ 114:../HelloWorld.c **** 		CheckStatus("ConsoleInEnabled", Status);
+ 402              		.loc 1 114 0
+ 403 0180 3C009FE5 		ldr	r0, .L18+40
+ 404 0184 08101BE5 		ldr	r1, [fp, #-8]
+ 405 0188 FEFFFFEB 		bl	CheckStatus
+ 406              	.L17:
+ 115:../HelloWorld.c ****     }
+ 116:../HelloWorld.c ****     return Status;
+ 407              		.loc 1 116 0
+ 408 018c 08301BE5 		ldr	r3, [fp, #-8]
+ 117:../HelloWorld.c **** }
+ 409              		.loc 1 117 0
+ 410 0190 0300A0E1 		mov	r0, r3
+ 411 0194 04D04BE2 		sub	sp, fp, #4
+ 412 0198 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 413              	.L19:
+ 414              		.align	2
+ 415              	.L18:
+ 416 019c 44000000 		.word	.LC5
+ 417 01a0 00C20100 		.word	115200
+ 418 01a4 00000000 		.word	UartCallback
+ 419 01a8 54000000 		.word	.LC6
+ 420 01ac 68000000 		.word	.LC7
+ 421 01b0 00000000 		.word	glDebugTxEnabled
+ 422 01b4 80000000 		.word	.LC8
+ 423 01b8 94000000 		.word	.LC9
+ 424 01bc 00000000 		.word	glUARTtoCPU_Handle
+ 425 01c0 AC000000 		.word	.LC10
+ 426 01c4 C4000000 		.word	.LC11
+ 427              		.cfi_endproc
+ 428              	.LFE2:
+ 430              		.section	.rodata
+ 431 00d5 000000   		.align	2
+ 432              	.LC12:
+ 433 00d8 0A417070 		.ascii	"\012Application started with %d\012\000"
+ 433      6C696361 
+ 433      74696F6E 
+ 433      20737461 
+ 433      72746564 
+ 434 00f6 0000     		.align	2
+ 435              	.LC13:
+ 436 00f8 25642C20 		.ascii	"%d, \000"
+ 436      00
+ 437 00fd 000000   		.align	2
+ 438              	.LC14:
+ 439 0100 0A417070 		.ascii	"\012Application failed to initialize. Error code: %"
+ 439      6C696361 
+ 439      74696F6E 
+ 439      20666169 
+ 439      6C656420 
+ 440 0130 642E0A00 		.ascii	"d.\012\000"
+ 441              		.section	.text.ApplicationThread_Entry,"ax",%progbits
+ 442              		.align	2
+ 443              		.global	ApplicationThread_Entry
+ 445              	ApplicationThread_Entry:
+ 446              	.LFB3:
+ 118:../HelloWorld.c **** 
+ 119:../HelloWorld.c **** void ApplicationThread_Entry (uint32_t Value)
+ 120:../HelloWorld.c **** {
+ 447              		.loc 1 120 0
+ 448              		.cfi_startproc
+ 449              		@ args = 0, pretend = 0, frame = 16
+ 450              		@ frame_needed = 1, uses_anonymous_args = 0
+ 451 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 452              	.LCFI6:
+ 453              		.cfi_def_cfa_offset 8
+ 454 0004 04B08DE2 		add	fp, sp, #4
+ 455              		.cfi_offset 14, -4
+ 456              		.cfi_offset 11, -8
+ 457              	.LCFI7:
+ 458              		.cfi_def_cfa 11, 4
+ 459 0008 10D04DE2 		sub	sp, sp, #16
+ 460 000c 10000BE5 		str	r0, [fp, #-16]
+ 121:../HelloWorld.c **** 	int32_t Seconds = 0;
+ 461              		.loc 1 121 0
+ 462 0010 0030A0E3 		mov	r3, #0
+ 463 0014 08300BE5 		str	r3, [fp, #-8]
+ 122:../HelloWorld.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 464              		.loc 1 122 0
+ 465 0018 0030A0E3 		mov	r3, #0
+ 466 001c 0C300BE5 		str	r3, [fp, #-12]
+ 123:../HelloWorld.c **** 
+ 124:../HelloWorld.c ****     Status = InitializeDebugConsole();
+ 467              		.loc 1 124 0
+ 468 0020 FEFFFFEB 		bl	InitializeDebugConsole
+ 469 0024 0C000BE5 		str	r0, [fp, #-12]
+ 125:../HelloWorld.c ****     if (Status == CY_U3P_SUCCESS)
+ 470              		.loc 1 125 0
+ 471 0028 0C301BE5 		ldr	r3, [fp, #-12]
+ 472 002c 000053E3 		cmp	r3, #0
+ 473 0030 0E00001A 		bne	.L21
+ 126:../HelloWorld.c ****     {
+ 127:../HelloWorld.c ****     	CyU3PDebugPrint(4, "\nApplication started with %d\n", Value);
+ 474              		.loc 1 127 0
+ 475 0034 0400A0E3 		mov	r0, #4
+ 476 0038 44109FE5 		ldr	r1, .L24
+ 477 003c 10201BE5 		ldr	r2, [fp, #-16]
+ 478 0040 FEFFFFEB 		bl	CyU3PDebugPrint
+ 479              	.L22:
+ 128:../HelloWorld.c ****     	// Now run forever
+ 129:../HelloWorld.c ****     	while (1)
+ 130:../HelloWorld.c ****     	{
+ 131:../HelloWorld.c ****     		CyU3PThreadSleep (1000);
+ 480              		.loc 1 131 0 discriminator 1
+ 481 0044 FA0FA0E3 		mov	r0, #1000
+ 482 0048 FEFFFFEB 		bl	_tx_thread_sleep
+ 132:../HelloWorld.c **** 			CyU3PDebugPrint(4, "%d, ", Seconds++);
+ 483              		.loc 1 132 0 discriminator 1
+ 484 004c 08301BE5 		ldr	r3, [fp, #-8]
+ 485 0050 08201BE5 		ldr	r2, [fp, #-8]
+ 486 0054 012082E2 		add	r2, r2, #1
+ 487 0058 08200BE5 		str	r2, [fp, #-8]
+ 488 005c 0400A0E3 		mov	r0, #4
+ 489 0060 20109FE5 		ldr	r1, .L24+4
+ 490 0064 0320A0E1 		mov	r2, r3
+ 491 0068 FEFFFFEB 		bl	CyU3PDebugPrint
+ 133:../HelloWorld.c **** 		}
+ 492              		.loc 1 133 0 discriminator 1
+ 493 006c F4FFFFEA 		b	.L22
+ 494              	.L21:
+ 134:../HelloWorld.c ****     }
+ 135:../HelloWorld.c ****     CyU3PDebugPrint(4, "\nApplication failed to initialize. Error code: %d.\n", Status);
+ 495              		.loc 1 135 0
+ 496 0070 0400A0E3 		mov	r0, #4
+ 497 0074 10109FE5 		ldr	r1, .L24+8
+ 498 0078 0C201BE5 		ldr	r2, [fp, #-12]
+ 499 007c FEFFFFEB 		bl	CyU3PDebugPrint
+ 500              	.L23:
+ 136:../HelloWorld.c ****     while (1);		// Hang here
+ 501              		.loc 1 136 0 discriminator 1
+ 502 0080 FEFFFFEA 		b	.L23
+ 503              	.L25:
+ 504              		.align	2
+ 505              	.L24:
+ 506 0084 D8000000 		.word	.LC12
+ 507 0088 F8000000 		.word	.LC13
+ 508 008c 00010000 		.word	.LC14
+ 509              		.cfi_endproc
+ 510              	.LFE3:
+ 512              		.section	.rodata
+ 513              		.align	2
+ 514              	.LC15:
+ 515 0134 31313A48 		.ascii	"11:HelloWorld\000"
+ 515      656C6C6F 
+ 515      576F726C 
+ 515      6400
+ 516 0142 0000     		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 517              		.align	2
+ 518              		.global	CyFxApplicationDefine
+ 520              	CyFxApplicationDefine:
+ 521              	.LFB4:
+ 137:../HelloWorld.c **** }
+ 138:../HelloWorld.c **** 
+ 139:../HelloWorld.c **** // ApplicationDefine function called by RTOS to startup the application threads
+ 140:../HelloWorld.c **** void CyFxApplicationDefine(void)
+ 141:../HelloWorld.c **** {
+ 522              		.loc 1 141 0
+ 523              		.cfi_startproc
+ 524              		@ args = 0, pretend = 0, frame = 8
+ 525              		@ frame_needed = 1, uses_anonymous_args = 0
+ 526 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 527              	.LCFI8:
+ 528              		.cfi_def_cfa_offset 8
+ 529 0004 04B08DE2 		add	fp, sp, #4
+ 530              		.cfi_offset 14, -4
+ 531              		.cfi_offset 11, -8
+ 532              	.LCFI9:
+ 533              		.cfi_def_cfa 11, 4
+ 534 0008 28D04DE2 		sub	sp, sp, #40
+ 142:../HelloWorld.c ****     void *StackPtr = NULL;
+ 535              		.loc 1 142 0
+ 536 000c 0030A0E3 		mov	r3, #0
+ 537 0010 08300BE5 		str	r3, [fp, #-8]
+ 143:../HelloWorld.c ****     uint32_t Status = CY_U3P_SUCCESS;
+ 538              		.loc 1 143 0
+ 539 0014 0030A0E3 		mov	r3, #0
+ 540 0018 0C300BE5 		str	r3, [fp, #-12]
+ 144:../HelloWorld.c **** 
+ 145:../HelloWorld.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 541              		.loc 1 145 0
+ 542 001c 020BA0E3 		mov	r0, #2048
+ 543 0020 FEFFFFEB 		bl	CyU3PMemAlloc
+ 544 0024 08000BE5 		str	r0, [fp, #-8]
+ 146:../HelloWorld.c ****     Status = CyU3PThreadCreate (&ApplicationThread, // Handle to my Application Thread
+ 545              		.loc 1 146 0
+ 546 0028 08301BE5 		ldr	r3, [fp, #-8]
+ 547 002c 00308DE5 		str	r3, [sp, #0]
+ 548 0030 023BA0E3 		mov	r3, #2048
+ 549 0034 04308DE5 		str	r3, [sp, #4]
+ 550 0038 0830A0E3 		mov	r3, #8
+ 551 003c 08308DE5 		str	r3, [sp, #8]
+ 552 0040 0830A0E3 		mov	r3, #8
+ 553 0044 0C308DE5 		str	r3, [sp, #12]
+ 554 0048 0030A0E3 		mov	r3, #0
+ 555 004c 10308DE5 		str	r3, [sp, #16]
+ 556 0050 0130A0E3 		mov	r3, #1
+ 557 0054 14308DE5 		str	r3, [sp, #20]
+ 558 0058 A830A0E3 		mov	r3, #168
+ 559 005c 18308DE5 		str	r3, [sp, #24]
+ 560 0060 28009FE5 		ldr	r0, .L29
+ 561 0064 28109FE5 		ldr	r1, .L29+4
+ 562 0068 28209FE5 		ldr	r2, .L29+8
+ 563 006c 2A30A0E3 		mov	r3, #42
+ 564 0070 FEFFFFEB 		bl	_txe_thread_create
+ 565 0074 0C000BE5 		str	r0, [fp, #-12]
+ 147:../HelloWorld.c ****             "11:HelloWorld",                		// Thread ID and name
+ 148:../HelloWorld.c ****             ApplicationThread_Entry,     			// Thread entry function
+ 149:../HelloWorld.c ****             42,                             		// Parameter passed to Thread
+ 150:../HelloWorld.c ****             StackPtr,                       		// Pointer to the allocated thread stack
+ 151:../HelloWorld.c ****             APPLICATION_THREAD_STACK,               // Allocated thread stack size
+ 152:../HelloWorld.c ****             APPLICATION_THREAD_PRIORITY,            // Thread priority
+ 153:../HelloWorld.c ****             APPLICATION_THREAD_PRIORITY,            // = Thread priority so no preemption
+ 154:../HelloWorld.c ****             CYU3P_NO_TIME_SLICE,            		// Time slice no supported
+ 155:../HelloWorld.c ****             CYU3P_AUTO_START                		// Start the thread immediately
+ 156:../HelloWorld.c ****             );
+ 157:../HelloWorld.c **** 
+ 158:../HelloWorld.c ****     if (Status != CY_U3P_SUCCESS)
+ 566              		.loc 1 158 0
+ 567 0078 0C301BE5 		ldr	r3, [fp, #-12]
+ 568 007c 000053E3 		cmp	r3, #0
+ 569 0080 0000000A 		beq	.L26
+ 570              	.L28:
+ 159:../HelloWorld.c ****     {
+ 160:../HelloWorld.c ****         /* Thread creation failed with the Status = error code */
+ 161:../HelloWorld.c **** 
+ 162:../HelloWorld.c ****         /* Add custom recovery or debug actions here */
+ 163:../HelloWorld.c **** 
+ 164:../HelloWorld.c ****         /* Application cannot continue. Loop indefinitely */
+ 165:../HelloWorld.c ****         while(1);
+ 571              		.loc 1 165 0 discriminator 1
+ 572 0084 FEFFFFEA 		b	.L28
+ 573              	.L26:
+ 166:../HelloWorld.c ****     }
+ 167:../HelloWorld.c **** }
+ 574              		.loc 1 167 0
+ 575 0088 04D04BE2 		sub	sp, fp, #4
+ 576 008c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 577              	.L30:
+ 578              		.align	2
+ 579              	.L29:
+ 580 0090 00000000 		.word	ApplicationThread
+ 581 0094 34010000 		.word	.LC15
+ 582 0098 00000000 		.word	ApplicationThread_Entry
+ 583              		.cfi_endproc
+ 584              	.LFE4:
+ 586              		.section	.text.main,"ax",%progbits
+ 587              		.align	2
+ 588              		.global	main
+ 590              	main:
+ 591              	.LFB5:
+ 168:../HelloWorld.c **** 
+ 169:../HelloWorld.c **** 
+ 170:../HelloWorld.c **** // Main sets up the CPU environment the starts the RTOS
+ 171:../HelloWorld.c **** int main (void)
+ 172:../HelloWorld.c **** {
+ 592              		.loc 1 172 0
+ 593              		.cfi_startproc
+ 594              		@ args = 0, pretend = 0, frame = 64
+ 595              		@ frame_needed = 1, uses_anonymous_args = 0
+ 596 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 597              	.LCFI10:
+ 598              		.cfi_def_cfa_offset 8
+ 599 0004 04B08DE2 		add	fp, sp, #4
+ 600              		.cfi_offset 14, -4
+ 601              		.cfi_offset 11, -8
+ 602              	.LCFI11:
+ 603              		.cfi_def_cfa 11, 4
+ 604 0008 40D04DE2 		sub	sp, sp, #64
+ 173:../HelloWorld.c ****     CyU3PIoMatrixConfig_t ioConfig;
+ 174:../HelloWorld.c ****     CyU3PSysClockConfig_t clockConfig;
+ 175:../HelloWorld.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 605              		.loc 1 175 0
+ 606 000c 0030A0E3 		mov	r3, #0
+ 607 0010 08300BE5 		str	r3, [fp, #-8]
+ 176:../HelloWorld.c **** 
+ 177:../HelloWorld.c ****  // The default clock parameters run the CPU at 384 MHz, change the setup to 403.2MHz so that I can
+ 178:../HelloWorld.c ****     clockConfig.setSysClk400 = CyTrue;
+ 608              		.loc 1 178 0
+ 609 0014 0130A0E3 		mov	r3, #1
+ 610 0018 40300BE5 		str	r3, [fp, #-64]
+ 179:../HelloWorld.c ****     clockConfig.cpuClkDiv = 2;
+ 611              		.loc 1 179 0
+ 612 001c 0230A0E3 		mov	r3, #2
+ 613 0020 3C304BE5 		strb	r3, [fp, #-60]
+ 180:../HelloWorld.c **** 	clockConfig.dmaClkDiv = 2;
+ 614              		.loc 1 180 0
+ 615 0024 0230A0E3 		mov	r3, #2
+ 616 0028 3B304BE5 		strb	r3, [fp, #-59]
+ 181:../HelloWorld.c **** 	clockConfig.mmioClkDiv = 2;
+ 617              		.loc 1 181 0
+ 618 002c 0230A0E3 		mov	r3, #2
+ 619 0030 3A304BE5 		strb	r3, [fp, #-58]
+ 182:../HelloWorld.c **** 	clockConfig.useStandbyClk = CyFalse;
+ 620              		.loc 1 182 0
+ 621 0034 0030A0E3 		mov	r3, #0
+ 622 0038 38300BE5 		str	r3, [fp, #-56]
+ 183:../HelloWorld.c **** 	clockConfig.clkSrc = CY_U3P_SYS_CLK;
+ 623              		.loc 1 183 0
+ 624 003c 0330A0E3 		mov	r3, #3
+ 625 0040 34304BE5 		strb	r3, [fp, #-52]
+ 184:../HelloWorld.c **** 	Status = CyU3PDeviceInit (&clockConfig);
+ 626              		.loc 1 184 0
+ 627 0044 40304BE2 		sub	r3, fp, #64
+ 628 0048 0300A0E1 		mov	r0, r3
+ 629 004c FEFFFFEB 		bl	CyU3PDeviceInit
+ 630 0050 08000BE5 		str	r0, [fp, #-8]
+ 185:../HelloWorld.c **** 	if (Status == CY_U3P_SUCCESS)
+ 631              		.loc 1 185 0
+ 632 0054 08301BE5 		ldr	r3, [fp, #-8]
+ 633 0058 000053E3 		cmp	r3, #0
+ 634 005c 1800001A 		bne	.L32
+ 186:../HelloWorld.c ****     {
+ 187:../HelloWorld.c **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);
+ 635              		.loc 1 187 0
+ 636 0060 0100A0E3 		mov	r0, #1
+ 637 0064 0110A0E3 		mov	r1, #1
+ 638 0068 0120A0E3 		mov	r2, #1
+ 639 006c FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 640 0070 08000BE5 		str	r0, [fp, #-8]
+ 188:../HelloWorld.c **** 		if (Status == CY_U3P_SUCCESS)
+ 641              		.loc 1 188 0
+ 642 0074 08301BE5 		ldr	r3, [fp, #-8]
+ 643 0078 000053E3 		cmp	r3, #0
+ 644 007c 1000001A 		bne	.L32
+ 189:../HelloWorld.c **** 		{
+ 190:../HelloWorld.c **** 			CyU3PMemSet((uint8_t *)&ioConfig, 0, sizeof(ioConfig));
+ 645              		.loc 1 190 0
+ 646 0080 30304BE2 		sub	r3, fp, #48
+ 647 0084 0300A0E1 		mov	r0, r3
+ 648 0088 0010A0E3 		mov	r1, #0
+ 649 008c 2820A0E3 		mov	r2, #40
+ 650 0090 FEFFFFEB 		bl	CyU3PMemSet
+ 191:../HelloWorld.c **** //r			ioConfig.isDQ32Bit = CyFalse;
+ 192:../HelloWorld.c **** //r			ioConfig.s0Mode 	 = CY_U3P_SPORT_INACTIVE;
+ 193:../HelloWorld.c **** //r			ioConfig.s1Mode	 = CY_U3P_SPORT_INACTIVE;
+ 194:../HelloWorld.c **** 			ioConfig.useUart   = CyTrue;
+ 651              		.loc 1 194 0
+ 652 0094 0130A0E3 		mov	r3, #1
+ 653 0098 2C300BE5 		str	r3, [fp, #-44]
+ 195:../HelloWorld.c **** //r			ioConfig.useI2C    = CyFalse;
+ 196:../HelloWorld.c **** //r			ioConfig.useI2S    = CyFalse;
+ 197:../HelloWorld.c **** //r			ioConfig.useSpi    = CyFalse;
+ 198:../HelloWorld.c **** 			ioConfig.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+ 654              		.loc 1 198 0
+ 655 009c 0130A0E3 		mov	r3, #1
+ 656 00a0 1A304BE5 		strb	r3, [fp, #-26]
+ 199:../HelloWorld.c **** //r			ioConfig.gpioSimpleEn[0]  = 0;
+ 200:../HelloWorld.c **** //r			ioConfig.gpioSimpleEn[1]  = 0;
+ 201:../HelloWorld.c **** //r			ioConfig.gpioComplexEn[0] = 0;
+ 202:../HelloWorld.c **** //r			ioConfig.gpioComplexEn[1] = 0;
+ 203:../HelloWorld.c **** 			Status = CyU3PDeviceConfigureIOMatrix(&ioConfig);
+ 657              		.loc 1 203 0
+ 658 00a4 30304BE2 		sub	r3, fp, #48
+ 659 00a8 0300A0E1 		mov	r0, r3
+ 660 00ac FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 661 00b0 08000BE5 		str	r0, [fp, #-8]
+ 204:../HelloWorld.c **** 			if (Status == CY_U3P_SUCCESS) CyU3PKernelEntry();	// Start RTOS, this does not return
+ 662              		.loc 1 204 0
+ 663 00b4 08301BE5 		ldr	r3, [fp, #-8]
+ 664 00b8 000053E3 		cmp	r3, #0
+ 665 00bc 0000001A 		bne	.L32
+ 666              		.loc 1 204 0 is_stmt 0 discriminator 1
+ 667 00c0 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 668              	.L32:
+ 205:../HelloWorld.c **** 		}
+ 206:../HelloWorld.c **** 	}
+ 207:../HelloWorld.c ****     // Get here on a failure, can't recover, just hang here
+ 208:../HelloWorld.c ****     while (1);
+ 669              		.loc 1 208 0 is_stmt 1 discriminator 1
+ 670 00c4 FEFFFFEA 		b	.L32
+ 671              		.cfi_endproc
+ 672              	.LFE5:
+ 674              		.text
+ 675              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 HelloWorld.c
+                            *COM*:000000a8 ApplicationThread
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:27     .bss.glDebugTxEnabled:00000000 glDebugTxEnabled
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:24     .bss.glDebugTxEnabled:00000000 $d
+                            *COM*:000000a0 glUARTtoCPU_Handle
+                            *COM*:00000020 glConsoleInBuffer
+                            *COM*:00000004 glConsoleInIndex
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:33     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:43     .text.CheckStatus:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:46     .text.CheckStatus:00000000 CheckStatus
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:105    .text.CheckStatus:0000007c $d
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:120    .text.UartCallback:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:123    .text.UartCallback:00000000 UartCallback
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:226    .text.UartCallback:00000114 $d
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:257    .text.InitializeDebugConsole:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:260    .text.InitializeDebugConsole:00000000 InitializeDebugConsole
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:416    .text.InitializeDebugConsole:0000019c $d
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:442    .text.ApplicationThread_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:445    .text.ApplicationThread_Entry:00000000 ApplicationThread_Entry
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:506    .text.ApplicationThread_Entry:00000084 $d
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:517    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:520    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:580    .text.CyFxApplicationDefine:00000090 $d
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:587    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccES9jL.s:590    .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+_tx_thread_sleep
+CyU3PDmaChannelSetWrapUp
+CyU3PDmaChannelGetBuffer
+CyU3PDmaChannelDiscardBuffer
+CyU3PUartRxSetBlockXfer
+CyU3PUartInit
+CyU3PMemSet
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble
+CyU3PDmaChannelCreate
+CyU3PDmaChannelDestroy
+CyU3PDmaChannelSetXfer
+CyU3PMemAlloc
+_txe_thread_create
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

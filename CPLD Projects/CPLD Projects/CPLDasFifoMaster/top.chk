@@ -1,0 +1,143 @@
+
+----------------------------------------
+|  P a r t i t i o n    S u c c e e d  |
+----------------------------------------
+0 Group(s)
+
+GCLK0: 1=PCLK.p
+----------------- B l o c k 0 ------------------
+PLApt(27/56), Fanin(34/38), Clk(1/3), Bct(4/4), Pin(8/10), Mcell(13/16)
+PLApts[27/56] 123 158 122 157 5 3 3 148 121 156 120 155 101 7 104 99 100 103 107 102 105 46 145 147 () () () () 4 () () 108 () () () () () () () () () () () () () () () () () () () () () () () 8
+Fanins[34] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<1>.n DQ<2>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n User<0>.n User<1>.n User<2>.n User<3>.n User<4>.n User<6>.n Counter/Counter__add0000<31>.n Counter/Counter_and0000.n Counter/CurrentState_FSM_FFd1.n Counter/RUN_Sync.n Counter/RUN_Sync0.n N_PZ_317.n N_PZ_519.n DQ<31>_BUFR.n Button<6>.p CTRL<10>.p CTRL<4>.p CTRL<6>.p CTRL<9>.p
+clk[1] PCLK 
+CTC: (pt=5) CTRL<9> ;
+CTR: (pt=3) CTRL<10> ;
+CTS: (pt=3) CTRL<10> ;
+CTE: (pt=148) N_PZ_519' ;
+vref: [0]
+Signal[15] [DQ<14>(115),DQ<14>(4)] [DQ<13>(112),DQ<13>(7)] [DQ<12>(106),DQ<12>(9)] [DQ<11>(104),DQ<11>(11)]  
+           [User<1>(101),User<1>(13)] [User<0>(103),User<0>(12)] [CTRL<10>(6)] [CTRL<9>(8)]  
+           [Counter/CurrentState_FSM_FFd1(114)] [Counter/Counter_and0000(110)] [DQ<31>_BUFR(109)]  
+           [Counter/RUN_Sync(108)] [Counter/RUN_Sync0(107)] [N_PZ_519(102)] [N_PZ_317(116)] 
+Signal[15] [ 0: User<1>(101) User<1>(13)  ][ 1: N_PZ_519(102)  ][ 2: User<0>(103) User<0>(12)  ][ 3:  
+           DQ<11>(104) DQ<11>(11)  ][ 4: (10)  ][ 5: DQ<12>(106) DQ<12>(9)  ][ 6: Counter/RUN_Sync0(107)  ] 
+           [ 7: Counter/RUN_Sync(108)  ][ 8: DQ<31>_BUFR(109)  ][ 9: Counter/Counter_and0000(110)  ][ 10:  
+           CTRL<9>(8)  ][ 11: DQ<13>(112) DQ<13>(7)  ][ 12: CTRL<10>(6)  ][ 13:  
+           Counter/CurrentState_FSM_FFd1(114)  ][ 14: DQ<14>(115) DQ<14>(4)  ][ 15: N_PZ_317(116) (3)  ]
+----------------- B l o c k 1 ------------------
+PLApt(18/56), Fanin(26/38), Clk(1/3), Bct(2/4), Pin(10/10), Mcell(7/16)
+PLApts[18/18] 119 154 80 82 94 3 97 148 98 6 93 81 95 79 92 2 78 96
+Fanins[26] DQ<0>.n DQ<10>.n DQ<1>.n DQ<2>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n User<1>.n User<2>.n User<3>.n User<4>.n User<5>.n User<6>.n User<7>.n Counter/Counter_and0000.n Counter/RUN_Sync.n N_PZ_317.n N_PZ_519.n Button<6>.p CTRL<10>.p CTRL<4>.p CTRL<5>.p CTRL<6>.p CTRL<7>.p
+clk[1] PCLK 
+CTC: 
+CTR: (pt=3) CTRL<10> ;
+CTS: 
+CTE: (pt=148) N_PZ_519' ;
+vref: [0]
+Signal[10] [DQ<10>(130),DQ<10>(23)] [User<2>(118),User<2>(14)] [User<6>(122),User<6>(18)]  
+           [User<5>(121),User<5>(17)] [User<7>(127),User<7>(19)] [User<4>(120),User<4>(16)]  
+           [User<3>(119),User<3>(15)] [CTRL<6>(27)] [CTRL<7>(24)] [PCLK(22)] 
+Signal[10] [ 0:  ][ 1: User<2>(118) User<2>(14)  ][ 2: User<3>(119) User<3>(15)  ][ 3: User<4>(120)  
+           User<4>(16)  ][ 4: User<5>(121) User<5>(17)  ][ 5: User<6>(122) User<6>(18)  ][ 6:  ][ 7:  ][ 8:  
+            ][ 9:  ][ 10: User<7>(127) User<7>(19)  ][ 11:  ][ 12: PCLK(22)  ][ 13: DQ<10>(130) DQ<10>(23)  ] 
+           [ 14: CTRL<7>(24)  ][ 15: CTRL<6>(27)  ]
+----------------- B l o c k 2 ------------------
+PLApt(17/56), Fanin(38/38), Clk(1/3), Bct(1/4), Pin(10/11), Mcell(10/16)
+PLApts[17/56] 138 173 137 172 136 171 135 148 170 124 159 12 144 146 () () () () () () () () 174 () () () () () () () () () () () () () () () () () () () () () () () () () () () () () 91 () () 90
+Fanins[38] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<17>.n DQ<18>.n DQ<19>.n DQ<1>.n DQ<20>.n DQ<21>.n DQ<22>.n DQ<23>.n DQ<24>.n DQ<25>.n DQ<26>.n DQ<27>.n DQ<28>.n DQ<29>.n DQ<2>.n DQ<30>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n User<4>.n Counter/Counter__add0000<30>.n Counter/Counter_and0000.n N_PZ_317.n N_PZ_519.n DQ<31>_BUFR.n CTRL<10>.p DQ<30>.p DQ<31>.p
+clk[1] PCLK 
+CTC: 
+CTR: 
+CTS: 
+CTE: (pt=148) N_PZ_519' ;
+vref: [0]
+Signal[10] [DQ<29>(139),DQ<29>(95)] [DQ<28>(143),DQ<28>(94)] [DQ<27>(145),DQ<27>(93)]  
+           [DQ<26>(146),DQ<26>(92)] [DQ<15>(134),DQ<15>(2)] [DQ<30>(138),DQ<30>(96)]  
+           [DQ<31>(137),DQ<31>(97)] [LED<6>(148),LED<6>(90)] [LED<7>(147),LED<7>(91)] [INT(136),INT(99)] 
+Signal[10] [ 0:  ][ 1: DQ<15>(134) DQ<15>(2)  ][ 2: (1)  ][ 3: INT(136) INT(99)  ][ 4: DQ<31>(137)  
+           DQ<31>(97)  ][ 5: DQ<30>(138) DQ<30>(96)  ][ 6: DQ<29>(139) DQ<29>(95)  ][ 7:  ][ 8:  ][ 9:  ] 
+           [ 10: DQ<28>(143) DQ<28>(94)  ][ 11:  ][ 12: DQ<27>(145) DQ<27>(93)  ][ 13: DQ<26>(146)  
+           DQ<26>(92)  ][ 14: LED<7>(147) LED<7>(91)  ][ 15: LED<6>(148) LED<6>(90)  ]
+----------------- B l o c k 3 ------------------
+PLApt(14/56), Fanin(38/38), Clk(1/3), Bct(1/4), Pin(10/11), Mcell(7/16)
+PLApts[14/56] 118 153 117 152 116 151 115 148 150 114 149 9 () () () () () () () () () () () () () () () () () () () () () () () () () 10 () () () () () () () () () () () () () () () () () 106
+Fanins[38] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<17>.n DQ<18>.n DQ<19>.n DQ<1>.n DQ<20>.n DQ<21>.n DQ<22>.n DQ<23>.n DQ<24>.n DQ<25>.n DQ<26>.n DQ<27>.n DQ<28>.n DQ<29>.n DQ<2>.n DQ<30>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n User<1>.n User<4>.n Counter/Counter_and0000.n Counter/CurrentState_FSM_FFd1.n N_PZ_317.n N_PZ_519.n CTRL<10>.p
+clk[1] PCLK 
+CTC: 
+CTR: 
+CTS: 
+CTE: (pt=148) N_PZ_519' ;
+vref: [0]
+Signal[11] [DQ<9>(149),DQ<9>(28)] [DQ<8>(154),DQ<8>(32)] [DQ<7>(159),DQ<7>(34)] [DQ<6>(161),DQ<6>(36)]  
+           [DQ<5>(163),DQ<5>(39)] [CTRL<2>(164),CTRL<2>(40)] [CTRL<4>(35)] [CTRL<5>(33)] [I2C_SCL(30)]  
+           [I2C_SDA(29)] [Counter/Counter__add0000<30>(158)] 
+Signal[11] [ 0: DQ<9>(149) DQ<9>(28)  ][ 1:  ][ 2:  ][ 3: I2C_SDA(29)  ][ 4: I2C_SCL(30)  ][ 5: DQ<8>(154)  
+           DQ<8>(32)  ][ 6: CTRL<5>(33)  ][ 7:  ][ 8:  ][ 9: Counter/Counter__add0000<30>(158)  ][ 10:  
+           DQ<7>(159) DQ<7>(34)  ][ 11: CTRL<4>(35)  ][ 12: DQ<6>(161) DQ<6>(36)  ][ 13: (37)  ][ 14:  
+           DQ<5>(163) DQ<5>(39)  ][ 15: CTRL<2>(164) CTRL<2>(40)  ]
+----------------- B l o c k 4 ------------------
+PLApt(5/56), Fanin(35/38), Clk(0/3), Bct(2/4), Pin(4/10), Mcell(3/16)
+PLApts[5/56] 41 () () () 5 () 3 () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () () 4 () () () () () 44
+Fanins[35] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<17>.n DQ<18>.n DQ<19>.n DQ<1>.n DQ<20>.n DQ<21>.n DQ<22>.n DQ<23>.n DQ<24>.n DQ<25>.n DQ<26>.n DQ<27>.n DQ<28>.n DQ<29>.n DQ<2>.n DQ<30>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n User<0>.n DQ<31>_BUFR.n CTRL<10>.p CTRL<9>.p
+clk[0] 
+CTC: (pt=5) CTRL<9> ;
+CTR: 
+CTS: (pt=3) CTRL<10> ;
+CTE: 
+vref: [0]
+Signal[ 5] [SPI_SSN(178),SPI_SSN(74)] [FlashCS_n(177),FlashCS_n(73)] [Button<6>(65)] [SPI_SCK(76)]  
+           [Counter/Counter__add0000<31>(180)] 
+Signal[ 5] [ 0: Button<6>(65)  ][ 1: (66)  ][ 2: (67)  ][ 3:  ][ 4: (68)  ][ 5:  ][ 6: (70)  ][ 7:  ][ 8:  ] 
+           [ 9:  ][ 10: (71)  ][ 11: (72)  ][ 12: FlashCS_n(177) FlashCS_n(73)  ][ 13: SPI_SSN(178)  
+           SPI_SSN(74)  ][ 14: SPI_SCK(76)  ][ 15: Counter/Counter__add0000<31>(180)  ]
+----------------- B l o c k 5 ------------------
+PLApt(17/56), Fanin(29/38), Clk(1/3), Bct(1/4), Pin(8/9), Mcell(8/16)
+PLApts[17/17] 134 169 133 168 132 167 131 148 166 130 165 129 164 128 163 127 162
+Fanins[29] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<17>.n DQ<18>.n DQ<19>.n DQ<1>.n DQ<20>.n DQ<21>.n DQ<22>.n DQ<23>.n DQ<24>.n DQ<25>.n DQ<2>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n User<4>.n Counter/Counter_and0000.n N_PZ_317.n N_PZ_519.n CTRL<10>.p
+clk[1] PCLK 
+CTC: 
+CTR: 
+CTS: 
+CTE: (pt=148) N_PZ_519' ;
+vref: [0]
+Signal[ 8] [DQ<25>(182),DQ<25>(63)] [DQ<24>(183),DQ<24>(61)] [DQ<23>(184),DQ<23>(60)]  
+           [DQ<22>(185),DQ<22>(59)] [DQ<21>(186),DQ<21>(58)] [DQ<20>(192),DQ<20>(56)]  
+           [DQ<19>(194),DQ<19>(55)] [DQ<18>(196),DQ<18>(54)] 
+Signal[ 8] [ 0: (64)  ][ 1: DQ<25>(182) DQ<25>(63)  ][ 2: DQ<24>(183) DQ<24>(61)  ][ 3: DQ<23>(184)  
+           DQ<23>(60)  ][ 4: DQ<22>(185) DQ<22>(59)  ][ 5: DQ<21>(186) DQ<21>(58)  ][ 6:  ][ 7:  ][ 8:  ] 
+           [ 9:  ][ 10:  ][ 11: DQ<20>(192) DQ<20>(56)  ][ 12:  ][ 13: DQ<19>(194) DQ<19>(55)  ][ 14:  ] 
+           [ 15: DQ<18>(196) DQ<18>(54)  ]
+----------------- B l o c k 6 ------------------
+PLApt(7/56), Fanin(12/38), Clk(0/3), Bct(0/4), Pin(10/10), Mcell(8/16)
+PLApts[7/56] () () () () () () () () () () () () () () () () () () () () () () 83 () () 84 () () () () () () () () () () () () () () 85 () () () () () 86 () () 87 () () 88 () () 89
+Fanins[12] User<0>.n DQ<24>.p DQ<25>.p DQ<26>.p DQ<27>.p DQ<28>.p DQ<29>.p GPIO45_n.p I2C_SCL.p I2C_SDA.p RX_MOSI.p SPI_SCK.p
+clk[0] 
+CTC: 
+CTR: 
+CTS: 
+CTE: 
+vref: [0]
+Signal[10] [TP_2(201),TP_2(80)] [LED<0>(202),LED<0>(81)] [LED<1>(207),LED<1>(82)] [LED<2>(209),LED<2>(85)]  
+           [LED<3>(210),LED<3>(86)] [LED<4>(211),LED<4>(87)] [LED<5>(212),LED<5>(89)]  
+           [TX_MISO(197),TX_MISO(77)] [GPIO45_n(79)] [RX_MOSI(78)] 
+Signal[10] [ 0: TX_MISO(197) TX_MISO(77)  ][ 1: RX_MOSI(78)  ][ 2:  ][ 3: GPIO45_n(79)  ][ 4: TP_2(201)  
+           TP_2(80)  ][ 5: LED<0>(202) LED<0>(81)  ][ 6:  ][ 7:  ][ 8:  ][ 9:  ][ 10: LED<1>(207) LED<1>(82)  
+            ][ 11:  ][ 12: LED<2>(209) LED<2>(85)  ][ 13: LED<3>(210) LED<3>(86)  ][ 14: LED<4>(211)  
+           LED<4>(87)  ][ 15: LED<5>(212) LED<5>(89)  ]
+----------------- B l o c k 7 ------------------
+PLApt(20/56), Fanin(31/38), Clk(1/3), Bct(2/4), Pin(9/9), Mcell(9/16)
+PLApts[20/20] 126 161 125 160 113 3 143 148 112 142 6 93 111 141 110 140 2 96 109 139
+Fanins[31] DQ<0>.n DQ<10>.n DQ<11>.n DQ<12>.n DQ<13>.n DQ<14>.n DQ<15>.n DQ<16>.n DQ<17>.n DQ<1>.n DQ<2>.n DQ<3>.n DQ<4>.n DQ<5>.n DQ<6>.n DQ<7>.n DQ<8>.n DQ<9>.n User<2>.n User<3>.n User<4>.n User<6>.n Counter/Counter_and0000.n Counter/RUN_Sync.n N_PZ_317.n N_PZ_519.n Button<6>.p CTRL<10>.p CTRL<5>.p CTRL<6>.p CTRL<7>.p
+clk[1] PCLK 
+CTC: 
+CTR: (pt=3) CTRL<10> ;
+CTS: 
+CTE: (pt=148) N_PZ_519' ;
+vref: [0]
+Signal[ 9] [DQ<17>(214),DQ<17>(53)] [DQ<16>(215),DQ<16>(52)] [DQ<4>(228),DQ<4>(41)] [DQ<3>(226),DQ<3>(43)]  
+           [CTRL<1>(227),CTRL<1>(42)] [DQ<2>(224),DQ<2>(46)] [DQ<1>(218),DQ<1>(49)]  
+           [CTRL<0>(225),CTRL<0>(44)] [DQ<0>(216),DQ<0>(50)] 
+Signal[ 9] [ 0:  ][ 1: DQ<17>(214) DQ<17>(53)  ][ 2: DQ<16>(215) DQ<16>(52)  ][ 3: DQ<0>(216) DQ<0>(50)  ] 
+           [ 4:  ][ 5: DQ<1>(218) DQ<1>(49)  ][ 6:  ][ 7:  ][ 8:  ][ 9:  ][ 10:  ][ 11: DQ<2>(224) DQ<2>(46)  
+            ][ 12: CTRL<0>(225) CTRL<0>(44)  ][ 13: DQ<3>(226) DQ<3>(43)  ][ 14: CTRL<1>(227) CTRL<1>(42)  ] 
+           [ 15: DQ<4>(228) DQ<4>(41)  ]

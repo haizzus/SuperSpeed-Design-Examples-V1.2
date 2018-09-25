@@ -1,0 +1,261 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"RunApplication.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ApplicationThread,212,4
+  22              		.comm	glIsApplicationActive,4,4
+  23              		.section	.rodata
+  24              		.align	2
+  25              	.LC0:
+  26 0000 44656275 		.ascii	"Debug Console Initialized\000"
+  26      6720436F 
+  26      6E736F6C 
+  26      6520496E 
+  26      69746961 
+  27 001a 0000     		.align	2
+  28              	.LC1:
+  29 001c 43726561 		.ascii	"Create Event\000"
+  29      74652045 
+  29      76656E74 
+  29      00
+  30 0029 000000   		.align	2
+  31              	.LC2:
+  32 002c 0A0A0A53 		.ascii	"\012\012\012Start Ellisys NOW\012\000"
+  32      74617274 
+  32      20456C6C 
+  32      69737973 
+  32      204E4F57 
+  33 0042 0000     		.align	2
+  34              	.LC3:
+  35 0044 55534220 		.ascii	"USB Initialized\000"
+  35      496E6974 
+  35      69616C69 
+  35      7A656400 
+  36              		.align	2
+  37              	.LC4:
+  38 0054 0A417070 		.ascii	"\012Application started with %d\012\000"
+  38      6C696361 
+  38      74696F6E 
+  38      20737461 
+  38      72746564 
+  39 0072 0000     		.align	2
+  40              	.LC5:
+  41 0074 25642C20 		.ascii	"%d, \000"
+  41      00
+  42 0079 000000   		.align	2
+  43              	.LC6:
+  44 007c 0A417070 		.ascii	"\012Application failed to initialize. Error code: %"
+  44      6C696361 
+  44      74696F6E 
+  44      20666169 
+  44      6C656420 
+  45 00ac 642E0A00 		.ascii	"d.\012\000"
+  46              		.section	.text.ApplicationThread_Entry,"ax",%progbits
+  47              		.align	2
+  48              		.global	ApplicationThread_Entry
+  50              	ApplicationThread_Entry:
+  51              	.LFB0:
+  52              		.file 1 "../RunApplication.c"
+   1:../RunApplication.c **** // Demonstrate USB by enumerating as a CDC Device
+   2:../RunApplication.c **** //
+   3:../RunApplication.c **** // john@usb-by-example.com
+   4:../RunApplication.c **** //
+   5:../RunApplication.c **** 
+   6:../RunApplication.c **** #include "Application.h"
+   7:../RunApplication.c **** 
+   8:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(void);
+   9:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeUSB(void);
+  10:../RunApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  11:../RunApplication.c **** extern void BackgroundPrint(uint32_t TimeToWait);
+  12:../RunApplication.c **** 
+  13:../RunApplication.c **** extern CyU3PEvent DisplayEvent;			// Used to display events
+  14:../RunApplication.c **** 
+  15:../RunApplication.c **** CyU3PThread ApplicationThread;			// Handle to my Application Thread
+  16:../RunApplication.c **** CyBool_t glIsApplicationActive;			// Set true once device is enumerated
+  17:../RunApplication.c **** 
+  18:../RunApplication.c **** 
+  19:../RunApplication.c **** 
+  20:../RunApplication.c **** 
+  21:../RunApplication.c **** 
+  22:../RunApplication.c **** void ApplicationThread_Entry (uint32_t Value)
+  23:../RunApplication.c **** {
+  53              		.loc 1 23 0
+  54              		.cfi_startproc
+  55              		@ args = 0, pretend = 0, frame = 16
+  56              		@ frame_needed = 1, uses_anonymous_args = 0
+  57 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  58              	.LCFI0:
+  59              		.cfi_def_cfa_offset 8
+  60 0004 04B08DE2 		add	fp, sp, #4
+  61              		.cfi_offset 14, -4
+  62              		.cfi_offset 11, -8
+  63              	.LCFI1:
+  64              		.cfi_def_cfa 11, 4
+  65 0008 10D04DE2 		sub	sp, sp, #16
+  66 000c 10000BE5 		str	r0, [fp, #-16]
+  24:../RunApplication.c **** 	int32_t Seconds = 0;
+  67              		.loc 1 24 0
+  68 0010 0030A0E3 		mov	r3, #0
+  69 0014 08300BE5 		str	r3, [fp, #-8]
+  25:../RunApplication.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+  70              		.loc 1 25 0
+  71 0018 0030A0E3 		mov	r3, #0
+  72 001c 0C300BE5 		str	r3, [fp, #-12]
+  26:../RunApplication.c **** 
+  27:../RunApplication.c **** #if (DirectConnect)
+  28:../RunApplication.c ****     // Can't have a UART Debug Console with DirectConnect
+  29:../RunApplication.c ****     // This means that all of the DebugPrints will fail since glDebugTxEnabled = CyFalse
+  30:../RunApplication.c **** #else
+  31:../RunApplication.c ****     Status = InitializeDebugConsole();
+  73              		.loc 1 31 0
+  74 0020 FEFFFFEB 		bl	InitializeDebugConsole
+  75 0024 0C000BE5 		str	r0, [fp, #-12]
+  32:../RunApplication.c ****     CheckStatus("Debug Console Initialized", Status);
+  76              		.loc 1 32 0
+  77 0028 C4009FE5 		ldr	r0, .L7
+  78 002c 0C101BE5 		ldr	r1, [fp, #-12]
+  79 0030 FEFFFFEB 		bl	CheckStatus
+  33:../RunApplication.c **** #endif
+  34:../RunApplication.c **** 
+  35:../RunApplication.c ****     // Create an Event Group that Callbacks can use to signal events to a Background DebugPrint
+  36:../RunApplication.c ****     Status = CyU3PEventCreate(&DisplayEvent);
+  80              		.loc 1 36 0
+  81 0034 BC009FE5 		ldr	r0, .L7+4
+  82 0038 0010A0E3 		mov	r1, #0
+  83 003c 3C20A0E3 		mov	r2, #60
+  84 0040 FEFFFFEB 		bl	_txe_event_flags_create
+  85 0044 0C000BE5 		str	r0, [fp, #-12]
+  37:../RunApplication.c ****     CheckStatus("Create Event", Status);
+  86              		.loc 1 37 0
+  87 0048 AC009FE5 		ldr	r0, .L7+8
+  88 004c 0C101BE5 		ldr	r1, [fp, #-12]
+  89 0050 FEFFFFEB 		bl	CheckStatus
+  38:../RunApplication.c **** 
+  39:../RunApplication.c ****     // Give me time to start up my Ellisys Explorer
+  40:../RunApplication.c ****     DebugPrint(4, "\n\n\nStart Ellisys NOW\n");
+  90              		.loc 1 40 0
+  91 0054 0400A0E3 		mov	r0, #4
+  92 0058 A0109FE5 		ldr	r1, .L7+12
+  93 005c FEFFFFEB 		bl	CyU3PDebugPrint
+  41:../RunApplication.c ****     CyU3PThreadSleep(10000);
+  94              		.loc 1 41 0
+  95 0060 9C009FE5 		ldr	r0, .L7+16
+  96 0064 FEFFFFEB 		bl	_tx_thread_sleep
+  42:../RunApplication.c **** 
+  43:../RunApplication.c ****     Status = InitializeUSB();
+  97              		.loc 1 43 0
+  98 0068 FEFFFFEB 		bl	InitializeUSB
+  99 006c 0C000BE5 		str	r0, [fp, #-12]
+  44:../RunApplication.c ****     CheckStatus("USB Initialized", Status);
+ 100              		.loc 1 44 0
+ 101 0070 90009FE5 		ldr	r0, .L7+20
+ 102 0074 0C101BE5 		ldr	r1, [fp, #-12]
+ 103 0078 FEFFFFEB 		bl	CheckStatus
+  45:../RunApplication.c **** 
+  46:../RunApplication.c ****     // Wait for the USB connection to be up
+  47:../RunApplication.c ****     while (!glIsApplicationActive) BackgroundPrint(10);
+ 104              		.loc 1 47 0
+ 105 007c 010000EA 		b	.L2
+ 106              	.L3:
+ 107              		.loc 1 47 0 is_stmt 0 discriminator 2
+ 108 0080 0A00A0E3 		mov	r0, #10
+ 109 0084 FEFFFFEB 		bl	BackgroundPrint
+ 110              	.L2:
+ 111              		.loc 1 47 0 discriminator 1
+ 112 0088 7C309FE5 		ldr	r3, .L7+24
+ 113 008c 003093E5 		ldr	r3, [r3, #0]
+ 114 0090 000053E3 		cmp	r3, #0
+ 115 0094 F9FFFF0A 		beq	.L3
+  48:../RunApplication.c **** 
+  49:../RunApplication.c ****     if (Status == CY_U3P_SUCCESS)
+ 116              		.loc 1 49 0 is_stmt 1
+ 117 0098 0C301BE5 		ldr	r3, [fp, #-12]
+ 118 009c 000053E3 		cmp	r3, #0
+ 119 00a0 0E00001A 		bne	.L4
+  50:../RunApplication.c ****     {
+  51:../RunApplication.c ****     	DebugPrint(4, "\nApplication started with %d\n", Value);
+ 120              		.loc 1 51 0
+ 121 00a4 0400A0E3 		mov	r0, #4
+ 122 00a8 60109FE5 		ldr	r1, .L7+28
+ 123 00ac 10201BE5 		ldr	r2, [fp, #-16]
+ 124 00b0 FEFFFFEB 		bl	CyU3PDebugPrint
+ 125              	.L5:
+  52:../RunApplication.c ****     	// Now run forever
+  53:../RunApplication.c ****     	while (1)
+  54:../RunApplication.c ****     	{
+  55:../RunApplication.c ****         	{
+  56:../RunApplication.c ****         		DebugPrint(4, "%d, ", Seconds++);
+ 126              		.loc 1 56 0 discriminator 1
+ 127 00b4 08301BE5 		ldr	r3, [fp, #-8]
+ 128 00b8 08201BE5 		ldr	r2, [fp, #-8]
+ 129 00bc 012082E2 		add	r2, r2, #1
+ 130 00c0 08200BE5 		str	r2, [fp, #-8]
+ 131 00c4 0400A0E3 		mov	r0, #4
+ 132 00c8 44109FE5 		ldr	r1, .L7+32
+ 133 00cc 0320A0E1 		mov	r2, r3
+ 134 00d0 FEFFFFEB 		bl	CyU3PDebugPrint
+  57:../RunApplication.c ****     			BackgroundPrint(1000);				// Do something useful while waiting
+ 135              		.loc 1 57 0 discriminator 1
+ 136 00d4 FA0FA0E3 		mov	r0, #1000
+ 137 00d8 FEFFFFEB 		bl	BackgroundPrint
+  58:../RunApplication.c ****     		}
+  59:../RunApplication.c **** 		}
+ 138              		.loc 1 59 0 discriminator 1
+ 139 00dc F4FFFFEA 		b	.L5
+ 140              	.L4:
+  60:../RunApplication.c ****     }
+  61:../RunApplication.c ****     DebugPrint(4, "\nApplication failed to initialize. Error code: %d.\n", Status);
+ 141              		.loc 1 61 0
+ 142 00e0 0400A0E3 		mov	r0, #4
+ 143 00e4 2C109FE5 		ldr	r1, .L7+36
+ 144 00e8 0C201BE5 		ldr	r2, [fp, #-12]
+ 145 00ec FEFFFFEB 		bl	CyU3PDebugPrint
+ 146              	.L6:
+  62:../RunApplication.c ****     while (1);		// Hang here
+ 147              		.loc 1 62 0 discriminator 1
+ 148 00f0 FEFFFFEA 		b	.L6
+ 149              	.L8:
+ 150              		.align	2
+ 151              	.L7:
+ 152 00f4 00000000 		.word	.LC0
+ 153 00f8 00000000 		.word	DisplayEvent
+ 154 00fc 1C000000 		.word	.LC1
+ 155 0100 2C000000 		.word	.LC2
+ 156 0104 10270000 		.word	10000
+ 157 0108 44000000 		.word	.LC3
+ 158 010c 00000000 		.word	glIsApplicationActive
+ 159 0110 54000000 		.word	.LC4
+ 160 0114 74000000 		.word	.LC5
+ 161 0118 7C000000 		.word	.LC6
+ 162              		.cfi_endproc
+ 163              	.LFE0:
+ 165              		.text
+ 166              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 RunApplication.c
+                            *COM*:000000d4 ApplicationThread
+                            *COM*:00000004 glIsApplicationActive
+C:\Users\John\AppData\Local\Temp\ccTgffcb.s:24     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccTgffcb.s:47     .text.ApplicationThread_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccTgffcb.s:50     .text.ApplicationThread_Entry:00000000 ApplicationThread_Entry
+C:\Users\John\AppData\Local\Temp\ccTgffcb.s:152    .text.ApplicationThread_Entry:000000f4 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+InitializeDebugConsole
+CheckStatus
+_txe_event_flags_create
+CyU3PDebugPrint
+_tx_thread_sleep
+InitializeUSB
+BackgroundPrint
+DisplayEvent

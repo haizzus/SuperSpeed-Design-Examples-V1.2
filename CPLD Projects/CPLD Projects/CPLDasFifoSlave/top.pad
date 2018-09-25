@@ -1,0 +1,129 @@
+Release 8.1i - Fit P.15xf
+Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
+
+10- 5-2015  6:04PM
+
+NOTE: This file is designed to be imported into a spreadsheet program
+such as Microsoft Excel for viewing, printing and sorting. The pipe '|'
+character is used as the data field separator.
+This file is also designed to support parsing.
+
+Input file:  top.ngd
+output file: top.pad
+Part type:   xc2c128
+Speed grade: -6
+Package:     vq100
+
+Pinout by Pin Number:
+
+-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+Pin Number|Signal Name|Pin Usage|Pin Name|Direction|IO Standard|IO Bank Number|{blank}|Slew Rate|Termination|{blank}|Voltage|Constraint|
+P1|PGND||I/O/GTS2|||2|||||||
+P2|DQ<15>|O|I/O/GTS3|OUTPUT|LVCMOS33|2||FAST||||
+P3|PGND||I/O/GTS0|||2|||||||
+P4|DQ<14>|O|I/O/GTS1|OUTPUT|LVCMOS33|2||FAST||||
+P5||VCCAUX|VAUX||||||||||
+P6|CTRL<10>|I|I/O|INPUT|LVCMOS33|2||FAST||||
+P7|DQ<13>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P8|CTRL<9>|I|I/O|INPUT|LVCMOS33|2||FAST||||
+P9|DQ<12>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P10|PGND||I/O|||2|||||||
+P11|DQ<11>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P12|User<0>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P13|User<1>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P14|User<2>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P15|User<3>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P16|User<4>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P17|User<5>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P18|User<6>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P19|User<7>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P20||VCCIO-3.3|VCCIO|||1|||||||
+P21|GND||GND||||||||||
+P22|PCLK|GCK|I/O/GCK0||LVCMOS33|1||FAST||||
+P23|DQ<10>|O|I/O/GCK1|OUTPUT|LVCMOS33|1||FAST||||
+P24|CTRL<7>|O|I/O/CDR|OUTPUT|LVCMOS33|1||FAST||||
+P25|GND||GND||||||||||
+P26||VCC|VCC||||||||||
+P27|CTRL<6>|O|I/O/GCK2|OUTPUT|LVCMOS33|1||FAST||||
+P28|DQ<9>|O|I/O/DGE0|OUTPUT|LVCMOS33|1||FAST||||
+P29|I2C_SDA|I|I/O|INPUT|LVCMOS33|1||FAST||||
+P30|I2C_SCL|I|I/O|INPUT|LVCMOS33|1||FAST||||
+P31|GND||GND||||||||||
+P32|DQ<8>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P33|CTRL<5>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P34|DQ<7>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P35|CTRL<4>|I|I/O|INPUT|LVCMOS33|1||FAST||||
+P36|DQ<6>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P37|CTRL<3>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P38||VCCIO-3.3|VCCIO|||1|||||||
+P39|DQ<5>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P40|PGND||I/O|||1|||||||
+P41|DQ<4>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P42|CTRL<1>|I|I/O|INPUT|LVCMOS33|1||FAST||||
+P43|DQ<3>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P44|CTRL<0>|I|I/O|INPUT|LVCMOS33|1||FAST||||
+P45|TDI||TDI||||||||||
+P46|DQ<2>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P47|TMS||TMS||||||||||
+P48|TCK||TCK||||||||||
+P49|DQ<1>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P50|DQ<0>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P51||VCCIO-3.3|VCCIO|||1|||||||
+P52|DQ<16>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P53|DQ<17>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P54|DQ<18>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P55|DQ<19>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P56|DQ<20>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P57||VCC|VCC||||||||||
+P58|DQ<21>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P59|DQ<22>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P60|DQ<23>|O|I/O|OUTPUT|LVCMOS33|1||FAST||||
+P61|DQ<24>|I/O|I/O|BIDIR|LVCMOS33|1||FAST||||
+P62|GND||GND||||||||||
+P63|DQ<25>|I/O|I/O|BIDIR|LVCMOS33|1||FAST||||
+P64|PGND||I/O|||1|||||||
+P65|Button<6>|I|I/O|INPUT|LVCMOS33|2||FAST||||
+P66|PGND||I/O|||2|||||||
+P67|PGND||I/O|||2|||||||
+P68|PGND||I/O|||2|||||||
+P69|GND||GND||||||||||
+P70|PGND||I/O|||2|||||||
+P71|PGND||I/O|||2|||||||
+P72|PGND||I/O|||2|||||||
+P73|FlashCS_n|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P74|SPI_SSN|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P75|GND||GND||||||||||
+P76|SPI_SCK|I|I/O|INPUT|LVCMOS33|2||FAST||||
+P77|TX_MISO|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P78|RX_MOSI|I|I/O|INPUT|LVCMOS33|2||FAST||||
+P79|GPIO45_n|I|I/O|INPUT|LVCMOS33|2||FAST||||
+P80|TP_2|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P81|LED<0>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P82|LED<1>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P83|TDO||TDO||||||||||
+P84|GND||GND||||||||||
+P85|LED<2>|O|I/O/DGE1|OUTPUT|LVCMOS33|2||FAST||||
+P86|LED<3>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P87|LED<4>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P88||VCCIO-3.3|VCCIO|||2|||||||
+P89|LED<5>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P90|LED<6>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P91|LED<7>|O|I/O|OUTPUT|LVCMOS33|2||FAST||||
+P92|DQ<26>|I/O|I/O|BIDIR|LVCMOS33|2||FAST||||
+P93|DQ<27>|I/O|I/O|BIDIR|LVCMOS33|2||FAST||||
+P94|DQ<28>|I/O|I/O|BIDIR|LVCMOS33|2||FAST||||
+P95|DQ<29>|I/O|I/O|BIDIR|LVCMOS33|2||FAST||||
+P96|DQ<30>|I/O|I/O|BIDIR|LVCMOS33|2||FAST||||
+P97|DQ<31>|I/O|I/O|BIDIR|LVCMOS33|2||FAST||||
+P98||VCCIO-3.3|VCCIO|||2|||||||
+P99|INT|O|I/O/GSR|OUTPUT|LVCMOS33|2||FAST||||
+P100|GND||GND||||||||||
+
+To preserve the pinout above for future design iterations in
+Project Navigator simply execute the (Lock Pins) process
+located under the (Implement Design) process in a toolbox named
+(Optional Implementation Tools) or invoke PIN2UCF from the
+command line. The location constraints will be written into your
+specified UCF file
+
+

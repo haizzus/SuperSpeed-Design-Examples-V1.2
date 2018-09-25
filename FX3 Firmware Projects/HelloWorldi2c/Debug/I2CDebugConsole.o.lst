@@ -1,0 +1,354 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"I2CDebugConsole.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.bss.glI2C_DebugThread,"aw",%nobits
+  22              		.align	2
+  25              	glI2C_DebugThread:
+  26 0000 00000000 		.space	168
+  26      00000000 
+  26      00000000 
+  26      00000000 
+  26      00000000 
+  27              		.section	.bss.glI2C_DebugLock,"aw",%nobits
+  28              		.align	2
+  31              	glI2C_DebugLock:
+  32 0000 00000000 		.space	56
+  32      00000000 
+  32      00000000 
+  32      00000000 
+  32      00000000 
+  33              		.section	.bss.glI2C_DebugBuffer,"aw",%nobits
+  34              		.align	2
+  37              	glI2C_DebugBuffer:
+  38 0000 00000000 		.space	12
+  38      00000000 
+  38      00000000 
+  39              		.section	.bss.glI2C_DebugBufferOffset,"aw",%nobits
+  40              		.align	1
+  43              	glI2C_DebugBufferOffset:
+  44 0000 0000     		.space	2
+  45              		.section	.bss.glI2C_DebugTXHandle,"aw",%nobits
+  46              		.align	2
+  49              	glI2C_DebugTXHandle:
+  50 0000 00000000 		.space	160
+  50      00000000 
+  50      00000000 
+  50      00000000 
+  50      00000000 
+  51              		.section	.bss.glI2C_DebugRXHandle,"aw",%nobits
+  52              		.align	2
+  55              	glI2C_DebugRXHandle:
+  56 0000 00000000 		.space	160
+  56      00000000 
+  56      00000000 
+  56      00000000 
+  56      00000000 
+  57              		.section	.bss.glI2C_DebugInit,"aw",%nobits
+  58              		.align	2
+  61              	glI2C_DebugInit:
+  62 0000 00000000 		.space	4
+  63              		.section	.rodata
+  64              		.align	2
+  65              	.LC0:
+  66 0000 43795533 		.ascii	"CyU3PDmaChannelCreate(I2C_TX)\000"
+  66      50446D61 
+  66      4368616E 
+  66      6E656C43 
+  66      72656174 
+  67 001e 0000     		.align	2
+  68              	.LC1:
+  69 0020 43795533 		.ascii	"CyU3PDmaChannelSetXfer(I2C_TX)\000"
+  69      50446D61 
+  69      4368616E 
+  69      6E656C53 
+  69      65745866 
+  70 003f 00       		.align	2
+  71              	.LC2:
+  72 0040 43795533 		.ascii	"CyU3PDmaChannelGetBuffer(I2C_TX)\000"
+  72      50446D61 
+  72      4368616E 
+  72      6E656C47 
+  72      65744275 
+  73 0061 000000   		.align	2
+  74              	.LC3:
+  75 0064 43795533 		.ascii	"CyU3PDmaChannelCreate(I2C_RX)\000"
+  75      50446D61 
+  75      4368616E 
+  75      6E656C43 
+  75      72656174 
+  76 0082 0000     		.section	.text.I2C_DebugInit,"ax",%progbits
+  77              		.align	2
+  78              		.global	I2C_DebugInit
+  80              	I2C_DebugInit:
+  81              	.LFB0:
+  82              		.file 1 "../I2CDebugConsole.c"
+   1:../I2CDebugConsole.c **** /*
+   2:../I2CDebugConsole.c ****  * I2C_DebugConsole.c
+   3:../I2CDebugConsole.c ****  *
+   4:../I2CDebugConsole.c ****  *  This module implements the DebugPrint portion of cyu3debug.c for an I2C-based console
+   5:../I2CDebugConsole.c ****  *	The LOG function is not implemented which makes this code simpler
+   6:../I2CDebugConsole.c ****  */
+   7:../I2CDebugConsole.c **** 
+   8:../I2CDebugConsole.c **** #include "Application.h"
+   9:../I2CDebugConsole.c **** 
+  10:../I2CDebugConsole.c **** // Global variables static to this module
+  11:../I2CDebugConsole.c **** static CyU3PThread		glI2C_DebugThread;
+  12:../I2CDebugConsole.c **** static CyU3PMutex		glI2C_DebugLock;
+  13:../I2CDebugConsole.c **** static CyU3PDmaBuffer_t	glI2C_DebugBuffer;
+  14:../I2CDebugConsole.c **** static uint16_t			glI2C_DebugBufferOffset;
+  15:../I2CDebugConsole.c **** static CyU3PDmaChannel	glI2C_DebugTXHandle;
+  16:../I2CDebugConsole.c **** static CyU3PDmaChannel	glI2C_DebugRXHandle;
+  17:../I2CDebugConsole.c **** static CyBool_t			glI2C_DebugInit = CyFalse;		// Debug Init has been called or not
+  18:../I2CDebugConsole.c **** 
+  19:../I2CDebugConsole.c **** // 
+  20:../I2CDebugConsole.c **** CyU3PReturnStatus_t I2C_DebugInit(uint8_t traceLevel)
+  21:../I2CDebugConsole.c **** {
+  83              		.loc 1 21 0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 40
+  86              		@ frame_needed = 1, uses_anonymous_args = 0
+  87 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  88              	.LCFI0:
+  89              		.cfi_def_cfa_offset 8
+  90 0004 04B08DE2 		add	fp, sp, #4
+  91              		.cfi_offset 14, -4
+  92              		.cfi_offset 11, -8
+  93              	.LCFI1:
+  94              		.cfi_def_cfa 11, 4
+  95 0008 28D04DE2 		sub	sp, sp, #40
+  96 000c 0030A0E1 		mov	r3, r0
+  97 0010 25304BE5 		strb	r3, [fp, #-37]
+  22:../I2CDebugConsole.c ****     CyU3PDmaChannelConfig_t dmaConfig;
+  23:../I2CDebugConsole.c ****     CyU3PReturnStatus_t Status;
+  24:../I2CDebugConsole.c **** 
+  25:../I2CDebugConsole.c ****     if (glI2C_DebugInit) return CY_U3P_ERROR_ALREADY_STARTED;
+  98              		.loc 1 25 0
+  99 0014 50319FE5 		ldr	r3, .L5
+ 100 0018 003093E5 		ldr	r3, [r3, #0]
+ 101 001c 000053E3 		cmp	r3, #0
+ 102 0020 0100000A 		beq	.L2
+ 103              		.loc 1 25 0 is_stmt 0 discriminator 1
+ 104 0024 4330A0E3 		mov	r3, #67
+ 105 0028 4C0000EA 		b	.L3
+ 106              	.L2:
+  26:../I2CDebugConsole.c **** 
+  27:../I2CDebugConsole.c ****     CyU3PMutexGet(&glI2C_DebugLock, CYU3P_WAIT_FOREVER);
+ 107              		.loc 1 27 0 is_stmt 1
+ 108 002c 3C019FE5 		ldr	r0, .L5+4
+ 109 0030 0010E0E3 		mvn	r1, #0
+ 110 0034 FEFFFFEB 		bl	_txe_mutex_get
+  28:../I2CDebugConsole.c **** 
+  29:../I2CDebugConsole.c ****     // Create MANUAL DMA channels to send and receive data from the I2C IO block
+  30:../I2CDebugConsole.c ****     CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 111              		.loc 1 30 0
+ 112 0038 24304BE2 		sub	r3, fp, #36
+ 113 003c 0300A0E1 		mov	r0, r3
+ 114 0040 0010A0E3 		mov	r1, #0
+ 115 0044 1C20A0E3 		mov	r2, #28
+ 116 0048 FEFFFFEB 		bl	CyU3PMemSet
+  31:../I2CDebugConsole.c ****     // Get a set of buffers to output debug messages
+  32:../I2CDebugConsole.c ****     dmaConfig.size = CY_U3P_DEBUG_DMA_BUFFER_SIZE;
+ 117              		.loc 1 32 0
+ 118 004c 013CA0E3 		mov	r3, #256
+ 119 0050 B4324BE1 		strh	r3, [fp, #-36]	@ movhi
+  33:../I2CDebugConsole.c ****     dmaConfig.count = CY_U3P_DEBUG_DMA_BUFFER_COUNT;
+ 120              		.loc 1 33 0
+ 121 0054 0830A0E3 		mov	r3, #8
+ 122 0058 B2324BE1 		strh	r3, [fp, #-34]	@ movhi
+  34:../I2CDebugConsole.c ****     dmaConfig.prodSckId = CY_U3P_CPU_SOCKET_PROD;
+ 123              		.loc 1 34 0
+ 124 005c 10319FE5 		ldr	r3, .L5+8
+ 125 0060 B0324BE1 		strh	r3, [fp, #-32]	@ movhi
+  35:../I2CDebugConsole.c ****     dmaConfig.consSckId = CY_U3P_LPP_SOCKET_I2C_CONS;
+ 126              		.loc 1 35 0
+ 127 0064 0230A0E3 		mov	r3, #2
+ 128 0068 BE314BE1 		strh	r3, [fp, #-30]	@ movhi
+  36:../I2CDebugConsole.c ****     dmaConfig.dmaMode = CY_U3P_DMA_MODE_BYTE;
+ 129              		.loc 1 36 0
+ 130 006c 0030A0E3 		mov	r3, #0
+ 131 0070 14304BE5 		strb	r3, [fp, #-20]
+  37:../I2CDebugConsole.c ****     Status = CyU3PDmaChannelCreate (&glI2C_DebugTXHandle, CY_U3P_DMA_TYPE_MANUAL_OUT, &dmaConfig);
+ 132              		.loc 1 37 0
+ 133 0074 24304BE2 		sub	r3, fp, #36
+ 134 0078 F8009FE5 		ldr	r0, .L5+12
+ 135 007c 0410A0E3 		mov	r1, #4
+ 136 0080 0320A0E1 		mov	r2, r3
+ 137 0084 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 138 0088 08000BE5 		str	r0, [fp, #-8]
+  38:../I2CDebugConsole.c ****     CheckStatus("CyU3PDmaChannelCreate(I2C_TX)", Status);
+ 139              		.loc 1 38 0
+ 140 008c E8009FE5 		ldr	r0, .L5+16
+ 141 0090 08101BE5 		ldr	r1, [fp, #-8]
+ 142 0094 FEFFFFEB 		bl	CheckStatus
+  39:../I2CDebugConsole.c **** #if (0)
+  40:../I2CDebugConsole.c **** // Ask Karthik what this is and does
+  41:../I2CDebugConsole.c ****     if (Status == CY_U3P_SUCCESS)
+  42:../I2CDebugConsole.c ****     {
+  43:../I2CDebugConsole.c ****         /* The cache control for this channel has to be done internally. */
+  44:../I2CDebugConsole.c ****         if (glIsDCacheEnabled)
+  45:../I2CDebugConsole.c ****         {
+  46:../I2CDebugConsole.c ****             Status = CyU3PDmaChannelCacheControl (&glDebugChanHandle, CyTrue);
+  47:../I2CDebugConsole.c ****         }
+  48:../I2CDebugConsole.c ****     }
+  49:../I2CDebugConsole.c **** #endif
+  50:../I2CDebugConsole.c **** 	Status = CyU3PDmaChannelSetXfer(&glI2C_DebugTXHandle, 0);
+ 143              		.loc 1 50 0
+ 144 0098 D8009FE5 		ldr	r0, .L5+12
+ 145 009c 0010A0E3 		mov	r1, #0
+ 146 00a0 FEFFFFEB 		bl	CyU3PDmaChannelSetXfer
+ 147 00a4 08000BE5 		str	r0, [fp, #-8]
+  51:../I2CDebugConsole.c **** 	CheckStatus("CyU3PDmaChannelSetXfer(I2C_TX)", Status);
+ 148              		.loc 1 51 0
+ 149 00a8 D0009FE5 		ldr	r0, .L5+20
+ 150 00ac 08101BE5 		ldr	r1, [fp, #-8]
+ 151 00b0 FEFFFFEB 		bl	CheckStatus
+  52:../I2CDebugConsole.c **** 	// Get the first buffer to write into
+  53:../I2CDebugConsole.c **** 	Status = CyU3PDmaChannelGetBuffer(&glI2C_DebugTXHandle, &glI2C_DebugBuffer, CYU3P_WAIT_FOREVER);
+ 152              		.loc 1 53 0
+ 153 00b4 BC009FE5 		ldr	r0, .L5+12
+ 154 00b8 C4109FE5 		ldr	r1, .L5+24
+ 155 00bc 0020E0E3 		mvn	r2, #0
+ 156 00c0 FEFFFFEB 		bl	CyU3PDmaChannelGetBuffer
+ 157 00c4 08000BE5 		str	r0, [fp, #-8]
+  54:../I2CDebugConsole.c **** 	CheckStatus("CyU3PDmaChannelGetBuffer(I2C_TX)", Status);
+ 158              		.loc 1 54 0
+ 159 00c8 B8009FE5 		ldr	r0, .L5+28
+ 160 00cc 08101BE5 		ldr	r1, [fp, #-8]
+ 161 00d0 FEFFFFEB 		bl	CheckStatus
+  55:../I2CDebugConsole.c ****     if (Status != CY_U3P_SUCCESS)
+ 162              		.loc 1 55 0
+ 163 00d4 08301BE5 		ldr	r3, [fp, #-8]
+ 164 00d8 000053E3 		cmp	r3, #0
+ 165 00dc 0500000A 		beq	.L4
+  56:../I2CDebugConsole.c ****     {
+  57:../I2CDebugConsole.c ****         CyU3PDmaChannelDestroy (&glI2C_DebugTXHandle);
+ 166              		.loc 1 57 0
+ 167 00e0 90009FE5 		ldr	r0, .L5+12
+ 168 00e4 FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+  58:../I2CDebugConsole.c ****         CyU3PMutexPut(&glI2C_DebugLock);
+ 169              		.loc 1 58 0
+ 170 00e8 80009FE5 		ldr	r0, .L5+4
+ 171 00ec FEFFFFEB 		bl	_txe_mutex_put
+  59:../I2CDebugConsole.c ****         return Status;
+ 172              		.loc 1 59 0
+ 173 00f0 08301BE5 		ldr	r3, [fp, #-8]
+ 174 00f4 190000EA 		b	.L3
+ 175              	.L4:
+  60:../I2CDebugConsole.c ****     }
+  61:../I2CDebugConsole.c **** 	// Get a small buffer to handle Console In
+  62:../I2CDebugConsole.c ****     dmaConfig.size = 16;
+ 176              		.loc 1 62 0
+ 177 00f8 1030A0E3 		mov	r3, #16
+ 178 00fc B4324BE1 		strh	r3, [fp, #-36]	@ movhi
+  63:../I2CDebugConsole.c ****     dmaConfig.count = 1;
+ 179              		.loc 1 63 0
+ 180 0100 0130A0E3 		mov	r3, #1
+ 181 0104 B2324BE1 		strh	r3, [fp, #-34]	@ movhi
+  64:../I2CDebugConsole.c ****     dmaConfig.prodSckId = CY_U3P_LPP_SOCKET_I2C_PROD;
+ 182              		.loc 1 64 0
+ 183 0108 0530A0E3 		mov	r3, #5
+ 184 010c B0324BE1 		strh	r3, [fp, #-32]	@ movhi
+  65:../I2CDebugConsole.c ****     dmaConfig.consSckId = CY_U3P_CPU_SOCKET_CONS;
+ 185              		.loc 1 65 0
+ 186 0110 3F3CA0E3 		mov	r3, #16128
+ 187 0114 BE314BE1 		strh	r3, [fp, #-30]	@ movhi
+  66:../I2CDebugConsole.c ****     Status = CyU3PDmaChannelCreate (&glI2C_DebugRXHandle, CY_U3P_DMA_TYPE_MANUAL_IN, &dmaConfig);
+ 188              		.loc 1 66 0
+ 189 0118 24304BE2 		sub	r3, fp, #36
+ 190 011c 68009FE5 		ldr	r0, .L5+32
+ 191 0120 0310A0E3 		mov	r1, #3
+ 192 0124 0320A0E1 		mov	r2, r3
+ 193 0128 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 194 012c 08000BE5 		str	r0, [fp, #-8]
+  67:../I2CDebugConsole.c ****     CheckStatus("CyU3PDmaChannelCreate(I2C_RX)", Status);
+ 195              		.loc 1 67 0
+ 196 0130 58009FE5 		ldr	r0, .L5+36
+ 197 0134 08101BE5 		ldr	r1, [fp, #-8]
+ 198 0138 FEFFFFEB 		bl	CheckStatus
+  68:../I2CDebugConsole.c **** 	
+  69:../I2CDebugConsole.c ****     glDebugTraceLevel = traceLevel;
+ 199              		.loc 1 69 0
+ 200 013c 50309FE5 		ldr	r3, .L5+40
+ 201 0140 25205BE5 		ldrb	r2, [fp, #-37]
+ 202 0144 0020C3E5 		strb	r2, [r3, #0]
+  70:../I2CDebugConsole.c **** 
+  71:../I2CDebugConsole.c ****     glI2C_DebugInit = CyTrue;
+ 203              		.loc 1 71 0
+ 204 0148 1C309FE5 		ldr	r3, .L5
+ 205 014c 0120A0E3 		mov	r2, #1
+ 206 0150 002083E5 		str	r2, [r3, #0]
+  72:../I2CDebugConsole.c **** 
+  73:../I2CDebugConsole.c ****     CyU3PMutexPut(&glI2C_DebugLock);
+ 207              		.loc 1 73 0
+ 208 0154 14009FE5 		ldr	r0, .L5+4
+ 209 0158 FEFFFFEB 		bl	_txe_mutex_put
+  74:../I2CDebugConsole.c **** 
+  75:../I2CDebugConsole.c ****     return Status;
+ 210              		.loc 1 75 0
+ 211 015c 08301BE5 		ldr	r3, [fp, #-8]
+ 212              	.L3:
+  76:../I2CDebugConsole.c **** }
+ 213              		.loc 1 76 0
+ 214 0160 0300A0E1 		mov	r0, r3
+ 215 0164 04D04BE2 		sub	sp, fp, #4
+ 216 0168 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 217              	.L6:
+ 218              		.align	2
+ 219              	.L5:
+ 220 016c 00000000 		.word	glI2C_DebugInit
+ 221 0170 00000000 		.word	glI2C_DebugLock
+ 222 0174 013F0000 		.word	16129
+ 223 0178 00000000 		.word	glI2C_DebugTXHandle
+ 224 017c 00000000 		.word	.LC0
+ 225 0180 20000000 		.word	.LC1
+ 226 0184 00000000 		.word	glI2C_DebugBuffer
+ 227 0188 40000000 		.word	.LC2
+ 228 018c 00000000 		.word	glI2C_DebugRXHandle
+ 229 0190 64000000 		.word	.LC3
+ 230 0194 00000000 		.word	glDebugTraceLevel
+ 231              		.cfi_endproc
+ 232              	.LFE0:
+ 234              		.text
+ 235              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 I2CDebugConsole.c
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:22     .bss.glI2C_DebugThread:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:25     .bss.glI2C_DebugThread:00000000 glI2C_DebugThread
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:28     .bss.glI2C_DebugLock:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:31     .bss.glI2C_DebugLock:00000000 glI2C_DebugLock
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:34     .bss.glI2C_DebugBuffer:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:37     .bss.glI2C_DebugBuffer:00000000 glI2C_DebugBuffer
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:40     .bss.glI2C_DebugBufferOffset:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:43     .bss.glI2C_DebugBufferOffset:00000000 glI2C_DebugBufferOffset
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:46     .bss.glI2C_DebugTXHandle:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:49     .bss.glI2C_DebugTXHandle:00000000 glI2C_DebugTXHandle
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:52     .bss.glI2C_DebugRXHandle:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:55     .bss.glI2C_DebugRXHandle:00000000 glI2C_DebugRXHandle
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:58     .bss.glI2C_DebugInit:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:61     .bss.glI2C_DebugInit:00000000 glI2C_DebugInit
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:64     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:77     .text.I2C_DebugInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:80     .text.I2C_DebugInit:00000000 I2C_DebugInit
+C:\Users\John\AppData\Local\Temp\ccO6C13a.s:220    .text.I2C_DebugInit:0000016c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+_txe_mutex_get
+CyU3PMemSet
+CyU3PDmaChannelCreate
+CheckStatus
+CyU3PDmaChannelSetXfer
+CyU3PDmaChannelGetBuffer
+CyU3PDmaChannelDestroy
+_txe_mutex_put
+glDebugTraceLevel

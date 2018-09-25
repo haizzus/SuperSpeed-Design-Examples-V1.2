@@ -1,0 +1,20 @@
+﻿Build started 9/23/2015 3:40:35 PM.
+     1>Project "C:\Projects\FX3 Issues\Benchmark\Benchmark\Engine\Engine.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\x64\Debug\Engine.dll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Cypress\EZ-USB FX3 SDK\1.3\library\cpp\lib\x64" CyAPI.lib setupapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\x64\Debug\Engine.pdb" /ASSEMBLYDEBUG /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X64 /DLL x64\Debug\AbstractConsumer.obj
+         x64\Debug\AbstractProducer.obj
+         x64\Debug\FileConsumer.obj
+         x64\Debug\FileProducer.obj
+         x64\Debug\FixedMemoryProducer.obj
+         x64\Debug\OverlappedIO.obj
+         x64\Debug\RecycleBinConsumer.obj
+         x64\Debug\USBConsumer.obj
+         x64\Debug\USBEngine.obj
+         x64\Debug\USBProducer.obj
+         "x64\Debug\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         Engine.vcxproj -> C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\x64\Debug\Engine.dll
+     1>Done Building Project "C:\Projects\FX3 Issues\Benchmark\Benchmark\Engine\Engine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.27

@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Users\John\Documents\CPLD Projects\CPLDasFifoMaster\impact.xsl
+OUTFILE=C:\Users\John\Documents\CPLD Projects\CPLDasFifoMaster\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Users\John\Documents\CPLD Projects\CPLDasFifoMaster
+LICENSE=iMPACT
+USER_INFO=iMPACT

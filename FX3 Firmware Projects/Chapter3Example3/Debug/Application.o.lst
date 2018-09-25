@@ -1,0 +1,791 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Application.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ThreadHandle,336,4
+  22              		.comm	SharedMutex,56,4
+  23              		.comm	StatsTimer,44,4
+  24              		.comm	LoopCounter,8,4
+  25              		.comm	TotalTime,8,4
+  26              		.global	ActivityTime
+  27              		.section	.rodata.ActivityTime,"a",%progbits
+  28              		.align	2
+  31              	ActivityTime:
+  32 0000 C8000000 		.word	200
+  33 0004 F4010000 		.word	500
+  34 0008 90010000 		.word	400
+  35 000c 2C010000 		.word	300
+  36 0010 00000000 		.word	0
+  37 0014 00000000 		.word	0
+  38 0018 B0040000 		.word	1200
+  39 001c 20030000 		.word	800
+  40 0020 4C040000 		.word	1100
+  41 0024 84030000 		.word	900
+  42              		.section	.text.DoWork,"ax",%progbits
+  43              		.align	2
+  44              		.global	DoWork
+  46              	DoWork:
+  47              	.LFB0:
+  48              		.file 1 "../Application.c"
+   1:../Application.c **** // Chapter3Example3 - demonstrate the operation of an RTOS Mutex
+   2:../Application.c **** //
+   3:../Application.c **** // john@usb-by-example.com
+   4:../Application.c **** //
+   5:../Application.c **** 
+   6:../Application.c **** #include "Application.h"
+   7:../Application.c **** 
+   8:../Application.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(void);
+   9:../Application.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  10:../Application.c **** 
+  11:../Application.c **** CyU3PThread ThreadHandle[2];			// Handle to my Application Thread
+  12:../Application.c **** CyU3PMutex SharedMutex;					// Used to control access to a shared resource
+  13:../Application.c **** CyU3PTimer StatsTimer;					// Used to display Thread statistics
+  14:../Application.c **** uint32_t LoopCounter[2];				// Count passes through each Thread loop
+  15:../Application.c **** uint32_t TotalTime[2];					// Measure time through each loop of Thread
+  16:../Application.c **** 
+  17:../Application.c **** const uint32_t ActivityTime[2][5] = {
+  18:../Application.c **** 		{ 200,  500, 400,  300,   0 },	// Times for Speedy
+  19:../Application.c **** 		{   0, 1200, 800, 1100, 900 }	// Times for Slow (= 2x Speedy)
+  20:../Application.c **** };
+  21:../Application.c **** 
+  22:../Application.c **** 
+  23:../Application.c **** // Declare three helper routines so that I can simply add/remove progress messages
+  24:../Application.c **** void DoWork(uint32_t Time, char* Name)
+  25:../Application.c **** {
+  49              		.loc 1 25 0
+  50              		.cfi_startproc
+  51              		@ args = 0, pretend = 0, frame = 8
+  52              		@ frame_needed = 1, uses_anonymous_args = 0
+  53 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  54              	.LCFI0:
+  55              		.cfi_def_cfa_offset 8
+  56 0004 04B08DE2 		add	fp, sp, #4
+  57              		.cfi_offset 14, -4
+  58              		.cfi_offset 11, -8
+  59              	.LCFI1:
+  60              		.cfi_def_cfa 11, 4
+  61 0008 08D04DE2 		sub	sp, sp, #8
+  62 000c 08000BE5 		str	r0, [fp, #-8]
+  63 0010 0C100BE5 		str	r1, [fp, #-12]
+  26:../Application.c **** //	CyU3PDebugPrint(4, "\n%s waiting %d", Name, Time);
+  27:../Application.c **** 	CyU3PThreadSleep(Time);
+  64              		.loc 1 27 0
+  65 0014 08001BE5 		ldr	r0, [fp, #-8]
+  66 0018 FEFFFFEB 		bl	_tx_thread_sleep
+  28:../Application.c **** }
+  67              		.loc 1 28 0
+  68 001c 04D04BE2 		sub	sp, fp, #4
+  69 0020 0088BDE8 		ldmfd	sp!, {fp, pc}
+  70              		.cfi_endproc
+  71              	.LFE0:
+  73              		.section	.rodata
+  74              		.align	2
+  75              	.LC0:
+  76 0000 0A257320 		.ascii	"\012%s has Mutex\000"
+  76      68617320 
+  76      4D757465 
+  76      7800
+  77              		.section	.text.GetMutex,"ax",%progbits
+  78              		.align	2
+  79              		.global	GetMutex
+  81              	GetMutex:
+  82              	.LFB1:
+  29:../Application.c **** 
+  30:../Application.c **** void GetMutex(char* Name)
+  31:../Application.c **** {
+  83              		.loc 1 31 0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 16
+  86              		@ frame_needed = 1, uses_anonymous_args = 0
+  87 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  88              	.LCFI2:
+  89              		.cfi_def_cfa_offset 8
+  90 0004 04B08DE2 		add	fp, sp, #4
+  91              		.cfi_offset 14, -4
+  92              		.cfi_offset 11, -8
+  93              	.LCFI3:
+  94              		.cfi_def_cfa 11, 4
+  95 0008 10D04DE2 		sub	sp, sp, #16
+  96 000c 10000BE5 		str	r0, [fp, #-16]
+  32:../Application.c **** 	CyU3PReturnStatus_t Status;
+  33:../Application.c **** 	Status = CyU3PMutexGet(&SharedMutex, CYU3P_WAIT_FOREVER);
+  97              		.loc 1 33 0
+  98 0010 20009FE5 		ldr	r0, .L3
+  99 0014 0010E0E3 		mvn	r1, #0
+ 100 0018 FEFFFFEB 		bl	_txe_mutex_get
+ 101 001c 08000BE5 		str	r0, [fp, #-8]
+  34:../Application.c **** //	CheckStatus("Get", Status);
+  35:../Application.c **** 	CyU3PDebugPrint(4, "\n%s has Mutex", Name);
+ 102              		.loc 1 35 0
+ 103 0020 0400A0E3 		mov	r0, #4
+ 104 0024 10109FE5 		ldr	r1, .L3+4
+ 105 0028 10201BE5 		ldr	r2, [fp, #-16]
+ 106 002c FEFFFFEB 		bl	CyU3PDebugPrint
+  36:../Application.c **** }
+ 107              		.loc 1 36 0
+ 108 0030 04D04BE2 		sub	sp, fp, #4
+ 109 0034 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 110              	.L4:
+ 111              		.align	2
+ 112              	.L3:
+ 113 0038 00000000 		.word	SharedMutex
+ 114 003c 00000000 		.word	.LC0
+ 115              		.cfi_endproc
+ 116              	.LFE1:
+ 118              		.section	.text.PutMutex,"ax",%progbits
+ 119              		.align	2
+ 120              		.global	PutMutex
+ 122              	PutMutex:
+ 123              	.LFB2:
+  37:../Application.c **** 
+  38:../Application.c **** void PutMutex(char* Name)
+  39:../Application.c **** {
+ 124              		.loc 1 39 0
+ 125              		.cfi_startproc
+ 126              		@ args = 0, pretend = 0, frame = 16
+ 127              		@ frame_needed = 1, uses_anonymous_args = 0
+ 128 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 129              	.LCFI4:
+ 130              		.cfi_def_cfa_offset 8
+ 131 0004 04B08DE2 		add	fp, sp, #4
+ 132              		.cfi_offset 14, -4
+ 133              		.cfi_offset 11, -8
+ 134              	.LCFI5:
+ 135              		.cfi_def_cfa 11, 4
+ 136 0008 10D04DE2 		sub	sp, sp, #16
+ 137 000c 10000BE5 		str	r0, [fp, #-16]
+  40:../Application.c **** 	CyU3PReturnStatus_t Status;
+  41:../Application.c **** //	CyU3PDebugPrint(4, "\n%s returning Mutex", Name);
+  42:../Application.c **** 	Status = CyU3PMutexPut(&SharedMutex);
+ 138              		.loc 1 42 0
+ 139 0010 0C009FE5 		ldr	r0, .L6
+ 140 0014 FEFFFFEB 		bl	_txe_mutex_put
+ 141 0018 08000BE5 		str	r0, [fp, #-8]
+  43:../Application.c **** //	CheckStatus("Put", Status);
+  44:../Application.c **** }
+ 142              		.loc 1 44 0
+ 143 001c 04D04BE2 		sub	sp, fp, #4
+ 144 0020 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 145              	.L7:
+ 146              		.align	2
+ 147              	.L6:
+ 148 0024 00000000 		.word	SharedMutex
+ 149              		.cfi_endproc
+ 150              	.LFE2:
+ 152              		.section	.rodata
+ 153 000e 0000     		.align	2
+ 154              	.LC1:
+ 155 0010 0A257320 		.ascii	"\012%s started\000"
+ 155      73746172 
+ 155      74656400 
+ 156              		.section	.text.ApplicationThread,"ax",%progbits
+ 157              		.align	2
+ 158              		.global	ApplicationThread
+ 160              	ApplicationThread:
+ 161              	.LFB3:
+  45:../Application.c **** 
+  46:../Application.c **** // Declare main application code
+  47:../Application.c **** // Note that both threads use the SAME CODE; Value passed in determines the thread identity
+  48:../Application.c **** void ApplicationThread(uint32_t Value)
+  49:../Application.c **** {
+ 162              		.loc 1 49 0
+ 163              		.cfi_startproc
+ 164              		@ args = 0, pretend = 0, frame = 16
+ 165              		@ frame_needed = 1, uses_anonymous_args = 0
+ 166 0000 10482DE9 		stmfd	sp!, {r4, fp, lr}
+ 167              	.LCFI6:
+ 168              		.cfi_def_cfa_offset 12
+ 169 0004 08B08DE2 		add	fp, sp, #8
+ 170              		.cfi_offset 14, -4
+ 171              		.cfi_offset 11, -8
+ 172              		.cfi_offset 4, -12
+ 173              	.LCFI7:
+ 174              		.cfi_def_cfa 11, 4
+ 175 0008 2CD04DE2 		sub	sp, sp, #44
+ 176 000c 18000BE5 		str	r0, [fp, #-24]
+  50:../Application.c ****     char* ThreadName;
+  51:../Application.c ****     uint32_t StartTime;
+  52:../Application.c **** 
+  53:../Application.c **** 	CyU3PThreadInfoGet(&ThreadHandle[Value], &ThreadName, 0, 0, 0);
+ 177              		.loc 1 53 0
+ 178 0010 18301BE5 		ldr	r3, [fp, #-24]
+ 179 0014 A820A0E3 		mov	r2, #168
+ 180 0018 930202E0 		mul	r2, r3, r2
+ 181 001c F4319FE5 		ldr	r3, .L10
+ 182 0020 032082E0 		add	r2, r2, r3
+ 183 0024 14304BE2 		sub	r3, fp, #20
+ 184 0028 0010A0E3 		mov	r1, #0
+ 185 002c 00108DE5 		str	r1, [sp, #0]
+ 186 0030 0010A0E3 		mov	r1, #0
+ 187 0034 04108DE5 		str	r1, [sp, #4]
+ 188 0038 0010A0E3 		mov	r1, #0
+ 189 003c 08108DE5 		str	r1, [sp, #8]
+ 190 0040 0010A0E3 		mov	r1, #0
+ 191 0044 0C108DE5 		str	r1, [sp, #12]
+ 192 0048 0010A0E3 		mov	r1, #0
+ 193 004c 10108DE5 		str	r1, [sp, #16]
+ 194 0050 0200A0E1 		mov	r0, r2
+ 195 0054 0310A0E1 		mov	r1, r3
+ 196 0058 0020A0E3 		mov	r2, #0
+ 197 005c 0030A0E3 		mov	r3, #0
+ 198 0060 FEFFFFEB 		bl	_txe_thread_info_get
+  54:../Application.c **** 	ThreadName += 3;	// Skip numeric ID
+ 199              		.loc 1 54 0
+ 200 0064 14301BE5 		ldr	r3, [fp, #-20]
+ 201 0068 033083E2 		add	r3, r3, #3
+ 202 006c 14300BE5 		str	r3, [fp, #-20]
+  55:../Application.c **** 	CyU3PDebugPrint(4, "\n%s started", ThreadName);
+ 203              		.loc 1 55 0
+ 204 0070 14301BE5 		ldr	r3, [fp, #-20]
+ 205 0074 0400A0E3 		mov	r0, #4
+ 206 0078 9C119FE5 		ldr	r1, .L10+4
+ 207 007c 0320A0E1 		mov	r2, r3
+ 208 0080 FEFFFFEB 		bl	CyU3PDebugPrint
+ 209              	.L9:
+  56:../Application.c ****     // Now run forever
+  57:../Application.c ****    	while (1)
+  58:../Application.c ****    	{
+  59:../Application.c ****    		StartTime = CyU3PGetTime();
+ 210              		.loc 1 59 0 discriminator 1
+ 211 0084 FEFFFFEB 		bl	_tx_time_get
+ 212 0088 10000BE5 		str	r0, [fp, #-16]
+  60:../Application.c ****    		DoWork(ActivityTime[Value][0], ThreadName);
+ 213              		.loc 1 60 0 discriminator 1
+ 214 008c 8C119FE5 		ldr	r1, .L10+8
+ 215 0090 18201BE5 		ldr	r2, [fp, #-24]
+ 216 0094 0230A0E1 		mov	r3, r2
+ 217 0098 0331A0E1 		mov	r3, r3, asl #2
+ 218 009c 023083E0 		add	r3, r3, r2
+ 219 00a0 0331A0E1 		mov	r3, r3, asl #2
+ 220 00a4 033081E0 		add	r3, r1, r3
+ 221 00a8 002093E5 		ldr	r2, [r3, #0]
+ 222 00ac 14301BE5 		ldr	r3, [fp, #-20]
+ 223 00b0 0200A0E1 		mov	r0, r2
+ 224 00b4 0310A0E1 		mov	r1, r3
+ 225 00b8 FEFFFFEB 		bl	DoWork
+  61:../Application.c ****    		GetMutex(ThreadName);
+ 226              		.loc 1 61 0 discriminator 1
+ 227 00bc 14301BE5 		ldr	r3, [fp, #-20]
+ 228 00c0 0300A0E1 		mov	r0, r3
+ 229 00c4 FEFFFFEB 		bl	GetMutex
+  62:../Application.c ****    		DoWork(ActivityTime[Value][1], ThreadName);		// Work done with Mutex owned
+ 230              		.loc 1 62 0 discriminator 1
+ 231 00c8 50019FE5 		ldr	r0, .L10+8
+ 232 00cc 18201BE5 		ldr	r2, [fp, #-24]
+ 233 00d0 0410A0E3 		mov	r1, #4
+ 234 00d4 0230A0E1 		mov	r3, r2
+ 235 00d8 0331A0E1 		mov	r3, r3, asl #2
+ 236 00dc 023083E0 		add	r3, r3, r2
+ 237 00e0 0331A0E1 		mov	r3, r3, asl #2
+ 238 00e4 033080E0 		add	r3, r0, r3
+ 239 00e8 013083E0 		add	r3, r3, r1
+ 240 00ec 002093E5 		ldr	r2, [r3, #0]
+ 241 00f0 14301BE5 		ldr	r3, [fp, #-20]
+ 242 00f4 0200A0E1 		mov	r0, r2
+ 243 00f8 0310A0E1 		mov	r1, r3
+ 244 00fc FEFFFFEB 		bl	DoWork
+  63:../Application.c ****    		PutMutex(ThreadName);
+ 245              		.loc 1 63 0 discriminator 1
+ 246 0100 14301BE5 		ldr	r3, [fp, #-20]
+ 247 0104 0300A0E1 		mov	r0, r3
+ 248 0108 FEFFFFEB 		bl	PutMutex
+  64:../Application.c ****    		DoWork(ActivityTime[Value][2], ThreadName);
+ 249              		.loc 1 64 0 discriminator 1
+ 250 010c 0C019FE5 		ldr	r0, .L10+8
+ 251 0110 18201BE5 		ldr	r2, [fp, #-24]
+ 252 0114 0810A0E3 		mov	r1, #8
+ 253 0118 0230A0E1 		mov	r3, r2
+ 254 011c 0331A0E1 		mov	r3, r3, asl #2
+ 255 0120 023083E0 		add	r3, r3, r2
+ 256 0124 0331A0E1 		mov	r3, r3, asl #2
+ 257 0128 033080E0 		add	r3, r0, r3
+ 258 012c 013083E0 		add	r3, r3, r1
+ 259 0130 002093E5 		ldr	r2, [r3, #0]
+ 260 0134 14301BE5 		ldr	r3, [fp, #-20]
+ 261 0138 0200A0E1 		mov	r0, r2
+ 262 013c 0310A0E1 		mov	r1, r3
+ 263 0140 FEFFFFEB 		bl	DoWork
+  65:../Application.c ****    		GetMutex(ThreadName);
+ 264              		.loc 1 65 0 discriminator 1
+ 265 0144 14301BE5 		ldr	r3, [fp, #-20]
+ 266 0148 0300A0E1 		mov	r0, r3
+ 267 014c FEFFFFEB 		bl	GetMutex
+  66:../Application.c ****    		DoWork(ActivityTime[Value][3], ThreadName);		// Work done with Mutex owned
+ 268              		.loc 1 66 0 discriminator 1
+ 269 0150 C8009FE5 		ldr	r0, .L10+8
+ 270 0154 18201BE5 		ldr	r2, [fp, #-24]
+ 271 0158 0C10A0E3 		mov	r1, #12
+ 272 015c 0230A0E1 		mov	r3, r2
+ 273 0160 0331A0E1 		mov	r3, r3, asl #2
+ 274 0164 023083E0 		add	r3, r3, r2
+ 275 0168 0331A0E1 		mov	r3, r3, asl #2
+ 276 016c 033080E0 		add	r3, r0, r3
+ 277 0170 013083E0 		add	r3, r3, r1
+ 278 0174 002093E5 		ldr	r2, [r3, #0]
+ 279 0178 14301BE5 		ldr	r3, [fp, #-20]
+ 280 017c 0200A0E1 		mov	r0, r2
+ 281 0180 0310A0E1 		mov	r1, r3
+ 282 0184 FEFFFFEB 		bl	DoWork
+  67:../Application.c ****    		PutMutex(ThreadName);
+ 283              		.loc 1 67 0 discriminator 1
+ 284 0188 14301BE5 		ldr	r3, [fp, #-20]
+ 285 018c 0300A0E1 		mov	r0, r3
+ 286 0190 FEFFFFEB 		bl	PutMutex
+  68:../Application.c ****    		DoWork(ActivityTime[Value][4], ThreadName);
+ 287              		.loc 1 68 0 discriminator 1
+ 288 0194 84009FE5 		ldr	r0, .L10+8
+ 289 0198 18201BE5 		ldr	r2, [fp, #-24]
+ 290 019c 1010A0E3 		mov	r1, #16
+ 291 01a0 0230A0E1 		mov	r3, r2
+ 292 01a4 0331A0E1 		mov	r3, r3, asl #2
+ 293 01a8 023083E0 		add	r3, r3, r2
+ 294 01ac 0331A0E1 		mov	r3, r3, asl #2
+ 295 01b0 033080E0 		add	r3, r0, r3
+ 296 01b4 013083E0 		add	r3, r3, r1
+ 297 01b8 002093E5 		ldr	r2, [r3, #0]
+ 298 01bc 14301BE5 		ldr	r3, [fp, #-20]
+ 299 01c0 0200A0E1 		mov	r0, r2
+ 300 01c4 0310A0E1 		mov	r1, r3
+ 301 01c8 FEFFFFEB 		bl	DoWork
+  69:../Application.c ****    		LoopCounter[Value]++;							// Keep loop statistics
+ 302              		.loc 1 69 0 discriminator 1
+ 303 01cc 50309FE5 		ldr	r3, .L10+12
+ 304 01d0 18201BE5 		ldr	r2, [fp, #-24]
+ 305 01d4 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 306 01d8 011083E2 		add	r1, r3, #1
+ 307 01dc 40309FE5 		ldr	r3, .L10+12
+ 308 01e0 18201BE5 		ldr	r2, [fp, #-24]
+ 309 01e4 021183E7 		str	r1, [r3, r2, asl #2]
+  70:../Application.c ****    		TotalTime[Value] += CyU3PGetTime() - StartTime;	// Keep loop statistics
+ 310              		.loc 1 70 0 discriminator 1
+ 311 01e8 38309FE5 		ldr	r3, .L10+16
+ 312 01ec 18201BE5 		ldr	r2, [fp, #-24]
+ 313 01f0 024193E7 		ldr	r4, [r3, r2, asl #2]
+ 314 01f4 FEFFFFEB 		bl	_tx_time_get
+ 315 01f8 0020A0E1 		mov	r2, r0
+ 316 01fc 10301BE5 		ldr	r3, [fp, #-16]
+ 317 0200 023063E0 		rsb	r3, r3, r2
+ 318 0204 031084E0 		add	r1, r4, r3
+ 319 0208 18309FE5 		ldr	r3, .L10+16
+ 320 020c 18201BE5 		ldr	r2, [fp, #-24]
+ 321 0210 021183E7 		str	r1, [r3, r2, asl #2]
+  71:../Application.c ****     }
+ 322              		.loc 1 71 0 discriminator 1
+ 323 0214 9AFFFFEA 		b	.L9
+ 324              	.L11:
+ 325              		.align	2
+ 326              	.L10:
+ 327 0218 00000000 		.word	ThreadHandle
+ 328 021c 10000000 		.word	.LC1
+ 329 0220 00000000 		.word	ActivityTime
+ 330 0224 00000000 		.word	LoopCounter
+ 331 0228 00000000 		.word	TotalTime
+ 332              		.cfi_endproc
+ 333              	.LFE3:
+ 335              		.section	.rodata
+ 336              		.align	2
+ 337              	.LC2:
+ 338 001c 456E6162 		.ascii	"Enable DebugConsole\000"
+ 338      6C652044 
+ 338      65627567 
+ 338      436F6E73 
+ 338      6F6C6500 
+ 339              		.align	2
+ 340              	.LC3:
+ 341 0030 43726561 		.ascii	"Create Mutex\000"
+ 341      7465204D 
+ 341      75746578 
+ 341      00
+ 342 003d 000000   		.align	2
+ 343              	.LC4:
+ 344 0040 31303A53 		.ascii	"10:Speedy\000"
+ 344      70656564 
+ 344      7900
+ 345 004a 0000     		.align	2
+ 346              	.LC5:
+ 347 004c 53746172 		.ascii	"Start Speedy\000"
+ 347      74205370 
+ 347      65656479 
+ 347      00
+ 348 0059 000000   		.align	2
+ 349              	.LC6:
+ 350 005c 31313A53 		.ascii	"11:Slow\000"
+ 350      6C6F7700 
+ 351              		.align	2
+ 352              	.LC7:
+ 353 0064 53746172 		.ascii	"Start Slow\000"
+ 353      7420536C 
+ 353      6F7700
+ 354              		.global	__aeabi_uidiv
+ 355 006f 00       		.align	2
+ 356              	.LC8:
+ 357 0070 0A417420 		.ascii	"\012At %d seconds, Speedy Average Time = %d, Slow A"
+ 357      25642073 
+ 357      65636F6E 
+ 357      64732C20 
+ 357      53706565 
+ 358 00a0 76657261 		.ascii	"verage Time = %d\000"
+ 358      67652054 
+ 358      696D6520 
+ 358      3D202564 
+ 358      00
+ 359 00b1 000000   		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 360              		.align	2
+ 361              		.global	CyFxApplicationDefine
+ 363              	CyFxApplicationDefine:
+ 364              	.LFB4:
+  72:../Application.c **** }
+  73:../Application.c **** 
+  74:../Application.c **** // ApplicationDefine function called by RTOS to startup the application threads
+  75:../Application.c **** void CyFxApplicationDefine(void)
+  76:../Application.c **** {
+ 365              		.loc 1 76 0
+ 366              		.cfi_startproc
+ 367              		@ args = 0, pretend = 0, frame = 8
+ 368              		@ frame_needed = 1, uses_anonymous_args = 0
+ 369 0000 30482DE9 		stmfd	sp!, {r4, r5, fp, lr}
+ 370              	.LCFI8:
+ 371              		.cfi_def_cfa_offset 16
+ 372 0004 0CB08DE2 		add	fp, sp, #12
+ 373              		.cfi_offset 14, -4
+ 374              		.cfi_offset 11, -8
+ 375              		.cfi_offset 5, -12
+ 376              		.cfi_offset 4, -16
+ 377              	.LCFI9:
+ 378              		.cfi_def_cfa 11, 4
+ 379 0008 28D04DE2 		sub	sp, sp, #40
+  77:../Application.c ****     void *StackPtr;
+  78:../Application.c ****     uint32_t Status;
+  79:../Application.c **** 
+  80:../Application.c ****     // First, get a debug console running so that we can display some progress
+  81:../Application.c ****     // This DebugConsole will run in its own thread
+  82:../Application.c ****     Status = InitializeDebugConsole();
+ 380              		.loc 1 82 0
+ 381 000c FEFFFFEB 		bl	InitializeDebugConsole
+ 382 0010 10000BE5 		str	r0, [fp, #-16]
+  83:../Application.c ****     CheckStatus("Enable DebugConsole", Status);
+ 383              		.loc 1 83 0
+ 384 0014 7C019FE5 		ldr	r0, .L14
+ 385 0018 10101BE5 		ldr	r1, [fp, #-16]
+ 386 001c FEFFFFEB 		bl	CheckStatus
+  84:../Application.c **** 
+  85:../Application.c ****     // Create a Mutex that will protect a shared resource
+  86:../Application.c ****     Status = CyU3PMutexCreate(&SharedMutex, CYU3P_INHERIT);
+ 387              		.loc 1 86 0
+ 388 0020 74019FE5 		ldr	r0, .L14+4
+ 389 0024 0010A0E3 		mov	r1, #0
+ 390 0028 0120A0E3 		mov	r2, #1
+ 391 002c 3830A0E3 		mov	r3, #56
+ 392 0030 FEFFFFEB 		bl	_txe_mutex_create
+ 393 0034 10000BE5 		str	r0, [fp, #-16]
+  87:../Application.c ****     CheckStatus("Create Mutex", Status);
+ 394              		.loc 1 87 0
+ 395 0038 60019FE5 		ldr	r0, .L14+8
+ 396 003c 10101BE5 		ldr	r1, [fp, #-16]
+ 397 0040 FEFFFFEB 		bl	CheckStatus
+  88:../Application.c **** 
+  89:../Application.c ****     // Create two threads, Speedy and Slow.  Each will need a stack
+  90:../Application.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACKSIZE);
+ 398              		.loc 1 90 0
+ 399 0044 010AA0E3 		mov	r0, #4096
+ 400 0048 FEFFFFEB 		bl	CyU3PMemAlloc
+ 401 004c 14000BE5 		str	r0, [fp, #-20]
+  91:../Application.c ****     Status = CyU3PThreadCreate(&ThreadHandle[0],// Handle for this Thread
+ 402              		.loc 1 91 0
+ 403 0050 14301BE5 		ldr	r3, [fp, #-20]
+ 404 0054 00308DE5 		str	r3, [sp, #0]
+ 405 0058 013AA0E3 		mov	r3, #4096
+ 406 005c 04308DE5 		str	r3, [sp, #4]
+ 407 0060 0F30A0E3 		mov	r3, #15
+ 408 0064 08308DE5 		str	r3, [sp, #8]
+ 409 0068 0F30A0E3 		mov	r3, #15
+ 410 006c 0C308DE5 		str	r3, [sp, #12]
+ 411 0070 0030A0E3 		mov	r3, #0
+ 412 0074 10308DE5 		str	r3, [sp, #16]
+ 413 0078 0130A0E3 		mov	r3, #1
+ 414 007c 14308DE5 		str	r3, [sp, #20]
+ 415 0080 A830A0E3 		mov	r3, #168
+ 416 0084 18308DE5 		str	r3, [sp, #24]
+ 417 0088 14019FE5 		ldr	r0, .L14+12
+ 418 008c 14119FE5 		ldr	r1, .L14+16
+ 419 0090 14219FE5 		ldr	r2, .L14+20
+ 420 0094 0030A0E3 		mov	r3, #0
+ 421 0098 FEFFFFEB 		bl	_txe_thread_create
+ 422 009c 10000BE5 		str	r0, [fp, #-16]
+  92:../Application.c ****             "10:Speedy",                		// Thread ID and name
+  93:../Application.c ****             ApplicationThread,     				// Thread function
+  94:../Application.c ****             0,                             		// Parameter passed to Thread
+  95:../Application.c ****             StackPtr,                       	// Pointer to the allocated thread stack
+  96:../Application.c ****             APPLICATION_THREAD_STACKSIZE,		// Allocated thread stack size
+  97:../Application.c ****             SPEEDY_THREAD_PRIORITY,				// Thread priority
+  98:../Application.c ****             SPEEDY_THREAD_PRIORITY,				// = Thread priority so no preemption
+  99:../Application.c ****             CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+ 100:../Application.c ****             CYU3P_AUTO_START);                	// Start the thread immediately
+ 101:../Application.c ****     CheckStatus("Start Speedy", Status);
+ 423              		.loc 1 101 0
+ 424 00a0 08019FE5 		ldr	r0, .L14+24
+ 425 00a4 10101BE5 		ldr	r1, [fp, #-16]
+ 426 00a8 FEFFFFEB 		bl	CheckStatus
+ 102:../Application.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACKSIZE);
+ 427              		.loc 1 102 0
+ 428 00ac 010AA0E3 		mov	r0, #4096
+ 429 00b0 FEFFFFEB 		bl	CyU3PMemAlloc
+ 430 00b4 14000BE5 		str	r0, [fp, #-20]
+ 103:../Application.c ****     Status = CyU3PThreadCreate(&ThreadHandle[1],// Handle for this Thread
+ 431              		.loc 1 103 0
+ 432 00b8 14301BE5 		ldr	r3, [fp, #-20]
+ 433 00bc 00308DE5 		str	r3, [sp, #0]
+ 434 00c0 013AA0E3 		mov	r3, #4096
+ 435 00c4 04308DE5 		str	r3, [sp, #4]
+ 436 00c8 1430A0E3 		mov	r3, #20
+ 437 00cc 08308DE5 		str	r3, [sp, #8]
+ 438 00d0 1430A0E3 		mov	r3, #20
+ 439 00d4 0C308DE5 		str	r3, [sp, #12]
+ 440 00d8 0030A0E3 		mov	r3, #0
+ 441 00dc 10308DE5 		str	r3, [sp, #16]
+ 442 00e0 0130A0E3 		mov	r3, #1
+ 443 00e4 14308DE5 		str	r3, [sp, #20]
+ 444 00e8 A830A0E3 		mov	r3, #168
+ 445 00ec 18308DE5 		str	r3, [sp, #24]
+ 446 00f0 BC009FE5 		ldr	r0, .L14+28
+ 447 00f4 BC109FE5 		ldr	r1, .L14+32
+ 448 00f8 AC209FE5 		ldr	r2, .L14+20
+ 449 00fc 0130A0E3 		mov	r3, #1
+ 450 0100 FEFFFFEB 		bl	_txe_thread_create
+ 451 0104 10000BE5 		str	r0, [fp, #-16]
+ 104:../Application.c ****     		"11:Slow",                			// Thread ID and name
+ 105:../Application.c ****     		ApplicationThread,     				// Thread function
+ 106:../Application.c ****     		1,                             		// Parameter passed to Thread
+ 107:../Application.c ****     		StackPtr,                       	// Pointer to the allocated thread stack
+ 108:../Application.c ****     		APPLICATION_THREAD_STACKSIZE,		// Allocated thread stack size
+ 109:../Application.c ****     		SLOW_THREAD_PRIORITY,           	// Thread priority
+ 110:../Application.c ****     		SLOW_THREAD_PRIORITY,				// = Thread priority so no preemption
+ 111:../Application.c ****     		CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+ 112:../Application.c ****     		CYU3P_AUTO_START);					// Start the thread immediately
+ 113:../Application.c ****     CheckStatus("Start Slow", Status);
+ 452              		.loc 1 113 0
+ 453 0108 AC009FE5 		ldr	r0, .L14+36
+ 454 010c 10101BE5 		ldr	r1, [fp, #-16]
+ 455 0110 FEFFFFEB 		bl	CheckStatus
+ 114:../Application.c **** 
+ 115:../Application.c ****     // This thread now becomes a monitoring function that displays statistics of the other two thre
+ 116:../Application.c ****     // Display the average time each thread is taking to run every 10 seconds
+ 117:../Application.c ****     CyU3PSetTime(0);							// Reset System Timer
+ 456              		.loc 1 117 0
+ 457 0114 0000A0E3 		mov	r0, #0
+ 458 0118 FEFFFFEB 		bl	_tx_time_set
+ 459              	.L13:
+ 118:../Application.c ****     while(1)
+ 119:../Application.c ****     {
+ 120:../Application.c ****     	CyU3PThreadSleep(10000);
+ 460              		.loc 1 120 0 discriminator 1
+ 461 011c 9C009FE5 		ldr	r0, .L14+40
+ 462 0120 FEFFFFEB 		bl	_tx_thread_sleep
+ 121:../Application.c **** 		CyU3PDebugPrint(4, "\nAt %d seconds, Speedy Average Time = %d, Slow Average Time = %d",
+ 122:../Application.c **** 			CyU3PGetTime()/1000, TotalTime[0]/LoopCounter[0], TotalTime[1]/LoopCounter[1]);
+ 463              		.loc 1 122 0 discriminator 1
+ 464 0124 FEFFFFEB 		bl	_tx_time_get
+ 465 0128 0020A0E1 		mov	r2, r0
+ 121:../Application.c **** 		CyU3PDebugPrint(4, "\nAt %d seconds, Speedy Average Time = %d, Slow Average Time = %d",
+ 466              		.loc 1 121 0 discriminator 1
+ 467 012c 90309FE5 		ldr	r3, .L14+44
+ 468 0130 921383E0 		umull	r1, r3, r2, r3
+ 469 0134 2353A0E1 		mov	r5, r3, lsr #6
+ 470              		.loc 1 122 0 discriminator 1
+ 471 0138 88309FE5 		ldr	r3, .L14+48
+ 472 013c 002093E5 		ldr	r2, [r3, #0]
+ 473 0140 84309FE5 		ldr	r3, .L14+52
+ 474 0144 003093E5 		ldr	r3, [r3, #0]
+ 121:../Application.c **** 		CyU3PDebugPrint(4, "\nAt %d seconds, Speedy Average Time = %d, Slow Average Time = %d",
+ 475              		.loc 1 121 0 discriminator 1
+ 476 0148 0200A0E1 		mov	r0, r2
+ 477 014c 0310A0E1 		mov	r1, r3
+ 478 0150 FEFFFFEB 		bl	__aeabi_uidiv
+ 479 0154 0030A0E1 		mov	r3, r0
+ 480 0158 0340A0E1 		mov	r4, r3
+ 481              		.loc 1 122 0 discriminator 1
+ 482 015c 64309FE5 		ldr	r3, .L14+48
+ 483 0160 042093E5 		ldr	r2, [r3, #4]
+ 484 0164 60309FE5 		ldr	r3, .L14+52
+ 485 0168 043093E5 		ldr	r3, [r3, #4]
+ 121:../Application.c **** 		CyU3PDebugPrint(4, "\nAt %d seconds, Speedy Average Time = %d, Slow Average Time = %d",
+ 486              		.loc 1 121 0 discriminator 1
+ 487 016c 0200A0E1 		mov	r0, r2
+ 488 0170 0310A0E1 		mov	r1, r3
+ 489 0174 FEFFFFEB 		bl	__aeabi_uidiv
+ 490 0178 0030A0E1 		mov	r3, r0
+ 491 017c 00308DE5 		str	r3, [sp, #0]
+ 492 0180 0400A0E3 		mov	r0, #4
+ 493 0184 44109FE5 		ldr	r1, .L14+56
+ 494 0188 0520A0E1 		mov	r2, r5
+ 495 018c 0430A0E1 		mov	r3, r4
+ 496 0190 FEFFFFEB 		bl	CyU3PDebugPrint
+ 123:../Application.c ****     }
+ 497              		.loc 1 123 0 discriminator 1
+ 498 0194 E0FFFFEA 		b	.L13
+ 499              	.L15:
+ 500              		.align	2
+ 501              	.L14:
+ 502 0198 1C000000 		.word	.LC2
+ 503 019c 00000000 		.word	SharedMutex
+ 504 01a0 30000000 		.word	.LC3
+ 505 01a4 00000000 		.word	ThreadHandle
+ 506 01a8 40000000 		.word	.LC4
+ 507 01ac 00000000 		.word	ApplicationThread
+ 508 01b0 4C000000 		.word	.LC5
+ 509 01b4 A8000000 		.word	ThreadHandle+168
+ 510 01b8 5C000000 		.word	.LC6
+ 511 01bc 64000000 		.word	.LC7
+ 512 01c0 10270000 		.word	10000
+ 513 01c4 D34D6210 		.word	274877907
+ 514 01c8 00000000 		.word	TotalTime
+ 515 01cc 00000000 		.word	LoopCounter
+ 516 01d0 70000000 		.word	.LC8
+ 517              		.cfi_endproc
+ 518              	.LFE4:
+ 520              		.section	.text.main,"ax",%progbits
+ 521              		.align	2
+ 522              		.global	main
+ 524              	main:
+ 525              	.LFB5:
+ 124:../Application.c **** }
+ 125:../Application.c **** 
+ 126:../Application.c **** // Main sets up the CPU environment the starts the RTOS
+ 127:../Application.c **** int main (void)
+ 128:../Application.c **** {
+ 526              		.loc 1 128 0
+ 527              		.cfi_startproc
+ 528              		@ args = 0, pretend = 0, frame = 48
+ 529              		@ frame_needed = 1, uses_anonymous_args = 0
+ 530 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 531              	.LCFI10:
+ 532              		.cfi_def_cfa_offset 8
+ 533 0004 04B08DE2 		add	fp, sp, #4
+ 534              		.cfi_offset 14, -4
+ 535              		.cfi_offset 11, -8
+ 536              	.LCFI11:
+ 537              		.cfi_def_cfa 11, 4
+ 538 0008 30D04DE2 		sub	sp, sp, #48
+ 129:../Application.c ****     CyU3PIoMatrixConfig_t ioConfig;
+ 130:../Application.c ****     CyU3PReturnStatus_t Status;
+ 131:../Application.c **** 
+ 132:../Application.c ****  // Start with the default clock at 384 MHz
+ 133:../Application.c **** 	Status = CyU3PDeviceInit(0);
+ 539              		.loc 1 133 0
+ 540 000c 0000A0E3 		mov	r0, #0
+ 541 0010 FEFFFFEB 		bl	CyU3PDeviceInit
+ 542 0014 08000BE5 		str	r0, [fp, #-8]
+ 134:../Application.c **** 	if (Status == CY_U3P_SUCCESS)
+ 543              		.loc 1 134 0
+ 544 0018 08301BE5 		ldr	r3, [fp, #-8]
+ 545 001c 000053E3 		cmp	r3, #0
+ 546 0020 1800001A 		bne	.L17
+ 135:../Application.c ****     {
+ 136:../Application.c **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);
+ 547              		.loc 1 136 0
+ 548 0024 0100A0E3 		mov	r0, #1
+ 549 0028 0110A0E3 		mov	r1, #1
+ 550 002c 0120A0E3 		mov	r2, #1
+ 551 0030 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 552 0034 08000BE5 		str	r0, [fp, #-8]
+ 137:../Application.c **** 		if (Status == CY_U3P_SUCCESS)
+ 553              		.loc 1 137 0
+ 554 0038 08301BE5 		ldr	r3, [fp, #-8]
+ 555 003c 000053E3 		cmp	r3, #0
+ 556 0040 1000001A 		bne	.L17
+ 138:../Application.c **** 		{
+ 139:../Application.c **** 			CyU3PMemSet((uint8_t *)&ioConfig, 0, sizeof(ioConfig));
+ 557              		.loc 1 139 0
+ 558 0044 30304BE2 		sub	r3, fp, #48
+ 559 0048 0300A0E1 		mov	r0, r3
+ 560 004c 0010A0E3 		mov	r1, #0
+ 561 0050 2820A0E3 		mov	r2, #40
+ 562 0054 FEFFFFEB 		bl	CyU3PMemSet
+ 140:../Application.c **** 			ioConfig.useUart   = true;
+ 563              		.loc 1 140 0
+ 564 0058 0130A0E3 		mov	r3, #1
+ 565 005c 2C300BE5 		str	r3, [fp, #-44]
+ 141:../Application.c **** 			ioConfig.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+ 566              		.loc 1 141 0
+ 567 0060 0130A0E3 		mov	r3, #1
+ 568 0064 1A304BE5 		strb	r3, [fp, #-26]
+ 142:../Application.c **** 			Status = CyU3PDeviceConfigureIOMatrix(&ioConfig);
+ 569              		.loc 1 142 0
+ 570 0068 30304BE2 		sub	r3, fp, #48
+ 571 006c 0300A0E1 		mov	r0, r3
+ 572 0070 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 573 0074 08000BE5 		str	r0, [fp, #-8]
+ 143:../Application.c **** 			if (Status == CY_U3P_SUCCESS) CyU3PKernelEntry();	// Start RTOS, this does not return
+ 574              		.loc 1 143 0
+ 575 0078 08301BE5 		ldr	r3, [fp, #-8]
+ 576 007c 000053E3 		cmp	r3, #0
+ 577 0080 0000001A 		bne	.L17
+ 578              		.loc 1 143 0 is_stmt 0 discriminator 1
+ 579 0084 FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 580              	.L17:
+ 144:../Application.c **** 		}
+ 145:../Application.c **** 	}
+ 146:../Application.c **** 
+ 147:../Application.c ****     while (1);			// Get here on a failure, can't recover, just hang here
+ 581              		.loc 1 147 0 is_stmt 1 discriminator 1
+ 582 0088 FEFFFFEA 		b	.L17
+ 583              		.cfi_endproc
+ 584              	.LFE5:
+ 586              		.text
+ 587              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Application.c
+                            *COM*:00000150 ThreadHandle
+                            *COM*:00000038 SharedMutex
+                            *COM*:0000002c StatsTimer
+                            *COM*:00000008 LoopCounter
+                            *COM*:00000008 TotalTime
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:31     .rodata.ActivityTime:00000000 ActivityTime
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:28     .rodata.ActivityTime:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:43     .text.DoWork:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:46     .text.DoWork:00000000 DoWork
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:74     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:78     .text.GetMutex:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:81     .text.GetMutex:00000000 GetMutex
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:113    .text.GetMutex:00000038 $d
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:119    .text.PutMutex:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:122    .text.PutMutex:00000000 PutMutex
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:148    .text.PutMutex:00000024 $d
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:157    .text.ApplicationThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:160    .text.ApplicationThread:00000000 ApplicationThread
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:327    .text.ApplicationThread:00000218 $d
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:360    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:363    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:502    .text.CyFxApplicationDefine:00000198 $d
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:521    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccKRqcdb.s:524    .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+_tx_thread_sleep
+_txe_mutex_get
+CyU3PDebugPrint
+_txe_mutex_put
+_txe_thread_info_get
+_tx_time_get
+__aeabi_uidiv
+InitializeDebugConsole
+CheckStatus
+_txe_mutex_create
+CyU3PMemAlloc
+_txe_thread_create
+_tx_time_set
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PMemSet
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

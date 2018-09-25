@@ -1,0 +1,1063 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="paths.js"></script><script src="eqns.js"></script><script>
+      var design = "top";
+      var device = "XC2C128";
+      signals = new Array("CTRL0_SPECSIG","DQ0_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ1_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG","DQ25_SPECSIG","DQ26_SPECSIG","DQ27_SPECSIG","DQ28_SPECSIG","DQ29_SPECSIG","DQ2_SPECSIG","DQ30_SPECSIG","DQ31_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","FlashCS_n","I2C_LEDs0_SPECSIG","I2C_LEDs1_SPECSIG","I2C_LEDs2_SPECSIG","I2C_LEDs3_SPECSIG","I2C_LEDs4_SPECSIG","I2C_LEDs5_SPECSIG","I2C_LEDs6_SPECSIG","I2C_LEDs7_SPECSIG","I2C_SDA","INT","LED0_SPECSIG","LED1_SPECSIG","LED2_SPECSIG","LED3_SPECSIG","LED4_SPECSIG","LED5_SPECSIG","LED6_SPECSIG","LED7_SPECSIG","TX_MISO","ack_out","i2c_slavedata_in0_SPECSIG","i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","i2c_slavegpio_input0_SPECSIG","i2c_slavegpio_input1_SPECSIG","i2c_slavegpio_input2_SPECSIG","i2c_slavegpio_input3_SPECSIG","i2c_slavegpio_input4_SPECSIG","i2c_slavegpio_input5_SPECSIG","i2c_slavegpio_input6_SPECSIG","i2c_slavegpio_input7_SPECSIG","i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","i2c_slaveindex2_SPECSIG","i2c_slaveindex3_SPECSIG","i2c_slavelatch_data_in_SPECSIG","i2c_slavelatch_data_out_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","i2c_slaveshift_data_in_SPECSIG","i2c_slavestart_SPECSIG","i2c_slavestart_rst_SPECSIG","out_en","sda_out");
+      sigNegs = new Array("OFF","ON","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","ON","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","ON","ON","ON","ON","ON","ON","ON","ON","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","ON","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF");
+      sigTypes = new Array("DFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","TFF","","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","","","","","","","","","","","","DFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DEFF","DFF","DFF","TFF","DFF","DFF","DFF","DFF","DFF","TFF","DFF","DFF","TFF","DFF");
+
+      
+           iostyle["CTRL10_SPECSIG"]=new Array("PU");
+        
+           iostyle["I2C_SDA"]=new Array("PUOD_SPECSIG");
+        
+           iostyle["Button6_SPECSIG"]=new Array("PU");
+        
+           iostyle["Button5_SPECSIG"]=new Array("PU");
+        
+           iostyle["Button4_SPECSIG"]=new Array("PU");
+        
+           iostyle["Button3_SPECSIG"]=new Array("PU");
+        
+           iostyle["Button2_SPECSIG"]=new Array("PU");
+        
+           iostyle["Button1_SPECSIG"]=new Array("PU");
+        
+           iostyle["Button0_SPECSIG"]=new Array("PU");
+        
+           iostyle["Button7_SPECSIG"]=new Array("PU");
+        
+        specSig["CTRL10_SPECSIG"]=new Array("CTRL<10>");
+      
+        specSig["Button7_SPECSIG"]=new Array("Button<7>");
+      
+        specSig["I2C_SDAPIN_SPECSIG"]=new Array("I2C_SDA.PIN");
+      
+        specSig["Button0_SPECSIG"]=new Array("Button<0>");
+      
+        specSig["Button1_SPECSIG"]=new Array("Button<1>");
+      
+        specSig["Button2_SPECSIG"]=new Array("Button<2>");
+      
+        specSig["Button3_SPECSIG"]=new Array("Button<3>");
+      
+        specSig["Button4_SPECSIG"]=new Array("Button<4>");
+      
+        specSig["Button5_SPECSIG"]=new Array("Button<5>");
+      
+        specSig["Button6_SPECSIG"]=new Array("Button<6>");
+      
+        specSig["b_SPECSIG"]=new Array("(b)");
+      
+        specSig["i2c_slavelatch_data_in_SPECSIG"]=new Array("i2c_slave/latch_data_in");
+      
+        specSig["i2c_slaveindex1_SPECSIG"]=new Array("i2c_slave/index<1>");
+      
+        specSig["DQ11_SPECSIG"]=new Array("DQ<11>");
+      
+        specSig["i2c_slavelatch_data_out_SPECSIG"]=new Array("i2c_slave/latch_data_out");
+      
+        specSig["DQ12_SPECSIG"]=new Array("DQ<12>");
+      
+        specSig["i2c_slaveindex2_SPECSIG"]=new Array("i2c_slave/index<2>");
+      
+        specSig["DQ13_SPECSIG"]=new Array("DQ<13>");
+      
+        specSig["DQ14_SPECSIG"]=new Array("DQ<14>");
+      
+        specSig["i2c_slavepresent_state_FSM_FFd1_SPECSIG"]=new Array("i2c_slave/present_state_FSM_FFd1");
+      
+        specSig["i2c_slaveindex0_SPECSIG"]=new Array("i2c_slave/index<0>");
+      
+        specSig["I2C_LEDs7_SPECSIG"]=new Array("I2C_LEDs<7>");
+      
+        specSig["i2c_slavedata_in6_SPECSIG"]=new Array("i2c_slave/data_in<6>");
+      
+        specSig["I2C_LEDs5_SPECSIG"]=new Array("I2C_LEDs<5>");
+      
+        specSig["i2c_slavedata_in3_SPECSIG"]=new Array("i2c_slave/data_in<3>");
+      
+        specSig["DQ10_SPECSIG"]=new Array("DQ<10>");
+      
+        specSig["I2C_LEDs0_SPECSIG"]=new Array("I2C_LEDs<0>");
+      
+        specSig["i2c_slavedata_in1_SPECSIG"]=new Array("i2c_slave/data_in<1>");
+      
+        specSig["DQ15_SPECSIG"]=new Array("DQ<15>");
+      
+        specSig["DQ31_SPECSIG"]=new Array("DQ<31>");
+      
+        specSig["DQ30_SPECSIG"]=new Array("DQ<30>");
+      
+        specSig["DQ29_SPECSIG"]=new Array("DQ<29>");
+      
+        specSig["DQ28_SPECSIG"]=new Array("DQ<28>");
+      
+        specSig["DQ27_SPECSIG"]=new Array("DQ<27>");
+      
+        specSig["DQ26_SPECSIG"]=new Array("DQ<26>");
+      
+        specSig["LED7_SPECSIG"]=new Array("LED<7>");
+      
+        specSig["LED6_SPECSIG"]=new Array("LED<6>");
+      
+        specSig["DQ9_SPECSIG"]=new Array("DQ<9>");
+      
+        specSig["IO_SPECSIG"]=new Array("I/O");
+      
+        specSig["PUOD_SPECSIG"]=new Array("PU/OD");
+      
+        specSig["DQ8_SPECSIG"]=new Array("DQ<8>");
+      
+        specSig["DQ7_SPECSIG"]=new Array("DQ<7>");
+      
+        specSig["DQ6_SPECSIG"]=new Array("DQ<6>");
+      
+        specSig["DQ5_SPECSIG"]=new Array("DQ<5>");
+      
+        specSig["DQ25_SPECSIG"]=new Array("DQ<25>");
+      
+        specSig["DQ24_SPECSIG"]=new Array("DQ<24>");
+      
+        specSig["DQ23_SPECSIG"]=new Array("DQ<23>");
+      
+        specSig["DQ22_SPECSIG"]=new Array("DQ<22>");
+      
+        specSig["DQ21_SPECSIG"]=new Array("DQ<21>");
+      
+        specSig["DQ20_SPECSIG"]=new Array("DQ<20>");
+      
+        specSig["DQ19_SPECSIG"]=new Array("DQ<19>");
+      
+        specSig["DQ18_SPECSIG"]=new Array("DQ<18>");
+      
+        specSig["LED0_SPECSIG"]=new Array("LED<0>");
+      
+        specSig["LED1_SPECSIG"]=new Array("LED<1>");
+      
+        specSig["LED2_SPECSIG"]=new Array("LED<2>");
+      
+        specSig["LED3_SPECSIG"]=new Array("LED<3>");
+      
+        specSig["LED4_SPECSIG"]=new Array("LED<4>");
+      
+        specSig["LED5_SPECSIG"]=new Array("LED<5>");
+      
+        specSig["DQ17_SPECSIG"]=new Array("DQ<17>");
+      
+        specSig["DQ16_SPECSIG"]=new Array("DQ<16>");
+      
+        specSig["DQ0_SPECSIG"]=new Array("DQ<0>");
+      
+        specSig["DQ1_SPECSIG"]=new Array("DQ<1>");
+      
+        specSig["DQ2_SPECSIG"]=new Array("DQ<2>");
+      
+        specSig["CTRL0_SPECSIG"]=new Array("CTRL<0>");
+      
+        specSig["DQ3_SPECSIG"]=new Array("DQ<3>");
+      
+        specSig["DQ4_SPECSIG"]=new Array("DQ<4>");
+      
+        specSig["i2c_slaveindex3_SPECSIG"]=new Array("i2c_slave/index<3>");
+      
+        specSig["i2c_slavepresent_state_FSM_FFd2_SPECSIG"]=new Array("i2c_slave/present_state_FSM_FFd2");
+      
+        specSig["i2c_slaveshift_data_in_SPECSIG"]=new Array("i2c_slave/shift_data_in");
+      
+        specSig["i2c_slavedata_in2_SPECSIG"]=new Array("i2c_slave/data_in<2>");
+      
+        specSig["I2C_LEDs1_SPECSIG"]=new Array("I2C_LEDs<1>");
+      
+        specSig["i2c_slavedata_in4_SPECSIG"]=new Array("i2c_slave/data_in<4>");
+      
+        specSig["i2c_slavedata_in5_SPECSIG"]=new Array("i2c_slave/data_in<5>");
+      
+        specSig["i2c_slavedata_in7_SPECSIG"]=new Array("i2c_slave/data_in<7>");
+      
+        specSig["i2c_slavestart_SPECSIG"]=new Array("i2c_slave/start");
+      
+        specSig["i2c_slavedata_in0_SPECSIG"]=new Array("i2c_slave/data_in<0>");
+      
+        specSig["I2C_LEDs6_SPECSIG"]=new Array("I2C_LEDs<6>");
+      
+        specSig["I2C_LEDs4_SPECSIG"]=new Array("I2C_LEDs<4>");
+      
+        specSig["I2C_LEDs3_SPECSIG"]=new Array("I2C_LEDs<3>");
+      
+        specSig["I2C_LEDs2_SPECSIG"]=new Array("I2C_LEDs<2>");
+      
+        specSig["i2c_slavegpio_input0_SPECSIG"]=new Array("i2c_slave/gpio_input<0>");
+      
+        specSig["i2c_slavegpio_input1_SPECSIG"]=new Array("i2c_slave/gpio_input<1>");
+      
+        specSig["i2c_slavegpio_input2_SPECSIG"]=new Array("i2c_slave/gpio_input<2>");
+      
+        specSig["i2c_slavegpio_input3_SPECSIG"]=new Array("i2c_slave/gpio_input<3>");
+      
+        specSig["i2c_slavegpio_input4_SPECSIG"]=new Array("i2c_slave/gpio_input<4>");
+      
+        specSig["i2c_slavegpio_input5_SPECSIG"]=new Array("i2c_slave/gpio_input<5>");
+      
+        specSig["i2c_slavegpio_input6_SPECSIG"]=new Array("i2c_slave/gpio_input<6>");
+      
+        specSig["i2c_slavegpio_input7_SPECSIG"]=new Array("i2c_slave/gpio_input<7>");
+      
+        specSig["i2c_slavestart_rst_SPECSIG"]=new Array("i2c_slave/start_rst");
+      
+            pterms["FB1_0"]=new Array("i2c_slavedata_in1_SPECSIG");
+          
+            pterms["FB1_1"]=new Array("i2c_slaveshift_data_in_SPECSIG","/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_2"]=new Array("/i2c_slaveshift_data_in_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_3"]=new Array("/i2c_slaveshift_data_in_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_4"]=new Array("I2C_SCL");
+          
+            pterms["FB1_5"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB1_6"]=new Array("i2c_slaveshift_data_in_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_7"]=new Array("/i2c_slavedata_in0_SPECSIG","/i2c_slaveshift_data_in_SPECSIG","/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","/i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","/i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_8"]=new Array("i2c_slaveshift_data_in_SPECSIG","/i2c_slaveindex2_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_9"]=new Array("i2c_slavedata_in0_SPECSIG","/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","/i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","/i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","/i2c_slaveindex1_SPECSIG");
+          
+            pterms["FB1_10"]=new Array("i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","i2c_slaveindex1_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_11"]=new Array("/i2c_slaveindex2_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","/i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","/i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","/i2c_slaveindex1_SPECSIG");
+          
+            pterms["FB1_12"]=new Array("/i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG");
+          
+            pterms["FB1_13"]=new Array("i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_14"]=new Array("i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_15"]=new Array("/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","out_en");
+          
+            pterms["FB1_16"]=new Array("/i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG","i2c_slaveindex3_SPECSIG","out_en");
+          
+            pterms["FB1_17"]=new Array("i2c_slavedata_in0_SPECSIG","/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","/i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","/i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG","/out_en");
+          
+            pterms["FB1_18"]=new Array("/i2c_slaveindex2_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","/i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","/i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_19"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG");
+          
+            pterms["FB1_20"]=new Array("/i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_21"]=new Array("/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_22"]=new Array("i2c_slavedata_in0_SPECSIG","/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_23"]=new Array("/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_24"]=new Array("/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_25"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG");
+          
+            pterms["FB1_26"]=new Array("i2c_slaveindex2_SPECSIG","i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_27"]=new Array("/i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_28"]=new Array("/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","/i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","/i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_29"]=new Array("i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slavestart_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_30"]=new Array("/i2c_slaveindex2_SPECSIG","/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavedata_in1_SPECSIG","i2c_slavedata_in2_SPECSIG","i2c_slavedata_in3_SPECSIG","/i2c_slavedata_in4_SPECSIG","i2c_slavedata_in5_SPECSIG","/i2c_slavedata_in6_SPECSIG","i2c_slavedata_in7_SPECSIG","/i2c_slaveindex1_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_31"]=new Array("/i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_32"]=new Array("i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_33"]=new Array("i2c_slaveindex2_SPECSIG","i2c_slavepresent_state_FSM_FFd2_SPECSIG","i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_34"]=new Array("i2c_slaveindex2_SPECSIG","i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_35"]=new Array("/i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_36"]=new Array("i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_37"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB1_38"]=new Array("/i2c_slavepresent_state_FSM_FFd1_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_39"]=new Array("/i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG");
+          
+            pterms["FB1_40"]=new Array("/i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_41"]=new Array("i2c_slaveindex0_SPECSIG","/i2c_slaveindex1_SPECSIG","/i2c_slavestart_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB1_43"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG");
+          
+            pterms["FB1_49"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB1_52"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG");
+          
+            pterms["FB2_0"]=new Array("i2c_slavedata_in3_SPECSIG");
+          
+            pterms["FB2_1"]=new Array("i2c_slavedata_in4_SPECSIG");
+          
+            pterms["FB2_2"]=new Array("i2c_slavedata_in6_SPECSIG");
+          
+            pterms["FB2_3"]=new Array("i2c_slavedata_in0_SPECSIG");
+          
+            pterms["FB2_4"]=new Array("I2C_SCL");
+          
+            pterms["FB2_5"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB2_6"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB2_7"]=new Array("i2c_slavedata_in2_SPECSIG");
+          
+            pterms["FB2_8"]=new Array("i2c_slavedata_in5_SPECSIG");
+          
+            pterms["FB2_9"]=new Array("i2c_slavedata_in7_SPECSIG");
+          
+            pterms["FB2_10"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB2_11"]=new Array("/i2c_slavepresent_state_FSM_FFd1_SPECSIG","i2c_slaveindex0_SPECSIG","/i2c_slavepresent_state_FSM_FFd2_SPECSIG","/i2c_slavestart_SPECSIG");
+          
+            pterms["FB2_12"]=new Array("i2c_slaveindex0_SPECSIG","/i2c_slavestart_SPECSIG","/i2c_slaveindex3_SPECSIG");
+          
+            pterms["FB2_13"]=new Array("/out_en","sda_out");
+          
+            pterms["FB2_14"]=new Array("i2c_slaveindex2_SPECSIG","i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input0_SPECSIG");
+          
+            pterms["FB2_15"]=new Array("/i2c_slaveindex2_SPECSIG","i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input4_SPECSIG");
+          
+            pterms["FB2_16"]=new Array("i2c_slaveindex2_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input1_SPECSIG");
+          
+            pterms["FB2_17"]=new Array("/i2c_slaveindex2_SPECSIG","/i2c_slaveindex0_SPECSIG","i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input5_SPECSIG");
+          
+            pterms["FB2_18"]=new Array("i2c_slaveindex2_SPECSIG","i2c_slaveindex0_SPECSIG","/i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input2_SPECSIG");
+          
+            pterms["FB2_19"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB2_20"]=new Array("/i2c_slaveindex2_SPECSIG","i2c_slaveindex0_SPECSIG","/i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input6_SPECSIG");
+          
+            pterms["FB2_21"]=new Array("i2c_slaveindex2_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input3_SPECSIG");
+          
+            pterms["FB2_22"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB2_23"]=new Array("/i2c_slaveindex2_SPECSIG","/i2c_slaveindex0_SPECSIG","/i2c_slaveindex1_SPECSIG","out_en","i2c_slavegpio_input7_SPECSIG");
+          
+            pterms["FB2_25"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB2_28"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB2_31"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB2_34"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB2_37"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB2_40"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB2_43"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB2_46"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB2_49"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG");
+          
+            pterms["FB2_52"]=new Array("i2c_slavelatch_data_in_SPECSIG");
+          
+            pterms["FB2_55"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB3_0"]=new Array("DQ30_SPECSIG","/Button7_SPECSIG");
+          
+            pterms["FB3_1"]=new Array("Button7_SPECSIG","/I2C_LEDs6_SPECSIG");
+          
+            pterms["FB3_2"]=new Array("/Button7_SPECSIG","DQ31_SPECSIG");
+          
+            pterms["FB3_3"]=new Array("Button7_SPECSIG","/I2C_LEDs7_SPECSIG");
+          
+            pterms["FB3_4"]=new Array("I2C_SCL");
+          
+            pterms["FB3_5"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB3_13"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG");
+          
+            pterms["FB3_22"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG","DQ25_SPECSIG","DQ26_SPECSIG","DQ27_SPECSIG","DQ28_SPECSIG","DQ29_SPECSIG","DQ30_SPECSIG");
+          
+            pterms["FB3_25"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG","DQ25_SPECSIG","DQ26_SPECSIG","DQ27_SPECSIG","DQ28_SPECSIG","DQ29_SPECSIG");
+          
+            pterms["FB3_28"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG","DQ25_SPECSIG","DQ26_SPECSIG","DQ27_SPECSIG","DQ28_SPECSIG");
+          
+            pterms["FB3_40"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG","DQ25_SPECSIG","DQ26_SPECSIG","DQ27_SPECSIG");
+          
+            pterms["FB3_43"]=new Array("i2c_slavestart_SPECSIG");
+          
+            pterms["FB3_46"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG","DQ25_SPECSIG","DQ26_SPECSIG");
+          
+            pterms["FB3_49"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG","DQ25_SPECSIG");
+          
+            pterms["FB4_0"]=new Array("/out_en","/ack_out");
+          
+            pterms["FB4_1"]=new Array("/ack_out","sda_out");
+          
+            pterms["FB4_4"]=new Array("I2C_SCL");
+          
+            pterms["FB4_5"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB4_10"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG");
+          
+            pterms["FB4_19"]=new Array("i2c_slaveshift_data_in_SPECSIG");
+          
+            pterms["FB4_20"]=new Array("i2c_slavestart_rst_SPECSIG");
+          
+            pterms["FB4_22"]=new Array("I2C_SDAPIN_SPECSIG");
+          
+            pterms["FB4_25"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG");
+          
+            pterms["FB4_40"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG");
+          
+            pterms["FB4_46"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG");
+          
+            pterms["FB4_52"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG");
+          
+            pterms["FB5_4"]=new Array("I2C_SCL");
+          
+            pterms["FB5_5"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB5_10"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB5_13"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB5_16"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB5_22"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB5_28"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB5_40"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB5_43"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB6_4"]=new Array("I2C_SCL");
+          
+            pterms["FB6_5"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB6_10"]=new Array("i2c_slavelatch_data_out_SPECSIG");
+          
+            pterms["FB6_13"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG","DQ24_SPECSIG");
+          
+            pterms["FB6_16"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG","DQ23_SPECSIG");
+          
+            pterms["FB6_19"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG","DQ22_SPECSIG");
+          
+            pterms["FB6_22"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG","DQ21_SPECSIG");
+          
+            pterms["FB6_25"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG","DQ20_SPECSIG");
+          
+            pterms["FB6_43"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG","DQ19_SPECSIG");
+          
+            pterms["FB6_49"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG","DQ18_SPECSIG");
+          
+            pterms["FB6_55"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG","DQ17_SPECSIG");
+          
+            pterms["FB7_0"]=new Array("DQ24_SPECSIG","/Button7_SPECSIG");
+          
+            pterms["FB7_1"]=new Array("Button7_SPECSIG","/I2C_LEDs0_SPECSIG");
+          
+            pterms["FB7_2"]=new Array("DQ25_SPECSIG","/Button7_SPECSIG");
+          
+            pterms["FB7_3"]=new Array("Button7_SPECSIG","/I2C_LEDs1_SPECSIG");
+          
+            pterms["FB7_4"]=new Array("DQ26_SPECSIG","/Button7_SPECSIG");
+          
+            pterms["FB7_5"]=new Array("Button7_SPECSIG","/I2C_LEDs2_SPECSIG");
+          
+            pterms["FB7_6"]=new Array("DQ27_SPECSIG","/Button7_SPECSIG");
+          
+            pterms["FB7_7"]=new Array("Button7_SPECSIG","/I2C_LEDs3_SPECSIG");
+          
+            pterms["FB7_8"]=new Array("DQ28_SPECSIG","/Button7_SPECSIG");
+          
+            pterms["FB7_9"]=new Array("Button7_SPECSIG","/I2C_LEDs4_SPECSIG");
+          
+            pterms["FB7_10"]=new Array("DQ29_SPECSIG","/Button7_SPECSIG");
+          
+            pterms["FB7_11"]=new Array("Button7_SPECSIG","/I2C_LEDs5_SPECSIG");
+          
+            pterms["FB8_5"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB8_6"]=new Array("CTRL10_SPECSIG");
+          
+            pterms["FB8_13"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG","DQ16_SPECSIG");
+          
+            pterms["FB8_16"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG","DQ4_SPECSIG","DQ5_SPECSIG","DQ6_SPECSIG","DQ7_SPECSIG","DQ8_SPECSIG","DQ9_SPECSIG","DQ10_SPECSIG","DQ11_SPECSIG","DQ12_SPECSIG","DQ13_SPECSIG","DQ14_SPECSIG","DQ15_SPECSIG");
+          
+            pterms["FB8_25"]=new Array("DQ0_SPECSIG");
+          
+            pterms["FB8_43"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG");
+          
+            pterms["FB8_49"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG");
+          
+            pterms["FB8_55"]=new Array("DQ0_SPECSIG","DQ1_SPECSIG","DQ2_SPECSIG","DQ3_SPECSIG");
+          
+          d1["i2c_slavelatch_data_in_SPECSIG"]=new Array("FB1_10");
+          clkNegs["i2c_slavelatch_data_in_SPECSIG"]=1;
+              clk["i2c_slavelatch_data_in_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slavelatch_data_in_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slavelatch_data_in_SPECSIG"]="GND";
+          d2["i2c_slaveindex3_SPECSIG"]=new Array("FB1_26","FB1_21","FB1_23","FB1_24","FB1_20","FB1_18");
+          clkNegs["i2c_slaveindex3_SPECSIG"]=1;
+              clk["i2c_slaveindex3_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slaveindex3_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slaveindex3_SPECSIG"]="GND";
+          d2["i2c_slaveindex1_SPECSIG"]=new Array("FB1_41","FB1_40","FB1_39","FB1_38");
+          clkNegs["i2c_slaveindex1_SPECSIG"]=1;
+              clk["i2c_slaveindex1_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slaveindex1_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slaveindex1_SPECSIG"]="GND";
+          d1["DQ11_SPECSIG"]=new Array("FB1_19");
+          clkNegs["DQ11_SPECSIG"]=1;
+              gblclk["DQ11_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ11_SPECSIG"]=new Array("FB1_5");
+              prld["DQ11_SPECSIG"]="GND";
+          d1["i2c_slavelatch_data_out_SPECSIG"]=new Array("FB1_22");
+          clkNegs["i2c_slavelatch_data_out_SPECSIG"]=1;
+              clk["i2c_slavelatch_data_out_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slavelatch_data_out_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slavelatch_data_out_SPECSIG"]="GND";
+          d1["DQ12_SPECSIG"]=new Array("FB1_25");
+          clkNegs["DQ12_SPECSIG"]=1;
+              gblclk["DQ12_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ12_SPECSIG"]=new Array("FB1_5");
+              prld["DQ12_SPECSIG"]="GND";
+          d2["out_en"]=new Array("FB1_15","FB1_16","FB1_17");
+          clkNegs["out_en"]=1;
+              clk["out_en"]=new Array("FB1_4");
+              
+              rst["out_en"]=new Array("FB1_5");
+              prld["out_en"]="GND";
+          d2["i2c_slavepresent_state_FSM_FFd2_SPECSIG"]=new Array("FB1_14","FB1_13","FB1_12","FB1_11","FB1_9");
+          clkNegs["i2c_slavepresent_state_FSM_FFd2_SPECSIG"]=1;
+              clk["i2c_slavepresent_state_FSM_FFd2_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slavepresent_state_FSM_FFd2_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slavepresent_state_FSM_FFd2_SPECSIG"]="GND";
+          d2["i2c_slaveshift_data_in_SPECSIG"]=new Array("FB1_2","FB1_3","FB1_6","FB1_1","FB1_8","FB1_7");
+          clkNegs["i2c_slaveshift_data_in_SPECSIG"]=1;
+              clk["i2c_slaveshift_data_in_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slaveshift_data_in_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slaveshift_data_in_SPECSIG"]="GND";
+          d2["i2c_slavedata_in2_SPECSIG"]=new Array("FB1_0");
+          
+              clk["i2c_slavedata_in2_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slavedata_in2_SPECSIG"]=new Array("FB1_5");
+              
+          ce["i2c_slavedata_in2_SPECSIG"]=new Array("FB1_37");
+          prld["i2c_slavedata_in2_SPECSIG"]="GND";
+          d2["i2c_slaveindex2_SPECSIG"]=new Array("FB1_34","FB1_32","FB1_33","FB1_36","FB1_35");
+          clkNegs["i2c_slaveindex2_SPECSIG"]=1;
+              clk["i2c_slaveindex2_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slaveindex2_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slaveindex2_SPECSIG"]="GND";
+          d1["DQ13_SPECSIG"]=new Array("FB1_43");
+          clkNegs["DQ13_SPECSIG"]=1;
+              gblclk["DQ13_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ13_SPECSIG"]=new Array("FB1_5");
+              prld["DQ13_SPECSIG"]="GND";
+          d2["ack_out"]=new Array("FB1_31","FB1_30");
+          clkNegs["ack_out"]=1;
+              clk["ack_out"]=new Array("FB1_4");
+              
+              rst["ack_out"]=new Array("FB1_5");
+              prld["ack_out"]="GND";
+          d2["I2C_LEDs1_SPECSIG"]=new Array("FB1_0");
+          clkNegs["I2C_LEDs1_SPECSIG"]=1;
+              clk["I2C_LEDs1_SPECSIG"]=new Array("FB1_4");
+              
+              rst["I2C_LEDs1_SPECSIG"]=new Array("FB1_5");
+              
+          ce["I2C_LEDs1_SPECSIG"]=new Array("FB1_49");
+          prld["I2C_LEDs1_SPECSIG"]="GND";
+          d1["DQ14_SPECSIG"]=new Array("FB1_52");
+          clkNegs["DQ14_SPECSIG"]=1;
+              gblclk["DQ14_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ14_SPECSIG"]=new Array("FB1_5");
+              prld["DQ14_SPECSIG"]="GND";
+          d2["i2c_slavepresent_state_FSM_FFd1_SPECSIG"]=new Array("FB1_29","FB1_27","FB1_28");
+          clkNegs["i2c_slavepresent_state_FSM_FFd1_SPECSIG"]=1;
+              clk["i2c_slavepresent_state_FSM_FFd1_SPECSIG"]=new Array("FB1_4");
+              
+              rst["i2c_slavepresent_state_FSM_FFd1_SPECSIG"]=new Array("FB1_5");
+              prld["i2c_slavepresent_state_FSM_FFd1_SPECSIG"]="GND";
+          d2["i2c_slavedata_in7_SPECSIG"]=new Array("FB2_2");
+          
+              clk["i2c_slavedata_in7_SPECSIG"]=new Array("FB2_4");
+              
+              rst["i2c_slavedata_in7_SPECSIG"]=new Array("FB2_5");
+              
+          ce["i2c_slavedata_in7_SPECSIG"]=new Array("FB2_10");
+          prld["i2c_slavedata_in7_SPECSIG"]="GND";
+          d2["sda_out"]=new Array("FB2_13","FB2_14","FB2_18","FB2_16","FB2_21","FB2_15","FB2_20","FB2_17","FB2_23");
+          clkNegs["sda_out"]=1;
+              clk["sda_out"]=new Array("FB2_4");
+              
+              set["sda_out"]=new Array("FB2_5");
+              prld["sda_out"]="GND";
+          d2["i2c_slaveindex0_SPECSIG"]=new Array("FB2_12","FB2_11");
+          clkNegs["i2c_slaveindex0_SPECSIG"]=1;
+              clk["i2c_slaveindex0_SPECSIG"]=new Array("FB2_4");
+              
+              set["i2c_slaveindex0_SPECSIG"]=new Array("FB2_5");
+              prld["i2c_slaveindex0_SPECSIG"]="GND";
+          d2["I2C_LEDs7_SPECSIG"]=new Array("FB2_9");
+          clkNegs["I2C_LEDs7_SPECSIG"]=1;
+              clk["I2C_LEDs7_SPECSIG"]=new Array("FB2_4");
+              
+              set["I2C_LEDs7_SPECSIG"]=new Array("FB2_5");
+              
+          ce["I2C_LEDs7_SPECSIG"]=new Array("FB2_19");
+          prld["I2C_LEDs7_SPECSIG"]="GND";
+          d2["i2c_slavedata_in6_SPECSIG"]=new Array("FB2_8");
+          
+              clk["i2c_slavedata_in6_SPECSIG"]=new Array("FB2_4");
+              
+              rst["i2c_slavedata_in6_SPECSIG"]=new Array("FB2_5");
+              
+          ce["i2c_slavedata_in6_SPECSIG"]=new Array("FB2_10");
+          prld["i2c_slavedata_in6_SPECSIG"]="GND";
+          d2["I2C_LEDs5_SPECSIG"]=new Array("FB2_8");
+          clkNegs["I2C_LEDs5_SPECSIG"]=1;
+              clk["I2C_LEDs5_SPECSIG"]=new Array("FB2_4");
+              
+              set["I2C_LEDs5_SPECSIG"]=new Array("FB2_5");
+              
+          ce["I2C_LEDs5_SPECSIG"]=new Array("FB2_19");
+          prld["I2C_LEDs5_SPECSIG"]="GND";
+          d2["I2C_LEDs6_SPECSIG"]=new Array("FB2_2");
+          clkNegs["I2C_LEDs6_SPECSIG"]=1;
+              clk["I2C_LEDs6_SPECSIG"]=new Array("FB2_4");
+              
+              rst["I2C_LEDs6_SPECSIG"]=new Array("FB2_5");
+              
+          ce["I2C_LEDs6_SPECSIG"]=new Array("FB2_19");
+          prld["I2C_LEDs6_SPECSIG"]="GND";
+          d2["i2c_slavedata_in5_SPECSIG"]=new Array("FB2_1");
+          
+              clk["i2c_slavedata_in5_SPECSIG"]=new Array("FB2_4");
+              
+              rst["i2c_slavedata_in5_SPECSIG"]=new Array("FB2_5");
+              
+          ce["i2c_slavedata_in5_SPECSIG"]=new Array("FB2_10");
+          prld["i2c_slavedata_in5_SPECSIG"]="GND";
+          d2["I2C_LEDs4_SPECSIG"]=new Array("FB2_1");
+          clkNegs["I2C_LEDs4_SPECSIG"]=1;
+              clk["I2C_LEDs4_SPECSIG"]=new Array("FB2_4");
+              
+              rst["I2C_LEDs4_SPECSIG"]=new Array("FB2_5");
+              
+          ce["I2C_LEDs4_SPECSIG"]=new Array("FB2_19");
+          prld["I2C_LEDs4_SPECSIG"]="GND";
+          d2["i2c_slavedata_in4_SPECSIG"]=new Array("FB2_0");
+          
+              clk["i2c_slavedata_in4_SPECSIG"]=new Array("FB2_4");
+              
+              rst["i2c_slavedata_in4_SPECSIG"]=new Array("FB2_5");
+              
+          ce["i2c_slavedata_in4_SPECSIG"]=new Array("FB2_10");
+          prld["i2c_slavedata_in4_SPECSIG"]="GND";
+          d2["i2c_slavedata_in3_SPECSIG"]=new Array("FB2_7");
+          
+              clk["i2c_slavedata_in3_SPECSIG"]=new Array("FB2_4");
+              
+              rst["i2c_slavedata_in3_SPECSIG"]=new Array("FB2_5");
+              
+          ce["i2c_slavedata_in3_SPECSIG"]=new Array("FB2_10");
+          prld["i2c_slavedata_in3_SPECSIG"]="GND";
+          d2["I2C_LEDs3_SPECSIG"]=new Array("FB2_0");
+          clkNegs["I2C_LEDs3_SPECSIG"]=1;
+              clk["I2C_LEDs3_SPECSIG"]=new Array("FB2_4");
+              
+              rst["I2C_LEDs3_SPECSIG"]=new Array("FB2_5");
+              
+          ce["I2C_LEDs3_SPECSIG"]=new Array("FB2_19");
+          prld["I2C_LEDs3_SPECSIG"]="GND";
+          d2["I2C_LEDs2_SPECSIG"]=new Array("FB2_7");
+          clkNegs["I2C_LEDs2_SPECSIG"]=1;
+              clk["I2C_LEDs2_SPECSIG"]=new Array("FB2_4");
+              
+              set["I2C_LEDs2_SPECSIG"]=new Array("FB2_5");
+              
+          ce["I2C_LEDs2_SPECSIG"]=new Array("FB2_19");
+          prld["I2C_LEDs2_SPECSIG"]="GND";
+          d1["DQ10_SPECSIG"]=new Array("FB2_49");
+          clkNegs["DQ10_SPECSIG"]=1;
+              gblclk["DQ10_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ10_SPECSIG"]=new Array("FB2_5");
+              prld["DQ10_SPECSIG"]="GND";
+          d2["I2C_LEDs0_SPECSIG"]=new Array("FB2_3");
+          clkNegs["I2C_LEDs0_SPECSIG"]=1;
+              clk["I2C_LEDs0_SPECSIG"]=new Array("FB2_4");
+              
+              set["I2C_LEDs0_SPECSIG"]=new Array("FB2_5");
+              
+          ce["I2C_LEDs0_SPECSIG"]=new Array("FB2_19");
+          prld["I2C_LEDs0_SPECSIG"]="GND";
+          d2["i2c_slavedata_in1_SPECSIG"]=new Array("FB2_3");
+          
+              clk["i2c_slavedata_in1_SPECSIG"]=new Array("FB2_4");
+              
+              rst["i2c_slavedata_in1_SPECSIG"]=new Array("FB2_5");
+              
+          ce["i2c_slavedata_in1_SPECSIG"]=new Array("FB2_10");
+          prld["i2c_slavedata_in1_SPECSIG"]="GND";
+          d1["DQ15_SPECSIG"]=new Array("FB3_13");
+          clkNegs["DQ15_SPECSIG"]=1;
+              gblclk["DQ15_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ15_SPECSIG"]=new Array("FB3_5");
+              prld["DQ15_SPECSIG"]="GND";
+          d2["INT"]=new Array("GND");
+          
+          d1["DQ31_SPECSIG"]=new Array("FB3_22");
+          clkNegs["DQ31_SPECSIG"]=1;
+              gblclk["DQ31_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ31_SPECSIG"]=new Array("FB3_5");
+              prld["DQ31_SPECSIG"]="GND";
+          d1["DQ30_SPECSIG"]=new Array("FB3_25");
+          clkNegs["DQ30_SPECSIG"]=1;
+              gblclk["DQ30_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ30_SPECSIG"]=new Array("FB3_5");
+              prld["DQ30_SPECSIG"]="GND";
+          d1["DQ29_SPECSIG"]=new Array("FB3_28");
+          clkNegs["DQ29_SPECSIG"]=1;
+              gblclk["DQ29_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ29_SPECSIG"]=new Array("FB3_5");
+              prld["DQ29_SPECSIG"]="GND";
+          d1["DQ28_SPECSIG"]=new Array("FB3_40");
+          clkNegs["DQ28_SPECSIG"]=1;
+              gblclk["DQ28_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ28_SPECSIG"]=new Array("FB3_5");
+              prld["DQ28_SPECSIG"]="GND";
+          d1["i2c_slavestart_rst_SPECSIG"]=new Array("FB3_43");
+          clkNegs["i2c_slavestart_rst_SPECSIG"]=1;
+              clk["i2c_slavestart_rst_SPECSIG"]=new Array("FB3_4");
+              prld["i2c_slavestart_rst_SPECSIG"]="GND";
+          d1["DQ27_SPECSIG"]=new Array("FB3_46");
+          clkNegs["DQ27_SPECSIG"]=1;
+              gblclk["DQ27_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ27_SPECSIG"]=new Array("FB3_5");
+              prld["DQ27_SPECSIG"]="GND";
+          d1["DQ26_SPECSIG"]=new Array("FB3_49");
+          clkNegs["DQ26_SPECSIG"]=1;
+              gblclk["DQ26_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ26_SPECSIG"]=new Array("FB3_5");
+              prld["DQ26_SPECSIG"]="GND";
+          d2["LED7_SPECSIG"]=new Array("FB3_3","FB3_2");
+          
+          d2["LED6_SPECSIG"]=new Array("FB3_0","FB3_1");
+          
+          d1["DQ9_SPECSIG"]=new Array("FB4_10");
+          clkNegs["DQ9_SPECSIG"]=1;
+              gblclk["DQ9_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ9_SPECSIG"]=new Array("FB4_5");
+              prld["DQ9_SPECSIG"]="GND";
+              clk["i2c_slavedata_in0_SPECSIG"]=new Array("FB4_4");
+              
+              rst["i2c_slavedata_in0_SPECSIG"]=new Array("FB4_5");
+              
+          ce["i2c_slavedata_in0_SPECSIG"]=new Array("FB4_19");
+          prld["i2c_slavedata_in0_SPECSIG"]="GND";
+          inreg["i2c_slavedata_in0_SPECSIG"]=new Array("I2C_SDAPIN_SPECSIG");
+        clkNegs["i2c_slavestart_SPECSIG"]=1;
+              clk["i2c_slavestart_SPECSIG"]=new Array("FB4_22");
+              
+              rst["i2c_slavestart_SPECSIG"]=new Array("FB4_20");
+              prld["i2c_slavestart_SPECSIG"]="GND";
+          inreg["i2c_slavestart_SPECSIG"]=new Array("I2C_SCL");
+        
+          d1["DQ8_SPECSIG"]=new Array("FB4_25");
+          clkNegs["DQ8_SPECSIG"]=1;
+              gblclk["DQ8_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ8_SPECSIG"]=new Array("FB4_5");
+              prld["DQ8_SPECSIG"]="GND";
+          d1["DQ7_SPECSIG"]=new Array("FB4_40");
+          clkNegs["DQ7_SPECSIG"]=1;
+              gblclk["DQ7_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ7_SPECSIG"]=new Array("FB4_5");
+              prld["DQ7_SPECSIG"]="GND";
+          d1["DQ6_SPECSIG"]=new Array("FB4_46");
+          clkNegs["DQ6_SPECSIG"]=1;
+              gblclk["DQ6_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ6_SPECSIG"]=new Array("FB4_5");
+              prld["DQ6_SPECSIG"]="GND";
+          d1["DQ5_SPECSIG"]=new Array("FB4_52");
+          clkNegs["DQ5_SPECSIG"]=1;
+              gblclk["DQ5_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ5_SPECSIG"]=new Array("FB4_5");
+              prld["DQ5_SPECSIG"]="GND";
+          d2["I2C_SDA"]=new Array("FB4_0","FB4_1");
+          
+              clk["i2c_slavegpio_input6_SPECSIG"]=new Array("FB5_4");
+              
+              rst["i2c_slavegpio_input6_SPECSIG"]=new Array("FB5_5");
+              
+          ce["i2c_slavegpio_input6_SPECSIG"]=new Array("FB5_10");
+          prld["i2c_slavegpio_input6_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input6_SPECSIG"]=new Array("Button6_SPECSIG");
+        
+              clk["i2c_slavegpio_input5_SPECSIG"]=new Array("FB5_4");
+              
+              rst["i2c_slavegpio_input5_SPECSIG"]=new Array("FB5_5");
+              
+          ce["i2c_slavegpio_input5_SPECSIG"]=new Array("FB5_10");
+          prld["i2c_slavegpio_input5_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input5_SPECSIG"]=new Array("Button5_SPECSIG");
+        
+              clk["i2c_slavegpio_input4_SPECSIG"]=new Array("FB5_4");
+              
+              rst["i2c_slavegpio_input4_SPECSIG"]=new Array("FB5_5");
+              
+          ce["i2c_slavegpio_input4_SPECSIG"]=new Array("FB5_10");
+          prld["i2c_slavegpio_input4_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input4_SPECSIG"]=new Array("Button4_SPECSIG");
+        
+              clk["i2c_slavegpio_input3_SPECSIG"]=new Array("FB5_4");
+              
+              rst["i2c_slavegpio_input3_SPECSIG"]=new Array("FB5_5");
+              
+          ce["i2c_slavegpio_input3_SPECSIG"]=new Array("FB5_10");
+          prld["i2c_slavegpio_input3_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input3_SPECSIG"]=new Array("Button3_SPECSIG");
+        
+              clk["i2c_slavegpio_input2_SPECSIG"]=new Array("FB5_4");
+              
+              rst["i2c_slavegpio_input2_SPECSIG"]=new Array("FB5_5");
+              
+          ce["i2c_slavegpio_input2_SPECSIG"]=new Array("FB5_10");
+          prld["i2c_slavegpio_input2_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input2_SPECSIG"]=new Array("Button2_SPECSIG");
+        
+              clk["i2c_slavegpio_input1_SPECSIG"]=new Array("FB5_4");
+              
+              rst["i2c_slavegpio_input1_SPECSIG"]=new Array("FB5_5");
+              
+          ce["i2c_slavegpio_input1_SPECSIG"]=new Array("FB5_10");
+          prld["i2c_slavegpio_input1_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input1_SPECSIG"]=new Array("Button1_SPECSIG");
+        
+              clk["i2c_slavegpio_input0_SPECSIG"]=new Array("FB5_4");
+              
+              rst["i2c_slavegpio_input0_SPECSIG"]=new Array("FB5_5");
+              
+          ce["i2c_slavegpio_input0_SPECSIG"]=new Array("FB5_10");
+          prld["i2c_slavegpio_input0_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input0_SPECSIG"]=new Array("Button0_SPECSIG");
+        
+          d2["FlashCS_n"]=new Array("GND");
+          
+              clk["i2c_slavegpio_input7_SPECSIG"]=new Array("FB6_4");
+              
+              rst["i2c_slavegpio_input7_SPECSIG"]=new Array("FB6_5");
+              
+          ce["i2c_slavegpio_input7_SPECSIG"]=new Array("FB6_10");
+          prld["i2c_slavegpio_input7_SPECSIG"]="GND";
+          inreg["i2c_slavegpio_input7_SPECSIG"]=new Array("Button7_SPECSIG");
+        
+          d1["DQ25_SPECSIG"]=new Array("FB6_13");
+          clkNegs["DQ25_SPECSIG"]=1;
+              gblclk["DQ25_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ25_SPECSIG"]=new Array("FB6_5");
+              prld["DQ25_SPECSIG"]="GND";
+          d1["DQ24_SPECSIG"]=new Array("FB6_16");
+          clkNegs["DQ24_SPECSIG"]=1;
+              gblclk["DQ24_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ24_SPECSIG"]=new Array("FB6_5");
+              prld["DQ24_SPECSIG"]="GND";
+          d1["DQ23_SPECSIG"]=new Array("FB6_19");
+          clkNegs["DQ23_SPECSIG"]=1;
+              gblclk["DQ23_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ23_SPECSIG"]=new Array("FB6_5");
+              prld["DQ23_SPECSIG"]="GND";
+          d1["DQ22_SPECSIG"]=new Array("FB6_22");
+          clkNegs["DQ22_SPECSIG"]=1;
+              gblclk["DQ22_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ22_SPECSIG"]=new Array("FB6_5");
+              prld["DQ22_SPECSIG"]="GND";
+          d1["DQ21_SPECSIG"]=new Array("FB6_25");
+          clkNegs["DQ21_SPECSIG"]=1;
+              gblclk["DQ21_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ21_SPECSIG"]=new Array("FB6_5");
+              prld["DQ21_SPECSIG"]="GND";
+          d1["DQ20_SPECSIG"]=new Array("FB6_43");
+          clkNegs["DQ20_SPECSIG"]=1;
+              gblclk["DQ20_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ20_SPECSIG"]=new Array("FB6_5");
+              prld["DQ20_SPECSIG"]="GND";
+          d1["DQ19_SPECSIG"]=new Array("FB6_49");
+          clkNegs["DQ19_SPECSIG"]=1;
+              gblclk["DQ19_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ19_SPECSIG"]=new Array("FB6_5");
+              prld["DQ19_SPECSIG"]="GND";
+          d1["DQ18_SPECSIG"]=new Array("FB6_55");
+          clkNegs["DQ18_SPECSIG"]=1;
+              gblclk["DQ18_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ18_SPECSIG"]=new Array("FB6_5");
+              prld["DQ18_SPECSIG"]="GND";
+          d2["TX_MISO"]=new Array("GND");
+          
+              trst["TX_MISO"]=new Array("GND");
+              
+          d2["LED0_SPECSIG"]=new Array("FB7_0","FB7_1");
+          
+          d2["LED1_SPECSIG"]=new Array("FB7_2","FB7_3");
+          
+          d2["LED2_SPECSIG"]=new Array("FB7_4","FB7_5");
+          
+          d2["LED3_SPECSIG"]=new Array("FB7_6","FB7_7");
+          
+          d2["LED4_SPECSIG"]=new Array("FB7_8","FB7_9");
+          
+          d2["LED5_SPECSIG"]=new Array("FB7_10","FB7_11");
+          
+          d1["DQ17_SPECSIG"]=new Array("FB8_13");
+          clkNegs["DQ17_SPECSIG"]=1;
+              gblclk["DQ17_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ17_SPECSIG"]=new Array("FB8_5");
+              prld["DQ17_SPECSIG"]="GND";
+          d1["DQ16_SPECSIG"]=new Array("FB8_16");
+          clkNegs["DQ16_SPECSIG"]=1;
+              gblclk["DQ16_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ16_SPECSIG"]=new Array("FB8_5");
+              prld["DQ16_SPECSIG"]="GND";
+          d2["DQ0_SPECSIG"]=new Array("GND");
+          clkNegs["DQ0_SPECSIG"]=1;
+              gblclk["DQ0_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ0_SPECSIG"]=new Array("FB8_5");
+              prld["DQ0_SPECSIG"]="GND";
+          d1["DQ1_SPECSIG"]=new Array("FB8_25");
+          clkNegs["DQ1_SPECSIG"]=1;
+              gblclk["DQ1_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ1_SPECSIG"]=new Array("FB8_5");
+              prld["DQ1_SPECSIG"]="GND";
+          d1["DQ2_SPECSIG"]=new Array("FB8_43");
+          clkNegs["DQ2_SPECSIG"]=1;
+              gblclk["DQ2_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ2_SPECSIG"]=new Array("FB8_5");
+              prld["DQ2_SPECSIG"]="GND";
+          d2["CTRL0_SPECSIG"]=new Array("GND");
+          clkNegs["CTRL0_SPECSIG"]=1;
+              gblclk["CTRL0_SPECSIG"]=new Array("PCLK");
+            
+              set["CTRL0_SPECSIG"]=new Array("FB8_5");
+              prld["CTRL0_SPECSIG"]="GND";
+          d1["DQ3_SPECSIG"]=new Array("FB8_49");
+          clkNegs["DQ3_SPECSIG"]=1;
+              gblclk["DQ3_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ3_SPECSIG"]=new Array("FB8_5");
+              prld["DQ3_SPECSIG"]="GND";
+          d1["DQ4_SPECSIG"]=new Array("FB8_55");
+          clkNegs["DQ4_SPECSIG"]=1;
+              gblclk["DQ4_SPECSIG"]=new Array("PCLK");
+            
+              rst["DQ4_SPECSIG"]=new Array("FB8_5");
+              prld["DQ4_SPECSIG"]="GND";
+
+      uimSignals = new Array();
+
+      uimSigNegs = new Array();
+
+      uimPterms = new Array();
+      
+
+      
+        function getEqnList() {
+          var str = "<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>";
+          str += "<center><h3>Equations</h3></center>";
+          str += "<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>";
+          for (s=0; s<uimSignals.length; s++) {
+            str += "<tr><td>";
+            str += retUimEqn(uimSignals[s]);
+            str += "</td></tr>";
+          }
+          for (s=0; s<signals.length; s++) {
+            str += "<tr><td>";
+            str += retEqn(signals[s]);
+            str += "</td></tr>";
+          }
+
+          var legend = retLegend();
+		      if (legend != "") {
+		        str += "<tr><td>" + legend + "</td></tr>";
+		      }
+
+          str += "</table>";
+          str += "<form><span class='pgRef'>";
+
+          if (!parent.leftnav.IsNS()) {
+            str += "<table width='90%' align='center'>";
+            str += "<tr><td align='left'><input type='button' value='back to top' ";
+            str += "onclick='javascript:parent.leftnav.showEqnAll()' ";
+            str += "onmouseover=\"window.status='goto top of page'; return true;\" ";
+            str += "onmouseout=\"window.status=''\">";
+            str += "</td>";
+            str += "<td align='right'>";
+            str += "<input type='button' value='print page' ";
+            str += "onclick='javascript:window.print()' ";
+            str += "onmouseover=\"window.status='print page'; return true;\" ";
+            str += "onmouseout=\"window.status=''\">";
+            str += "</td>";
+            str += "</tr></table>";
+          }
+          else {
+            str += "<table width='90%' align='center'>";
+            str += "<tr><td align='left'><a href='javascript:parent.leftnav.showEqnAll()'>back to top</a>";
+            str += "</td>";
+            str += "<td align='right'>";
+            str += "<a href='javascript:window.print()'>";
+            str += "print page</a>";
+            str += "</td>";
+            str += "</tr></table>";
+          }
+
+          str += "</span></form>";
+          str += "</body></html>";
+          return str;
+        }
+      
+    </script>
+</head></html>

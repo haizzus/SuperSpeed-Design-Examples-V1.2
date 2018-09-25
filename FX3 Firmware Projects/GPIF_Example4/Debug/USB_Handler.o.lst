@@ -1,0 +1,808 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"USB_Handler.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.global	glVendorRequestCount
+  17              		.section	.bss.glVendorRequestCount,"aw",%nobits
+  20              	glVendorRequestCount:
+  21 0000 00       		.space	1
+  22              		.global	glUnderrunCount
+  23              		.section	.bss.glUnderrunCount,"aw",%nobits
+  24              		.align	2
+  27              	glUnderrunCount:
+  28 0000 00000000 		.space	4
+  29              		.comm	glEp0Buffer,32,32
+  30              		.comm	glForceLinkU2,4,4
+  31              		.comm	glChannelSuspended,4,4
+  32              		.section	.rodata
+  33              		.align	2
+  34              	.LC0:
+  35 0000 53746172 		.ascii	"Start\000"
+  35      7400
+  36 0006 0000     		.align	2
+  37              	.LC1:
+  38 0008 53746F70 		.ascii	"Stop\000"
+  38      00
+  39 000d 000000   		.align	2
+  40              	.LC2:
+  41 0010 0D0A476F 		.ascii	"\015\012Got Command = %s Data Collection\000"
+  41      7420436F 
+  41      6D6D616E 
+  41      64203D20 
+  41      25732044 
+  42              		.section	.text.USBSetup_Callback,"ax",%progbits
+  43              		.align	2
+  44              		.global	USBSetup_Callback
+  46              	USBSetup_Callback:
+  47              	.LFB0:
+  48              		.file 1 "../USB_Handler.c"
+   1:../USB_Handler.c **** /*
+   2:../USB_Handler.c ****  * USB Handler.c
+   3:../USB_Handler.c ****  *
+   4:../USB_Handler.c ****  *      Author: john@usb-by-example.com
+   5:../USB_Handler.c ****  */
+   6:../USB_Handler.c **** 
+   7:../USB_Handler.c **** #include "Application.h"
+   8:../USB_Handler.c **** 
+   9:../USB_Handler.c **** // Declare external functions
+  10:../USB_Handler.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  11:../USB_Handler.c **** extern CyU3PReturnStatus_t SetUSBdescriptors(void);
+  12:../USB_Handler.c **** extern void StartApplication(void);
+  13:../USB_Handler.c **** extern void StopApplication(void);
+  14:../USB_Handler.c **** extern CyU3PEvent CallbackEvent;			// Used by Callback to signal Main()
+  15:../USB_Handler.c **** 
+  16:../USB_Handler.c **** // Declare external data
+  17:../USB_Handler.c **** extern CyBool_t glIsApplicationActive;		// Set true once device is enumerated
+  18:../USB_Handler.c **** extern uint32_t ClockValue;					// Used to select GPIF speed
+  19:../USB_Handler.c **** 
+  20:../USB_Handler.c **** // Global data owned by this module
+  21:../USB_Handler.c **** volatile uint8_t  glVendorRequestCount = 0;
+  22:../USB_Handler.c **** volatile uint32_t glUnderrunCount = 0;
+  23:../USB_Handler.c **** uint8_t glEp0Buffer[32] __attribute__ ((aligned (32))); /* Local buffer used for vendor command han
+  24:../USB_Handler.c **** CyBool_t glForceLinkU2;
+  25:../USB_Handler.c **** CyBool_t glChannelSuspended;
+  26:../USB_Handler.c **** 
+  27:../USB_Handler.c **** 
+  28:../USB_Handler.c **** // Declare the callbacks needed to support the USB device driver
+  29:../USB_Handler.c **** CyBool_t USBSetup_Callback(uint32_t setupdat0, uint32_t setupdat1)
+  30:../USB_Handler.c **** {
+  49              		.loc 1 30 0
+  50              		.cfi_startproc
+  51              		@ args = 0, pretend = 0, frame = 24
+  52              		@ frame_needed = 1, uses_anonymous_args = 0
+  53 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  54              	.LCFI0:
+  55              		.cfi_def_cfa_offset 8
+  56              		.cfi_offset 11, -8
+  57              		.cfi_offset 14, -4
+  58 0004 04B08DE2 		add	fp, sp, #4
+  59              	.LCFI1:
+  60              		.cfi_def_cfa 11, 4
+  61 0008 18D04DE2 		sub	sp, sp, #24
+  62 000c 18000BE5 		str	r0, [fp, #-24]
+  63 0010 1C100BE5 		str	r1, [fp, #-28]
+  31:../USB_Handler.c **** 	CyBool_t isHandled = CyFalse;
+  64              		.loc 1 31 0
+  65 0014 0030A0E3 		mov	r3, #0
+  66 0018 08300BE5 		str	r3, [fp, #-8]
+  32:../USB_Handler.c **** 	union { uint32_t SetupData[2];
+  33:../USB_Handler.c **** 			struct { uint8_t Target:5; uint8_t Type:2; uint8_t Direction:1;
+  34:../USB_Handler.c **** 				 	 uint8_t Request; uint16_t Value; uint16_t Index; uint16_t Length; };
+  35:../USB_Handler.c **** 		  } Setup;
+  36:../USB_Handler.c **** 	// Copy the incoming Setup Packet into my Setup union which will "unpack" the variables
+  37:../USB_Handler.c **** 	Setup.SetupData[0] = setupdat0;
+  67              		.loc 1 37 0
+  68 001c 18301BE5 		ldr	r3, [fp, #-24]
+  69 0020 10300BE5 		str	r3, [fp, #-16]
+  38:../USB_Handler.c **** 	Setup.SetupData[1] = setupdat1;
+  70              		.loc 1 38 0
+  71 0024 1C301BE5 		ldr	r3, [fp, #-28]
+  72 0028 0C300BE5 		str	r3, [fp, #-12]
+  39:../USB_Handler.c **** 
+  40:../USB_Handler.c **** 	// USB Driver will send me Class and Vendor requests to handle
+  41:../USB_Handler.c ****     if (Setup.Type == VENDOR_REQUEST)
+  73              		.loc 1 41 0
+  74 002c 10305BE5 		ldrb	r3, [fp, #-16]	@ zero_extendqisi2
+  75 0030 A332A0E1 		mov	r3, r3, lsr #5
+  76 0034 033003E2 		and	r3, r3, #3
+  77 0038 FF3003E2 		and	r3, r3, #255
+  78 003c 020053E3 		cmp	r3, #2
+  79 0040 3800001A 		bne	.L2
+  42:../USB_Handler.c ****     {
+  43:../USB_Handler.c ****         if (Setup.Request == 0xB5)
+  80              		.loc 1 43 0
+  81 0044 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+  82 0048 B50053E3 		cmp	r3, #181
+  83 004c 1800001A 		bne	.L3
+  44:../USB_Handler.c ****         {
+  45:../USB_Handler.c ****         	DebugPrint(4, "\r\nGot Command = %s Data Collection", Setup.Value ? "Start" : "Stop");
+  84              		.loc 1 45 0
+  85 0050 BE305BE1 		ldrh	r3, [fp, #-14]
+  86 0054 000053E3 		cmp	r3, #0
+  87 0058 0100000A 		beq	.L4
+  88              		.loc 1 45 0 is_stmt 0 discriminator 1
+  89 005c E0319FE5 		ldr	r3, .L14
+  90 0060 000000EA 		b	.L5
+  91              	.L4:
+  92              		.loc 1 45 0 discriminator 2
+  93 0064 DC319FE5 		ldr	r3, .L14+4
+  94              	.L5:
+  95              		.loc 1 45 0 discriminator 3
+  96 0068 0400A0E3 		mov	r0, #4
+  97 006c D8119FE5 		ldr	r1, .L14+8
+  98 0070 0320A0E1 		mov	r2, r3
+  99 0074 FEFFFFEB 		bl	CyU3PDebugPrint
+  46:../USB_Handler.c ****         	if (Setup.Value == 1) CyU3PGpioSetValue(CPLD_RESET, 0);		// Start = Release CPLD_RESET
+ 100              		.loc 1 46 0 is_stmt 1 discriminator 3
+ 101 0078 BE305BE1 		ldrh	r3, [fp, #-14]
+ 102 007c 010053E3 		cmp	r3, #1
+ 103 0080 0200001A 		bne	.L6
+ 104              		.loc 1 46 0 is_stmt 0 discriminator 1
+ 105 0084 1B00A0E3 		mov	r0, #27
+ 106 0088 0010A0E3 		mov	r1, #0
+ 107 008c FEFFFFEB 		bl	CyU3PGpioSetValue
+ 108              	.L6:
+  47:../USB_Handler.c ****         	if (Setup.Value == 0) CyU3PGpioSetValue(CPLD_RESET, 1);		// Stop = Drive CPLD_RESET
+ 109              		.loc 1 47 0 is_stmt 1
+ 110 0090 BE305BE1 		ldrh	r3, [fp, #-14]
+ 111 0094 000053E3 		cmp	r3, #0
+ 112 0098 0200001A 		bne	.L7
+ 113              		.loc 1 47 0 is_stmt 0 discriminator 1
+ 114 009c 1B00A0E3 		mov	r0, #27
+ 115 00a0 0110A0E3 		mov	r1, #1
+ 116 00a4 FEFFFFEB 		bl	CyU3PGpioSetValue
+ 117              	.L7:
+  48:../USB_Handler.c ****         	CyU3PUsbAckSetup();
+ 118              		.loc 1 48 0 is_stmt 1
+ 119 00a8 FEFFFFEB 		bl	CyU3PUsbAckSetup
+  49:../USB_Handler.c ****             isHandled = CyTrue;
+ 120              		.loc 1 49 0
+ 121 00ac 0130A0E3 		mov	r3, #1
+ 122 00b0 08300BE5 		str	r3, [fp, #-8]
+ 123              	.L3:
+  50:../USB_Handler.c ****         }
+  51:../USB_Handler.c ****         if (Setup.Request == 0x76)
+ 124              		.loc 1 51 0
+ 125 00b4 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 126 00b8 760053E3 		cmp	r3, #118
+ 127 00bc 1900001A 		bne	.L2
+  52:../USB_Handler.c ****         {
+  53:../USB_Handler.c ****             /* When operating at USB 2.0 speeds, there is a possibility that the bulk transfers cre
+  54:../USB_Handler.c ****                errors during control transfers. Ensure that the bulk channel is suspended for the d
+  55:../USB_Handler.c ****                of the control request to avoid this possibility. We use a timeout of 1 second to en
+  56:../USB_Handler.c ****                that the control pipe does not get stuck in the case where the host is not reading t
+  57:../USB_Handler.c ****                bulk pipe. */
+  58:../USB_Handler.c ****             glEp0Buffer[0] = glVendorRequestCount++;
+ 128              		.loc 1 58 0
+ 129 00c0 88319FE5 		ldr	r3, .L14+12
+ 130 00c4 0030D3E5 		ldrb	r3, [r3]
+ 131 00c8 FF3003E2 		and	r3, r3, #255
+ 132 00cc 012083E2 		add	r2, r3, #1
+ 133 00d0 FF1002E2 		and	r1, r2, #255
+ 134 00d4 74219FE5 		ldr	r2, .L14+12
+ 135 00d8 0010C2E5 		strb	r1, [r2]
+ 136 00dc 70219FE5 		ldr	r2, .L14+16
+ 137 00e0 0030C2E5 		strb	r3, [r2]
+  59:../USB_Handler.c ****             glEp0Buffer[1] = glUnderrunCount;
+ 138              		.loc 1 59 0
+ 139 00e4 6C319FE5 		ldr	r3, .L14+20
+ 140 00e8 003093E5 		ldr	r3, [r3]
+ 141 00ec FF2003E2 		and	r2, r3, #255
+ 142 00f0 5C319FE5 		ldr	r3, .L14+16
+ 143 00f4 0120C3E5 		strb	r2, [r3, #1]
+  60:../USB_Handler.c ****             glEp0Buffer[2] = 1;
+ 144              		.loc 1 60 0
+ 145 00f8 54319FE5 		ldr	r3, .L14+16
+ 146 00fc 0120A0E3 		mov	r2, #1
+ 147 0100 0220C3E5 		strb	r2, [r3, #2]
+  61:../USB_Handler.c ****             glEp0Buffer[3] = 2;
+ 148              		.loc 1 61 0
+ 149 0104 48319FE5 		ldr	r3, .L14+16
+ 150 0108 0220A0E3 		mov	r2, #2
+ 151 010c 0320C3E5 		strb	r2, [r3, #3]
+  62:../USB_Handler.c ****             CyU3PUsbSendEP0Data(Setup.Length, glEp0Buffer);
+ 152              		.loc 1 62 0
+ 153 0110 BA305BE1 		ldrh	r3, [fp, #-10]
+ 154 0114 0300A0E1 		mov	r0, r3
+ 155 0118 34119FE5 		ldr	r1, .L14+16
+ 156 011c FEFFFFEB 		bl	CyU3PUsbSendEP0Data
+  63:../USB_Handler.c ****             isHandled = CyTrue;
+ 157              		.loc 1 63 0
+ 158 0120 0130A0E3 		mov	r3, #1
+ 159 0124 08300BE5 		str	r3, [fp, #-8]
+ 160              	.L2:
+  64:../USB_Handler.c ****         }
+  65:../USB_Handler.c ****     }
+  66:../USB_Handler.c **** 
+  67:../USB_Handler.c ****     if (Setup.Type == STANDARD_REQUEST)
+ 161              		.loc 1 67 0
+ 162 0128 10305BE5 		ldrb	r3, [fp, #-16]	@ zero_extendqisi2
+ 163 012c A332A0E1 		mov	r3, r3, lsr #5
+ 164 0130 033003E2 		and	r3, r3, #3
+ 165 0134 FF3003E2 		and	r3, r3, #255
+ 166 0138 000053E3 		cmp	r3, #0
+ 167 013c 3C00001A 		bne	.L8
+  68:../USB_Handler.c ****     {
+  69:../USB_Handler.c ****         /* Handle SET_FEATURE(FUNCTION_SUSPEND) and CLEAR_FEATURE(FUNCTION_SUSPEND)
+  70:../USB_Handler.c ****          * requests here. It should be allowed to pass if the device is in configured
+  71:../USB_Handler.c ****          * state and failed otherwise. */
+  72:../USB_Handler.c ****         if ((Setup.Target == CY_U3P_USB_TARGET_INTF) && ((Setup.Request == CY_U3P_USB_SC_SET_FEATUR
+ 168              		.loc 1 72 0
+ 169 0140 10305BE5 		ldrb	r3, [fp, #-16]
+ 170 0144 1F3003E2 		and	r3, r3, #31
+ 171 0148 FF3003E2 		and	r3, r3, #255
+ 172 014c 010053E3 		cmp	r3, #1
+ 173 0150 1C00001A 		bne	.L9
+ 174              		.loc 1 72 0 is_stmt 0 discriminator 1
+ 175 0154 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 176 0158 030053E3 		cmp	r3, #3
+ 177 015c 0200000A 		beq	.L10
+  73:../USB_Handler.c ****                     || (Setup.Request == CY_U3P_USB_SC_CLEAR_FEATURE)) && (Setup.Value == 0))
+ 178              		.loc 1 73 0 is_stmt 1
+ 179 0160 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 180 0164 010053E3 		cmp	r3, #1
+ 181 0168 1600001A 		bne	.L9
+ 182              	.L10:
+ 183              		.loc 1 73 0 is_stmt 0 discriminator 1
+ 184 016c BE305BE1 		ldrh	r3, [fp, #-14]
+ 185 0170 000053E3 		cmp	r3, #0
+ 186 0174 1300001A 		bne	.L9
+  74:../USB_Handler.c ****         {
+  75:../USB_Handler.c ****             if (glIsApplicationActive)
+ 187              		.loc 1 75 0 is_stmt 1
+ 188 0178 DC309FE5 		ldr	r3, .L14+24
+ 189 017c 003093E5 		ldr	r3, [r3]
+ 190 0180 000053E3 		cmp	r3, #0
+ 191 0184 0900000A 		beq	.L11
+  76:../USB_Handler.c ****             {
+  77:../USB_Handler.c ****                 CyU3PUsbAckSetup ();
+ 192              		.loc 1 77 0
+ 193 0188 FEFFFFEB 		bl	CyU3PUsbAckSetup
+  78:../USB_Handler.c ****                 /* As we have only one interface, the link can be pushed into U2 state as soon as
+  79:../USB_Handler.c ****                    this interface is suspended.
+  80:../USB_Handler.c ****                  */
+  81:../USB_Handler.c ****                 glForceLinkU2 = (Setup.Request == CY_U3P_USB_SC_SET_FEATURE);
+ 194              		.loc 1 81 0
+ 195 018c 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 196 0190 030053E3 		cmp	r3, #3
+ 197 0194 0030A013 		movne	r3, #0
+ 198 0198 0130A003 		moveq	r3, #1
+ 199 019c FF3003E2 		and	r3, r3, #255
+ 200 01a0 0320A0E1 		mov	r2, r3
+ 201 01a4 B4309FE5 		ldr	r3, .L14+28
+ 202 01a8 002083E5 		str	r2, [r3]
+ 203 01ac 030000EA 		b	.L12
+ 204              	.L11:
+  82:../USB_Handler.c ****              }
+  83:../USB_Handler.c ****             else CyU3PUsbStall(0, CyTrue, CyFalse);
+ 205              		.loc 1 83 0
+ 206 01b0 0000A0E3 		mov	r0, #0
+ 207 01b4 0110A0E3 		mov	r1, #1
+ 208 01b8 0020A0E3 		mov	r2, #0
+ 209 01bc FEFFFFEB 		bl	CyU3PUsbStall
+ 210              	.L12:
+  84:../USB_Handler.c **** 
+  85:../USB_Handler.c ****             isHandled = CyTrue;
+ 211              		.loc 1 85 0
+ 212 01c0 0130A0E3 		mov	r3, #1
+ 213 01c4 08300BE5 		str	r3, [fp, #-8]
+ 214              	.L9:
+  86:../USB_Handler.c ****         }
+  87:../USB_Handler.c **** 
+  88:../USB_Handler.c ****         /* CLEAR_FEATURE request for endpoint is always passed to the setup callback
+  89:../USB_Handler.c ****          * regardless of the enumeration model used. When a clear feature is received,
+  90:../USB_Handler.c ****          * the previous transfer has to be flushed and cleaned up. This is done at the
+  91:../USB_Handler.c ****          * protocol level. Since this is just a loopback operation, there is no higher
+  92:../USB_Handler.c ****          * level protocol. So flush the EP memory and reset the DMA channel associated
+  93:../USB_Handler.c ****          * with it. If there are more than one EP associated with the channel reset both
+  94:../USB_Handler.c ****          * the EPs. The endpoint stall and toggle / sequence number is also expected to be
+  95:../USB_Handler.c ****          * reset. Return CyFalse to make the library clear the stall and reset the endpoint
+  96:../USB_Handler.c ****          * toggle. Or invoke the CyU3PUsbStall (ep, CyFalse, CyTrue) and return CyTrue.
+  97:../USB_Handler.c ****          * Here we are clearing the stall. */
+  98:../USB_Handler.c ****         if ((Setup.Target == CY_U3P_USB_TARGET_ENDPT) && (Setup.Request == CY_U3P_USB_SC_CLEAR_FEAT
+ 215              		.loc 1 98 0
+ 216 01c8 10305BE5 		ldrb	r3, [fp, #-16]
+ 217 01cc 1F3003E2 		and	r3, r3, #31
+ 218 01d0 FF3003E2 		and	r3, r3, #255
+ 219 01d4 020053E3 		cmp	r3, #2
+ 220 01d8 1500001A 		bne	.L8
+ 221              		.loc 1 98 0 is_stmt 0 discriminator 1
+ 222 01dc 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 223 01e0 010053E3 		cmp	r3, #1
+ 224 01e4 1200001A 		bne	.L8
+  99:../USB_Handler.c ****                 && (Setup.Value == CY_U3P_USBX_FS_EP_HALT))
+ 225              		.loc 1 99 0 is_stmt 1
+ 226 01e8 BE305BE1 		ldrh	r3, [fp, #-14]
+ 227 01ec 000053E3 		cmp	r3, #0
+ 228 01f0 0F00001A 		bne	.L8
+ 100:../USB_Handler.c ****         {
+ 101:../USB_Handler.c ****             if (glIsApplicationActive)
+ 229              		.loc 1 101 0
+ 230 01f4 60309FE5 		ldr	r3, .L14+24
+ 231 01f8 003093E5 		ldr	r3, [r3]
+ 232 01fc 000053E3 		cmp	r3, #0
+ 233 0200 0B00000A 		beq	.L8
+ 102:../USB_Handler.c ****             {
+ 103:../USB_Handler.c ****                 if (Setup.Index == USB_CONSUMER_ENDPOINT)
+ 234              		.loc 1 103 0
+ 235 0204 BC305BE1 		ldrh	r3, [fp, #-12]
+ 236 0208 810053E3 		cmp	r3, #129
+ 237 020c 0800001A 		bne	.L8
+ 104:../USB_Handler.c ****                 {
+ 105:../USB_Handler.c ****                     CyU3PUsbStall(Setup.Index, CyFalse, CyTrue);
+ 238              		.loc 1 105 0
+ 239 0210 BC305BE1 		ldrh	r3, [fp, #-12]
+ 240 0214 FF3003E2 		and	r3, r3, #255
+ 241 0218 0300A0E1 		mov	r0, r3
+ 242 021c 0010A0E3 		mov	r1, #0
+ 243 0220 0120A0E3 		mov	r2, #1
+ 244 0224 FEFFFFEB 		bl	CyU3PUsbStall
+ 106:../USB_Handler.c ****                     isHandled = CyTrue;
+ 245              		.loc 1 106 0
+ 246 0228 0130A0E3 		mov	r3, #1
+ 247 022c 08300BE5 		str	r3, [fp, #-8]
+ 107:../USB_Handler.c ****                     CyU3PUsbAckSetup();
+ 248              		.loc 1 107 0
+ 249 0230 FEFFFFEB 		bl	CyU3PUsbAckSetup
+ 250              	.L8:
+ 108:../USB_Handler.c ****                 }
+ 109:../USB_Handler.c ****             }
+ 110:../USB_Handler.c ****         }
+ 111:../USB_Handler.c ****     }
+ 112:../USB_Handler.c ****     return isHandled;
+ 251              		.loc 1 112 0
+ 252 0234 08301BE5 		ldr	r3, [fp, #-8]
+ 113:../USB_Handler.c **** }
+ 253              		.loc 1 113 0
+ 254 0238 0300A0E1 		mov	r0, r3
+ 255 023c 04D04BE2 		sub	sp, fp, #4
+ 256              		@ sp needed
+ 257 0240 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 258              	.L15:
+ 259              		.align	2
+ 260              	.L14:
+ 261 0244 00000000 		.word	.LC0
+ 262 0248 08000000 		.word	.LC1
+ 263 024c 10000000 		.word	.LC2
+ 264 0250 00000000 		.word	glVendorRequestCount
+ 265 0254 00000000 		.word	glEp0Buffer
+ 266 0258 00000000 		.word	glUnderrunCount
+ 267 025c 00000000 		.word	glIsApplicationActive
+ 268 0260 00000000 		.word	glForceLinkU2
+ 269              		.cfi_endproc
+ 270              	.LFE0:
+ 272              		.section	.rodata
+ 273 0033 00       		.align	2
+ 274              	.LC3:
+ 275 0034 0D0A4550 		.ascii	"\015\012EP Underrun on %d\000"
+ 275      20556E64 
+ 275      65727275 
+ 275      6E206F6E 
+ 275      20256400 
+ 276              		.section	.text.USBEvent_Callback,"ax",%progbits
+ 277              		.align	2
+ 278              		.global	USBEvent_Callback
+ 280              	USBEvent_Callback:
+ 281              	.LFB1:
+ 114:../USB_Handler.c **** 
+ 115:../USB_Handler.c **** void USBEvent_Callback(CyU3PUsbEventType_t Event, uint16_t EventData )
+ 116:../USB_Handler.c **** {
+ 282              		.loc 1 116 0
+ 283              		.cfi_startproc
+ 284              		@ args = 0, pretend = 0, frame = 8
+ 285              		@ frame_needed = 1, uses_anonymous_args = 0
+ 286 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 287              	.LCFI2:
+ 288              		.cfi_def_cfa_offset 8
+ 289              		.cfi_offset 11, -8
+ 290              		.cfi_offset 14, -4
+ 291 0004 04B08DE2 		add	fp, sp, #4
+ 292              	.LCFI3:
+ 293              		.cfi_def_cfa 11, 4
+ 294 0008 08D04DE2 		sub	sp, sp, #8
+ 295 000c 0020A0E1 		mov	r2, r0
+ 296 0010 0130A0E1 		mov	r3, r1
+ 297 0014 05204BE5 		strb	r2, [fp, #-5]
+ 298 0018 B8304BE1 		strh	r3, [fp, #-8]	@ movhi
+ 117:../USB_Handler.c **** 	CyU3PEventSet(&CallbackEvent, 1<<Event, CYU3P_EVENT_OR);
+ 299              		.loc 1 117 0
+ 300 001c 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 301 0020 0120A0E3 		mov	r2, #1
+ 302 0024 1233A0E1 		mov	r3, r2, asl r3
+ 303 0028 04019FE5 		ldr	r0, .L30
+ 304 002c 0310A0E1 		mov	r1, r3
+ 305 0030 0020A0E3 		mov	r2, #0
+ 306 0034 FEFFFFEB 		bl	_txe_event_flags_set
+ 118:../USB_Handler.c **** 	switch (Event)
+ 307              		.loc 1 118 0
+ 308 0038 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 309 003c 120053E3 		cmp	r3, #18
+ 310 0040 03F19F97 		ldrls	pc, [pc, r3, asl #2]
+ 311 0044 370000EA 		b	.L29
+ 312              	.L19:
+ 313 0048 28010000 		.word	.L29
+ 314 004c D4000000 		.word	.L20
+ 315 0050 28010000 		.word	.L29
+ 316 0054 28010000 		.word	.L29
+ 317 0058 D4000000 		.word	.L20
+ 318 005c 94000000 		.word	.L21
+ 319 0060 28010000 		.word	.L29
+ 320 0064 28010000 		.word	.L29
+ 321 0068 28010000 		.word	.L29
+ 322 006c 28010000 		.word	.L29
+ 323 0070 28010000 		.word	.L29
+ 324 0074 28010000 		.word	.L29
+ 325 0078 28010000 		.word	.L29
+ 326 007c 28010000 		.word	.L29
+ 327 0080 28010000 		.word	.L29
+ 328 0084 28010000 		.word	.L29
+ 329 0088 28010000 		.word	.L29
+ 330 008c 28010000 		.word	.L29
+ 331 0090 FC000000 		.word	.L23
+ 332              	.L21:
+ 119:../USB_Handler.c ****     {
+ 120:../USB_Handler.c ****      case CY_U3P_USB_EVENT_CONNECT:
+ 121:../USB_Handler.c ****        break;
+ 122:../USB_Handler.c **** 
+ 123:../USB_Handler.c ****     case CY_U3P_USB_EVENT_SETCONF:
+ 124:../USB_Handler.c ****         /* If the application is already active stop it before re-enabling. */
+ 125:../USB_Handler.c ****         if (glIsApplicationActive) StopApplication();
+ 333              		.loc 1 125 0
+ 334 0094 9C309FE5 		ldr	r3, .L30+4
+ 335 0098 003093E5 		ldr	r3, [r3]
+ 336 009c 000053E3 		cmp	r3, #0
+ 337 00a0 0000000A 		beq	.L25
+ 338              		.loc 1 125 0 is_stmt 0 discriminator 1
+ 339 00a4 FEFFFFEB 		bl	StopApplication
+ 340              	.L25:
+ 126:../USB_Handler.c ****     	ClockValue = (CyU3PUsbGetSpeed() == CY_U3P_SUPER_SPEED) ? MAXCLOCKVALUE : 80;	//	DEBUG at 10MH
+ 341              		.loc 1 126 0 is_stmt 1
+ 342 00a8 FEFFFFEB 		bl	CyU3PUsbGetSpeed
+ 343 00ac 0030A0E1 		mov	r3, r0
+ 344 00b0 030053E3 		cmp	r3, #3
+ 345 00b4 0100001A 		bne	.L26
+ 346              		.loc 1 126 0 is_stmt 0 discriminator 1
+ 347 00b8 0A30A0E3 		mov	r3, #10
+ 348 00bc 000000EA 		b	.L27
+ 349              	.L26:
+ 350              		.loc 1 126 0 discriminator 2
+ 351 00c0 5030A0E3 		mov	r3, #80
+ 352              	.L27:
+ 353              		.loc 1 126 0 discriminator 3
+ 354 00c4 70209FE5 		ldr	r2, .L30+8
+ 355 00c8 003082E5 		str	r3, [r2]
+ 127:../USB_Handler.c ****         StartApplication();
+ 356              		.loc 1 127 0 is_stmt 1 discriminator 3
+ 357 00cc FEFFFFEB 		bl	StartApplication
+ 128:../USB_Handler.c ****         break;
+ 358              		.loc 1 128 0 discriminator 3
+ 359 00d0 150000EA 		b	.L16
+ 360              	.L20:
+ 129:../USB_Handler.c **** 
+ 130:../USB_Handler.c ****     case CY_U3P_USB_EVENT_DISCONNECT:
+ 131:../USB_Handler.c ****     case CY_U3P_USB_EVENT_RESET:
+ 132:../USB_Handler.c ****         glForceLinkU2 = CyFalse;
+ 361              		.loc 1 132 0
+ 362 00d4 64309FE5 		ldr	r3, .L30+12
+ 363 00d8 0020A0E3 		mov	r2, #0
+ 364 00dc 002083E5 		str	r2, [r3]
+ 133:../USB_Handler.c ****         if (glIsApplicationActive) StopApplication();
+ 365              		.loc 1 133 0
+ 366 00e0 50309FE5 		ldr	r3, .L30+4
+ 367 00e4 003093E5 		ldr	r3, [r3]
+ 368 00e8 000053E3 		cmp	r3, #0
+ 369 00ec 0100000A 		beq	.L28
+ 370              		.loc 1 133 0 is_stmt 0 discriminator 1
+ 371 00f0 FEFFFFEB 		bl	StopApplication
+ 134:../USB_Handler.c ****         break;
+ 372              		.loc 1 134 0 is_stmt 1 discriminator 1
+ 373 00f4 0C0000EA 		b	.L16
+ 374              	.L28:
+ 375              		.loc 1 134 0 is_stmt 0
+ 376 00f8 0B0000EA 		b	.L16
+ 377              	.L23:
+ 135:../USB_Handler.c **** 
+ 136:../USB_Handler.c ****     case CY_U3P_USB_EVENT_EP_UNDERRUN:
+ 137:../USB_Handler.c ****     	glUnderrunCount++;
+ 378              		.loc 1 137 0 is_stmt 1
+ 379 00fc 40309FE5 		ldr	r3, .L30+16
+ 380 0100 003093E5 		ldr	r3, [r3]
+ 381 0104 012083E2 		add	r2, r3, #1
+ 382 0108 34309FE5 		ldr	r3, .L30+16
+ 383 010c 002083E5 		str	r2, [r3]
+ 138:../USB_Handler.c ****         DebugPrint (7, "\r\nEP Underrun on %d", EventData);
+ 384              		.loc 1 138 0
+ 385 0110 B8305BE1 		ldrh	r3, [fp, #-8]
+ 386 0114 0700A0E3 		mov	r0, #7
+ 387 0118 28109FE5 		ldr	r1, .L30+20
+ 388 011c 0320A0E1 		mov	r2, r3
+ 389 0120 FEFFFFEB 		bl	CyU3PDebugPrint
+ 139:../USB_Handler.c ****         break;
+ 390              		.loc 1 139 0
+ 391 0124 000000EA 		b	.L16
+ 392              	.L29:
+ 140:../USB_Handler.c **** 
+ 141:../USB_Handler.c ****     case CY_U3P_USB_EVENT_EP0_STAT_CPLT:
+ 142:../USB_Handler.c ****         /* Make sure the bulk pipe is resumed once the control transfer is done. */
+ 143:../USB_Handler.c ****         break;
+ 144:../USB_Handler.c **** 
+ 145:../USB_Handler.c ****     default:
+ 146:../USB_Handler.c ****         break;
+ 393              		.loc 1 146 0
+ 394 0128 0000A0E1 		mov	r0, r0	@ nop
+ 395              	.L16:
+ 147:../USB_Handler.c ****     }
+ 148:../USB_Handler.c **** }
+ 396              		.loc 1 148 0
+ 397 012c 04D04BE2 		sub	sp, fp, #4
+ 398              		@ sp needed
+ 399 0130 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 400              	.L31:
+ 401              		.align	2
+ 402              	.L30:
+ 403 0134 00000000 		.word	CallbackEvent
+ 404 0138 00000000 		.word	glIsApplicationActive
+ 405 013c 00000000 		.word	ClockValue
+ 406 0140 00000000 		.word	glForceLinkU2
+ 407 0144 00000000 		.word	glUnderrunCount
+ 408 0148 34000000 		.word	.LC3
+ 409              		.cfi_endproc
+ 410              	.LFE1:
+ 412              		.section	.text.LPMRequest_Callback,"ax",%progbits
+ 413              		.align	2
+ 414              		.global	LPMRequest_Callback
+ 416              	LPMRequest_Callback:
+ 417              	.LFB2:
+ 149:../USB_Handler.c **** 
+ 150:../USB_Handler.c **** CyBool_t LPMRequest_Callback(CyU3PUsbLinkPowerMode link_mode)
+ 151:../USB_Handler.c **** {
+ 418              		.loc 1 151 0
+ 419              		.cfi_startproc
+ 420              		@ args = 0, pretend = 0, frame = 8
+ 421              		@ frame_needed = 1, uses_anonymous_args = 0
+ 422              		@ link register save eliminated.
+ 423 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 424              	.LCFI4:
+ 425              		.cfi_def_cfa_offset 4
+ 426              		.cfi_offset 11, -4
+ 427 0004 00B08DE2 		add	fp, sp, #0
+ 428              	.LCFI5:
+ 429              		.cfi_def_cfa_register 11
+ 430 0008 0CD04DE2 		sub	sp, sp, #12
+ 431 000c 0030A0E1 		mov	r3, r0
+ 432 0010 05304BE5 		strb	r3, [fp, #-5]
+ 152:../USB_Handler.c ****     return CyTrue;
+ 433              		.loc 1 152 0
+ 434 0014 0130A0E3 		mov	r3, #1
+ 153:../USB_Handler.c **** }
+ 435              		.loc 1 153 0
+ 436 0018 0300A0E1 		mov	r0, r3
+ 437 001c 00D04BE2 		sub	sp, fp, #0
+ 438              		@ sp needed
+ 439 0020 04B09DE4 		ldr	fp, [sp], #4
+ 440 0024 1EFF2FE1 		bx	lr
+ 441              		.cfi_endproc
+ 442              	.LFE2:
+ 444              		.section	.rodata
+ 445              		.align	2
+ 446              	.LC4:
+ 447 0048 53746172 		.ascii	"Start USB Driver\000"
+ 447      74205553 
+ 447      42204472 
+ 447      69766572 
+ 447      00
+ 448 0059 000000   		.align	2
+ 449              	.LC5:
+ 450 005c 53657420 		.ascii	"Set USB Descriptors\000"
+ 450      55534220 
+ 450      44657363 
+ 450      72697074 
+ 450      6F727300 
+ 451              		.align	2
+ 452              	.LC6:
+ 453 0070 436F6E6E 		.ascii	"Connect USB\000"
+ 453      65637420 
+ 453      55534200 
+ 454              		.section	.text.InitializeUSB,"ax",%progbits
+ 455              		.align	2
+ 456              		.global	InitializeUSB
+ 458              	InitializeUSB:
+ 459              	.LFB3:
+ 154:../USB_Handler.c **** 
+ 155:../USB_Handler.c **** // Spin up USB, let the USB driver handle enumeration
+ 156:../USB_Handler.c **** CyU3PReturnStatus_t InitializeUSB(void)
+ 157:../USB_Handler.c **** {
+ 460              		.loc 1 157 0
+ 461              		.cfi_startproc
+ 462              		@ args = 0, pretend = 0, frame = 8
+ 463              		@ frame_needed = 1, uses_anonymous_args = 0
+ 464 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 465              	.LCFI6:
+ 466              		.cfi_def_cfa_offset 8
+ 467              		.cfi_offset 11, -8
+ 468              		.cfi_offset 14, -4
+ 469 0004 04B08DE2 		add	fp, sp, #4
+ 470              	.LCFI7:
+ 471              		.cfi_def_cfa 11, 4
+ 472 0008 08D04DE2 		sub	sp, sp, #8
+ 158:../USB_Handler.c **** 	CyU3PReturnStatus_t Status;
+ 159:../USB_Handler.c **** 	CyBool_t NeedToRenumerate = CyTrue;
+ 473              		.loc 1 159 0
+ 474 000c 0130A0E3 		mov	r3, #1
+ 475 0010 0C300BE5 		str	r3, [fp, #-12]
+ 160:../USB_Handler.c **** 	Status = CyU3PUsbStart();
+ 476              		.loc 1 160 0
+ 477 0014 FEFFFFEB 		bl	CyU3PUsbStart
+ 478 0018 08000BE5 		str	r0, [fp, #-8]
+ 161:../USB_Handler.c ****     if (Status == CY_U3P_ERROR_NO_REENUM_REQUIRED)
+ 479              		.loc 1 161 0
+ 480 001c 08301BE5 		ldr	r3, [fp, #-8]
+ 481 0020 FE0053E3 		cmp	r3, #254
+ 482 0024 0300001A 		bne	.L35
+ 162:../USB_Handler.c ****     {
+ 163:../USB_Handler.c ****     	NeedToRenumerate = CyFalse;
+ 483              		.loc 1 163 0
+ 484 0028 0030A0E3 		mov	r3, #0
+ 485 002c 0C300BE5 		str	r3, [fp, #-12]
+ 164:../USB_Handler.c ****     	Status = CY_U3P_SUCCESS;
+ 486              		.loc 1 164 0
+ 487 0030 0030A0E3 		mov	r3, #0
+ 488 0034 08300BE5 		str	r3, [fp, #-8]
+ 489              	.L35:
+ 165:../USB_Handler.c ****     }
+ 166:../USB_Handler.c **** 	CheckStatus("Start USB Driver", Status);
+ 490              		.loc 1 166 0
+ 491 0038 88009FE5 		ldr	r0, .L40
+ 492 003c 08101BE5 		ldr	r1, [fp, #-8]
+ 493 0040 FEFFFFEB 		bl	CheckStatus
+ 167:../USB_Handler.c **** 	// Setup callbacks to handle the setup requests, USB Events and LPM Requests (for USB 3.0)
+ 168:../USB_Handler.c ****     CyU3PUsbRegisterSetupCallback(USBSetup_Callback, CyTrue);
+ 494              		.loc 1 168 0
+ 495 0044 80009FE5 		ldr	r0, .L40+4
+ 496 0048 0110A0E3 		mov	r1, #1
+ 497 004c FEFFFFEB 		bl	CyU3PUsbRegisterSetupCallback
+ 169:../USB_Handler.c ****     CyU3PUsbRegisterEventCallback(USBEvent_Callback);
+ 498              		.loc 1 169 0
+ 499 0050 78009FE5 		ldr	r0, .L40+8
+ 500 0054 FEFFFFEB 		bl	CyU3PUsbRegisterEventCallback
+ 170:../USB_Handler.c ****     CyU3PUsbRegisterLPMRequestCallback(LPMRequest_Callback);
+ 501              		.loc 1 170 0
+ 502 0058 74009FE5 		ldr	r0, .L40+12
+ 503 005c FEFFFFEB 		bl	CyU3PUsbRegisterLPMRequestCallback
+ 171:../USB_Handler.c **** 
+ 172:../USB_Handler.c ****     // Driver needs all of the descriptors so it can supply them to the host when requested
+ 173:../USB_Handler.c ****     Status = SetUSBdescriptors();
+ 504              		.loc 1 173 0
+ 505 0060 FEFFFFEB 		bl	SetUSBdescriptors
+ 506 0064 08000BE5 		str	r0, [fp, #-8]
+ 174:../USB_Handler.c ****     CheckStatus("Set USB Descriptors", Status);
+ 507              		.loc 1 174 0
+ 508 0068 68009FE5 		ldr	r0, .L40+16
+ 509 006c 08101BE5 		ldr	r1, [fp, #-8]
+ 510 0070 FEFFFFEB 		bl	CheckStatus
+ 175:../USB_Handler.c **** 
+ 176:../USB_Handler.c ****     /* Connect the USB Pins with super speed operation enabled. */
+ 177:../USB_Handler.c ****     if (NeedToRenumerate)
+ 511              		.loc 1 177 0
+ 512 0074 0C301BE5 		ldr	r3, [fp, #-12]
+ 513 0078 000053E3 		cmp	r3, #0
+ 514 007c 0700000A 		beq	.L36
+ 178:../USB_Handler.c ****     {
+ 179:../USB_Handler.c ****     	Status = CyU3PConnectState(CyTrue, CyTrue);
+ 515              		.loc 1 179 0
+ 516 0080 0100A0E3 		mov	r0, #1
+ 517 0084 0110A0E3 		mov	r1, #1
+ 518 0088 FEFFFFEB 		bl	CyU3PConnectState
+ 519 008c 08000BE5 		str	r0, [fp, #-8]
+ 180:../USB_Handler.c ****     	CheckStatus("Connect USB", Status);
+ 520              		.loc 1 180 0
+ 521 0090 44009FE5 		ldr	r0, .L40+20
+ 522 0094 08101BE5 		ldr	r1, [fp, #-8]
+ 523 0098 FEFFFFEB 		bl	CheckStatus
+ 524 009c 050000EA 		b	.L37
+ 525              	.L36:
+ 181:../USB_Handler.c ****     }
+ 182:../USB_Handler.c ****     else	// USB connection already exists, restart the Application
+ 183:../USB_Handler.c ****     {
+ 184:../USB_Handler.c ****         if (glIsApplicationActive) StopApplication();
+ 526              		.loc 1 184 0
+ 527 00a0 38309FE5 		ldr	r3, .L40+24
+ 528 00a4 003093E5 		ldr	r3, [r3]
+ 529 00a8 000053E3 		cmp	r3, #0
+ 530 00ac 0000000A 		beq	.L38
+ 531              		.loc 1 184 0 is_stmt 0 discriminator 1
+ 532 00b0 FEFFFFEB 		bl	StopApplication
+ 533              	.L38:
+ 185:../USB_Handler.c ****         StartApplication();
+ 534              		.loc 1 185 0 is_stmt 1
+ 535 00b4 FEFFFFEB 		bl	StartApplication
+ 536              	.L37:
+ 186:../USB_Handler.c ****     }
+ 187:../USB_Handler.c **** 
+ 188:../USB_Handler.c ****     return Status;
+ 537              		.loc 1 188 0
+ 538 00b8 08301BE5 		ldr	r3, [fp, #-8]
+ 189:../USB_Handler.c **** }
+ 539              		.loc 1 189 0
+ 540 00bc 0300A0E1 		mov	r0, r3
+ 541 00c0 04D04BE2 		sub	sp, fp, #4
+ 542              		@ sp needed
+ 543 00c4 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 544              	.L41:
+ 545              		.align	2
+ 546              	.L40:
+ 547 00c8 48000000 		.word	.LC4
+ 548 00cc 00000000 		.word	USBSetup_Callback
+ 549 00d0 00000000 		.word	USBEvent_Callback
+ 550 00d4 00000000 		.word	LPMRequest_Callback
+ 551 00d8 5C000000 		.word	.LC5
+ 552 00dc 70000000 		.word	.LC6
+ 553 00e0 00000000 		.word	glIsApplicationActive
+ 554              		.cfi_endproc
+ 555              	.LFE3:
+ 557              		.text
+ 558              	.Letext0:
+ 559              		.file 2 "c:\\program files (x86)\\cypress\\ez-usb fx3 sdk\\1.3\\arm gcc\\arm-none-eabi\\include\\s
+ 560              		.file 3 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3typ
+ 561              		.file 4 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_port
+ 562              		.file 5 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_api.
+ 563              		.file 6 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3dma
+ 564              		.file 7 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3err
+ 565              		.file 8 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3usb
+ 566              		.file 9 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3usb
+DEFINED SYMBOLS
+                            *ABS*:00000000 USB_Handler.c
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:20     .bss.glVendorRequestCount:00000000 glVendorRequestCount
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:21     .bss.glVendorRequestCount:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:27     .bss.glUnderrunCount:00000000 glUnderrunCount
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:24     .bss.glUnderrunCount:00000000 $d
+                            *COM*:00000020 glEp0Buffer
+                            *COM*:00000004 glForceLinkU2
+                            *COM*:00000004 glChannelSuspended
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:33     .rodata:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:43     .text.USBSetup_Callback:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:46     .text.USBSetup_Callback:00000000 USBSetup_Callback
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:261    .text.USBSetup_Callback:00000244 $d
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:277    .text.USBEvent_Callback:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:280    .text.USBEvent_Callback:00000000 USBEvent_Callback
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:313    .text.USBEvent_Callback:00000048 $d
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:334    .text.USBEvent_Callback:00000094 $a
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:403    .text.USBEvent_Callback:00000134 $d
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:413    .text.LPMRequest_Callback:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:416    .text.LPMRequest_Callback:00000000 LPMRequest_Callback
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:455    .text.InitializeUSB:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:458    .text.InitializeUSB:00000000 InitializeUSB
+C:\Users\dbir\AppData\Local\Temp\ccdQ2Ovw.s:547    .text.InitializeUSB:000000c8 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+CyU3PGpioSetValue
+CyU3PUsbAckSetup
+CyU3PUsbSendEP0Data
+CyU3PUsbStall
+glIsApplicationActive
+_txe_event_flags_set
+StopApplication
+CyU3PUsbGetSpeed
+StartApplication
+CallbackEvent
+ClockValue
+CyU3PUsbStart
+CheckStatus
+CyU3PUsbRegisterSetupCallback
+CyU3PUsbRegisterEventCallback
+CyU3PUsbRegisterLPMRequestCallback
+SetUSBdescriptors
+CyU3PConnectState

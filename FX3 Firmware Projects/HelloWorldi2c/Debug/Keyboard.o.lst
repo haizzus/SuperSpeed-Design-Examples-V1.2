@@ -1,0 +1,974 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Keyboard.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ApplicationThread,168,4
+  22              		.global	glDebugTxEnabled
+  23              		.section	.bss.glDebugTxEnabled,"aw",%nobits
+  24              		.align	2
+  27              	glDebugTxEnabled:
+  28 0000 00000000 		.space	4
+  29              		.comm	glIsApplicationActive,4,4
+  30              		.comm	glUARTtoCPU_Handle,160,4
+  31              		.comm	glUSBtoCPU_Handle,160,4
+  32              		.comm	glConsoleInBuffer,32,4
+  33              		.comm	glConsoleInIndex,4,4
+  34              		.section	.rodata
+  35              		.align	2
+  36              	.LC0:
+  37 0000 0A257320 		.ascii	"\012%s Successful\000"
+  37      53756363 
+  37      65737366 
+  37      756C00
+  38 000f 00       		.align	2
+  39              	.LC1:
+  40 0010 0A257320 		.ascii	"\012%s failed, Status = %d\012\000"
+  40      6661696C 
+  40      65642C20 
+  40      53746174 
+  40      7573203D 
+  41 0029 000000   		.align	2
+  42              	.LC2:
+  43 002c 3F00     		.ascii	"?\000"
+  44              		.section	.text.CheckStatus,"ax",%progbits
+  45              		.align	2
+  46              		.global	CheckStatus
+  48              	CheckStatus:
+  49              	.LFB0:
+  50              		.file 1 "../Keyboard.c"
+   1:../Keyboard.c **** // Keyboard.c - demonstrate USB by enumerating as a keyboard
+   2:../Keyboard.c **** //
+   3:../Keyboard.c **** // john@usb-by-example.com
+   4:../Keyboard.c **** //
+   5:../Keyboard.c **** 
+   6:../Keyboard.c **** #include "Keyboard.h"
+   7:../Keyboard.c **** 
+   8:../Keyboard.c **** extern CyU3PReturnStatus_t InitializeUSB(void);
+   9:../Keyboard.c **** 
+  10:../Keyboard.c **** CyU3PThread ApplicationThread;			// Handle to my Application Thread
+  11:../Keyboard.c **** CyBool_t glDebugTxEnabled = CyFalse;	// Set true once I can output messages to the Console
+  12:../Keyboard.c **** CyBool_t glIsApplicationActive;			// Set true once device is enumerated
+  13:../Keyboard.c **** CyU3PDmaChannel glUARTtoCPU_Handle;		// Handle needed by Uart Callback routine
+  14:../Keyboard.c **** CyU3PDmaChannel glUSBtoCPU_Handle;		// Handle needed for Interrupt Endpoint
+  15:../Keyboard.c **** char glConsoleInBuffer[32];				// Buffer for user Console Input
+  16:../Keyboard.c **** uint32_t glConsoleInIndex;				// Index into ConsoleIn buffer
+  17:../Keyboard.c **** 
+  18:../Keyboard.c **** void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status)
+  19:../Keyboard.c **** // In this initial debugging stage I stall on an un-successful system call, else I display progress
+  20:../Keyboard.c **** // Note that this assumes that there were no errors bringing up the Debug Console
+  21:../Keyboard.c **** {
+  51              		.loc 1 21 0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 8
+  54              		@ frame_needed = 1, uses_anonymous_args = 0
+  55 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58 0004 04B08DE2 		add	fp, sp, #4
+  59              		.cfi_offset 14, -4
+  60              		.cfi_offset 11, -8
+  61              	.LCFI1:
+  62              		.cfi_def_cfa 11, 4
+  63 0008 08D04DE2 		sub	sp, sp, #8
+  64 000c 08000BE5 		str	r0, [fp, #-8]
+  65 0010 0C100BE5 		str	r1, [fp, #-12]
+  22:../Keyboard.c **** 	if (glDebugTxEnabled)				// Need to wait until ConsoleOut is enabled
+  66              		.loc 1 22 0
+  67 0014 60309FE5 		ldr	r3, .L5
+  68 0018 003093E5 		ldr	r3, [r3, #0]
+  69 001c 000053E3 		cmp	r3, #0
+  70 0020 1300000A 		beq	.L1
+  23:../Keyboard.c **** 	{
+  24:../Keyboard.c **** 		if (Status == CY_U3P_SUCCESS)
+  71              		.loc 1 24 0
+  72 0024 0C301BE5 		ldr	r3, [fp, #-12]
+  73 0028 000053E3 		cmp	r3, #0
+  74 002c 0500001A 		bne	.L3
+  25:../Keyboard.c **** 		{
+  26:../Keyboard.c **** 			CyU3PDebugPrint(4, "\n%s Successful", StringPtr);
+  75              		.loc 1 26 0
+  76 0030 0400A0E3 		mov	r0, #4
+  77 0034 44109FE5 		ldr	r1, .L5+4
+  78 0038 08201BE5 		ldr	r2, [fp, #-8]
+  79 003c FEFFFFEB 		bl	CyU3PDebugPrint
+  27:../Keyboard.c **** 			return;
+  80              		.loc 1 27 0
+  81 0040 0000A0E1 		mov	r0, r0	@ nop
+  82 0044 0A0000EA 		b	.L1
+  83              	.L3:
+  28:../Keyboard.c **** 		}
+  29:../Keyboard.c **** 		// else hang here
+  30:../Keyboard.c **** 		CyU3PDebugPrint(4, "\n%s failed, Status = %d\n", StringPtr, Status);
+  84              		.loc 1 30 0
+  85 0048 0400A0E3 		mov	r0, #4
+  86 004c 30109FE5 		ldr	r1, .L5+8
+  87 0050 08201BE5 		ldr	r2, [fp, #-8]
+  88 0054 0C301BE5 		ldr	r3, [fp, #-12]
+  89 0058 FEFFFFEB 		bl	CyU3PDebugPrint
+  90              	.L4:
+  31:../Keyboard.c **** 		while (1)
+  32:../Keyboard.c **** 		{
+  33:../Keyboard.c **** 			CyU3PDebugPrint(4, "?");
+  91              		.loc 1 33 0 discriminator 1
+  92 005c 0400A0E3 		mov	r0, #4
+  93 0060 20109FE5 		ldr	r1, .L5+12
+  94 0064 FEFFFFEB 		bl	CyU3PDebugPrint
+  34:../Keyboard.c **** 			CyU3PThreadSleep (1000);
+  95              		.loc 1 34 0 discriminator 1
+  96 0068 FA0FA0E3 		mov	r0, #1000
+  97 006c FEFFFFEB 		bl	_tx_thread_sleep
+  35:../Keyboard.c **** 		}
+  98              		.loc 1 35 0 discriminator 1
+  99 0070 F9FFFFEA 		b	.L4
+ 100              	.L1:
+  36:../Keyboard.c **** 	}
+  37:../Keyboard.c **** }
+ 101              		.loc 1 37 0
+ 102 0074 04D04BE2 		sub	sp, fp, #4
+ 103 0078 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 104              	.L6:
+ 105              		.align	2
+ 106              	.L5:
+ 107 007c 00000000 		.word	glDebugTxEnabled
+ 108 0080 00000000 		.word	.LC0
+ 109 0084 10000000 		.word	.LC1
+ 110 0088 2C000000 		.word	.LC2
+ 111              		.cfi_endproc
+ 112              	.LFE0:
+ 114              		.section	.rodata
+ 115 002e 0000     		.align	2
+ 116              	.LC3:
+ 117 0030 256300   		.ascii	"%c\000"
+ 118 0033 00       		.align	2
+ 119              	.LC4:
+ 120 0034 0A496E70 		.ascii	"\012Input: '%s'\000"
+ 120      75743A20 
+ 120      27257327 
+ 120      00
+ 121              		.section	.text.UartCallback,"ax",%progbits
+ 122              		.align	2
+ 123              		.global	UartCallback
+ 125              	UartCallback:
+ 126              	.LFB1:
+  38:../Keyboard.c **** 
+  39:../Keyboard.c **** void UartCallback(CyU3PUartEvt_t Event, CyU3PUartError_t Error)
+  40:../Keyboard.c **** // Handle characters typed in by the developer
+  41:../Keyboard.c **** // Later we will respond to commands terminated with a <CR>
+  42:../Keyboard.c **** {
+ 127              		.loc 1 42 0
+ 128              		.cfi_startproc
+ 129              		@ args = 0, pretend = 0, frame = 24
+ 130              		@ frame_needed = 1, uses_anonymous_args = 0
+ 131 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 132              	.LCFI2:
+ 133              		.cfi_def_cfa_offset 8
+ 134 0004 04B08DE2 		add	fp, sp, #4
+ 135              		.cfi_offset 14, -4
+ 136              		.cfi_offset 11, -8
+ 137              	.LCFI3:
+ 138              		.cfi_def_cfa 11, 4
+ 139 0008 18D04DE2 		sub	sp, sp, #24
+ 140 000c 0020A0E1 		mov	r2, r0
+ 141 0010 0130A0E1 		mov	r3, r1
+ 142 0014 15204BE5 		strb	r2, [fp, #-21]
+ 143 0018 16304BE5 		strb	r3, [fp, #-22]
+  43:../Keyboard.c **** 	CyU3PDmaBuffer_t ConsoleInDmaBuffer;
+  44:../Keyboard.c **** 	char InputChar;
+  45:../Keyboard.c **** 	if (Event == CY_U3P_UART_EVENT_RX_DONE)
+ 144              		.loc 1 45 0
+ 145 001c 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+ 146 0020 000053E3 		cmp	r3, #0
+ 147 0024 3800001A 		bne	.L7
+  46:../Keyboard.c ****     {
+  47:../Keyboard.c **** 		CyU3PDmaChannelSetWrapUp(&glUARTtoCPU_Handle);
+ 148              		.loc 1 47 0
+ 149 0028 E4009FE5 		ldr	r0, .L12
+ 150 002c FEFFFFEB 		bl	CyU3PDmaChannelSetWrapUp
+  48:../Keyboard.c **** 		CyU3PDmaChannelGetBuffer(&glUARTtoCPU_Handle, &ConsoleInDmaBuffer, CYU3P_NO_WAIT);
+ 151              		.loc 1 48 0
+ 152 0030 14304BE2 		sub	r3, fp, #20
+ 153 0034 D8009FE5 		ldr	r0, .L12
+ 154 0038 0310A0E1 		mov	r1, r3
+ 155 003c 0020A0E3 		mov	r2, #0
+ 156 0040 FEFFFFEB 		bl	CyU3PDmaChannelGetBuffer
+  49:../Keyboard.c **** 		InputChar = (char)*ConsoleInDmaBuffer.buffer;
+ 157              		.loc 1 49 0
+ 158 0044 14301BE5 		ldr	r3, [fp, #-20]
+ 159 0048 0030D3E5 		ldrb	r3, [r3, #0]
+ 160 004c 05304BE5 		strb	r3, [fp, #-5]
+  50:../Keyboard.c **** 		CyU3PDebugPrint(4, "%c", InputChar);			// Echo the character
+ 161              		.loc 1 50 0
+ 162 0050 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 163 0054 0400A0E3 		mov	r0, #4
+ 164 0058 B8109FE5 		ldr	r1, .L12+4
+ 165 005c 0320A0E1 		mov	r2, r3
+ 166 0060 FEFFFFEB 		bl	CyU3PDebugPrint
+  51:../Keyboard.c **** 		if (InputChar == 0x0d)
+ 167              		.loc 1 51 0
+ 168 0064 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 169 0068 0D0053E3 		cmp	r3, #13
+ 170 006c 0700001A 		bne	.L9
+  52:../Keyboard.c **** 		{
+  53:../Keyboard.c **** 			CyU3PDebugPrint(4, "\nInput: '%s'", &glConsoleInBuffer[0]);
+ 171              		.loc 1 53 0
+ 172 0070 0400A0E3 		mov	r0, #4
+ 173 0074 A0109FE5 		ldr	r1, .L12+8
+ 174 0078 A0209FE5 		ldr	r2, .L12+12
+ 175 007c FEFFFFEB 		bl	CyU3PDebugPrint
+  54:../Keyboard.c **** 			glConsoleInIndex = 0;
+ 176              		.loc 1 54 0
+ 177 0080 9C309FE5 		ldr	r3, .L12+16
+ 178 0084 0020A0E3 		mov	r2, #0
+ 179 0088 002083E5 		str	r2, [r3, #0]
+ 180 008c 1A0000EA 		b	.L10
+ 181              	.L9:
+  55:../Keyboard.c **** 		}
+  56:../Keyboard.c **** 		else
+  57:../Keyboard.c **** 		{
+  58:../Keyboard.c **** 			glConsoleInBuffer[glConsoleInIndex] = InputChar;
+ 182              		.loc 1 58 0
+ 183 0090 8C309FE5 		ldr	r3, .L12+16
+ 184 0094 003093E5 		ldr	r3, [r3, #0]
+ 185 0098 80209FE5 		ldr	r2, .L12+12
+ 186 009c 05105BE5 		ldrb	r1, [fp, #-5]
+ 187 00a0 0310C2E7 		strb	r1, [r2, r3]
+  59:../Keyboard.c **** 			if (glConsoleInIndex++ < sizeof(glConsoleInBuffer)) glConsoleInBuffer[glConsoleInIndex] = 0;
+ 188              		.loc 1 59 0
+ 189 00a4 78309FE5 		ldr	r3, .L12+16
+ 190 00a8 003093E5 		ldr	r3, [r3, #0]
+ 191 00ac 1F0053E3 		cmp	r3, #31
+ 192 00b0 0020A083 		movhi	r2, #0
+ 193 00b4 0120A093 		movls	r2, #1
+ 194 00b8 FF2002E2 		and	r2, r2, #255
+ 195 00bc 011083E2 		add	r1, r3, #1
+ 196 00c0 5C309FE5 		ldr	r3, .L12+16
+ 197 00c4 001083E5 		str	r1, [r3, #0]
+ 198 00c8 000052E3 		cmp	r2, #0
+ 199 00cc 0500000A 		beq	.L11
+ 200              		.loc 1 59 0 is_stmt 0 discriminator 1
+ 201 00d0 4C309FE5 		ldr	r3, .L12+16
+ 202 00d4 003093E5 		ldr	r3, [r3, #0]
+ 203 00d8 40209FE5 		ldr	r2, .L12+12
+ 204 00dc 0010A0E3 		mov	r1, #0
+ 205 00e0 0310C2E7 		strb	r1, [r2, r3]
+ 206 00e4 040000EA 		b	.L10
+ 207              	.L11:
+  60:../Keyboard.c **** 			else glConsoleInIndex--;
+ 208              		.loc 1 60 0 is_stmt 1
+ 209 00e8 34309FE5 		ldr	r3, .L12+16
+ 210 00ec 003093E5 		ldr	r3, [r3, #0]
+ 211 00f0 012043E2 		sub	r2, r3, #1
+ 212 00f4 28309FE5 		ldr	r3, .L12+16
+ 213 00f8 002083E5 		str	r2, [r3, #0]
+ 214              	.L10:
+  61:../Keyboard.c **** 		}
+  62:../Keyboard.c **** 		CyU3PDmaChannelDiscardBuffer(&glUARTtoCPU_Handle);
+ 215              		.loc 1 62 0
+ 216 00fc 10009FE5 		ldr	r0, .L12
+ 217 0100 FEFFFFEB 		bl	CyU3PDmaChannelDiscardBuffer
+  63:../Keyboard.c **** 		CyU3PUartRxSetBlockXfer(1);
+ 218              		.loc 1 63 0
+ 219 0104 0100A0E3 		mov	r0, #1
+ 220 0108 FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 221              	.L7:
+  64:../Keyboard.c ****     }
+  65:../Keyboard.c **** }
+ 222              		.loc 1 65 0
+ 223 010c 04D04BE2 		sub	sp, fp, #4
+ 224 0110 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 225              	.L13:
+ 226              		.align	2
+ 227              	.L12:
+ 228 0114 00000000 		.word	glUARTtoCPU_Handle
+ 229 0118 30000000 		.word	.LC3
+ 230 011c 34000000 		.word	.LC4
+ 231 0120 00000000 		.word	glConsoleInBuffer
+ 232 0124 00000000 		.word	glConsoleInIndex
+ 233              		.cfi_endproc
+ 234              	.LFE1:
+ 236              		.section	.rodata
+ 237 0041 000000   		.align	2
+ 238              	.LC5:
+ 239 0044 43795533 		.ascii	"CyU3PUartInit\000"
+ 239      50556172 
+ 239      74496E69 
+ 239      7400
+ 240 0052 0000     		.align	2
+ 241              	.LC6:
+ 242 0054 43795533 		.ascii	"CyU3PUartSetConfig\000"
+ 242      50556172 
+ 242      74536574 
+ 242      436F6E66 
+ 242      696700
+ 243 0067 00       		.align	2
+ 244              	.LC7:
+ 245 0068 43795533 		.ascii	"CyU3PUartTxSetBlockXfer\000"
+ 245      50556172 
+ 245      74547853 
+ 245      6574426C 
+ 245      6F636B58 
+ 246              		.align	2
+ 247              	.LC8:
+ 248 0080 436F6E73 		.ascii	"ConsoleOutEnabled\000"
+ 248      6F6C654F 
+ 248      7574456E 
+ 248      61626C65 
+ 248      6400
+ 249 0092 0000     		.align	2
+ 250              	.LC9:
+ 251 0094 43795533 		.ascii	"CyU3PUartRxSetBlockXfer\000"
+ 251      50556172 
+ 251      74527853 
+ 251      6574426C 
+ 251      6F636B58 
+ 252              		.align	2
+ 253              	.LC10:
+ 254 00ac 43726561 		.ascii	"CreateDebugRxDmaChannel\000"
+ 254      74654465 
+ 254      62756752 
+ 254      78446D61 
+ 254      4368616E 
+ 255              		.align	2
+ 256              	.LC11:
+ 257 00c4 436F6E73 		.ascii	"ConsoleInEnabled\000"
+ 257      6F6C6549 
+ 257      6E456E61 
+ 257      626C6564 
+ 257      00
+ 258              		.section	.text.InitializeDebugConsole,"ax",%progbits
+ 259              		.align	2
+ 260              		.global	InitializeDebugConsole
+ 262              	InitializeDebugConsole:
+ 263              	.LFB2:
+  66:../Keyboard.c **** 
+  67:../Keyboard.c **** // Spin up the DEBUG Console, Out and In
+  68:../Keyboard.c **** CyU3PReturnStatus_t InitializeDebugConsole(void)
+  69:../Keyboard.c **** {
+ 264              		.loc 1 69 0
+ 265              		.cfi_startproc
+ 266              		@ args = 0, pretend = 0, frame = 56
+ 267              		@ frame_needed = 1, uses_anonymous_args = 0
+ 268 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 269              	.LCFI4:
+ 270              		.cfi_def_cfa_offset 8
+ 271 0004 04B08DE2 		add	fp, sp, #4
+ 272              		.cfi_offset 14, -4
+ 273              		.cfi_offset 11, -8
+ 274              	.LCFI5:
+ 275              		.cfi_def_cfa 11, 4
+ 276 0008 38D04DE2 		sub	sp, sp, #56
+  70:../Keyboard.c ****     CyU3PUartConfig_t uartConfig;
+  71:../Keyboard.c ****     CyU3PDmaChannelConfig_t dmaConfig;
+  72:../Keyboard.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 277              		.loc 1 72 0
+ 278 000c 0030A0E3 		mov	r3, #0
+ 279 0010 08300BE5 		str	r3, [fp, #-8]
+  73:../Keyboard.c **** 
+  74:../Keyboard.c ****     Status = CyU3PUartInit();										// Start the UART driver
+ 280              		.loc 1 74 0
+ 281 0014 FEFFFFEB 		bl	CyU3PUartInit
+ 282 0018 08000BE5 		str	r0, [fp, #-8]
+  75:../Keyboard.c ****     CheckStatus("CyU3PUartInit", Status);
+ 283              		.loc 1 75 0
+ 284 001c 78019FE5 		ldr	r0, .L18
+ 285 0020 08101BE5 		ldr	r1, [fp, #-8]
+ 286 0024 FEFFFFEB 		bl	CheckStatus
+  76:../Keyboard.c **** 
+  77:../Keyboard.c ****     CyU3PMemSet ((uint8_t *)&uartConfig, 0, sizeof (uartConfig));
+ 287              		.loc 1 77 0
+ 288 0028 20304BE2 		sub	r3, fp, #32
+ 289 002c 0300A0E1 		mov	r0, r3
+ 290 0030 0010A0E3 		mov	r1, #0
+ 291 0034 1820A0E3 		mov	r2, #24
+ 292 0038 FEFFFFEB 		bl	CyU3PMemSet
+  78:../Keyboard.c **** 	uartConfig.baudRate = CY_U3P_UART_BAUDRATE_115200;
+ 293              		.loc 1 78 0
+ 294 003c 5C319FE5 		ldr	r3, .L18+4
+ 295 0040 10300BE5 		str	r3, [fp, #-16]
+  79:../Keyboard.c **** 	uartConfig.stopBit  = CY_U3P_UART_ONE_STOP_BIT;
+ 296              		.loc 1 79 0
+ 297 0044 0130A0E3 		mov	r3, #1
+ 298 0048 0C304BE5 		strb	r3, [fp, #-12]
+  80:../Keyboard.c **** //r	uartConfig.parity   = CY_U3P_UART_NO_PARITY;
+  81:../Keyboard.c **** 	uartConfig.txEnable = CyTrue;
+ 299              		.loc 1 81 0
+ 300 004c 0130A0E3 		mov	r3, #1
+ 301 0050 20300BE5 		str	r3, [fp, #-32]
+  82:../Keyboard.c **** 	uartConfig.rxEnable = CyTrue;
+ 302              		.loc 1 82 0
+ 303 0054 0130A0E3 		mov	r3, #1
+ 304 0058 1C300BE5 		str	r3, [fp, #-28]
+  83:../Keyboard.c **** //r	uartConfig.flowCtrl = CyFalse;
+  84:../Keyboard.c **** 	uartConfig.isDma    = CyTrue;
+ 305              		.loc 1 84 0
+ 306 005c 0130A0E3 		mov	r3, #1
+ 307 0060 14300BE5 		str	r3, [fp, #-20]
+  85:../Keyboard.c **** 	Status = CyU3PUartSetConfig(&uartConfig, UartCallback);			// Configure the UART hardware
+ 308              		.loc 1 85 0
+ 309 0064 20304BE2 		sub	r3, fp, #32
+ 310 0068 0300A0E1 		mov	r0, r3
+ 311 006c 30119FE5 		ldr	r1, .L18+8
+ 312 0070 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 313 0074 08000BE5 		str	r0, [fp, #-8]
+  86:../Keyboard.c ****     CheckStatus("CyU3PUartSetConfig", Status);
+ 314              		.loc 1 86 0
+ 315 0078 28019FE5 		ldr	r0, .L18+12
+ 316 007c 08101BE5 		ldr	r1, [fp, #-8]
+ 317 0080 FEFFFFEB 		bl	CheckStatus
+  87:../Keyboard.c **** 
+  88:../Keyboard.c ****     Status = CyU3PUartTxSetBlockXfer(0xFFFFFFFF);					// Send as much data as I need to
+ 318              		.loc 1 88 0
+ 319 0084 0000E0E3 		mvn	r0, #0
+ 320 0088 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 321 008c 08000BE5 		str	r0, [fp, #-8]
+  89:../Keyboard.c ****     CheckStatus("CyU3PUartTxSetBlockXfer", Status);
+ 322              		.loc 1 89 0
+ 323 0090 14019FE5 		ldr	r0, .L18+16
+ 324 0094 08101BE5 		ldr	r1, [fp, #-8]
+ 325 0098 FEFFFFEB 		bl	CheckStatus
+  90:../Keyboard.c **** 
+  91:../Keyboard.c **** 	Status = CyU3PDebugInit(CY_U3P_LPP_SOCKET_UART_CONS, 8);		// Attach the Debug driver above the UAR
+ 326              		.loc 1 91 0
+ 327 009c 0300A0E3 		mov	r0, #3
+ 328 00a0 0810A0E3 		mov	r1, #8
+ 329 00a4 FEFFFFEB 		bl	CyU3PDebugInit
+ 330 00a8 08000BE5 		str	r0, [fp, #-8]
+  92:../Keyboard.c **** 	if (Status == CY_U3P_SUCCESS) glDebugTxEnabled = CyTrue;
+ 331              		.loc 1 92 0
+ 332 00ac 08301BE5 		ldr	r3, [fp, #-8]
+ 333 00b0 000053E3 		cmp	r3, #0
+ 334 00b4 0200001A 		bne	.L15
+ 335              		.loc 1 92 0 is_stmt 0 discriminator 1
+ 336 00b8 F0309FE5 		ldr	r3, .L18+20
+ 337 00bc 0120A0E3 		mov	r2, #1
+ 338 00c0 002083E5 		str	r2, [r3, #0]
+ 339              	.L15:
+  93:../Keyboard.c ****     CheckStatus("ConsoleOutEnabled", Status);
+ 340              		.loc 1 93 0 is_stmt 1
+ 341 00c4 E8009FE5 		ldr	r0, .L18+24
+ 342 00c8 08101BE5 		ldr	r1, [fp, #-8]
+ 343 00cc FEFFFFEB 		bl	CheckStatus
+  94:../Keyboard.c **** 	CyU3PDebugPreamble(CyFalse);									// Skip preamble, debug info is targeted for a person
+ 344              		.loc 1 94 0
+ 345 00d0 0000A0E3 		mov	r0, #0
+ 346 00d4 FEFFFFEB 		bl	CyU3PDebugPreamble
+  95:../Keyboard.c **** 
+  96:../Keyboard.c **** 	// Now setup a DMA channel to receive characters from the Uart Rx
+  97:../Keyboard.c ****     Status = CyU3PUartRxSetBlockXfer(1);
+ 347              		.loc 1 97 0
+ 348 00d8 0100A0E3 		mov	r0, #1
+ 349 00dc FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 350 00e0 08000BE5 		str	r0, [fp, #-8]
+  98:../Keyboard.c ****     CheckStatus("CyU3PUartRxSetBlockXfer", Status);
+ 351              		.loc 1 98 0
+ 352 00e4 CC009FE5 		ldr	r0, .L18+28
+ 353 00e8 08101BE5 		ldr	r1, [fp, #-8]
+ 354 00ec FEFFFFEB 		bl	CheckStatus
+  99:../Keyboard.c **** 	CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 355              		.loc 1 99 0
+ 356 00f0 3C304BE2 		sub	r3, fp, #60
+ 357 00f4 0300A0E1 		mov	r0, r3
+ 358 00f8 0010A0E3 		mov	r1, #0
+ 359 00fc 1C20A0E3 		mov	r2, #28
+ 360 0100 FEFFFFEB 		bl	CyU3PMemSet
+ 100:../Keyboard.c **** 	dmaConfig.size  		= 16;									// Minimum size allowed, I only need 1 byte
+ 361              		.loc 1 100 0
+ 362 0104 1030A0E3 		mov	r3, #16
+ 363 0108 BC334BE1 		strh	r3, [fp, #-60]	@ movhi
+ 101:../Keyboard.c **** 	dmaConfig.count 		= 1;									// I can't type faster than the Uart Callback routine!
+ 364              		.loc 1 101 0
+ 365 010c 0130A0E3 		mov	r3, #1
+ 366 0110 BA334BE1 		strh	r3, [fp, #-58]	@ movhi
+ 102:../Keyboard.c **** 	dmaConfig.prodSckId		= CY_U3P_LPP_SOCKET_UART_PROD;
+ 367              		.loc 1 102 0
+ 368 0114 0630A0E3 		mov	r3, #6
+ 369 0118 B8334BE1 		strh	r3, [fp, #-56]	@ movhi
+ 103:../Keyboard.c **** 	dmaConfig.consSckId 	= CY_U3P_CPU_SOCKET_CONS;
+ 370              		.loc 1 103 0
+ 371 011c 3F3CA0E3 		mov	r3, #16128
+ 372 0120 B6334BE1 		strh	r3, [fp, #-54]	@ movhi
+ 104:../Keyboard.c **** 	dmaConfig.dmaMode 		= CY_U3P_DMA_MODE_BYTE;
+ 373              		.loc 1 104 0
+ 374 0124 0030A0E3 		mov	r3, #0
+ 375 0128 2C304BE5 		strb	r3, [fp, #-44]
+ 105:../Keyboard.c **** 	dmaConfig.notification	= CY_U3P_DMA_CB_PROD_EVENT;
+ 376              		.loc 1 105 0
+ 377 012c 0830A0E3 		mov	r3, #8
+ 378 0130 28300BE5 		str	r3, [fp, #-40]
+ 106:../Keyboard.c **** 	Status = CyU3PDmaChannelCreate(&glUARTtoCPU_Handle, CY_U3P_DMA_TYPE_MANUAL_IN, &dmaConfig);
+ 379              		.loc 1 106 0
+ 380 0134 3C304BE2 		sub	r3, fp, #60
+ 381 0138 7C009FE5 		ldr	r0, .L18+32
+ 382 013c 0310A0E3 		mov	r1, #3
+ 383 0140 0320A0E1 		mov	r2, r3
+ 384 0144 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 385 0148 08000BE5 		str	r0, [fp, #-8]
+ 107:../Keyboard.c ****     CheckStatus("CreateDebugRxDmaChannel", Status);
+ 386              		.loc 1 107 0
+ 387 014c 6C009FE5 		ldr	r0, .L18+36
+ 388 0150 08101BE5 		ldr	r1, [fp, #-8]
+ 389 0154 FEFFFFEB 		bl	CheckStatus
+ 108:../Keyboard.c ****     if (Status != CY_U3P_SUCCESS) CyU3PDmaChannelDestroy(&glUARTtoCPU_Handle);
+ 390              		.loc 1 108 0
+ 391 0158 08301BE5 		ldr	r3, [fp, #-8]
+ 392 015c 000053E3 		cmp	r3, #0
+ 393 0160 0200000A 		beq	.L16
+ 394              		.loc 1 108 0 is_stmt 0 discriminator 1
+ 395 0164 50009FE5 		ldr	r0, .L18+32
+ 396 0168 FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+ 397 016c 060000EA 		b	.L17
+ 398              	.L16:
+ 109:../Keyboard.c ****     else
+ 110:../Keyboard.c ****     {
+ 111:../Keyboard.c **** 		Status = CyU3PDmaChannelSetXfer(&glUARTtoCPU_Handle, 0);
+ 399              		.loc 1 111 0 is_stmt 1
+ 400 0170 44009FE5 		ldr	r0, .L18+32
+ 401 0174 0010A0E3 		mov	r1, #0
+ 402 0178 FEFFFFEB 		bl	CyU3PDmaChannelSetXfer
+ 403 017c 08000BE5 		str	r0, [fp, #-8]
+ 112:../Keyboard.c **** 		CheckStatus("ConsoleInEnabled", Status);
+ 404              		.loc 1 112 0
+ 405 0180 3C009FE5 		ldr	r0, .L18+40
+ 406 0184 08101BE5 		ldr	r1, [fp, #-8]
+ 407 0188 FEFFFFEB 		bl	CheckStatus
+ 408              	.L17:
+ 113:../Keyboard.c ****     }
+ 114:../Keyboard.c ****     return Status;
+ 409              		.loc 1 114 0
+ 410 018c 08301BE5 		ldr	r3, [fp, #-8]
+ 115:../Keyboard.c **** }
+ 411              		.loc 1 115 0
+ 412 0190 0300A0E1 		mov	r0, r3
+ 413 0194 04D04BE2 		sub	sp, fp, #4
+ 414 0198 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 415              	.L19:
+ 416              		.align	2
+ 417              	.L18:
+ 418 019c 44000000 		.word	.LC5
+ 419 01a0 00C20100 		.word	115200
+ 420 01a4 00000000 		.word	UartCallback
+ 421 01a8 54000000 		.word	.LC6
+ 422 01ac 68000000 		.word	.LC7
+ 423 01b0 00000000 		.word	glDebugTxEnabled
+ 424 01b4 80000000 		.word	.LC8
+ 425 01b8 94000000 		.word	.LC9
+ 426 01bc 00000000 		.word	glUARTtoCPU_Handle
+ 427 01c0 AC000000 		.word	.LC10
+ 428 01c4 C4000000 		.word	.LC11
+ 429              		.cfi_endproc
+ 430              	.LFE2:
+ 432              		.section	.rodata
+ 433 00d5 000000   		.align	2
+ 434              	.LC12:
+ 435 00d8 44656275 		.ascii	"Debug Console Initialized\000"
+ 435      6720436F 
+ 435      6E736F6C 
+ 435      6520496E 
+ 435      69746961 
+ 436 00f2 0000     		.align	2
+ 437              	.LC13:
+ 438 00f4 55534220 		.ascii	"USB Initialized\000"
+ 438      496E6974 
+ 438      69616C69 
+ 438      7A656400 
+ 439              		.align	2
+ 440              	.LC14:
+ 441 0104 0A417070 		.ascii	"\012Application started with %d\012\000"
+ 441      6C696361 
+ 441      74696F6E 
+ 441      20737461 
+ 441      72746564 
+ 442 0122 0000     		.align	2
+ 443              	.LC15:
+ 444 0124 25642C20 		.ascii	"%d, \000"
+ 444      00
+ 445 0129 000000   		.align	2
+ 446              	.LC16:
+ 447 012c 0A417070 		.ascii	"\012Application failed to initialize. Error code: %"
+ 447      6C696361 
+ 447      74696F6E 
+ 447      20666169 
+ 447      6C656420 
+ 448 015c 642E0A00 		.ascii	"d.\012\000"
+ 449              		.section	.text.ApplicationThread_Entry,"ax",%progbits
+ 450              		.align	2
+ 451              		.global	ApplicationThread_Entry
+ 453              	ApplicationThread_Entry:
+ 454              	.LFB3:
+ 116:../Keyboard.c **** 
+ 117:../Keyboard.c **** void ApplicationThread_Entry (uint32_t Value)
+ 118:../Keyboard.c **** {
+ 455              		.loc 1 118 0
+ 456              		.cfi_startproc
+ 457              		@ args = 0, pretend = 0, frame = 16
+ 458              		@ frame_needed = 1, uses_anonymous_args = 0
+ 459 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 460              	.LCFI6:
+ 461              		.cfi_def_cfa_offset 8
+ 462 0004 04B08DE2 		add	fp, sp, #4
+ 463              		.cfi_offset 14, -4
+ 464              		.cfi_offset 11, -8
+ 465              	.LCFI7:
+ 466              		.cfi_def_cfa 11, 4
+ 467 0008 10D04DE2 		sub	sp, sp, #16
+ 468 000c 10000BE5 		str	r0, [fp, #-16]
+ 119:../Keyboard.c **** 	int32_t Seconds = 0;
+ 469              		.loc 1 119 0
+ 470 0010 0030A0E3 		mov	r3, #0
+ 471 0014 08300BE5 		str	r3, [fp, #-8]
+ 120:../Keyboard.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 472              		.loc 1 120 0
+ 473 0018 0030A0E3 		mov	r3, #0
+ 474 001c 0C300BE5 		str	r3, [fp, #-12]
+ 121:../Keyboard.c **** 
+ 122:../Keyboard.c ****     Status = InitializeDebugConsole();
+ 475              		.loc 1 122 0
+ 476 0020 FEFFFFEB 		bl	InitializeDebugConsole
+ 477 0024 0C000BE5 		str	r0, [fp, #-12]
+ 123:../Keyboard.c ****     CheckStatus("Debug Console Initialized", Status);
+ 478              		.loc 1 123 0
+ 479 0028 7C009FE5 		ldr	r0, .L24
+ 480 002c 0C101BE5 		ldr	r1, [fp, #-12]
+ 481 0030 FEFFFFEB 		bl	CheckStatus
+ 124:../Keyboard.c **** 
+ 125:../Keyboard.c ****     CyU3PThreadSleep (10000);
+ 482              		.loc 1 125 0
+ 483 0034 74009FE5 		ldr	r0, .L24+4
+ 484 0038 FEFFFFEB 		bl	_tx_thread_sleep
+ 126:../Keyboard.c **** 
+ 127:../Keyboard.c ****     Status = InitializeUSB();
+ 485              		.loc 1 127 0
+ 486 003c FEFFFFEB 		bl	InitializeUSB
+ 487 0040 0C000BE5 		str	r0, [fp, #-12]
+ 128:../Keyboard.c ****     CheckStatus("USB Initialized", Status);
+ 488              		.loc 1 128 0
+ 489 0044 68009FE5 		ldr	r0, .L24+8
+ 490 0048 0C101BE5 		ldr	r1, [fp, #-12]
+ 491 004c FEFFFFEB 		bl	CheckStatus
+ 129:../Keyboard.c **** 
+ 130:../Keyboard.c ****     if (Status == CY_U3P_SUCCESS)
+ 492              		.loc 1 130 0
+ 493 0050 0C301BE5 		ldr	r3, [fp, #-12]
+ 494 0054 000053E3 		cmp	r3, #0
+ 495 0058 0E00001A 		bne	.L21
+ 131:../Keyboard.c ****     {
+ 132:../Keyboard.c ****     	CyU3PDebugPrint(4, "\nApplication started with %d\n", Value);
+ 496              		.loc 1 132 0
+ 497 005c 0400A0E3 		mov	r0, #4
+ 498 0060 50109FE5 		ldr	r1, .L24+12
+ 499 0064 10201BE5 		ldr	r2, [fp, #-16]
+ 500 0068 FEFFFFEB 		bl	CyU3PDebugPrint
+ 501              	.L22:
+ 133:../Keyboard.c ****     	// Now run forever
+ 134:../Keyboard.c ****     	while (1)
+ 135:../Keyboard.c ****     	{
+ 136:../Keyboard.c ****     		CyU3PThreadSleep (1000);
+ 502              		.loc 1 136 0 discriminator 1
+ 503 006c FA0FA0E3 		mov	r0, #1000
+ 504 0070 FEFFFFEB 		bl	_tx_thread_sleep
+ 137:../Keyboard.c **** 			CyU3PDebugPrint(4, "%d, ", Seconds++);
+ 505              		.loc 1 137 0 discriminator 1
+ 506 0074 08301BE5 		ldr	r3, [fp, #-8]
+ 507 0078 08201BE5 		ldr	r2, [fp, #-8]
+ 508 007c 012082E2 		add	r2, r2, #1
+ 509 0080 08200BE5 		str	r2, [fp, #-8]
+ 510 0084 0400A0E3 		mov	r0, #4
+ 511 0088 2C109FE5 		ldr	r1, .L24+16
+ 512 008c 0320A0E1 		mov	r2, r3
+ 513 0090 FEFFFFEB 		bl	CyU3PDebugPrint
+ 138:../Keyboard.c **** 		}
+ 514              		.loc 1 138 0 discriminator 1
+ 515 0094 F4FFFFEA 		b	.L22
+ 516              	.L21:
+ 139:../Keyboard.c ****     }
+ 140:../Keyboard.c ****     CyU3PDebugPrint(4, "\nApplication failed to initialize. Error code: %d.\n", Status);
+ 517              		.loc 1 140 0
+ 518 0098 0400A0E3 		mov	r0, #4
+ 519 009c 1C109FE5 		ldr	r1, .L24+20
+ 520 00a0 0C201BE5 		ldr	r2, [fp, #-12]
+ 521 00a4 FEFFFFEB 		bl	CyU3PDebugPrint
+ 522              	.L23:
+ 141:../Keyboard.c ****     while (1);		// Hang here
+ 523              		.loc 1 141 0 discriminator 1
+ 524 00a8 FEFFFFEA 		b	.L23
+ 525              	.L25:
+ 526              		.align	2
+ 527              	.L24:
+ 528 00ac D8000000 		.word	.LC12
+ 529 00b0 10270000 		.word	10000
+ 530 00b4 F4000000 		.word	.LC13
+ 531 00b8 04010000 		.word	.LC14
+ 532 00bc 24010000 		.word	.LC15
+ 533 00c0 2C010000 		.word	.LC16
+ 534              		.cfi_endproc
+ 535              	.LFE3:
+ 537              		.section	.rodata
+ 538              		.align	2
+ 539              	.LC17:
+ 540 0160 31313A48 		.ascii	"11:HelloWorld\000"
+ 540      656C6C6F 
+ 540      576F726C 
+ 540      6400
+ 541 016e 0000     		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 542              		.align	2
+ 543              		.global	CyFxApplicationDefine
+ 545              	CyFxApplicationDefine:
+ 546              	.LFB4:
+ 142:../Keyboard.c **** }
+ 143:../Keyboard.c **** 
+ 144:../Keyboard.c **** // ApplicationDefine function called by RTOS to startup the application threads
+ 145:../Keyboard.c **** void CyFxApplicationDefine(void)
+ 146:../Keyboard.c **** {
+ 547              		.loc 1 146 0
+ 548              		.cfi_startproc
+ 549              		@ args = 0, pretend = 0, frame = 8
+ 550              		@ frame_needed = 1, uses_anonymous_args = 0
+ 551 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 552              	.LCFI8:
+ 553              		.cfi_def_cfa_offset 8
+ 554 0004 04B08DE2 		add	fp, sp, #4
+ 555              		.cfi_offset 14, -4
+ 556              		.cfi_offset 11, -8
+ 557              	.LCFI9:
+ 558              		.cfi_def_cfa 11, 4
+ 559 0008 28D04DE2 		sub	sp, sp, #40
+ 147:../Keyboard.c ****     void *StackPtr = NULL;
+ 560              		.loc 1 147 0
+ 561 000c 0030A0E3 		mov	r3, #0
+ 562 0010 08300BE5 		str	r3, [fp, #-8]
+ 148:../Keyboard.c ****     uint32_t Status = CY_U3P_SUCCESS;
+ 563              		.loc 1 148 0
+ 564 0014 0030A0E3 		mov	r3, #0
+ 565 0018 0C300BE5 		str	r3, [fp, #-12]
+ 149:../Keyboard.c **** 
+ 150:../Keyboard.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 566              		.loc 1 150 0
+ 567 001c 020BA0E3 		mov	r0, #2048
+ 568 0020 FEFFFFEB 		bl	CyU3PMemAlloc
+ 569 0024 08000BE5 		str	r0, [fp, #-8]
+ 151:../Keyboard.c ****     Status = CyU3PThreadCreate (&ApplicationThread, // Handle to my Application Thread
+ 570              		.loc 1 151 0
+ 571 0028 08301BE5 		ldr	r3, [fp, #-8]
+ 572 002c 00308DE5 		str	r3, [sp, #0]
+ 573 0030 023BA0E3 		mov	r3, #2048
+ 574 0034 04308DE5 		str	r3, [sp, #4]
+ 575 0038 0830A0E3 		mov	r3, #8
+ 576 003c 08308DE5 		str	r3, [sp, #8]
+ 577 0040 0830A0E3 		mov	r3, #8
+ 578 0044 0C308DE5 		str	r3, [sp, #12]
+ 579 0048 0030A0E3 		mov	r3, #0
+ 580 004c 10308DE5 		str	r3, [sp, #16]
+ 581 0050 0130A0E3 		mov	r3, #1
+ 582 0054 14308DE5 		str	r3, [sp, #20]
+ 583 0058 A830A0E3 		mov	r3, #168
+ 584 005c 18308DE5 		str	r3, [sp, #24]
+ 585 0060 28009FE5 		ldr	r0, .L29
+ 586 0064 28109FE5 		ldr	r1, .L29+4
+ 587 0068 28209FE5 		ldr	r2, .L29+8
+ 588 006c 2A30A0E3 		mov	r3, #42
+ 589 0070 FEFFFFEB 		bl	_txe_thread_create
+ 590 0074 0C000BE5 		str	r0, [fp, #-12]
+ 152:../Keyboard.c ****             "11:HelloWorld",                		// Thread ID and name
+ 153:../Keyboard.c ****             ApplicationThread_Entry,     			// Thread entry function
+ 154:../Keyboard.c ****             42,                             		// Parameter passed to Thread
+ 155:../Keyboard.c ****             StackPtr,                       		// Pointer to the allocated thread stack
+ 156:../Keyboard.c ****             APPLICATION_THREAD_STACK,               // Allocated thread stack size
+ 157:../Keyboard.c ****             APPLICATION_THREAD_PRIORITY,            // Thread priority
+ 158:../Keyboard.c ****             APPLICATION_THREAD_PRIORITY,            // = Thread priority so no preemption
+ 159:../Keyboard.c ****             CYU3P_NO_TIME_SLICE,            		// Time slice no supported
+ 160:../Keyboard.c ****             CYU3P_AUTO_START                		// Start the thread immediately
+ 161:../Keyboard.c ****             );
+ 162:../Keyboard.c **** 
+ 163:../Keyboard.c ****     if (Status != CY_U3P_SUCCESS)
+ 591              		.loc 1 163 0
+ 592 0078 0C301BE5 		ldr	r3, [fp, #-12]
+ 593 007c 000053E3 		cmp	r3, #0
+ 594 0080 0000000A 		beq	.L26
+ 595              	.L28:
+ 164:../Keyboard.c ****     {
+ 165:../Keyboard.c ****         /* Thread creation failed with the Status = error code */
+ 166:../Keyboard.c **** 
+ 167:../Keyboard.c ****         /* Add custom recovery or debug actions here */
+ 168:../Keyboard.c **** 
+ 169:../Keyboard.c ****         /* Application cannot continue. Loop indefinitely */
+ 170:../Keyboard.c ****         while(1);
+ 596              		.loc 1 170 0 discriminator 1
+ 597 0084 FEFFFFEA 		b	.L28
+ 598              	.L26:
+ 171:../Keyboard.c ****     }
+ 172:../Keyboard.c **** }
+ 599              		.loc 1 172 0
+ 600 0088 04D04BE2 		sub	sp, fp, #4
+ 601 008c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 602              	.L30:
+ 603              		.align	2
+ 604              	.L29:
+ 605 0090 00000000 		.word	ApplicationThread
+ 606 0094 60010000 		.word	.LC17
+ 607 0098 00000000 		.word	ApplicationThread_Entry
+ 608              		.cfi_endproc
+ 609              	.LFE4:
+ 611              		.section	.text.main,"ax",%progbits
+ 612              		.align	2
+ 613              		.global	main
+ 615              	main:
+ 616              	.LFB5:
+ 173:../Keyboard.c **** 
+ 174:../Keyboard.c **** 
+ 175:../Keyboard.c **** // Main sets up the CPU environment the starts the RTOS
+ 176:../Keyboard.c **** int main (void)
+ 177:../Keyboard.c **** {
+ 617              		.loc 1 177 0
+ 618              		.cfi_startproc
+ 619              		@ args = 0, pretend = 0, frame = 48
+ 620              		@ frame_needed = 1, uses_anonymous_args = 0
+ 621 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 622              	.LCFI10:
+ 623              		.cfi_def_cfa_offset 8
+ 624 0004 04B08DE2 		add	fp, sp, #4
+ 625              		.cfi_offset 14, -4
+ 626              		.cfi_offset 11, -8
+ 627              	.LCFI11:
+ 628              		.cfi_def_cfa 11, 4
+ 629 0008 30D04DE2 		sub	sp, sp, #48
+ 178:../Keyboard.c ****     CyU3PIoMatrixConfig_t io_cfg;
+ 179:../Keyboard.c ****     CyU3PReturnStatus_t Status = CY_U3P_SUCCESS;
+ 630              		.loc 1 179 0
+ 631 000c 0030A0E3 		mov	r3, #0
+ 632 0010 08300BE5 		str	r3, [fp, #-8]
+ 180:../Keyboard.c **** 
+ 181:../Keyboard.c ****     Status = CyU3PDeviceInit(NULL);		// Setup with default clock parameters
+ 633              		.loc 1 181 0
+ 634 0014 0000A0E3 		mov	r0, #0
+ 635 0018 FEFFFFEB 		bl	CyU3PDeviceInit
+ 636 001c 08000BE5 		str	r0, [fp, #-8]
+ 182:../Keyboard.c ****     if (Status == CY_U3P_SUCCESS)
+ 637              		.loc 1 182 0
+ 638 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 639 0024 000053E3 		cmp	r3, #0
+ 640 0028 1800001A 		bne	.L32
+ 183:../Keyboard.c ****     {
+ 184:../Keyboard.c **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);
+ 641              		.loc 1 184 0
+ 642 002c 0100A0E3 		mov	r0, #1
+ 643 0030 0110A0E3 		mov	r1, #1
+ 644 0034 0120A0E3 		mov	r2, #1
+ 645 0038 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 646 003c 08000BE5 		str	r0, [fp, #-8]
+ 185:../Keyboard.c **** 		if (Status == CY_U3P_SUCCESS)
+ 647              		.loc 1 185 0
+ 648 0040 08301BE5 		ldr	r3, [fp, #-8]
+ 649 0044 000053E3 		cmp	r3, #0
+ 650 0048 1000001A 		bne	.L32
+ 186:../Keyboard.c **** 		{
+ 187:../Keyboard.c **** 			CyU3PMemSet((uint8_t *)&io_cfg, 0, sizeof(io_cfg));
+ 651              		.loc 1 187 0
+ 652 004c 30304BE2 		sub	r3, fp, #48
+ 653 0050 0300A0E1 		mov	r0, r3
+ 654 0054 0010A0E3 		mov	r1, #0
+ 655 0058 2820A0E3 		mov	r2, #40
+ 656 005c FEFFFFEB 		bl	CyU3PMemSet
+ 188:../Keyboard.c **** //r			io_cfg.isDQ32Bit = CyFalse;
+ 189:../Keyboard.c **** //r			io_cfg.s0Mode 	 = CY_U3P_SPORT_INACTIVE;
+ 190:../Keyboard.c **** //r			io_cfg.s1Mode	 = CY_U3P_SPORT_INACTIVE;
+ 191:../Keyboard.c **** 			io_cfg.useUart   = CyTrue;
+ 657              		.loc 1 191 0
+ 658 0060 0130A0E3 		mov	r3, #1
+ 659 0064 2C300BE5 		str	r3, [fp, #-44]
+ 192:../Keyboard.c **** //r			io_cfg.useI2C    = CyFalse;
+ 193:../Keyboard.c **** //r			io_cfg.useI2S    = CyFalse;
+ 194:../Keyboard.c **** //r			io_cfg.useSpi    = CyFalse;
+ 195:../Keyboard.c **** 			io_cfg.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;
+ 660              		.loc 1 195 0
+ 661 0068 0130A0E3 		mov	r3, #1
+ 662 006c 1A304BE5 		strb	r3, [fp, #-26]
+ 196:../Keyboard.c **** //r			io_cfg.gpioSimpleEn[0]  = 0;
+ 197:../Keyboard.c **** //r			io_cfg.gpioSimpleEn[1]  = 0;
+ 198:../Keyboard.c **** //r			io_cfg.gpioComplexEn[0] = 0;
+ 199:../Keyboard.c **** //r			io_cfg.gpioComplexEn[1] = 0;
+ 200:../Keyboard.c **** 			Status = CyU3PDeviceConfigureIOMatrix(&io_cfg);
+ 663              		.loc 1 200 0
+ 664 0070 30304BE2 		sub	r3, fp, #48
+ 665 0074 0300A0E1 		mov	r0, r3
+ 666 0078 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 667 007c 08000BE5 		str	r0, [fp, #-8]
+ 201:../Keyboard.c **** 			if (Status == CY_U3P_SUCCESS) CyU3PKernelEntry();	// Start RTOS, this does not return
+ 668              		.loc 1 201 0
+ 669 0080 08301BE5 		ldr	r3, [fp, #-8]
+ 670 0084 000053E3 		cmp	r3, #0
+ 671 0088 0000001A 		bne	.L32
+ 672              		.loc 1 201 0 is_stmt 0 discriminator 1
+ 673 008c FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 674              	.L32:
+ 202:../Keyboard.c **** 		}
+ 203:../Keyboard.c **** 	}
+ 204:../Keyboard.c ****     // Get here on a failure, can't recover, just hang here
+ 205:../Keyboard.c ****     while (1);
+ 675              		.loc 1 205 0 is_stmt 1 discriminator 1
+ 676 0090 FEFFFFEA 		b	.L32
+ 677              		.cfi_endproc
+ 678              	.LFE5:
+ 680              		.text
+ 681              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Keyboard.c
+                            *COM*:000000a8 ApplicationThread
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:27     .bss.glDebugTxEnabled:00000000 glDebugTxEnabled
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:24     .bss.glDebugTxEnabled:00000000 $d
+                            *COM*:00000004 glIsApplicationActive
+                            *COM*:000000a0 glUARTtoCPU_Handle
+                            *COM*:000000a0 glUSBtoCPU_Handle
+                            *COM*:00000020 glConsoleInBuffer
+                            *COM*:00000004 glConsoleInIndex
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:35     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:45     .text.CheckStatus:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:48     .text.CheckStatus:00000000 CheckStatus
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:107    .text.CheckStatus:0000007c $d
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:122    .text.UartCallback:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:125    .text.UartCallback:00000000 UartCallback
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:228    .text.UartCallback:00000114 $d
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:259    .text.InitializeDebugConsole:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:262    .text.InitializeDebugConsole:00000000 InitializeDebugConsole
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:418    .text.InitializeDebugConsole:0000019c $d
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:450    .text.ApplicationThread_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:453    .text.ApplicationThread_Entry:00000000 ApplicationThread_Entry
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:528    .text.ApplicationThread_Entry:000000ac $d
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:542    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:545    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:605    .text.CyFxApplicationDefine:00000090 $d
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:612    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccSKoh9N.s:615    .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+_tx_thread_sleep
+CyU3PDmaChannelSetWrapUp
+CyU3PDmaChannelGetBuffer
+CyU3PDmaChannelDiscardBuffer
+CyU3PUartRxSetBlockXfer
+CyU3PUartInit
+CyU3PMemSet
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble
+CyU3PDmaChannelCreate
+CyU3PDmaChannelDestroy
+CyU3PDmaChannelSetXfer
+InitializeUSB
+CyU3PMemAlloc
+_txe_thread_create
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

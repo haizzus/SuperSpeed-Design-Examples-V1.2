@@ -1,0 +1,961 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Application.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ThreadHandle,504,4
+  22              		.comm	SharedEvent,40,4
+  23              		.comm	DataOverrun,4,4
+  24              		.comm	TotalData,4,4
+  25              		.comm	InputDataBuffer,400,4
+  26              		.comm	ProcessedDataBuffer,40,4
+  27              		.comm	TempCounter,4,4
+  28              		.global	DID
+  29              		.section	.data.DID,"aw",%progbits
+  32              	DID:
+  33 0000 08       		.byte	8
+  34              		.global	SampleTime
+  35              		.section	.data.SampleTime,"aw",%progbits
+  36              		.align	2
+  39              	SampleTime:
+  40 0000 AC0D0000 		.word	3500
+  41              		.section	.rodata
+  42              		.align	2
+  43              	.LC0:
+  44 0000 0A257320 		.ascii	"\012%s is busy working\000"
+  44      69732062 
+  44      75737920 
+  44      776F726B 
+  44      696E6700 
+  45              		.section	.text.DoWork,"ax",%progbits
+  46              		.align	2
+  47              		.global	DoWork
+  49              	DoWork:
+  50              	.LFB0:
+  51              		.file 1 "../Application.c"
+   1:../Application.c **** // Introduction to ThreadX threads and Thread Communication using Events
+   2:../Application.c **** //
+   3:../Application.c **** // john@usb-by-example.com
+   4:../Application.c **** //
+   5:../Application.c **** 
+   6:../Application.c **** #include "Application.h"
+   7:../Application.c **** 
+   8:../Application.c **** CyU3PThread ThreadHandle[3];			// Handles to my Application Threads
+   9:../Application.c **** CyU3PEvent SharedEvent;					// Used for thread communications
+  10:../Application.c **** uint32_t DataOverrun, TotalData;		// Used to monitor for missed input data
+  11:../Application.c **** uint32_t InputDataBuffer[100];			// InputData thread puts data here
+  12:../Application.c **** uint32_t ProcessedDataBuffer[10];		// ProcessData thread puts data here
+  13:../Application.c **** uint32_t TempCounter;					// Used to generate 'data'
+  14:../Application.c **** uint8_t DID = 8;						// Set DID = Display Intermediate Data = 4 to see more display
+  15:../Application.c **** uint32_t SampleTime = 3500;				// Time between data collections in Input Thread
+  16:../Application.c **** 
+  17:../Application.c **** extern void CheckStatus(uint8_t DisplayLevel, char* StringPtr, CyU3PReturnStatus_t Status);
+  18:../Application.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(void);
+  19:../Application.c **** extern void DisplayThreads(void);
+  20:../Application.c **** 
+  21:../Application.c **** // Declare some helper routines so that I can simply add/remove progress messages
+  22:../Application.c **** void DoWork(uint32_t Time, char* Name)
+  23:../Application.c **** {
+  52              		.loc 1 23 0
+  53              		.cfi_startproc
+  54              		@ args = 0, pretend = 0, frame = 8
+  55              		@ frame_needed = 1, uses_anonymous_args = 0
+  56 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  57              	.LCFI0:
+  58              		.cfi_def_cfa_offset 8
+  59 0004 04B08DE2 		add	fp, sp, #4
+  60              		.cfi_offset 14, -4
+  61              		.cfi_offset 11, -8
+  62              	.LCFI1:
+  63              		.cfi_def_cfa 11, 4
+  64 0008 08D04DE2 		sub	sp, sp, #8
+  65 000c 08000BE5 		str	r0, [fp, #-8]
+  66 0010 0C100BE5 		str	r1, [fp, #-12]
+  24:../Application.c **** 	CyU3PDebugPrint(DID, "\n%s is busy working", Name);
+  67              		.loc 1 24 0
+  68 0014 20309FE5 		ldr	r3, .L2
+  69 0018 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+  70 001c 0300A0E1 		mov	r0, r3
+  71 0020 18109FE5 		ldr	r1, .L2+4
+  72 0024 0C201BE5 		ldr	r2, [fp, #-12]
+  73 0028 FEFFFFEB 		bl	CyU3PDebugPrint
+  25:../Application.c **** 	CyU3PThreadSleep(Time);
+  74              		.loc 1 25 0
+  75 002c 08001BE5 		ldr	r0, [fp, #-8]
+  76 0030 FEFFFFEB 		bl	_tx_thread_sleep
+  26:../Application.c **** }
+  77              		.loc 1 26 0
+  78 0034 04D04BE2 		sub	sp, fp, #4
+  79 0038 0088BDE8 		ldmfd	sp!, {fp, pc}
+  80              	.L3:
+  81              		.align	2
+  82              	.L2:
+  83 003c 00000000 		.word	DID
+  84 0040 00000000 		.word	.LC0
+  85              		.cfi_endproc
+  86              	.LFE0:
+  88              		.section	.rodata
+  89              		.align	2
+  90              	.LC1:
+  91 0014 0A257320 		.ascii	"\012%s started\000"
+  91      73746172 
+  91      74656400 
+  92              		.section	.text.InputDataThread,"ax",%progbits
+  93              		.align	2
+  94              		.global	InputDataThread
+  96              	InputDataThread:
+  97              	.LFB1:
+  27:../Application.c **** 
+  28:../Application.c **** // Declare main application code
+  29:../Application.c **** void InputDataThread(uint32_t Value)
+  30:../Application.c **** {
+  98              		.loc 1 30 0
+  99              		.cfi_startproc
+ 100              		@ args = 0, pretend = 0, frame = 24
+ 101              		@ frame_needed = 1, uses_anonymous_args = 0
+ 102 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 103              	.LCFI2:
+ 104              		.cfi_def_cfa_offset 8
+ 105 0004 04B08DE2 		add	fp, sp, #4
+ 106              		.cfi_offset 14, -4
+ 107              		.cfi_offset 11, -8
+ 108              	.LCFI3:
+ 109              		.cfi_def_cfa 11, 4
+ 110 0008 30D04DE2 		sub	sp, sp, #48
+ 111 000c 18000BE5 		str	r0, [fp, #-24]
+  31:../Application.c ****     char* ThreadName;
+  32:../Application.c ****     uint32_t ActualEvents, Status, i;
+  33:../Application.c **** 
+  34:../Application.c **** 	CyU3PThreadInfoGet(&ThreadHandle[Value], &ThreadName, 0, 0, 0);
+ 112              		.loc 1 34 0
+ 113 0010 18301BE5 		ldr	r3, [fp, #-24]
+ 114 0014 A820A0E3 		mov	r2, #168
+ 115 0018 930202E0 		mul	r2, r3, r2
+ 116 001c 28319FE5 		ldr	r3, .L10
+ 117 0020 032082E0 		add	r2, r2, r3
+ 118 0024 10304BE2 		sub	r3, fp, #16
+ 119 0028 0010A0E3 		mov	r1, #0
+ 120 002c 00108DE5 		str	r1, [sp, #0]
+ 121 0030 0010A0E3 		mov	r1, #0
+ 122 0034 04108DE5 		str	r1, [sp, #4]
+ 123 0038 0010A0E3 		mov	r1, #0
+ 124 003c 08108DE5 		str	r1, [sp, #8]
+ 125 0040 0010A0E3 		mov	r1, #0
+ 126 0044 0C108DE5 		str	r1, [sp, #12]
+ 127 0048 0010A0E3 		mov	r1, #0
+ 128 004c 10108DE5 		str	r1, [sp, #16]
+ 129 0050 0200A0E1 		mov	r0, r2
+ 130 0054 0310A0E1 		mov	r1, r3
+ 131 0058 0020A0E3 		mov	r2, #0
+ 132 005c 0030A0E3 		mov	r3, #0
+ 133 0060 FEFFFFEB 		bl	_txe_thread_info_get
+  35:../Application.c **** 	ThreadName += 3;	// Skip numeric ID
+ 134              		.loc 1 35 0
+ 135 0064 10301BE5 		ldr	r3, [fp, #-16]
+ 136 0068 033083E2 		add	r3, r3, #3
+ 137 006c 10300BE5 		str	r3, [fp, #-16]
+  36:../Application.c **** 	CyU3PDebugPrint(4, "\n%s started", ThreadName);
+ 138              		.loc 1 36 0
+ 139 0070 10301BE5 		ldr	r3, [fp, #-16]
+ 140 0074 0400A0E3 		mov	r0, #4
+ 141 0078 D0109FE5 		ldr	r1, .L10+4
+ 142 007c 0320A0E1 		mov	r2, r3
+ 143 0080 FEFFFFEB 		bl	CyU3PDebugPrint
+ 144              	.L9:
+  37:../Application.c ****     // Now run forever
+  38:../Application.c ****    	while (1)
+  39:../Application.c ****    	{
+  40:../Application.c ****    		// Gather some input data
+  41:../Application.c ****    		for (i = 0; i<Elements(InputDataBuffer); i++) InputDataBuffer[i] = TempCounter++;
+ 145              		.loc 1 41 0
+ 146 0084 0030A0E3 		mov	r3, #0
+ 147 0088 08300BE5 		str	r3, [fp, #-8]
+ 148 008c 0A0000EA 		b	.L5
+ 149              	.L6:
+ 150              		.loc 1 41 0 is_stmt 0 discriminator 2
+ 151 0090 BC309FE5 		ldr	r3, .L10+8
+ 152 0094 003093E5 		ldr	r3, [r3, #0]
+ 153 0098 B8209FE5 		ldr	r2, .L10+12
+ 154 009c 08101BE5 		ldr	r1, [fp, #-8]
+ 155 00a0 013182E7 		str	r3, [r2, r1, asl #2]
+ 156 00a4 012083E2 		add	r2, r3, #1
+ 157 00a8 A4309FE5 		ldr	r3, .L10+8
+ 158 00ac 002083E5 		str	r2, [r3, #0]
+ 159 00b0 08301BE5 		ldr	r3, [fp, #-8]
+ 160 00b4 013083E2 		add	r3, r3, #1
+ 161 00b8 08300BE5 		str	r3, [fp, #-8]
+ 162              	.L5:
+ 163              		.loc 1 41 0 discriminator 1
+ 164 00bc 08301BE5 		ldr	r3, [fp, #-8]
+ 165 00c0 630053E3 		cmp	r3, #99
+ 166 00c4 F1FFFF9A 		bls	.L6
+  42:../Application.c ****    		DoWork(SampleTime, ThreadName);		// Pad the actual work for demonstration
+ 167              		.loc 1 42 0 is_stmt 1
+ 168 00c8 8C309FE5 		ldr	r3, .L10+16
+ 169 00cc 002093E5 		ldr	r2, [r3, #0]
+ 170 00d0 10301BE5 		ldr	r3, [fp, #-16]
+ 171 00d4 0200A0E1 		mov	r0, r2
+ 172 00d8 0310A0E1 		mov	r1, r3
+ 173 00dc FEFFFFEB 		bl	DoWork
+  43:../Application.c ****    		TotalData++;
+ 174              		.loc 1 43 0
+ 175 00e0 78309FE5 		ldr	r3, .L10+20
+ 176 00e4 003093E5 		ldr	r3, [r3, #0]
+ 177 00e8 012083E2 		add	r2, r3, #1
+ 178 00ec 6C309FE5 		ldr	r3, .L10+20
+ 179 00f0 002083E5 		str	r2, [r3, #0]
+  44:../Application.c ****    		// Check that the previous data has been processed
+  45:../Application.c ****    		Status = CyU3PEventGet(&SharedEvent, INPUT_DATA_AVAILABLE, CYU3P_EVENT_OR, &ActualEvents, CYU3
+ 180              		.loc 1 45 0
+ 181 00f4 14304BE2 		sub	r3, fp, #20
+ 182 00f8 0020A0E3 		mov	r2, #0
+ 183 00fc 00208DE5 		str	r2, [sp, #0]
+ 184 0100 5C009FE5 		ldr	r0, .L10+24
+ 185 0104 0110A0E3 		mov	r1, #1
+ 186 0108 0020A0E3 		mov	r2, #0
+ 187 010c FEFFFFEB 		bl	_txe_event_flags_get
+ 188 0110 0C000BE5 		str	r0, [fp, #-12]
+  46:../Application.c ****    		if (Status == 0) DataOverrun++;
+ 189              		.loc 1 46 0
+ 190 0114 0C301BE5 		ldr	r3, [fp, #-12]
+ 191 0118 000053E3 		cmp	r3, #0
+ 192 011c 0500001A 		bne	.L7
+ 193              		.loc 1 46 0 is_stmt 0 discriminator 1
+ 194 0120 40309FE5 		ldr	r3, .L10+28
+ 195 0124 003093E5 		ldr	r3, [r3, #0]
+ 196 0128 012083E2 		add	r2, r3, #1
+ 197 012c 34309FE5 		ldr	r3, .L10+28
+ 198 0130 002083E5 		str	r2, [r3, #0]
+  47:../Application.c ****    		else CyU3PEventSet(&SharedEvent, INPUT_DATA_AVAILABLE, CYU3P_EVENT_OR);
+  48:../Application.c ****    		// Go back and find more input
+  49:../Application.c ****     }
+ 199              		.loc 1 49 0 is_stmt 1 discriminator 1
+ 200 0134 D2FFFFEA 		b	.L9
+ 201              	.L7:
+  47:../Application.c ****    		else CyU3PEventSet(&SharedEvent, INPUT_DATA_AVAILABLE, CYU3P_EVENT_OR);
+ 202              		.loc 1 47 0
+ 203 0138 24009FE5 		ldr	r0, .L10+24
+ 204 013c 0110A0E3 		mov	r1, #1
+ 205 0140 0020A0E3 		mov	r2, #0
+ 206 0144 FEFFFFEB 		bl	_txe_event_flags_set
+ 207              		.loc 1 49 0
+ 208 0148 CDFFFFEA 		b	.L9
+ 209              	.L11:
+ 210              		.align	2
+ 211              	.L10:
+ 212 014c 00000000 		.word	ThreadHandle
+ 213 0150 14000000 		.word	.LC1
+ 214 0154 00000000 		.word	TempCounter
+ 215 0158 00000000 		.word	InputDataBuffer
+ 216 015c 00000000 		.word	SampleTime
+ 217 0160 00000000 		.word	TotalData
+ 218 0164 00000000 		.word	SharedEvent
+ 219 0168 00000000 		.word	DataOverrun
+ 220              		.cfi_endproc
+ 221              	.LFE1:
+ 223              		.section	.text.ProcessDataThread,"ax",%progbits
+ 224              		.align	2
+ 225              		.global	ProcessDataThread
+ 227              	ProcessDataThread:
+ 228              	.LFB2:
+  50:../Application.c **** }
+  51:../Application.c **** 
+  52:../Application.c **** void ProcessDataThread(uint32_t Value)
+  53:../Application.c **** {
+ 229              		.loc 1 53 0
+ 230              		.cfi_startproc
+ 231              		@ args = 0, pretend = 0, frame = 24
+ 232              		@ frame_needed = 1, uses_anonymous_args = 0
+ 233 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 234              	.LCFI4:
+ 235              		.cfi_def_cfa_offset 8
+ 236 0004 04B08DE2 		add	fp, sp, #4
+ 237              		.cfi_offset 14, -4
+ 238              		.cfi_offset 11, -8
+ 239              	.LCFI5:
+ 240              		.cfi_def_cfa 11, 4
+ 241 0008 30D04DE2 		sub	sp, sp, #48
+ 242 000c 18000BE5 		str	r0, [fp, #-24]
+  54:../Application.c ****     char* ThreadName;
+  55:../Application.c ****     uint32_t ActualEvents, i, j;
+  56:../Application.c **** 
+  57:../Application.c **** 	CyU3PThreadInfoGet(&ThreadHandle[Value], &ThreadName, 0, 0, 0);
+ 243              		.loc 1 57 0
+ 244 0010 18301BE5 		ldr	r3, [fp, #-24]
+ 245 0014 A820A0E3 		mov	r2, #168
+ 246 0018 930202E0 		mul	r2, r3, r2
+ 247 001c 4C319FE5 		ldr	r3, .L18
+ 248 0020 032082E0 		add	r2, r2, r3
+ 249 0024 10304BE2 		sub	r3, fp, #16
+ 250 0028 0010A0E3 		mov	r1, #0
+ 251 002c 00108DE5 		str	r1, [sp, #0]
+ 252 0030 0010A0E3 		mov	r1, #0
+ 253 0034 04108DE5 		str	r1, [sp, #4]
+ 254 0038 0010A0E3 		mov	r1, #0
+ 255 003c 08108DE5 		str	r1, [sp, #8]
+ 256 0040 0010A0E3 		mov	r1, #0
+ 257 0044 0C108DE5 		str	r1, [sp, #12]
+ 258 0048 0010A0E3 		mov	r1, #0
+ 259 004c 10108DE5 		str	r1, [sp, #16]
+ 260 0050 0200A0E1 		mov	r0, r2
+ 261 0054 0310A0E1 		mov	r1, r3
+ 262 0058 0020A0E3 		mov	r2, #0
+ 263 005c 0030A0E3 		mov	r3, #0
+ 264 0060 FEFFFFEB 		bl	_txe_thread_info_get
+  58:../Application.c **** 	ThreadName += 3;	// Skip numeric ID
+ 265              		.loc 1 58 0
+ 266 0064 10301BE5 		ldr	r3, [fp, #-16]
+ 267 0068 033083E2 		add	r3, r3, #3
+ 268 006c 10300BE5 		str	r3, [fp, #-16]
+  59:../Application.c **** 	CyU3PDebugPrint(4, "\n%s started", ThreadName);
+ 269              		.loc 1 59 0
+ 270 0070 10301BE5 		ldr	r3, [fp, #-16]
+ 271 0074 0400A0E3 		mov	r0, #4
+ 272 0078 F4109FE5 		ldr	r1, .L18+4
+ 273 007c 0320A0E1 		mov	r2, r3
+ 274 0080 FEFFFFEB 		bl	CyU3PDebugPrint
+ 275              	.L17:
+  60:../Application.c ****     // Now run forever
+  61:../Application.c ****    	while (1)
+  62:../Application.c ****    	{
+  63:../Application.c ****    		// Wait for some input data to process
+  64:../Application.c ****    		CyU3PEventGet(&SharedEvent, INPUT_DATA_AVAILABLE, CYU3P_EVENT_OR_CLEAR, &ActualEvents, CYU3P_W
+ 276              		.loc 1 64 0
+ 277 0084 14304BE2 		sub	r3, fp, #20
+ 278 0088 0020E0E3 		mvn	r2, #0
+ 279 008c 00208DE5 		str	r2, [sp, #0]
+ 280 0090 E0009FE5 		ldr	r0, .L18+8
+ 281 0094 0110A0E3 		mov	r1, #1
+ 282 0098 0120A0E3 		mov	r2, #1
+ 283 009c FEFFFFEB 		bl	_txe_event_flags_get
+  65:../Application.c ****    		for (i = 0; i<Elements(ProcessedDataBuffer); i++)
+ 284              		.loc 1 65 0
+ 285 00a0 0030A0E3 		mov	r3, #0
+ 286 00a4 08300BE5 		str	r3, [fp, #-8]
+ 287 00a8 200000EA 		b	.L13
+ 288              	.L16:
+  66:../Application.c ****    		{
+  67:../Application.c ****    			ProcessedDataBuffer[i] = 0;
+ 289              		.loc 1 67 0
+ 290 00ac C8309FE5 		ldr	r3, .L18+12
+ 291 00b0 08201BE5 		ldr	r2, [fp, #-8]
+ 292 00b4 0010A0E3 		mov	r1, #0
+ 293 00b8 021183E7 		str	r1, [r3, r2, asl #2]
+  68:../Application.c ****    			for (j = 0; j<10; j++) ProcessedDataBuffer[i] += InputDataBuffer[(10*i)+j];
+ 294              		.loc 1 68 0
+ 295 00bc 0030A0E3 		mov	r3, #0
+ 296 00c0 0C300BE5 		str	r3, [fp, #-12]
+ 297 00c4 130000EA 		b	.L14
+ 298              	.L15:
+ 299              		.loc 1 68 0 is_stmt 0 discriminator 2
+ 300 00c8 AC309FE5 		ldr	r3, .L18+12
+ 301 00cc 08201BE5 		ldr	r2, [fp, #-8]
+ 302 00d0 021193E7 		ldr	r1, [r3, r2, asl #2]
+ 303 00d4 08201BE5 		ldr	r2, [fp, #-8]
+ 304 00d8 0230A0E1 		mov	r3, r2
+ 305 00dc 0331A0E1 		mov	r3, r3, asl #2
+ 306 00e0 023083E0 		add	r3, r3, r2
+ 307 00e4 8330A0E1 		mov	r3, r3, asl #1
+ 308 00e8 0320A0E1 		mov	r2, r3
+ 309 00ec 0C301BE5 		ldr	r3, [fp, #-12]
+ 310 00f0 032082E0 		add	r2, r2, r3
+ 311 00f4 84309FE5 		ldr	r3, .L18+16
+ 312 00f8 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 313 00fc 031081E0 		add	r1, r1, r3
+ 314 0100 74309FE5 		ldr	r3, .L18+12
+ 315 0104 08201BE5 		ldr	r2, [fp, #-8]
+ 316 0108 021183E7 		str	r1, [r3, r2, asl #2]
+ 317 010c 0C301BE5 		ldr	r3, [fp, #-12]
+ 318 0110 013083E2 		add	r3, r3, #1
+ 319 0114 0C300BE5 		str	r3, [fp, #-12]
+ 320              	.L14:
+ 321              		.loc 1 68 0 discriminator 1
+ 322 0118 0C301BE5 		ldr	r3, [fp, #-12]
+ 323 011c 090053E3 		cmp	r3, #9
+ 324 0120 E8FFFF9A 		bls	.L15
+  65:../Application.c ****    		for (i = 0; i<Elements(ProcessedDataBuffer); i++)
+ 325              		.loc 1 65 0 is_stmt 1
+ 326 0124 08301BE5 		ldr	r3, [fp, #-8]
+ 327 0128 013083E2 		add	r3, r3, #1
+ 328 012c 08300BE5 		str	r3, [fp, #-8]
+ 329              	.L13:
+  65:../Application.c ****    		for (i = 0; i<Elements(ProcessedDataBuffer); i++)
+ 330              		.loc 1 65 0 is_stmt 0 discriminator 1
+ 331 0130 08301BE5 		ldr	r3, [fp, #-8]
+ 332 0134 090053E3 		cmp	r3, #9
+ 333 0138 DBFFFF9A 		bls	.L16
+  69:../Application.c ****    		}
+  70:../Application.c ****    		DoWork(2000, ThreadName);		// Pad the actual work for demonstration
+ 334              		.loc 1 70 0 is_stmt 1
+ 335 013c 10301BE5 		ldr	r3, [fp, #-16]
+ 336 0140 7D0EA0E3 		mov	r0, #2000
+ 337 0144 0310A0E1 		mov	r1, r3
+ 338 0148 FEFFFFEB 		bl	DoWork
+  71:../Application.c ****    		// Hand off the processed data to the Output thread
+  72:../Application.c ****    		CyU3PEventSet(&SharedEvent, PROCESSED_DATA_AVAILABLE, CYU3P_EVENT_OR);
+ 339              		.loc 1 72 0
+ 340 014c 24009FE5 		ldr	r0, .L18+8
+ 341 0150 0210A0E3 		mov	r1, #2
+ 342 0154 0020A0E3 		mov	r2, #0
+ 343 0158 FEFFFFEB 		bl	_txe_event_flags_set
+  73:../Application.c ****    		// Do any tidy-up required
+  74:../Application.c ****    		DoWork(100, ThreadName);
+ 344              		.loc 1 74 0
+ 345 015c 10301BE5 		ldr	r3, [fp, #-16]
+ 346 0160 6400A0E3 		mov	r0, #100
+ 347 0164 0310A0E1 		mov	r1, r3
+ 348 0168 FEFFFFEB 		bl	DoWork
+  75:../Application.c ****    		// Go back and find more work
+  76:../Application.c ****     }
+ 349              		.loc 1 76 0
+ 350 016c C4FFFFEA 		b	.L17
+ 351              	.L19:
+ 352              		.align	2
+ 353              	.L18:
+ 354 0170 00000000 		.word	ThreadHandle
+ 355 0174 14000000 		.word	.LC1
+ 356 0178 00000000 		.word	SharedEvent
+ 357 017c 00000000 		.word	ProcessedDataBuffer
+ 358 0180 00000000 		.word	InputDataBuffer
+ 359              		.cfi_endproc
+ 360              	.LFE2:
+ 362              		.section	.rodata
+ 363              		.align	2
+ 364              	.LC2:
+ 365 0020 0A4F7574 		.ascii	"\012Output: \000"
+ 365      7075743A 
+ 365      2000
+ 366 002a 0000     		.align	2
+ 367              	.LC3:
+ 368 002c 25642000 		.ascii	"%d \000"
+ 369              		.section	.text.OutputDataThread,"ax",%progbits
+ 370              		.align	2
+ 371              		.global	OutputDataThread
+ 373              	OutputDataThread:
+ 374              	.LFB3:
+  77:../Application.c **** }
+  78:../Application.c **** 
+  79:../Application.c **** void OutputDataThread(uint32_t Value)
+  80:../Application.c **** {
+ 375              		.loc 1 80 0
+ 376              		.cfi_startproc
+ 377              		@ args = 0, pretend = 0, frame = 24
+ 378              		@ frame_needed = 1, uses_anonymous_args = 0
+ 379 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 380              	.LCFI6:
+ 381              		.cfi_def_cfa_offset 8
+ 382 0004 04B08DE2 		add	fp, sp, #4
+ 383              		.cfi_offset 14, -4
+ 384              		.cfi_offset 11, -8
+ 385              	.LCFI7:
+ 386              		.cfi_def_cfa 11, 4
+ 387 0008 30D04DE2 		sub	sp, sp, #48
+ 388 000c 18000BE5 		str	r0, [fp, #-24]
+  81:../Application.c ****     char* ThreadName;
+  82:../Application.c ****     uint32_t i, ActualEvents;
+  83:../Application.c **** 
+  84:../Application.c **** 	CyU3PThreadInfoGet(&ThreadHandle[Value], &ThreadName, 0, 0, 0);
+ 389              		.loc 1 84 0
+ 390 0010 18301BE5 		ldr	r3, [fp, #-24]
+ 391 0014 A820A0E3 		mov	r2, #168
+ 392 0018 930202E0 		mul	r2, r3, r2
+ 393 001c DC309FE5 		ldr	r3, .L24
+ 394 0020 032082E0 		add	r2, r2, r3
+ 395 0024 0C304BE2 		sub	r3, fp, #12
+ 396 0028 0010A0E3 		mov	r1, #0
+ 397 002c 00108DE5 		str	r1, [sp, #0]
+ 398 0030 0010A0E3 		mov	r1, #0
+ 399 0034 04108DE5 		str	r1, [sp, #4]
+ 400 0038 0010A0E3 		mov	r1, #0
+ 401 003c 08108DE5 		str	r1, [sp, #8]
+ 402 0040 0010A0E3 		mov	r1, #0
+ 403 0044 0C108DE5 		str	r1, [sp, #12]
+ 404 0048 0010A0E3 		mov	r1, #0
+ 405 004c 10108DE5 		str	r1, [sp, #16]
+ 406 0050 0200A0E1 		mov	r0, r2
+ 407 0054 0310A0E1 		mov	r1, r3
+ 408 0058 0020A0E3 		mov	r2, #0
+ 409 005c 0030A0E3 		mov	r3, #0
+ 410 0060 FEFFFFEB 		bl	_txe_thread_info_get
+  85:../Application.c **** 	ThreadName += 3;	// Skip numeric ID
+ 411              		.loc 1 85 0
+ 412 0064 0C301BE5 		ldr	r3, [fp, #-12]
+ 413 0068 033083E2 		add	r3, r3, #3
+ 414 006c 0C300BE5 		str	r3, [fp, #-12]
+  86:../Application.c **** 	CyU3PDebugPrint(4, "\n%s started", ThreadName);
+ 415              		.loc 1 86 0
+ 416 0070 0C301BE5 		ldr	r3, [fp, #-12]
+ 417 0074 0400A0E3 		mov	r0, #4
+ 418 0078 84109FE5 		ldr	r1, .L24+4
+ 419 007c 0320A0E1 		mov	r2, r3
+ 420 0080 FEFFFFEB 		bl	CyU3PDebugPrint
+ 421              	.L23:
+  87:../Application.c ****     // Now run forever
+  88:../Application.c ****    	while (1)
+  89:../Application.c ****    	{
+  90:../Application.c ****    		// Wait for some processed data to output
+  91:../Application.c ****    		CyU3PEventGet(&SharedEvent, PROCESSED_DATA_AVAILABLE, CYU3P_EVENT_OR_CLEAR, &ActualEvents, CYU
+ 422              		.loc 1 91 0
+ 423 0084 10304BE2 		sub	r3, fp, #16
+ 424 0088 0020E0E3 		mvn	r2, #0
+ 425 008c 00208DE5 		str	r2, [sp, #0]
+ 426 0090 70009FE5 		ldr	r0, .L24+8
+ 427 0094 0210A0E3 		mov	r1, #2
+ 428 0098 0120A0E3 		mov	r2, #1
+ 429 009c FEFFFFEB 		bl	_txe_event_flags_get
+  92:../Application.c ****    		DoWork(1000, ThreadName);		// Pad the actual work for demonstration
+ 430              		.loc 1 92 0
+ 431 00a0 0C301BE5 		ldr	r3, [fp, #-12]
+ 432 00a4 FA0FA0E3 		mov	r0, #1000
+ 433 00a8 0310A0E1 		mov	r1, r3
+ 434 00ac FEFFFFEB 		bl	DoWork
+  93:../Application.c ****    		CyU3PDebugPrint(4, "\nOutput: ");
+ 435              		.loc 1 93 0
+ 436 00b0 0400A0E3 		mov	r0, #4
+ 437 00b4 50109FE5 		ldr	r1, .L24+12
+ 438 00b8 FEFFFFEB 		bl	CyU3PDebugPrint
+  94:../Application.c ****    		for (i = 0; i<Elements(ProcessedDataBuffer); i++) CyU3PDebugPrint(4, "%d ", ProcessedDataBuffe
+ 439              		.loc 1 94 0
+ 440 00bc 0030A0E3 		mov	r3, #0
+ 441 00c0 08300BE5 		str	r3, [fp, #-8]
+ 442 00c4 090000EA 		b	.L21
+ 443              	.L22:
+ 444              		.loc 1 94 0 is_stmt 0 discriminator 2
+ 445 00c8 40309FE5 		ldr	r3, .L24+16
+ 446 00cc 08201BE5 		ldr	r2, [fp, #-8]
+ 447 00d0 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 448 00d4 0400A0E3 		mov	r0, #4
+ 449 00d8 34109FE5 		ldr	r1, .L24+20
+ 450 00dc 0320A0E1 		mov	r2, r3
+ 451 00e0 FEFFFFEB 		bl	CyU3PDebugPrint
+ 452 00e4 08301BE5 		ldr	r3, [fp, #-8]
+ 453 00e8 013083E2 		add	r3, r3, #1
+ 454 00ec 08300BE5 		str	r3, [fp, #-8]
+ 455              	.L21:
+ 456              		.loc 1 94 0 discriminator 1
+ 457 00f0 08301BE5 		ldr	r3, [fp, #-8]
+ 458 00f4 090053E3 		cmp	r3, #9
+ 459 00f8 F2FFFF9A 		bls	.L22
+  95:../Application.c ****    		// Go back and find more work
+  96:../Application.c ****     }
+ 460              		.loc 1 96 0 is_stmt 1
+ 461 00fc E0FFFFEA 		b	.L23
+ 462              	.L25:
+ 463              		.align	2
+ 464              	.L24:
+ 465 0100 00000000 		.word	ThreadHandle
+ 466 0104 14000000 		.word	.LC1
+ 467 0108 00000000 		.word	SharedEvent
+ 468 010c 20000000 		.word	.LC2
+ 469 0110 00000000 		.word	ProcessedDataBuffer
+ 470 0114 2C000000 		.word	.LC3
+ 471              		.cfi_endproc
+ 472              	.LFE3:
+ 474              		.section	.rodata
+ 475              		.align	2
+ 476              	.LC4:
+ 477 0030 456E6162 		.ascii	"Enable DebugConsole\000"
+ 477      6C652044 
+ 477      65627567 
+ 477      436F6E73 
+ 477      6F6C6500 
+ 478              		.align	2
+ 479              	.LC5:
+ 480 0044 43726561 		.ascii	"Create Event\000"
+ 480      74652045 
+ 480      76656E74 
+ 480      00
+ 481 0051 000000   		.align	2
+ 482              	.LC6:
+ 483 0054 31303A49 		.ascii	"10:Input_Thread\000"
+ 483      6E707574 
+ 483      5F546872 
+ 483      65616400 
+ 484              		.align	2
+ 485              	.LC7:
+ 486 0064 53746172 		.ascii	"Start ProcessData\000"
+ 486      74205072 
+ 486      6F636573 
+ 486      73446174 
+ 486      6100
+ 487 0076 0000     		.align	2
+ 488              	.LC8:
+ 489 0078 31313A50 		.ascii	"11:Process_Thread\000"
+ 489      726F6365 
+ 489      73735F54 
+ 489      68726561 
+ 489      6400
+ 490 008a 0000     		.align	2
+ 491              	.LC9:
+ 492 008c 31323A4F 		.ascii	"12:Output_Thread\000"
+ 492      75747075 
+ 492      745F5468 
+ 492      72656164 
+ 492      00
+ 493 009d 000000   		.align	2
+ 494              	.LC10:
+ 495 00a0 53746172 		.ascii	"Start OutputData\000"
+ 495      74204F75 
+ 495      74707574 
+ 495      44617461 
+ 495      00
+ 496 00b1 000000   		.align	2
+ 497              	.LC11:
+ 498 00b4 7800     		.ascii	"x\000"
+ 499 00b6 0000     		.align	2
+ 500              	.LC12:
+ 501 00b8 0A417420 		.ascii	"\012At %d seconds, Missed Data = %d/%d\000"
+ 501      25642073 
+ 501      65636F6E 
+ 501      64732C20 
+ 501      4D697373 
+ 502              		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 503              		.align	2
+ 504              		.global	CyFxApplicationDefine
+ 506              	CyFxApplicationDefine:
+ 507              	.LFB4:
+  97:../Application.c **** }
+  98:../Application.c **** 
+  99:../Application.c **** // ApplicationDefine function called by RTOS to startup the application threads
+ 100:../Application.c **** void CyFxApplicationDefine(void)
+ 101:../Application.c **** {
+ 508              		.loc 1 101 0
+ 509              		.cfi_startproc
+ 510              		@ args = 0, pretend = 0, frame = 16
+ 511              		@ frame_needed = 1, uses_anonymous_args = 0
+ 512 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 513              	.LCFI8:
+ 514              		.cfi_def_cfa_offset 8
+ 515 0004 04B08DE2 		add	fp, sp, #4
+ 516              		.cfi_offset 14, -4
+ 517              		.cfi_offset 11, -8
+ 518              	.LCFI9:
+ 519              		.cfi_def_cfa 11, 4
+ 520 0008 30D04DE2 		sub	sp, sp, #48
+ 102:../Application.c ****     void *StackPtr;
+ 103:../Application.c ****     uint32_t Status, Counter;
+ 104:../Application.c **** 
+ 105:../Application.c ****     // First, get a debug console running so that we can display some progress
+ 106:../Application.c ****     // This DebugConsole will run in its own thread
+ 107:../Application.c ****     Status = InitializeDebugConsole();
+ 521              		.loc 1 107 0
+ 522 000c FEFFFFEB 		bl	InitializeDebugConsole
+ 523 0010 0C000BE5 		str	r0, [fp, #-12]
+ 108:../Application.c ****     CheckStatus(4, "Enable DebugConsole", Status);
+ 524              		.loc 1 108 0
+ 525 0014 0400A0E3 		mov	r0, #4
+ 526 0018 30129FE5 		ldr	r1, .L31
+ 527 001c 0C201BE5 		ldr	r2, [fp, #-12]
+ 528 0020 FEFFFFEB 		bl	CheckStatus
+ 109:../Application.c **** 
+ 110:../Application.c ****     // Create an Event Group that the threads will use to inter-communicate
+ 111:../Application.c ****     Status = CyU3PEventCreate(&SharedEvent);
+ 529              		.loc 1 111 0
+ 530 0024 28029FE5 		ldr	r0, .L31+4
+ 531 0028 0010A0E3 		mov	r1, #0
+ 532 002c 2820A0E3 		mov	r2, #40
+ 533 0030 FEFFFFEB 		bl	_txe_event_flags_create
+ 534 0034 0C000BE5 		str	r0, [fp, #-12]
+ 112:../Application.c ****     CheckStatus(4, "Create Event", Status);
+ 535              		.loc 1 112 0
+ 536 0038 0400A0E3 		mov	r0, #4
+ 537 003c 14129FE5 		ldr	r1, .L31+8
+ 538 0040 0C201BE5 		ldr	r2, [fp, #-12]
+ 539 0044 FEFFFFEB 		bl	CheckStatus
+ 113:../Application.c **** 
+ 114:../Application.c ****     // Create three threads, InputData, ProcessData and OutputData.  Each will need a stack
+ 115:../Application.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 540              		.loc 1 115 0
+ 541 0048 020BA0E3 		mov	r0, #2048
+ 542 004c FEFFFFEB 		bl	CyU3PMemAlloc
+ 543 0050 10000BE5 		str	r0, [fp, #-16]
+ 116:../Application.c ****     Status = CyU3PThreadCreate(&ThreadHandle[0],// Handle for this Thread
+ 544              		.loc 1 116 0
+ 545 0054 10301BE5 		ldr	r3, [fp, #-16]
+ 546 0058 00308DE5 		str	r3, [sp, #0]
+ 547 005c 023BA0E3 		mov	r3, #2048
+ 548 0060 04308DE5 		str	r3, [sp, #4]
+ 549 0064 0F30A0E3 		mov	r3, #15
+ 550 0068 08308DE5 		str	r3, [sp, #8]
+ 551 006c 0F30A0E3 		mov	r3, #15
+ 552 0070 0C308DE5 		str	r3, [sp, #12]
+ 553 0074 0030A0E3 		mov	r3, #0
+ 554 0078 10308DE5 		str	r3, [sp, #16]
+ 555 007c 0130A0E3 		mov	r3, #1
+ 556 0080 14308DE5 		str	r3, [sp, #20]
+ 557 0084 A830A0E3 		mov	r3, #168
+ 558 0088 18308DE5 		str	r3, [sp, #24]
+ 559 008c C8019FE5 		ldr	r0, .L31+12
+ 560 0090 C8119FE5 		ldr	r1, .L31+16
+ 561 0094 C8219FE5 		ldr	r2, .L31+20
+ 562 0098 0030A0E3 		mov	r3, #0
+ 563 009c FEFFFFEB 		bl	_txe_thread_create
+ 564 00a0 0C000BE5 		str	r0, [fp, #-12]
+ 117:../Application.c ****             "10:Input_Thread",                	// Thread ID and name
+ 118:../Application.c ****             InputDataThread,     				// Thread function
+ 119:../Application.c ****             0,                             		// Parameter passed to Thread
+ 120:../Application.c ****             StackPtr,                       	// Pointer to the allocated thread stack
+ 121:../Application.c ****             APPLICATION_THREAD_STACK,			// Allocated thread stack size
+ 122:../Application.c ****             INPUT_DATA_THREAD_PRIORITY,			// Thread priority
+ 123:../Application.c ****             INPUT_DATA_THREAD_PRIORITY,			// = Thread priority so no preemption
+ 124:../Application.c ****             CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+ 125:../Application.c ****             CYU3P_AUTO_START);                	// Start the thread immediately
+ 126:../Application.c ****     CheckStatus(4, "Start ProcessData", Status);
+ 565              		.loc 1 126 0
+ 566 00a4 0400A0E3 		mov	r0, #4
+ 567 00a8 B8119FE5 		ldr	r1, .L31+24
+ 568 00ac 0C201BE5 		ldr	r2, [fp, #-12]
+ 569 00b0 FEFFFFEB 		bl	CheckStatus
+ 127:../Application.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 570              		.loc 1 127 0
+ 571 00b4 020BA0E3 		mov	r0, #2048
+ 572 00b8 FEFFFFEB 		bl	CyU3PMemAlloc
+ 573 00bc 10000BE5 		str	r0, [fp, #-16]
+ 128:../Application.c ****     Status = CyU3PThreadCreate(&ThreadHandle[1],// Handle for this Thread
+ 574              		.loc 1 128 0
+ 575 00c0 10301BE5 		ldr	r3, [fp, #-16]
+ 576 00c4 00308DE5 		str	r3, [sp, #0]
+ 577 00c8 023BA0E3 		mov	r3, #2048
+ 578 00cc 04308DE5 		str	r3, [sp, #4]
+ 579 00d0 1430A0E3 		mov	r3, #20
+ 580 00d4 08308DE5 		str	r3, [sp, #8]
+ 581 00d8 1430A0E3 		mov	r3, #20
+ 582 00dc 0C308DE5 		str	r3, [sp, #12]
+ 583 00e0 0030A0E3 		mov	r3, #0
+ 584 00e4 10308DE5 		str	r3, [sp, #16]
+ 585 00e8 0130A0E3 		mov	r3, #1
+ 586 00ec 14308DE5 		str	r3, [sp, #20]
+ 587 00f0 A830A0E3 		mov	r3, #168
+ 588 00f4 18308DE5 		str	r3, [sp, #24]
+ 589 00f8 6C019FE5 		ldr	r0, .L31+28
+ 590 00fc 6C119FE5 		ldr	r1, .L31+32
+ 591 0100 6C219FE5 		ldr	r2, .L31+36
+ 592 0104 0130A0E3 		mov	r3, #1
+ 593 0108 FEFFFFEB 		bl	_txe_thread_create
+ 594 010c 0C000BE5 		str	r0, [fp, #-12]
+ 129:../Application.c ****             "11:Process_Thread",                // Thread ID and name
+ 130:../Application.c ****             ProcessDataThread,     				// Thread function
+ 131:../Application.c ****             1,                             		// Parameter passed to Thread
+ 132:../Application.c ****             StackPtr,                       	// Pointer to the allocated thread stack
+ 133:../Application.c ****             APPLICATION_THREAD_STACK,			// Allocated thread stack size
+ 134:../Application.c ****             PROCESS_DATA_THREAD_PRIORITY,		// Thread priority
+ 135:../Application.c ****             PROCESS_DATA_THREAD_PRIORITY,		// = Thread priority so no preemption
+ 136:../Application.c ****             CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+ 137:../Application.c ****             CYU3P_AUTO_START);                	// Start the thread immediately
+ 138:../Application.c ****     CheckStatus(4, "Start ProcessData", Status);
+ 595              		.loc 1 138 0
+ 596 0110 0400A0E3 		mov	r0, #4
+ 597 0114 4C119FE5 		ldr	r1, .L31+24
+ 598 0118 0C201BE5 		ldr	r2, [fp, #-12]
+ 599 011c FEFFFFEB 		bl	CheckStatus
+ 139:../Application.c ****     StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 600              		.loc 1 139 0
+ 601 0120 020BA0E3 		mov	r0, #2048
+ 602 0124 FEFFFFEB 		bl	CyU3PMemAlloc
+ 603 0128 10000BE5 		str	r0, [fp, #-16]
+ 140:../Application.c ****     Status = CyU3PThreadCreate(&ThreadHandle[2],// Handle for this Thread
+ 604              		.loc 1 140 0
+ 605 012c 10301BE5 		ldr	r3, [fp, #-16]
+ 606 0130 00308DE5 		str	r3, [sp, #0]
+ 607 0134 023BA0E3 		mov	r3, #2048
+ 608 0138 04308DE5 		str	r3, [sp, #4]
+ 609 013c 0F30A0E3 		mov	r3, #15
+ 610 0140 08308DE5 		str	r3, [sp, #8]
+ 611 0144 0F30A0E3 		mov	r3, #15
+ 612 0148 0C308DE5 		str	r3, [sp, #12]
+ 613 014c 0030A0E3 		mov	r3, #0
+ 614 0150 10308DE5 		str	r3, [sp, #16]
+ 615 0154 0130A0E3 		mov	r3, #1
+ 616 0158 14308DE5 		str	r3, [sp, #20]
+ 617 015c A830A0E3 		mov	r3, #168
+ 618 0160 18308DE5 		str	r3, [sp, #24]
+ 619 0164 0C019FE5 		ldr	r0, .L31+40
+ 620 0168 0C119FE5 		ldr	r1, .L31+44
+ 621 016c 0C219FE5 		ldr	r2, .L31+48
+ 622 0170 0230A0E3 		mov	r3, #2
+ 623 0174 FEFFFFEB 		bl	_txe_thread_create
+ 624 0178 0C000BE5 		str	r0, [fp, #-12]
+ 141:../Application.c ****     		"12:Output_Thread",                	// Thread ID and name
+ 142:../Application.c ****     		OutputDataThread,     				// Thread function
+ 143:../Application.c ****     		2,                             		// Parameter passed to Thread
+ 144:../Application.c ****     		StackPtr,                       	// Pointer to the allocated thread stack
+ 145:../Application.c ****     		APPLICATION_THREAD_STACK,			// Allocated thread stack size
+ 146:../Application.c ****     		OUTPUT_DATA_THREAD_PRIORITY,        // Thread priority
+ 147:../Application.c ****     		OUTPUT_DATA_THREAD_PRIORITY,		// = Thread priority so no preemption
+ 148:../Application.c ****     		CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+ 149:../Application.c ****     		CYU3P_AUTO_START);					// Start the thread immediately
+ 150:../Application.c ****     CheckStatus(4, "Start OutputData", Status);
+ 625              		.loc 1 150 0
+ 626 017c 0400A0E3 		mov	r0, #4
+ 627 0180 FC109FE5 		ldr	r1, .L31+52
+ 628 0184 0C201BE5 		ldr	r2, [fp, #-12]
+ 629 0188 FEFFFFEB 		bl	CheckStatus
+ 151:../Application.c **** 
+ 152:../Application.c ****     DisplayThreads();
+ 630              		.loc 1 152 0
+ 631 018c FEFFFFEB 		bl	DisplayThreads
+ 153:../Application.c ****     // This thread now becomes a monitoring function that displays statistics of the other two thre
+ 154:../Application.c ****     // Check for missed data every 10 seconds
+ 155:../Application.c ****     Counter = 0;
+ 632              		.loc 1 155 0
+ 633 0190 0030A0E3 		mov	r3, #0
+ 634 0194 08300BE5 		str	r3, [fp, #-8]
+ 635 0198 000000EA 		b	.L29
+ 636              	.L30:
+ 156:../Application.c ****     while(1)
+ 157:../Application.c ****     {
+ 158:../Application.c ****     	CyU3PThreadSleep(10);
+ 159:../Application.c ****     	if (Counter & 0xE)
+ 160:../Application.c ****     	{
+ 161:../Application.c **** 			Status = CyU3PGpioSetValue((Counter & 0xE)>>1, Counter & 1);
+ 162:../Application.c **** 			if (Status != 0) CyU3PDebugPrint(4, "x");
+ 163:../Application.c ****     	}
+ 164:../Application.c **** 		if (++Counter == 1000)
+ 165:../Application.c ****     	{
+ 166:../Application.c **** 			CyU3PDebugPrint(4, "\nAt %d seconds, Missed Data = %d/%d", CyU3PGetTime()/1000, DataOverrun, Tot
+ 167:../Application.c **** 			Counter = 0;
+ 168:../Application.c ****     	}
+ 169:../Application.c ****     }
+ 637              		.loc 1 169 0
+ 638 019c 0000A0E1 		mov	r0, r0	@ nop
+ 639              	.L29:
+ 158:../Application.c ****     	CyU3PThreadSleep(10);
+ 640              		.loc 1 158 0
+ 641 01a0 0A00A0E3 		mov	r0, #10
+ 642 01a4 FEFFFFEB 		bl	_tx_thread_sleep
+ 159:../Application.c ****     	if (Counter & 0xE)
+ 643              		.loc 1 159 0
+ 644 01a8 08301BE5 		ldr	r3, [fp, #-8]
+ 645 01ac 0E3003E2 		and	r3, r3, #14
+ 646 01b0 000053E3 		cmp	r3, #0
+ 647 01b4 0F00000A 		beq	.L27
+ 161:../Application.c **** 			Status = CyU3PGpioSetValue((Counter & 0xE)>>1, Counter & 1);
+ 648              		.loc 1 161 0
+ 649 01b8 08301BE5 		ldr	r3, [fp, #-8]
+ 650 01bc 0E3003E2 		and	r3, r3, #14
+ 651 01c0 A330A0E1 		mov	r3, r3, lsr #1
+ 652 01c4 FF2003E2 		and	r2, r3, #255
+ 653 01c8 08301BE5 		ldr	r3, [fp, #-8]
+ 654 01cc 013003E2 		and	r3, r3, #1
+ 655 01d0 0200A0E1 		mov	r0, r2
+ 656 01d4 0310A0E1 		mov	r1, r3
+ 657 01d8 FEFFFFEB 		bl	CyU3PGpioSetValue
+ 658 01dc 0C000BE5 		str	r0, [fp, #-12]
+ 162:../Application.c **** 			if (Status != 0) CyU3PDebugPrint(4, "x");
+ 659              		.loc 1 162 0
+ 660 01e0 0C301BE5 		ldr	r3, [fp, #-12]
+ 661 01e4 000053E3 		cmp	r3, #0
+ 662 01e8 0200000A 		beq	.L27
+ 162:../Application.c **** 			if (Status != 0) CyU3PDebugPrint(4, "x");
+ 663              		.loc 1 162 0 is_stmt 0 discriminator 1
+ 664 01ec 0400A0E3 		mov	r0, #4
+ 665 01f0 90109FE5 		ldr	r1, .L31+56
+ 666 01f4 FEFFFFEB 		bl	CyU3PDebugPrint
+ 667              	.L27:
+ 164:../Application.c **** 		if (++Counter == 1000)
+ 668              		.loc 1 164 0 is_stmt 1
+ 669 01f8 08301BE5 		ldr	r3, [fp, #-8]
+ 670 01fc 013083E2 		add	r3, r3, #1
+ 671 0200 08300BE5 		str	r3, [fp, #-8]
+ 672 0204 08301BE5 		ldr	r3, [fp, #-8]
+ 673 0208 FA0F53E3 		cmp	r3, #1000
+ 674 020c E2FFFF1A 		bne	.L30
+ 166:../Application.c **** 			CyU3PDebugPrint(4, "\nAt %d seconds, Missed Data = %d/%d", CyU3PGetTime()/1000, DataOverrun, Tot
+ 675              		.loc 1 166 0
+ 676 0210 FEFFFFEB 		bl	_tx_time_get
+ 677 0214 0020A0E1 		mov	r2, r0
+ 678 0218 6C309FE5 		ldr	r3, .L31+60
+ 679 021c 921383E0 		umull	r1, r3, r2, r3
+ 680 0220 2323A0E1 		mov	r2, r3, lsr #6
+ 681 0224 64309FE5 		ldr	r3, .L31+64
+ 682 0228 003093E5 		ldr	r3, [r3, #0]
+ 683 022c 60109FE5 		ldr	r1, .L31+68
+ 684 0230 001091E5 		ldr	r1, [r1, #0]
+ 685 0234 00108DE5 		str	r1, [sp, #0]
+ 686 0238 0400A0E3 		mov	r0, #4
+ 687 023c 54109FE5 		ldr	r1, .L31+72
+ 688 0240 FEFFFFEB 		bl	CyU3PDebugPrint
+ 167:../Application.c **** 			Counter = 0;
+ 689              		.loc 1 167 0
+ 690 0244 0030A0E3 		mov	r3, #0
+ 691 0248 08300BE5 		str	r3, [fp, #-8]
+ 692              		.loc 1 169 0
+ 693 024c D3FFFFEA 		b	.L29
+ 694              	.L32:
+ 695              		.align	2
+ 696              	.L31:
+ 697 0250 30000000 		.word	.LC4
+ 698 0254 00000000 		.word	SharedEvent
+ 699 0258 44000000 		.word	.LC5
+ 700 025c 00000000 		.word	ThreadHandle
+ 701 0260 54000000 		.word	.LC6
+ 702 0264 00000000 		.word	InputDataThread
+ 703 0268 64000000 		.word	.LC7
+ 704 026c A8000000 		.word	ThreadHandle+168
+ 705 0270 78000000 		.word	.LC8
+ 706 0274 00000000 		.word	ProcessDataThread
+ 707 0278 50010000 		.word	ThreadHandle+336
+ 708 027c 8C000000 		.word	.LC9
+ 709 0280 00000000 		.word	OutputDataThread
+ 710 0284 A0000000 		.word	.LC10
+ 711 0288 B4000000 		.word	.LC11
+ 712 028c D34D6210 		.word	274877907
+ 713 0290 00000000 		.word	DataOverrun
+ 714 0294 00000000 		.word	TotalData
+ 715 0298 B8000000 		.word	.LC12
+ 716              		.cfi_endproc
+ 717              	.LFE4:
+ 719              		.text
+ 720              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Application.c
+                            *COM*:000001f8 ThreadHandle
+                            *COM*:00000028 SharedEvent
+                            *COM*:00000004 DataOverrun
+                            *COM*:00000004 TotalData
+                            *COM*:00000190 InputDataBuffer
+                            *COM*:00000028 ProcessedDataBuffer
+                            *COM*:00000004 TempCounter
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:32     .data.DID:00000000 DID
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:39     .data.SampleTime:00000000 SampleTime
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:36     .data.SampleTime:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:42     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:46     .text.DoWork:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:49     .text.DoWork:00000000 DoWork
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:83     .text.DoWork:0000003c $d
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:93     .text.InputDataThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:96     .text.InputDataThread:00000000 InputDataThread
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:212    .text.InputDataThread:0000014c $d
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:224    .text.ProcessDataThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:227    .text.ProcessDataThread:00000000 ProcessDataThread
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:354    .text.ProcessDataThread:00000170 $d
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:370    .text.OutputDataThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:373    .text.OutputDataThread:00000000 OutputDataThread
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:465    .text.OutputDataThread:00000100 $d
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:503    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:506    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\ccpKIkzE.s:697    .text.CyFxApplicationDefine:00000250 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+_tx_thread_sleep
+_txe_thread_info_get
+_txe_event_flags_get
+_txe_event_flags_set
+InitializeDebugConsole
+CheckStatus
+_txe_event_flags_create
+CyU3PMemAlloc
+_txe_thread_create
+DisplayThreads
+CyU3PGpioSetValue
+_tx_time_get

@@ -1,0 +1,840 @@
+MDF Database:  version 1.0
+MDF_INFO | top | XC2C128-6-VQ100
+MACROCELL | 3 | 13 | CTRL<3>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 3 | User<7>  | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 3 | 1 | 10 | 0 | 9 | 0 | 13
+EQ | 2 | 
+   !CTRL<3> = !User<7> & Counter/CurrentState_FSM_FFd3
+	# !User<7> & Counter/CurrentState_FSM_FFd2;	// (2 pt, 3 inp)
+
+MACROCELL | 1 | 10 | User<7>_MC
+ATTRIBUTES | 2189722370 | 0
+OUTPUTMC | 6 | 0 | 9 | 1 | 10 | 3 | 13 | 3 | 6 | 1 | 15 | 1 | 2
+INPUTS | 5 | User<0>  | User<7>  | Counter/CurrentState_FSM_FFd2  | CTRL<1>  | Counter/CurrentState_FSM_FFd3
+INPUTMC | 4 | 0 | 2 | 1 | 10 | 0 | 13 | 0 | 9
+INPUTP | 1 | 50
+LCT | 1 | 4 | Internal_Name
+EQ | 6 | 
+   !User<7> := User<0> & !User<7>
+	# !User<0> & !Counter/CurrentState_FSM_FFd2
+	# !User<0> & !CTRL<1> & 
+	!Counter/CurrentState_FSM_FFd3;	// (3 pt, 5 inp)
+   User<7>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    User<7>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 2 | User<0>_MC
+ATTRIBUTES | 2189722370 | 0
+OUTPUTMC | 3 | 0 | 13 | 0 | 9 | 1 | 10
+INPUTS | 1 | User<1>
+INPUTMC | 1 | 0 | 0
+LCT | 1 | 4 | Internal_Name
+EQ | 3 | 
+   User<0> := User<1>;	// (1 pt, 1 inp)
+   User<0>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    User<0>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 0 | User<1>_MC
+ATTRIBUTES | 2189722370 | 0
+OUTPUTMC | 1 | 0 | 2
+INPUTS | 1 | User<2>
+INPUTMC | 1 | 1 | 1
+LCT | 1 | 4 | Internal_Name
+EQ | 3 | 
+   User<1> := User<2>;	// (1 pt, 1 inp)
+   User<1>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    User<1>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 1 | 1 | User<2>_MC
+ATTRIBUTES | 2319713026 | 0
+OUTPUTMC | 2 | 0 | 0 | 4 | 13
+INPUTS | 0
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 3 | 
+   !User<2>.T := Gnd;	// (0 pt, 0 inp)
+    User<2>.CLK = !(CTRL<9>);	// CTC	(1 pt, 1 inp)
+    User<2>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 9 | Counter/CurrentState_FSM_FFd3_MC
+ATTRIBUTES | 2189460224 | 0
+OUTPUTMC | 10 | 0 | 13 | 0 | 9 | 1 | 10 | 3 | 13 | 3 | 6 | 1 | 15 | 1 | 2 | 1 | 3 | 1 | 4 | 1 | 5
+INPUTS | 6 | User<0>  | CTRL<1>  | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2  | User<7>  | CTRL<0>
+INPUTMC | 4 | 0 | 2 | 0 | 9 | 0 | 13 | 1 | 10
+INPUTP | 2 | 50 | 52
+LCT | 1 | 4 | Internal_Name
+EQ | 12 | 
+   Counter/CurrentState_FSM_FFd3 := User<0> & !CTRL<1> & 
+	Counter/CurrentState_FSM_FFd3
+	# User<0> & Counter/CurrentState_FSM_FFd3 & 
+	Counter/CurrentState_FSM_FFd2
+	# !CTRL<1> & !Counter/CurrentState_FSM_FFd3 & 
+	Counter/CurrentState_FSM_FFd2
+	# User<0> & !User<7> & 
+	!Counter/CurrentState_FSM_FFd3 & !Counter/CurrentState_FSM_FFd2
+	# !CTRL<1> & Counter/CurrentState_FSM_FFd3 & 
+	!Counter/CurrentState_FSM_FFd2 & CTRL<0>;	// (5 pt, 6 inp)
+   Counter/CurrentState_FSM_FFd3.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    Counter/CurrentState_FSM_FFd3.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 13 | Counter/CurrentState_FSM_FFd2_MC
+ATTRIBUTES | 2189460224 | 0
+OUTPUTMC | 10 | 0 | 13 | 0 | 9 | 1 | 10 | 3 | 13 | 3 | 6 | 1 | 15 | 1 | 2 | 1 | 3 | 1 | 4 | 1 | 5
+INPUTS | 5 | User<0>  | Counter/CurrentState_FSM_FFd3  | CTRL<0>  | CTRL<1>  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 3 | 0 | 2 | 0 | 9 | 0 | 13
+INPUTP | 2 | 52 | 50
+LCT | 1 | 4 | Internal_Name
+EQ | 10 | 
+   Counter/CurrentState_FSM_FFd2 := User<0> & Counter/CurrentState_FSM_FFd3 & 
+	CTRL<0>
+	# CTRL<1> & Counter/CurrentState_FSM_FFd3 & 
+	!Counter/CurrentState_FSM_FFd2
+	# Counter/CurrentState_FSM_FFd3 & 
+	!Counter/CurrentState_FSM_FFd2 & CTRL<0>
+	# User<0> & CTRL<1> & 
+	!Counter/CurrentState_FSM_FFd3 & Counter/CurrentState_FSM_FFd2;	// (4 pt, 5 inp)
+   Counter/CurrentState_FSM_FFd2.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    Counter/CurrentState_FSM_FFd2.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 6 | CTRL<5>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 3 | User<7>  | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 3 | 1 | 10 | 0 | 9 | 0 | 13
+EQ | 2 | 
+   CTRL<5> = !User<7> & !Counter/CurrentState_FSM_FFd3 & 
+	!Counter/CurrentState_FSM_FFd2;	// (1 pt, 3 inp)
+
+MACROCELL | 1 | 15 | CTRL<6>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 3 | User<7>  | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 3 | 1 | 10 | 0 | 9 | 0 | 13
+EQ | 2 | 
+   CTRL<6> = !User<7> & !Counter/CurrentState_FSM_FFd3 & 
+	!Counter/CurrentState_FSM_FFd2;	// (1 pt, 3 inp)
+
+MACROCELL | 1 | 14 | CTRL<7>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | Button<6>
+INPUTP | 1 | 83
+EQ | 1 | 
+   CTRL<7> = Button<6>;	// (1 pt, 1 inp)
+
+MACROCELL | 7 | 3 | DQ<0>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 31 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 1 | CTRL<1>
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 4 | 
+   DQ<0>.T := CTRL<1>;	// (1 pt, 1 inp)
+    DQ<0>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<0>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<0>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 1 | 13 | DQ<10>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 21 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 11 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>
+INPUTMC | 10 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 5 | 
+   DQ<10>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9>;	// (1 pt, 11 inp)
+    DQ<10>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<10>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<10>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 5 | DQ<1>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 30 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 2 | CTRL<1>  | DQ<0>
+INPUTMC | 1 | 7 | 3
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 4 | 
+   DQ<1>.T := CTRL<1> & DQ<0>;	// (1 pt, 2 inp)
+    DQ<1>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<1>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<1>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 11 | DQ<2>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 29 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 3 | CTRL<1>  | DQ<0>  | DQ<1>
+INPUTMC | 2 | 7 | 3 | 7 | 5
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 4 | 
+   DQ<2>.T := CTRL<1> & DQ<0> & DQ<1>;	// (1 pt, 3 inp)
+    DQ<2>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<2>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<2>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 13 | DQ<3>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 28 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 4 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>
+INPUTMC | 3 | 7 | 3 | 7 | 5 | 7 | 11
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 4 | 
+   DQ<3>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2>;	// (1 pt, 4 inp)
+    DQ<3>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<3>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<3>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 15 | DQ<4>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 27 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 5 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>
+INPUTMC | 4 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 4 | 
+   DQ<4>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3>;	// (1 pt, 5 inp)
+    DQ<4>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<4>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<4>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 14 | DQ<5>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 26 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 6 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>
+INPUTMC | 5 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 5 | 
+   DQ<5>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4>;	// (1 pt, 6 inp)
+    DQ<5>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<5>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<5>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 12 | DQ<6>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 25 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 7 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>
+INPUTMC | 6 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 5 | 
+   DQ<6>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5>;	// (1 pt, 7 inp)
+    DQ<6>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<6>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<6>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 10 | DQ<7>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 24 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 8 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>
+INPUTMC | 7 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 5 | 
+   DQ<7>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6>;	// (1 pt, 8 inp)
+    DQ<7>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<7>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<7>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 5 | DQ<8>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 23 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 9 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>
+INPUTMC | 8 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 5 | 
+   DQ<8>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7>;	// (1 pt, 9 inp)
+    DQ<8>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<8>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<8>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 3 | 0 | DQ<9>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 22 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 10 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>
+INPUTMC | 9 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 5 | 
+   DQ<9>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8>;	// (1 pt, 10 inp)
+    DQ<9>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<9>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<9>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 3 | DQ<11>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 20 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 12 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>
+INPUTMC | 11 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 6 | 
+   DQ<11>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10>;	// (1 pt, 12 inp)
+    DQ<11>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<11>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<11>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 5 | DQ<12>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 19 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 13 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>
+INPUTMC | 12 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 6 | 
+   DQ<12>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11>;	// (1 pt, 13 inp)
+    DQ<12>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<12>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<12>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 11 | DQ<13>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 18 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 14 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>
+INPUTMC | 13 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 6 | 
+   DQ<13>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12>;	// (1 pt, 14 inp)
+    DQ<13>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<13>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<13>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 0 | 14 | DQ<14>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 17 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 15 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>
+INPUTMC | 14 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 6 | 
+   DQ<14>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13>;	// (1 pt, 15 inp)
+    DQ<14>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<14>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<14>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 1 | DQ<15>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 16 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 16 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>
+INPUTMC | 15 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 6 | 
+   DQ<15>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14>;	// (1 pt, 16 inp)
+    DQ<15>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<15>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<15>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 2 | DQ<16>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 15 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 17 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>
+INPUTMC | 16 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 6 | 
+   DQ<16>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15>;	// (1 pt, 17 inp)
+    DQ<16>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<16>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<16>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 7 | 1 | DQ<17>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 14 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 18 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>
+INPUTMC | 17 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 7 | 
+   DQ<17>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16>;	// (1 pt, 18 inp)
+    DQ<17>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<17>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<17>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 15 | DQ<18>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 13 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 19 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>
+INPUTMC | 18 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 7 | 
+   DQ<18>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17>;	// (1 pt, 19 inp)
+    DQ<18>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<18>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<18>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 13 | DQ<19>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 12 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 20 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>
+INPUTMC | 19 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 7 | 
+   DQ<19>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18>;	// (1 pt, 20 inp)
+    DQ<19>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<19>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<19>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 11 | DQ<20>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 21 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>
+INPUTMC | 20 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 7 | 
+   DQ<20>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19>;	// (1 pt, 21 inp)
+    DQ<20>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<20>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<20>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 5 | DQ<21>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 10 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 22 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>
+INPUTMC | 21 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 7 | 
+   DQ<21>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20>;	// (1 pt, 22 inp)
+    DQ<21>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<21>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<21>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 4 | DQ<22>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 9 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 23 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>
+INPUTMC | 22 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 7 | 
+   DQ<22>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21>;	// (1 pt, 23 inp)
+    DQ<22>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<22>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<22>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 3 | DQ<23>_MC
+ATTRIBUTES | 2235859714 | 0
+OUTPUTMC | 8 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 24 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>
+INPUTMC | 23 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 8 | 
+   DQ<23>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22>;	// (1 pt, 24 inp)
+    DQ<23>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<23>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<23>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 2 | DQ<24>_MC
+ATTRIBUTES | 2235859714 | 2
+OUTPUTMC | 7 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 25 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>
+INPUTMC | 24 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 8 | 
+   DQ<24>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23>;	// (1 pt, 25 inp)
+    DQ<24>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<24>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<24>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 5 | 1 | DQ<25>_MC
+ATTRIBUTES | 2235859714 | 2
+OUTPUTMC | 6 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 26 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>
+INPUTMC | 25 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 8 | 
+   DQ<25>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24>;	// (1 pt, 26 inp)
+    DQ<25>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<25>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<25>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 13 | DQ<26>_MC
+ATTRIBUTES | 2235859714 | 2
+OUTPUTMC | 5 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 27 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>
+INPUTMC | 26 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 8 | 
+   DQ<26>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25>;	// (1 pt, 27 inp)
+    DQ<26>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<26>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<26>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 12 | DQ<27>_MC
+ATTRIBUTES | 2235859714 | 2
+OUTPUTMC | 4 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 28 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>
+INPUTMC | 27 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 8 | 
+   DQ<27>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26>;	// (1 pt, 28 inp)
+    DQ<27>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<27>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<27>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 10 | DQ<28>_MC
+ATTRIBUTES | 2235859714 | 2
+OUTPUTMC | 3 | 2 | 6 | 2 | 5 | 2 | 4
+INPUTS | 29 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>
+INPUTMC | 28 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 8 | 
+   DQ<28>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27>;	// (1 pt, 29 inp)
+    DQ<28>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<28>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<28>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 6 | DQ<29>_MC
+ATTRIBUTES | 2235859714 | 2
+OUTPUTMC | 2 | 2 | 5 | 2 | 4
+INPUTS | 30 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>  | DQ<28>
+INPUTMC | 29 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 9 | 
+   DQ<29>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27> & 
+	DQ<28>;	// (1 pt, 30 inp)
+    DQ<29>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<29>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<29>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 5 | DQ<30>_MC
+ATTRIBUTES | 2235859714 | 2
+OUTPUTMC | 1 | 2 | 4
+INPUTS | 31 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>  | DQ<28>  | DQ<29>
+INPUTMC | 30 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 9 | 
+   DQ<30>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27> & 
+	DQ<28> & DQ<29>;	// (1 pt, 31 inp)
+    DQ<30>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<30>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<30>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 2 | 4 | DQ<31>_MC
+ATTRIBUTES | 88376066 | 2
+INPUTS | 32 | CTRL<1>  | DQ<0>  | DQ<1>  | DQ<2>  | DQ<3>  | DQ<4>  | DQ<5>  | DQ<6>  | DQ<7>  | DQ<8>  | DQ<9>  | DQ<10>  | DQ<11>  | DQ<12>  | DQ<13>  | DQ<14>  | DQ<15>  | DQ<16>  | DQ<17>  | DQ<18>  | DQ<19>  | DQ<20>  | DQ<21>  | DQ<22>  | DQ<23>  | DQ<24>  | DQ<25>  | DQ<26>  | DQ<27>  | DQ<28>  | DQ<29>  | DQ<30>
+INPUTMC | 31 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5
+INPUTP | 1 | 50
+LCT | 2 | 1 | Internal_Name | 5 | Internal_Name
+EQ | 9 | 
+   DQ<31>.T := CTRL<1> & DQ<0> & DQ<1> & DQ<2> & DQ<3> & 
+	DQ<4> & DQ<5> & DQ<6> & DQ<7> & DQ<8> & DQ<9> & 
+	DQ<10> & DQ<11> & DQ<12> & DQ<13> & DQ<14> & DQ<15> & 
+	DQ<16> & DQ<17> & DQ<18> & DQ<19> & DQ<20> & DQ<21> & 
+	DQ<22> & DQ<23> & DQ<24> & DQ<25> & DQ<26> & DQ<27> & 
+	DQ<28> & DQ<29> & DQ<30>;	// (1 pt, 32 inp)
+    DQ<31>.OE = CTRL<4>;	// CTE	(1 pt, 1 inp)
+   DQ<31>.CLK  =  PCLK;	// GCK	(0 pt, 0 inp)
+    DQ<31>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+GLOBALS | 1 | 2 | PCLK
+
+MACROCELL | 4 | 12 | FlashCS_n_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 1 | 
+   !FlashCS_n = Gnd;	// (0 pt, 0 inp)
+
+MACROCELL | 2 | 3 | INT_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 1 | 
+   INT = Gnd;	// (0 pt, 0 inp)
+
+MACROCELL | 6 | 5 | LED<0>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<24>.PIN
+INPUTP | 1 | 77
+EQ | 1 | 
+   LED<0> = !DQ<24>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 6 | 10 | LED<1>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<25>.PIN
+INPUTP | 1 | 80
+EQ | 1 | 
+   LED<1> = !DQ<25>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 6 | 12 | LED<2>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<26>.PIN
+INPUTP | 1 | 117
+EQ | 1 | 
+   LED<2> = !DQ<26>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 6 | 13 | LED<3>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<27>.PIN
+INPUTP | 1 | 118
+EQ | 1 | 
+   LED<3> = !DQ<27>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 6 | 14 | LED<4>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<28>.PIN
+INPUTP | 1 | 120
+EQ | 1 | 
+   LED<4> = !DQ<28>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 6 | 15 | LED<5>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<29>.PIN
+INPUTP | 1 | 121
+EQ | 1 | 
+   LED<5> = !DQ<29>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 2 | 15 | LED<6>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<30>.PIN
+INPUTP | 1 | 122
+EQ | 1 | 
+   LED<6> = !DQ<30>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 2 | 14 | LED<7>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 1 | DQ<31>.PIN
+INPUTP | 1 | 123
+EQ | 1 | 
+   LED<7> = !DQ<31>.PIN;	// (1 pt, 1 inp)
+
+MACROCELL | 4 | 13 | SPI_SSN_MC
+ATTRIBUTES | 159646470 | 0
+INPUTS | 1 | User<2>
+INPUTMC | 1 | 1 | 1
+LCT | 2 | 1 | Internal_Name | 2 | Internal_Name
+EQ | 3 | 
+   SPI_SSN := User<2>;	// (1 pt, 1 inp)
+    SPI_SSN.CLK = !(CTRL<9>);	// CTC	(1 pt, 1 inp)
+    SPI_SSN.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+
+MACROCELL | 6 | 4 | TP_2_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 6 | CTRL<4>  | SPI_SCK  | RX_MOSI  | I2C_SDA  | I2C_SCL  | GPIO45_n
+INPUTP | 6 | 43 | 97 | 100 | 37 | 38 | 102
+EQ | 2 | 
+   TP_2 = CTRL<4> & SPI_SCK & RX_MOSI & I2C_SDA & 
+	I2C_SCL & GPIO45_n;	// (1 pt, 6 inp)
+
+MACROCELL | 6 | 0 | TX_MISO_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 2 | 
+   TX_MISO = Gnd;	// (0 pt, 0 inp)
+    TX_MISO.OE = Gnd;	// PTB	(1 pt, 1 inp)
+
+MACROCELL | 1 | 2 | User<3>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 3 | User<7>  | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 3 | 1 | 10 | 0 | 9 | 0 | 13
+EQ | 2 | 
+   User<3> = !User<7> & !Counter/CurrentState_FSM_FFd3 & 
+	!Counter/CurrentState_FSM_FFd2;	// (1 pt, 3 inp)
+
+MACROCELL | 1 | 3 | User<4>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 2 | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 2 | 0 | 9 | 0 | 13
+EQ | 2 | 
+   User<4> = Counter/CurrentState_FSM_FFd3 & 
+	!Counter/CurrentState_FSM_FFd2;	// (1 pt, 2 inp)
+
+MACROCELL | 1 | 4 | User<5>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 2 | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 2 | 0 | 9 | 0 | 13
+EQ | 2 | 
+   User<5> = Counter/CurrentState_FSM_FFd3 & 
+	Counter/CurrentState_FSM_FFd2;	// (1 pt, 2 inp)
+
+MACROCELL | 1 | 5 | User<6>_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 2 | Counter/CurrentState_FSM_FFd3  | Counter/CurrentState_FSM_FFd2
+INPUTMC | 2 | 0 | 9 | 0 | 13
+EQ | 2 | 
+   User<6> = !Counter/CurrentState_FSM_FFd3 & 
+	Counter/CurrentState_FSM_FFd2;	// (1 pt, 2 inp)
+
+PIN | Button<6> | 64 | 64 | LVCMOS33 | 83 | 1 | 1 | 14
+PIN | CTRL<0> | 64 | 64 | LVCMOS33 | 52 | 2 | 0 | 13 | 0 | 9
+PIN | CTRL<10> | 64 | 64 | LVCMOS33 | 9 | 0
+PIN | CTRL<1> | 64 | 64 | LVCMOS33 | 50 | 35 | 0 | 13 | 0 | 9 | 1 | 10 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+PIN | CTRL<9> | 64 | 64 | LVCMOS33 | 11 | 0
+PIN | PCLK | 4096 | 64 | LVCMOS33 | 28 | 37 | 0 | 0 | 0 | 2 | 0 | 13 | 0 | 9 | 1 | 10 | 7 | 3 | 7 | 5 | 7 | 11 | 7 | 13 | 7 | 15 | 3 | 14 | 3 | 12 | 3 | 10 | 3 | 5 | 3 | 0 | 1 | 13 | 0 | 3 | 0 | 5 | 0 | 11 | 0 | 14 | 2 | 1 | 7 | 2 | 7 | 1 | 5 | 15 | 5 | 13 | 5 | 11 | 5 | 5 | 5 | 4 | 5 | 3 | 5 | 2 | 5 | 1 | 2 | 13 | 2 | 12 | 2 | 10 | 2 | 6 | 2 | 5 | 2 | 4
+PIN | CTRL<4> | 64 | 64 | LVCMOS33 | 43 | 1 | 6 | 4
+PIN | GPIO45_n | 1073741888 | 64 | LVCMOS33 | 102 | 1 | 6 | 4
+PIN | I2C_SCL | 64 | 64 | LVCMOS33 | 38 | 1 | 6 | 4
+PIN | I2C_SDA | 64 | 64 | LVCMOS33 | 37 | 1 | 6 | 4
+PIN | RX_MOSI | 64 | 64 | LVCMOS33 | 100 | 1 | 6 | 4
+PIN | SPI_SCK | 64 | 64 | LVCMOS33 | 97 | 1 | 6 | 4
+PIN | CTRL<3> | 536871040 | 0 | LVCMOS33 | 45
+PIN | CTRL<5> | 536871040 | 0 | LVCMOS33 | 41
+PIN | CTRL<6> | 536871040 | 0 | LVCMOS33 | 33
+PIN | CTRL<7> | 536871040 | 0 | LVCMOS33 | 30
+PIN | DQ<0> | 536871040 | 64 | LVCMOS33 | 61
+PIN | DQ<10> | 536871040 | 64 | LVCMOS33 | 29
+PIN | DQ<11> | 536871040 | 64 | LVCMOS33 | 14
+PIN | DQ<12> | 536871040 | 64 | LVCMOS33 | 12
+PIN | DQ<13> | 536871040 | 64 | LVCMOS33 | 10
+PIN | DQ<14> | 536871040 | 64 | LVCMOS33 | 6
+PIN | DQ<15> | 536871040 | 64 | LVCMOS33 | 3
+PIN | DQ<16> | 536871040 | 64 | LVCMOS33 | 64
+PIN | DQ<17> | 536871040 | 64 | LVCMOS33 | 65
+PIN | DQ<18> | 536871040 | 64 | LVCMOS33 | 67
+PIN | DQ<19> | 536871040 | 64 | LVCMOS33 | 69
+PIN | DQ<1> | 536871040 | 64 | LVCMOS33 | 59
+PIN | DQ<20> | 536871040 | 64 | LVCMOS33 | 71
+PIN | DQ<21> | 536871040 | 64 | LVCMOS33 | 74
+PIN | DQ<22> | 536871040 | 64 | LVCMOS33 | 75
+PIN | DQ<23> | 536871040 | 64 | LVCMOS33 | 76
+PIN | DQ<2> | 536871040 | 64 | LVCMOS33 | 55
+PIN | DQ<3> | 536871040 | 64 | LVCMOS33 | 51
+PIN | DQ<4> | 536871040 | 64 | LVCMOS33 | 49
+PIN | DQ<5> | 536871040 | 64 | LVCMOS33 | 47
+PIN | DQ<6> | 536871040 | 64 | LVCMOS33 | 44
+PIN | DQ<7> | 536871040 | 64 | LVCMOS33 | 42
+PIN | DQ<8> | 536871040 | 64 | LVCMOS33 | 40
+PIN | DQ<9> | 536871040 | 64 | LVCMOS33 | 34
+PIN | FlashCS_n | 536871040 | 0 | LVCMOS33 | 93
+PIN | INT | 536871040 | 0 | LVCMOS33 | 125
+PIN | LED<0> | 536871040 | 0 | LVCMOS33 | 104
+PIN | LED<1> | 536871040 | 0 | LVCMOS33 | 106
+PIN | LED<2> | 536871040 | 0 | LVCMOS33 | 110
+PIN | LED<3> | 536871040 | 0 | LVCMOS33 | 111
+PIN | LED<4> | 536871040 | 0 | LVCMOS33 | 112
+PIN | LED<5> | 536871040 | 0 | LVCMOS33 | 114
+PIN | LED<6> | 536871040 | 0 | LVCMOS33 | 115
+PIN | LED<7> | 536871040 | 0 | LVCMOS33 | 116
+PIN | SPI_SSN | 536871040 | 0 | LVCMOS33 | 94
+PIN | TP_2 | 536871040 | 0 | LVCMOS33 | 103
+PIN | TX_MISO | 536871040 | 64 | LVCMOS33 | 99
+PIN | User<0> | 536871040 | 0 | LVCMOS33 | 15
+PIN | User<1> | 536871040 | 0 | LVCMOS33 | 17
+PIN | User<2> | 536871040 | 0 | LVCMOS33 | 19
+PIN | User<3> | 536871040 | 0 | LVCMOS33 | 20
+PIN | User<4> | 536871040 | 0 | LVCMOS33 | 21
+PIN | User<5> | 536871040 | 0 | LVCMOS33 | 22
+PIN | User<6> | 536871040 | 0 | LVCMOS33 | 23
+PIN | User<7> | 536871040 | 0 | LVCMOS33 | 24
+PIN | DQ<24> | 536870976 | 64 | LVCMOS33 | 77 | 1 | 6 | 5
+PIN | DQ<25> | 536870976 | 64 | LVCMOS33 | 80 | 1 | 6 | 10
+PIN | DQ<26> | 536870976 | 64 | LVCMOS33 | 117 | 1 | 6 | 12
+PIN | DQ<27> | 536870976 | 64 | LVCMOS33 | 118 | 1 | 6 | 13
+PIN | DQ<28> | 536870976 | 64 | LVCMOS33 | 120 | 1 | 6 | 14
+PIN | DQ<29> | 536870976 | 64 | LVCMOS33 | 121 | 1 | 6 | 15
+PIN | DQ<30> | 536870976 | 64 | LVCMOS33 | 122 | 1 | 2 | 15
+PIN | DQ<31> | 536870976 | 64 | LVCMOS33 | 123 | 1 | 2 | 14

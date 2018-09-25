@@ -1,0 +1,8 @@
+﻿Build started 7/22/2015 12:26:48 PM.
+     1>Project "C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\Engine\Engine.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.Cpp.Platform.targets(64,5): error MSB8020: The build tools for Visual Studio 2012 (Platform Toolset = 'v110') cannot be found. To build using the v110 build tools, please install Visual Studio 2012 build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting "Upgrade Solution...".
+     1>Done Building Project "C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\Engine\Engine.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.01

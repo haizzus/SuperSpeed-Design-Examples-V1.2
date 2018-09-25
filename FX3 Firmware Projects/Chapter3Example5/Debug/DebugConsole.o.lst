@@ -1,0 +1,321 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"DebugConsole.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.bss.DebugTxEnabled,"aw",%nobits
+  17              		.align	2
+  20              	DebugTxEnabled:
+  21 0000 00000000 		.space	4
+  22              		.section	.rodata
+  23              		.align	2
+  24              	.LC0:
+  25 0000 0D0A2573 		.ascii	"\015\012%s Successful\000"
+  25      20537563 
+  25      63657373 
+  25      66756C00 
+  26              		.align	2
+  27              	.LC1:
+  28 0010 0D0A2573 		.ascii	"\015\012%s failed, Status = %d\015\012\000"
+  28      20666169 
+  28      6C65642C 
+  28      20537461 
+  28      74757320 
+  29 002b 00       		.align	2
+  30              	.LC2:
+  31 002c 3F00     		.ascii	"?\000"
+  32              		.section	.text.CheckStatus,"ax",%progbits
+  33              		.align	2
+  34              		.global	CheckStatus
+  36              	CheckStatus:
+  37              	.LFB0:
+  38              		.file 1 "../DebugConsole.c"
+   1:../DebugConsole.c **** // DebugConsole.c	include the Cypress UART-based Debug Console into the project
+   2:../DebugConsole.c **** 
+   3:../DebugConsole.c **** #include "Application.h"
+   4:../DebugConsole.c **** 
+   5:../DebugConsole.c **** 
+   6:../DebugConsole.c **** static CyBool_t DebugTxEnabled = CyFalse;	// Set true once I can output messages to the Console
+   7:../DebugConsole.c **** 
+   8:../DebugConsole.c **** void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status)
+   9:../DebugConsole.c **** // In this initial debugging stage I stall on an un-successful system call, else I display progress
+  10:../DebugConsole.c **** // Note that this assumes that there were no errors bringing up the Debug Console
+  11:../DebugConsole.c **** {
+  39              		.loc 1 11 0
+  40              		.cfi_startproc
+  41              		@ args = 0, pretend = 0, frame = 8
+  42              		@ frame_needed = 1, uses_anonymous_args = 0
+  43 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 8
+  46              		.cfi_offset 11, -8
+  47              		.cfi_offset 14, -4
+  48 0004 04B08DE2 		add	fp, sp, #4
+  49              	.LCFI1:
+  50              		.cfi_def_cfa 11, 4
+  51 0008 08D04DE2 		sub	sp, sp, #8
+  52 000c 08000BE5 		str	r0, [fp, #-8]
+  53 0010 0C100BE5 		str	r1, [fp, #-12]
+  12:../DebugConsole.c **** 	if (DebugTxEnabled)				// Need to wait until ConsoleOut is enabled
+  54              		.loc 1 12 0
+  55 0014 5C309FE5 		ldr	r3, .L5
+  56 0018 003093E5 		ldr	r3, [r3]
+  57 001c 000053E3 		cmp	r3, #0
+  58 0020 1200000A 		beq	.L1
+  13:../DebugConsole.c **** 	{
+  14:../DebugConsole.c **** 		if (Status == CY_U3P_SUCCESS)
+  59              		.loc 1 14 0
+  60 0024 0C301BE5 		ldr	r3, [fp, #-12]
+  61 0028 000053E3 		cmp	r3, #0
+  62 002c 0400001A 		bne	.L3
+  15:../DebugConsole.c **** 		{
+  16:../DebugConsole.c **** 			CyU3PDebugPrint(4, "\r\n%s Successful", StringPtr);
+  63              		.loc 1 16 0
+  64 0030 0400A0E3 		mov	r0, #4
+  65 0034 40109FE5 		ldr	r1, .L5+4
+  66 0038 08201BE5 		ldr	r2, [fp, #-8]
+  67 003c FEFFFFEB 		bl	CyU3PDebugPrint
+  17:../DebugConsole.c **** 			return;
+  68              		.loc 1 17 0
+  69 0040 0A0000EA 		b	.L1
+  70              	.L3:
+  18:../DebugConsole.c **** 		}
+  19:../DebugConsole.c **** 		// else hang here
+  20:../DebugConsole.c **** 		CyU3PDebugPrint(4, "\r\n%s failed, Status = %d\r\n", StringPtr, Status);
+  71              		.loc 1 20 0
+  72 0044 0400A0E3 		mov	r0, #4
+  73 0048 30109FE5 		ldr	r1, .L5+8
+  74 004c 08201BE5 		ldr	r2, [fp, #-8]
+  75 0050 0C301BE5 		ldr	r3, [fp, #-12]
+  76 0054 FEFFFFEB 		bl	CyU3PDebugPrint
+  77              	.L4:
+  21:../DebugConsole.c **** 		while (1)
+  22:../DebugConsole.c **** 		{
+  23:../DebugConsole.c **** 			CyU3PDebugPrint(4, "?");
+  78              		.loc 1 23 0 discriminator 1
+  79 0058 0400A0E3 		mov	r0, #4
+  80 005c 20109FE5 		ldr	r1, .L5+12
+  81 0060 FEFFFFEB 		bl	CyU3PDebugPrint
+  24:../DebugConsole.c **** 			CyU3PThreadSleep (1000);
+  82              		.loc 1 24 0 discriminator 1
+  83 0064 FA0FA0E3 		mov	r0, #1000
+  84 0068 FEFFFFEB 		bl	_tx_thread_sleep
+  25:../DebugConsole.c **** 		}
+  85              		.loc 1 25 0 discriminator 1
+  86 006c F9FFFFEA 		b	.L4
+  87              	.L1:
+  26:../DebugConsole.c **** 	}
+  27:../DebugConsole.c **** }
+  88              		.loc 1 27 0
+  89 0070 04D04BE2 		sub	sp, fp, #4
+  90              		@ sp needed
+  91 0074 0088BDE8 		ldmfd	sp!, {fp, pc}
+  92              	.L6:
+  93              		.align	2
+  94              	.L5:
+  95 0078 00000000 		.word	DebugTxEnabled
+  96 007c 00000000 		.word	.LC0
+  97 0080 10000000 		.word	.LC1
+  98 0084 2C000000 		.word	.LC2
+  99              		.cfi_endproc
+ 100              	.LFE0:
+ 102              		.section	.rodata
+ 103 002e 0000     		.align	2
+ 104              	.LC3:
+ 105 0030 43795533 		.ascii	"CyU3PUartInit\000"
+ 105      50556172 
+ 105      74496E69 
+ 105      7400
+ 106 003e 0000     		.align	2
+ 107              	.LC4:
+ 108 0040 43795533 		.ascii	"CyU3PUartSetConfig\000"
+ 108      50556172 
+ 108      74536574 
+ 108      436F6E66 
+ 108      696700
+ 109 0053 00       		.align	2
+ 110              	.LC5:
+ 111 0054 43795533 		.ascii	"CyU3PUartTxSetBlockXfer\000"
+ 111      50556172 
+ 111      74547853 
+ 111      6574426C 
+ 111      6F636B58 
+ 112              		.align	2
+ 113              	.LC6:
+ 114 006c 436F6E73 		.ascii	"ConsoleOutEnabled\000"
+ 114      6F6C654F 
+ 114      7574456E 
+ 114      61626C65 
+ 114      6400
+ 115 007e 0000     		.section	.text.InitializeDebugConsole,"ax",%progbits
+ 116              		.align	2
+ 117              		.global	InitializeDebugConsole
+ 119              	InitializeDebugConsole:
+ 120              	.LFB1:
+  28:../DebugConsole.c **** 
+  29:../DebugConsole.c **** // Spin up the DEBUG Console, Out and In
+  30:../DebugConsole.c **** CyU3PReturnStatus_t InitializeDebugConsole(void)
+  31:../DebugConsole.c **** {
+ 121              		.loc 1 31 0
+ 122              		.cfi_startproc
+ 123              		@ args = 0, pretend = 0, frame = 32
+ 124              		@ frame_needed = 1, uses_anonymous_args = 0
+ 125 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 126              	.LCFI2:
+ 127              		.cfi_def_cfa_offset 8
+ 128              		.cfi_offset 11, -8
+ 129              		.cfi_offset 14, -4
+ 130 0004 04B08DE2 		add	fp, sp, #4
+ 131              	.LCFI3:
+ 132              		.cfi_def_cfa 11, 4
+ 133 0008 20D04DE2 		sub	sp, sp, #32
+  32:../DebugConsole.c ****     CyU3PUartConfig_t uartConfig;
+  33:../DebugConsole.c ****     CyU3PReturnStatus_t Status;
+  34:../DebugConsole.c **** 
+  35:../DebugConsole.c ****     Status = CyU3PUartInit();										// Start the UART driver
+ 134              		.loc 1 35 0
+ 135 000c FEFFFFEB 		bl	CyU3PUartInit
+ 136 0010 08000BE5 		str	r0, [fp, #-8]
+  36:../DebugConsole.c ****     CheckStatus("CyU3PUartInit", Status);
+ 137              		.loc 1 36 0
+ 138 0014 C4009FE5 		ldr	r0, .L10
+ 139 0018 08101BE5 		ldr	r1, [fp, #-8]
+ 140 001c FEFFFFEB 		bl	CheckStatus
+  37:../DebugConsole.c **** 
+  38:../DebugConsole.c ****     CyU3PMemSet ((uint8_t *)&uartConfig, 0, sizeof (uartConfig));
+ 141              		.loc 1 38 0
+ 142 0020 20304BE2 		sub	r3, fp, #32
+ 143 0024 0300A0E1 		mov	r0, r3
+ 144 0028 0010A0E3 		mov	r1, #0
+ 145 002c 1820A0E3 		mov	r2, #24
+ 146 0030 FEFFFFEB 		bl	CyU3PMemSet
+  39:../DebugConsole.c **** 	uartConfig.baudRate = CY_U3P_UART_BAUDRATE_115200;
+ 147              		.loc 1 39 0
+ 148 0034 A8309FE5 		ldr	r3, .L10+4
+ 149 0038 10300BE5 		str	r3, [fp, #-16]
+  40:../DebugConsole.c **** 	uartConfig.stopBit  = CY_U3P_UART_ONE_STOP_BIT;
+ 150              		.loc 1 40 0
+ 151 003c 0130A0E3 		mov	r3, #1
+ 152 0040 0C304BE5 		strb	r3, [fp, #-12]
+  41:../DebugConsole.c **** //r	uartConfig.parity   = CY_U3P_UART_NO_PARITY;
+  42:../DebugConsole.c **** 	uartConfig.txEnable = CyTrue;
+ 153              		.loc 1 42 0
+ 154 0044 0130A0E3 		mov	r3, #1
+ 155 0048 20300BE5 		str	r3, [fp, #-32]
+  43:../DebugConsole.c **** 	uartConfig.rxEnable = CyTrue;
+ 156              		.loc 1 43 0
+ 157 004c 0130A0E3 		mov	r3, #1
+ 158 0050 1C300BE5 		str	r3, [fp, #-28]
+  44:../DebugConsole.c **** //r	uartConfig.flowCtrl = CyFalse;
+  45:../DebugConsole.c **** 	uartConfig.isDma    = CyTrue;
+ 159              		.loc 1 45 0
+ 160 0054 0130A0E3 		mov	r3, #1
+ 161 0058 14300BE5 		str	r3, [fp, #-20]
+  46:../DebugConsole.c **** 	Status = CyU3PUartSetConfig(&uartConfig, 0);					// Configure the UART hardware
+ 162              		.loc 1 46 0
+ 163 005c 20304BE2 		sub	r3, fp, #32
+ 164 0060 0300A0E1 		mov	r0, r3
+ 165 0064 0010A0E3 		mov	r1, #0
+ 166 0068 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 167 006c 08000BE5 		str	r0, [fp, #-8]
+  47:../DebugConsole.c ****     CheckStatus("CyU3PUartSetConfig", Status);
+ 168              		.loc 1 47 0
+ 169 0070 70009FE5 		ldr	r0, .L10+8
+ 170 0074 08101BE5 		ldr	r1, [fp, #-8]
+ 171 0078 FEFFFFEB 		bl	CheckStatus
+  48:../DebugConsole.c **** 
+  49:../DebugConsole.c ****     Status = CyU3PUartTxSetBlockXfer(0xFFFFFFFF);					// Send as much data as I need to
+ 172              		.loc 1 49 0
+ 173 007c 0000E0E3 		mvn	r0, #0
+ 174 0080 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 175 0084 08000BE5 		str	r0, [fp, #-8]
+  50:../DebugConsole.c ****     CheckStatus("CyU3PUartTxSetBlockXfer", Status);
+ 176              		.loc 1 50 0
+ 177 0088 5C009FE5 		ldr	r0, .L10+12
+ 178 008c 08101BE5 		ldr	r1, [fp, #-8]
+ 179 0090 FEFFFFEB 		bl	CheckStatus
+  51:../DebugConsole.c **** 
+  52:../DebugConsole.c **** 	Status = CyU3PDebugInit(CY_U3P_LPP_SOCKET_UART_CONS, 8);		// Attach the Debug driver above the UAR
+ 180              		.loc 1 52 0
+ 181 0094 0300A0E3 		mov	r0, #3
+ 182 0098 0810A0E3 		mov	r1, #8
+ 183 009c FEFFFFEB 		bl	CyU3PDebugInit
+ 184 00a0 08000BE5 		str	r0, [fp, #-8]
+  53:../DebugConsole.c **** 	if (Status == CY_U3P_SUCCESS) DebugTxEnabled = CyTrue;
+ 185              		.loc 1 53 0
+ 186 00a4 08301BE5 		ldr	r3, [fp, #-8]
+ 187 00a8 000053E3 		cmp	r3, #0
+ 188 00ac 0200001A 		bne	.L8
+ 189              		.loc 1 53 0 is_stmt 0 discriminator 1
+ 190 00b0 38309FE5 		ldr	r3, .L10+16
+ 191 00b4 0120A0E3 		mov	r2, #1
+ 192 00b8 002083E5 		str	r2, [r3]
+ 193              	.L8:
+  54:../DebugConsole.c ****     CheckStatus("ConsoleOutEnabled", Status);
+ 194              		.loc 1 54 0 is_stmt 1
+ 195 00bc 30009FE5 		ldr	r0, .L10+20
+ 196 00c0 08101BE5 		ldr	r1, [fp, #-8]
+ 197 00c4 FEFFFFEB 		bl	CheckStatus
+  55:../DebugConsole.c **** 	CyU3PDebugPreamble(CyFalse);									// Skip preamble, debug info is targeted for a person
+ 198              		.loc 1 55 0
+ 199 00c8 0000A0E3 		mov	r0, #0
+ 200 00cc FEFFFFEB 		bl	CyU3PDebugPreamble
+  56:../DebugConsole.c ****     return Status;
+ 201              		.loc 1 56 0
+ 202 00d0 08301BE5 		ldr	r3, [fp, #-8]
+  57:../DebugConsole.c **** }
+ 203              		.loc 1 57 0
+ 204 00d4 0300A0E1 		mov	r0, r3
+ 205 00d8 04D04BE2 		sub	sp, fp, #4
+ 206              		@ sp needed
+ 207 00dc 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 208              	.L11:
+ 209              		.align	2
+ 210              	.L10:
+ 211 00e0 30000000 		.word	.LC3
+ 212 00e4 00C20100 		.word	115200
+ 213 00e8 40000000 		.word	.LC4
+ 214 00ec 54000000 		.word	.LC5
+ 215 00f0 00000000 		.word	DebugTxEnabled
+ 216 00f4 6C000000 		.word	.LC6
+ 217              		.cfi_endproc
+ 218              	.LFE1:
+ 220              		.text
+ 221              	.Letext0:
+ 222              		.file 2 "c:\\program files (x86)\\cypress\\ez-usb fx3 sdk\\1.3\\arm gcc\\arm-none-eabi\\include\\s
+ 223              		.file 3 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3typ
+ 224              		.file 4 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3dma
+ 225              		.file 5 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3err
+ 226              		.file 6 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3uar
+DEFINED SYMBOLS
+                            *ABS*:00000000 DebugConsole.c
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:17     .bss.DebugTxEnabled:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:20     .bss.DebugTxEnabled:00000000 DebugTxEnabled
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:23     .rodata:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:33     .text.CheckStatus:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:36     .text.CheckStatus:00000000 CheckStatus
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:95     .text.CheckStatus:00000078 $d
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:116    .text.InitializeDebugConsole:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:119    .text.InitializeDebugConsole:00000000 InitializeDebugConsole
+C:\Users\dbir\AppData\Local\Temp\ccI5ctya.s:211    .text.InitializeDebugConsole:000000e0 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+_tx_thread_sleep
+CyU3PUartInit
+CyU3PMemSet
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble

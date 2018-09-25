@@ -1,0 +1,13 @@
+C:\Work\Perforce\apps\DCD\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\bin\Debug\USBBarometer.exe.config
+C:\Work\Perforce\apps\DCD\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.csprojResolveAssemblyReference.cache
+C:\Work\Perforce\apps\DCD\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.Form1.resources
+C:\Work\Perforce\apps\DCD\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.Properties.Resources.resources
+C:\Work\Perforce\apps\DCD\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.SummaryForm.resources
+C:\Work\Perforce\apps\DCD\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.csproj.GenerateResource.Cache
+C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\bin\Debug\USBBarometer.exe.config
+C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.csprojResolveAssemblyReference.cache
+C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.Form1.resources
+C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.Properties.Resources.resources
+C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.SummaryForm.resources
+C:\Users\mddd\Desktop\SuperSpeed_Design_Examples_V1.1\SuperSpeed Design Examples V1.1\Visual Studio Projects\Benchmark\USBBarometer\obj\Debug\USBBarometer.csproj.GenerateResource.Cache
+C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\bin\Debug\USBBarometer.exe.config

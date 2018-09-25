@@ -1,0 +1,304 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"RunApplication.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	ThreadHandle,168,4
+  22              		.section	.rodata
+  23              		.align	2
+  24              	.LC0:
+  25 0000 44656275 		.ascii	"Debug Console Initialized\000"
+  25      6720436F 
+  25      6E736F6C 
+  25      6520496E 
+  25      69746961 
+  26 001a 0000     		.align	2
+  27              	.LC1:
+  28 001c 0A417070 		.ascii	"\012Application started with %d\012\000"
+  28      6C696361 
+  28      74696F6E 
+  28      20737461 
+  28      72746564 
+  29 003a 0000     		.align	2
+  30              	.LC2:
+  31 003c 4932435F 		.ascii	"I2C_DebugInit\000"
+  31      44656275 
+  31      67496E69 
+  31      7400
+  32 004a 0000     		.align	2
+  33              	.LC3:
+  34 004c 0A493243 		.ascii	"\012I2C Debug Console Example\012\000"
+  34      20446562 
+  34      75672043 
+  34      6F6E736F 
+  34      6C652045 
+  35              		.align	2
+  36              	.LC4:
+  37 0068 25642C20 		.ascii	"%d, \000"
+  37      00
+  38 006d 000000   		.align	2
+  39              	.LC5:
+  40 0070 0A417070 		.ascii	"\012Application failed to initialize. Error code: %"
+  40      6C696361 
+  40      74696F6E 
+  40      20666169 
+  40      6C656420 
+  41 00a0 642E0A00 		.ascii	"d.\012\000"
+  42              		.section	.text.ApplicationThread,"ax",%progbits
+  43              		.align	2
+  44              		.global	ApplicationThread
+  46              	ApplicationThread:
+  47              	.LFB0:
+  48              		.file 1 "../RunApplication.c"
+   1:../RunApplication.c **** // Dual Console Example - this connects two debug consoles to the FX3
+   2:../RunApplication.c **** //
+   3:../RunApplication.c **** // One is the standard UART and the other is an I2C console
+   4:../RunApplication.c **** // You can type on either console and DebugPrint output is sent to both consoles
+   5:../RunApplication.c **** //
+   6:../RunApplication.c **** // You can only type quite slowly in the I2C Input Console
+   7:../RunApplication.c **** // This is a BUG an I am investigating the issue
+   8:../RunApplication.c **** //
+   9:../RunApplication.c **** //
+  10:../RunApplication.c **** // john@usb-by-example.com
+  11:../RunApplication.c **** //
+  12:../RunApplication.c **** 
+  13:../RunApplication.c **** #include "Application.h"
+  14:../RunApplication.c **** 
+  15:../RunApplication.c **** extern CyU3PReturnStatus_t InitializeDebugConsole(uint8_t TraceLevel);
+  16:../RunApplication.c **** extern CyU3PReturnStatus_t I2C_DebugInit(uint8_t TraceLevel);
+  17:../RunApplication.c **** extern CyU3PReturnStatus_t I2C_DebugPrint(uint8_t Priority, char* Message, ...);
+  18:../RunApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  19:../RunApplication.c **** extern void IndicateError(uint16_t ErrorCode);
+  20:../RunApplication.c **** extern void CheckForCommand(void);
+  21:../RunApplication.c **** 
+  22:../RunApplication.c **** CyU3PThread ThreadHandle;		// Handles to my Application Threads
+  23:../RunApplication.c **** 
+  24:../RunApplication.c **** void ApplicationThread (uint32_t Value)
+  25:../RunApplication.c **** {
+  49              		.loc 1 25 0
+  50              		.cfi_startproc
+  51              		@ args = 0, pretend = 0, frame = 16
+  52              		@ frame_needed = 1, uses_anonymous_args = 0
+  53 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  54              	.LCFI0:
+  55              		.cfi_def_cfa_offset 8
+  56 0004 04B08DE2 		add	fp, sp, #4
+  57              		.cfi_offset 14, -4
+  58              		.cfi_offset 11, -8
+  59              	.LCFI1:
+  60              		.cfi_def_cfa 11, 4
+  61 0008 10D04DE2 		sub	sp, sp, #16
+  62 000c 10000BE5 		str	r0, [fp, #-16]
+  26:../RunApplication.c **** 	int32_t Seconds = 0;
+  63              		.loc 1 26 0
+  64 0010 0030A0E3 		mov	r3, #0
+  65 0014 08300BE5 		str	r3, [fp, #-8]
+  27:../RunApplication.c ****     CyU3PReturnStatus_t Status;
+  28:../RunApplication.c **** 
+  29:../RunApplication.c ****     // Start up the UART Console
+  30:../RunApplication.c ****     Status = InitializeDebugConsole(6);
+  66              		.loc 1 30 0
+  67 0018 0600A0E3 		mov	r0, #6
+  68 001c FEFFFFEB 		bl	InitializeDebugConsole
+  69 0020 0C000BE5 		str	r0, [fp, #-12]
+  31:../RunApplication.c ****     CheckStatus("Debug Console Initialized", Status);
+  70              		.loc 1 31 0
+  71 0024 84009FE5 		ldr	r0, .L5
+  72 0028 0C101BE5 		ldr	r1, [fp, #-12]
+  73 002c FEFFFFEB 		bl	CheckStatus
+  32:../RunApplication.c **** 
+  33:../RunApplication.c ****     if (Status == CY_U3P_SUCCESS)
+  74              		.loc 1 33 0
+  75 0030 0C301BE5 		ldr	r3, [fp, #-12]
+  76 0034 000053E3 		cmp	r3, #0
+  77 0038 1700001A 		bne	.L2
+  34:../RunApplication.c ****     {
+  35:../RunApplication.c ****     	CyU3PDebugPrint(4, "\nApplication started with %d\n", Value);
+  78              		.loc 1 35 0
+  79 003c 0400A0E3 		mov	r0, #4
+  80 0040 6C109FE5 		ldr	r1, .L5+4
+  81 0044 10201BE5 		ldr	r2, [fp, #-16]
+  82 0048 FEFFFFEB 		bl	CyU3PDebugPrint
+  36:../RunApplication.c **** 
+  37:../RunApplication.c ****     	// Start up the I2C Console
+  38:../RunApplication.c ****     	Status = I2C_DebugInit(6);
+  83              		.loc 1 38 0
+  84 004c 0600A0E3 		mov	r0, #6
+  85 0050 FEFFFFEB 		bl	I2C_DebugInit
+  86 0054 0C000BE5 		str	r0, [fp, #-12]
+  39:../RunApplication.c ****         CheckStatus("I2C_DebugInit", Status);
+  87              		.loc 1 39 0
+  88 0058 58009FE5 		ldr	r0, .L5+8
+  89 005c 0C101BE5 		ldr	r1, [fp, #-12]
+  90 0060 FEFFFFEB 		bl	CheckStatus
+  40:../RunApplication.c ****         DebugPrint(4, "\nI2C Debug Console Example\n");		// This will display on BOTH consoles
+  91              		.loc 1 40 0
+  92 0064 0400A0E3 		mov	r0, #4
+  93 0068 4C109FE5 		ldr	r1, .L5+12
+  94 006c FEFFFFEB 		bl	I2C_DebugPrint
+  95              	.L3:
+  41:../RunApplication.c **** 
+  42:../RunApplication.c ****         // Now run forever
+  43:../RunApplication.c ****     	while (1)
+  44:../RunApplication.c ****     	{
+  45:../RunApplication.c ****     		CyU3PThreadSleep(1000);
+  96              		.loc 1 45 0 discriminator 1
+  97 0070 FA0FA0E3 		mov	r0, #1000
+  98 0074 FEFFFFEB 		bl	_tx_thread_sleep
+  46:../RunApplication.c **** 			DebugPrint(4, "%d, ", Seconds);
+  99              		.loc 1 46 0 discriminator 1
+ 100 0078 0400A0E3 		mov	r0, #4
+ 101 007c 3C109FE5 		ldr	r1, .L5+16
+ 102 0080 08201BE5 		ldr	r2, [fp, #-8]
+ 103 0084 FEFFFFEB 		bl	I2C_DebugPrint
+  47:../RunApplication.c **** 			Seconds++;
+ 104              		.loc 1 47 0 discriminator 1
+ 105 0088 08301BE5 		ldr	r3, [fp, #-8]
+ 106 008c 013083E2 		add	r3, r3, #1
+ 107 0090 08300BE5 		str	r3, [fp, #-8]
+  48:../RunApplication.c **** 			CheckForCommand();		// Check for commands in Main context and execute them in Main context
+ 108              		.loc 1 48 0 discriminator 1
+ 109 0094 FEFFFFEB 		bl	CheckForCommand
+  49:../RunApplication.c ****     	}
+ 110              		.loc 1 49 0 discriminator 1
+ 111 0098 F4FFFFEA 		b	.L3
+ 112              	.L2:
+  50:../RunApplication.c ****     }
+  51:../RunApplication.c ****     CyU3PDebugPrint(4, "\nApplication failed to initialize. Error code: %d.\n", Status);
+ 113              		.loc 1 51 0
+ 114 009c 0400A0E3 		mov	r0, #4
+ 115 00a0 1C109FE5 		ldr	r1, .L5+20
+ 116 00a4 0C201BE5 		ldr	r2, [fp, #-12]
+ 117 00a8 FEFFFFEB 		bl	CyU3PDebugPrint
+ 118              	.L4:
+  52:../RunApplication.c ****     while (1);		// Hang here
+ 119              		.loc 1 52 0 discriminator 1
+ 120 00ac FEFFFFEA 		b	.L4
+ 121              	.L6:
+ 122              		.align	2
+ 123              	.L5:
+ 124 00b0 00000000 		.word	.LC0
+ 125 00b4 1C000000 		.word	.LC1
+ 126 00b8 3C000000 		.word	.LC2
+ 127 00bc 4C000000 		.word	.LC3
+ 128 00c0 68000000 		.word	.LC4
+ 129 00c4 70000000 		.word	.LC5
+ 130              		.cfi_endproc
+ 131              	.LFE0:
+ 133              		.section	.rodata
+ 134              		.align	2
+ 135              	.LC6:
+ 136 00a4 31303A44 		.ascii	"10:Dual_Console\000"
+ 136      75616C5F 
+ 136      436F6E73 
+ 136      6F6C6500 
+ 137              		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 138              		.align	2
+ 139              		.global	CyFxApplicationDefine
+ 141              	CyFxApplicationDefine:
+ 142              	.LFB1:
+  53:../RunApplication.c **** }
+  54:../RunApplication.c **** 
+  55:../RunApplication.c **** // ApplicationDefine function called by RTOS to startup the application threads
+  56:../RunApplication.c **** void CyFxApplicationDefine(void)
+  57:../RunApplication.c **** {
+ 143              		.loc 1 57 0
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 8
+ 146              		@ frame_needed = 1, uses_anonymous_args = 0
+ 147 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 148              	.LCFI2:
+ 149              		.cfi_def_cfa_offset 8
+ 150 0004 04B08DE2 		add	fp, sp, #4
+ 151              		.cfi_offset 14, -4
+ 152              		.cfi_offset 11, -8
+ 153              	.LCFI3:
+ 154              		.cfi_def_cfa 11, 4
+ 155 0008 28D04DE2 		sub	sp, sp, #40
+  58:../RunApplication.c ****     // If I get here then RTOS has started correctly, turn off ErrorIndicator
+  59:../RunApplication.c ****     IndicateError(0);
+ 156              		.loc 1 59 0
+ 157 000c 0000A0E3 		mov	r0, #0
+ 158 0010 FEFFFFEB 		bl	IndicateError
+  60:../RunApplication.c **** 
+  61:../RunApplication.c ****     // Create three threads, InputData, ProcessData and OutputData.  Each will need a stack
+  62:../RunApplication.c ****     void *StackPtr = CyU3PMemAlloc(APPLICATION_THREAD_STACK);
+ 159              		.loc 1 62 0
+ 160 0014 010AA0E3 		mov	r0, #4096
+ 161 0018 FEFFFFEB 		bl	CyU3PMemAlloc
+ 162 001c 08000BE5 		str	r0, [fp, #-8]
+  63:../RunApplication.c ****     CyU3PThreadCreate(&ThreadHandle,			// Handle for this Thread
+ 163              		.loc 1 63 0
+ 164 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 165 0024 00308DE5 		str	r3, [sp, #0]
+ 166 0028 013AA0E3 		mov	r3, #4096
+ 167 002c 04308DE5 		str	r3, [sp, #4]
+ 168 0030 0830A0E3 		mov	r3, #8
+ 169 0034 08308DE5 		str	r3, [sp, #8]
+ 170 0038 0830A0E3 		mov	r3, #8
+ 171 003c 0C308DE5 		str	r3, [sp, #12]
+ 172 0040 0030A0E3 		mov	r3, #0
+ 173 0044 10308DE5 		str	r3, [sp, #16]
+ 174 0048 0130A0E3 		mov	r3, #1
+ 175 004c 14308DE5 		str	r3, [sp, #20]
+ 176 0050 A830A0E3 		mov	r3, #168
+ 177 0054 18308DE5 		str	r3, [sp, #24]
+ 178 0058 14009FE5 		ldr	r0, .L8
+ 179 005c 14109FE5 		ldr	r1, .L8+4
+ 180 0060 14209FE5 		ldr	r2, .L8+8
+ 181 0064 2A30A0E3 		mov	r3, #42
+ 182 0068 FEFFFFEB 		bl	_txe_thread_create
+  64:../RunApplication.c ****             "10:Dual_Console",                	// Thread ID and name
+  65:../RunApplication.c ****             ApplicationThread,     				// Thread function
+  66:../RunApplication.c ****             42,                             	// Parameter passed to Thread
+  67:../RunApplication.c ****             StackPtr,                       	// Pointer to the allocated thread stack
+  68:../RunApplication.c ****             APPLICATION_THREAD_STACK,			// Allocated thread stack size
+  69:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,		// Thread priority
+  70:../RunApplication.c ****             APPLICATION_THREAD_PRIORITY,		// = Thread priority so no preemption
+  71:../RunApplication.c ****             CYU3P_NO_TIME_SLICE,            	// Time slice no supported
+  72:../RunApplication.c ****             CYU3P_AUTO_START);                	// Start the thread immediately
+  73:../RunApplication.c **** }
+ 183              		.loc 1 73 0
+ 184 006c 04D04BE2 		sub	sp, fp, #4
+ 185 0070 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 186              	.L9:
+ 187              		.align	2
+ 188              	.L8:
+ 189 0074 00000000 		.word	ThreadHandle
+ 190 0078 A4000000 		.word	.LC6
+ 191 007c 00000000 		.word	ApplicationThread
+ 192              		.cfi_endproc
+ 193              	.LFE1:
+ 195              		.text
+ 196              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 RunApplication.c
+                            *COM*:000000a8 ThreadHandle
+C:\Users\John\AppData\Local\Temp\cchJPP5V.s:23     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cchJPP5V.s:43     .text.ApplicationThread:00000000 $a
+C:\Users\John\AppData\Local\Temp\cchJPP5V.s:46     .text.ApplicationThread:00000000 ApplicationThread
+C:\Users\John\AppData\Local\Temp\cchJPP5V.s:124    .text.ApplicationThread:000000b0 $d
+C:\Users\John\AppData\Local\Temp\cchJPP5V.s:138    .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\cchJPP5V.s:141    .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\cchJPP5V.s:189    .text.CyFxApplicationDefine:00000074 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+InitializeDebugConsole
+CheckStatus
+CyU3PDebugPrint
+I2C_DebugInit
+I2C_DebugPrint
+_tx_thread_sleep
+CheckForCommand
+IndicateError
+CyU3PMemAlloc
+_txe_thread_create

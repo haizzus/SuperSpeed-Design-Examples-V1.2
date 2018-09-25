@@ -1,0 +1,825 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"StartStopApplication.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.global	CyFxGpifTransition
+  17              		.section	.data.CyFxGpifTransition,"aw",%progbits
+  18              		.align	2
+  21              	CyFxGpifTransition:
+  22 0000 0000     		.short	0
+  23 0002 FFFF     		.short	-1
+  24 0004 5555     		.short	21845
+  25 0006 AAAA     		.short	-21846
+  26 0008 CCCC     		.short	-13108
+  27              		.global	CyFxGpifWavedata
+  28 000a 0000     		.section	.data.CyFxGpifWavedata,"aw",%progbits
+  29              		.align	2
+  32              	CyFxGpifWavedata:
+  33 0000 0180732E 		.word	779321345
+  34 0004 00010000 		.word	256
+  35 0008 00000080 		.word	-2147483648
+  36 000c 00000000 		.word	0
+  37 0010 00000000 		.word	0
+  38 0014 00000000 		.word	0
+  39 0018 0302703E 		.word	1047527939
+  40 001c 08000020 		.word	536870920
+  41 0020 00000080 		.word	-2147483648
+  42 0024 00000000 		.word	0
+  43 0028 00000000 		.word	0
+  44 002c 00000000 		.word	0
+  45 0030 029C731E 		.word	510893058
+  46 0034 00000000 		.word	0
+  47 0038 00001080 		.word	-2146435072
+  48 003c 0440702E 		.word	779108356
+  49 0040 08010000 		.word	264
+  50 0044 00000080 		.word	-2147483648
+  51 0048 0302703E 		.word	1047527939
+  52 004c 08000020 		.word	536870920
+  53 0050 00000080 		.word	-2147483648
+  54 0054 029C731E 		.word	510893058
+  55 0058 00000000 		.word	0
+  56 005c 00001080 		.word	-2146435072
+  57              		.global	CyFxGpifWavedataPosition
+  58              		.section	.data.CyFxGpifWavedataPosition,"aw",%progbits
+  59              		.align	2
+  62              	CyFxGpifWavedataPosition:
+  63 0000 00       		.byte	0
+  64 0001 01       		.byte	1
+  65 0002 00       		.byte	0
+  66 0003 02       		.byte	2
+  67 0004 03       		.byte	3
+  68              		.global	CyFxGpifRegValue
+  69 0005 000000   		.section	.data.CyFxGpifRegValue,"aw",%progbits
+  70              		.align	2
+  73              	CyFxGpifRegValue:
+  74 0000 30830080 		.word	-2147450064
+  75 0004 6C000000 		.word	108
+  76 0008 00000000 		.word	0
+  77 000c 52000000 		.word	82
+  78 0010 00000000 		.word	0
+  79 0014 00000000 		.word	0
+  80 0018 00000000 		.word	0
+  81 001c 82000000 		.word	130
+  82 0020 82070000 		.word	1922
+  83 0024 00551054 		.word	1410356480
+  84 0028 FBFB0000 		.word	64507
+  85 002c 53000000 		.word	83
+  86 0030 00000000 		.word	0
+  87 0034 00000000 		.word	0
+  88 0038 00000000 		.word	0
+  89 003c 00000000 		.word	0
+  90 0040 00000000 		.word	0
+  91 0044 10000000 		.word	16
+  92 0048 14000000 		.word	20
+  93 004c 11000000 		.word	17
+  94 0050 15000000 		.word	21
+  95 0054 00000000 		.word	0
+  96 0058 00000000 		.word	0
+  97 005c 08000000 		.word	8
+  98 0060 00000000 		.word	0
+  99 0064 00000000 		.word	0
+ 100 0068 00000000 		.word	0
+ 101 006c 00000000 		.word	0
+ 102 0070 00000000 		.word	0
+ 103 0074 06000000 		.word	6
+ 104 0078 00000000 		.word	0
+ 105 007c FFFF0000 		.word	65535
+ 106 0080 0A010000 		.word	266
+ 107 0084 00000000 		.word	0
+ 108 0088 FFFF0000 		.word	65535
+ 109 008c 00000000 		.word	0
+ 110 0090 FFFF0000 		.word	65535
+ 111 0094 0A010000 		.word	266
+ 112 0098 00000000 		.word	0
+ 113 009c FFFF0000 		.word	65535
+ 114 00a0 00000000 		.word	0
+ 115 00a4 00000000 		.word	0
+ 116 00a8 00000000 		.word	0
+ 117 00ac 00000000 		.word	0
+ 118 00b0 00000000 		.word	0
+ 119 00b4 00000000 		.word	0
+ 120 00b8 00000000 		.word	0
+ 121 00bc 00000000 		.word	0
+ 122 00c0 00000000 		.word	0
+ 123 00c4 00000000 		.word	0
+ 124 00c8 00000000 		.word	0
+ 125 00cc 00000000 		.word	0
+ 126 00d0 00000000 		.word	0
+ 127 00d4 00000000 		.word	0
+ 128 00d8 00000000 		.word	0
+ 129 00dc 00000000 		.word	0
+ 130 00e0 00000000 		.word	0
+ 131 00e4 00000000 		.word	0
+ 132 00e8 00000000 		.word	0
+ 133 00ec 00000000 		.word	0
+ 134 00f0 00000000 		.word	0
+ 135 00f4 00000000 		.word	0
+ 136 00f8 00000000 		.word	0
+ 137 00fc 00040180 		.word	-2147417088
+ 138 0100 01040180 		.word	-2147417087
+ 139 0104 02040180 		.word	-2147417086
+ 140 0108 03040180 		.word	-2147417085
+ 141 010c 00000000 		.word	0
+ 142 0110 00000000 		.word	0
+ 143 0114 00000000 		.word	0
+ 144 0118 00000000 		.word	0
+ 145 011c 00000000 		.word	0
+ 146 0120 00000000 		.word	0
+ 147 0124 00000000 		.word	0
+ 148 0128 00000000 		.word	0
+ 149 012c C1FFFFFF 		.word	-63
+ 150              		.global	CyFxGpifConfig
+ 151              		.section	.rodata.CyFxGpifConfig,"a",%progbits
+ 152              		.align	2
+ 155              	CyFxGpifConfig:
+ 156 0000 0500     		.short	5
+ 157 0002 0000     		.space	2
+ 158 0004 00000000 		.word	CyFxGpifWavedata
+ 159 0008 00000000 		.word	CyFxGpifWavedataPosition
+ 160 000c 0500     		.short	5
+ 161 000e 0000     		.space	2
+ 162 0010 00000000 		.word	CyFxGpifTransition
+ 163 0014 4C00     		.short	76
+ 164 0016 0000     		.space	2
+ 165 0018 00000000 		.word	CyFxGpifRegValue
+ 166              		.global	CyFxGpifConfigName
+ 167              		.section	.rodata
+ 168              		.align	2
+ 169              	.LC0:
+ 170 0000 536C6176 		.ascii	"SlaveFifoRead\000"
+ 170      65466966 
+ 170      6F526561 
+ 170      6400
+ 171              		.section	.data.CyFxGpifConfigName,"aw",%progbits
+ 172              		.align	2
+ 175              	CyFxGpifConfigName:
+ 176 0000 00000000 		.word	.LC0
+ 177              		.comm	GPIF2USB_Handle,172,4
+ 178              		.comm	USB2GPIF_Handle,172,4
+ 179              		.global	BusSpeed
+ 180              		.section	.rodata
+ 181 000e 0000     		.align	2
+ 182              	.LC1:
+ 183 0010 4E6F7420 		.ascii	"Not Connected\000"
+ 183      436F6E6E 
+ 183      65637465 
+ 183      6400
+ 184 001e 0000     		.align	2
+ 185              	.LC2:
+ 186 0020 46756C6C 		.ascii	"Full \000"
+ 186      2000
+ 187 0026 0000     		.align	2
+ 188              	.LC3:
+ 189 0028 48696768 		.ascii	"High \000"
+ 189      2000
+ 190 002e 0000     		.align	2
+ 191              	.LC4:
+ 192 0030 53757065 		.ascii	"Super\000"
+ 192      7200
+ 193              		.section	.data.BusSpeed,"aw",%progbits
+ 194              		.align	2
+ 197              	BusSpeed:
+ 198 0000 10000000 		.word	.LC1
+ 199 0004 20000000 		.word	.LC2
+ 200 0008 28000000 		.word	.LC3
+ 201 000c 30000000 		.word	.LC4
+ 202              		.global	EpSize
+ 203              		.section	.rodata.EpSize,"a",%progbits
+ 204              		.align	2
+ 207              	EpSize:
+ 208 0000 0000     		.short	0
+ 209 0002 4000     		.short	64
+ 210 0004 0002     		.short	512
+ 211 0006 0004     		.short	1024
+ 212              		.section	.rodata
+ 213 0036 0000     		.align	2
+ 214              	.LC5:
+ 215 0038 0D0A5573 		.ascii	"\015\012Using GPIF:%s\000"
+ 215      696E6720 
+ 215      47504946 
+ 215      3A257300 
+ 216              		.align	2
+ 217              	.LC6:
+ 218 0048 47706966 		.ascii	"GpifLoad\000"
+ 218      4C6F6164 
+ 218      00
+ 219 0051 000000   		.align	2
+ 220              	.LC7:
+ 221 0054 53657457 		.ascii	"SetWatermark\000"
+ 221      61746572 
+ 221      6D61726B 
+ 221      00
+ 222              		.section	.text.StartGPIF,"ax",%progbits
+ 223              		.align	2
+ 224              		.global	StartGPIF
+ 226              	StartGPIF:
+ 227              	.LFB0:
+ 228              		.file 1 "../StartStopApplication.c"
+   1:../StartStopApplication.c **** /*
+   2:../StartStopApplication.c ****  * StartStopApplication.c
+   3:../StartStopApplication.c ****  *
+   4:../StartStopApplication.c ****  *      Author: john@usb-by-example.com
+   5:../StartStopApplication.c ****  */
+   6:../StartStopApplication.c **** 
+   7:../StartStopApplication.c **** #include "Application.h"
+   8:../StartStopApplication.c **** #include "SlaveFifoRead.h"				// File generated by GPIF Designer
+   9:../StartStopApplication.c **** char* CyFxGpifConfigName = { "SlaveFifoRead" };
+  10:../StartStopApplication.c **** 
+  11:../StartStopApplication.c **** // Declare external functions
+  12:../StartStopApplication.c **** extern void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status);
+  13:../StartStopApplication.c **** 
+  14:../StartStopApplication.c **** // Declare external data
+  15:../StartStopApplication.c **** extern CyBool_t glIsApplicationActive;		// Set true once device is enumerated
+  16:../StartStopApplication.c **** extern uint32_t ClockValue;					// Used to select GPIF speed
+  17:../StartStopApplication.c **** 
+  18:../StartStopApplication.c **** CyU3PDmaChannel GPIF2USB_Handle, USB2GPIF_Handle;
+  19:../StartStopApplication.c **** 
+  20:../StartStopApplication.c **** const char* BusSpeed[] = { "Not Connected", "Full ", "High ", "Super" };
+  21:../StartStopApplication.c **** const uint16_t EpSize[] = { 0, 64, 512, 1024 };
+  22:../StartStopApplication.c **** 
+  23:../StartStopApplication.c **** CyU3PReturnStatus_t StartGPIF(void)
+  24:../StartStopApplication.c **** {
+ 229              		.loc 1 24 0
+ 230              		.cfi_startproc
+ 231              		@ args = 0, pretend = 0, frame = 8
+ 232              		@ frame_needed = 1, uses_anonymous_args = 0
+ 233 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 234              	.LCFI0:
+ 235              		.cfi_def_cfa_offset 8
+ 236              		.cfi_offset 11, -8
+ 237              		.cfi_offset 14, -4
+ 238 0004 04B08DE2 		add	fp, sp, #4
+ 239              	.LCFI1:
+ 240              		.cfi_def_cfa 11, 4
+ 241 0008 10D04DE2 		sub	sp, sp, #16
+  25:../StartStopApplication.c **** 	CyU3PReturnStatus_t Status;
+  26:../StartStopApplication.c **** 	Status = CyU3PGpifLoad(&CyFxGpifConfig);
+ 242              		.loc 1 26 0
+ 243 000c 74009FE5 		ldr	r0, .L3
+ 244 0010 FEFFFFEB 		bl	CyU3PGpifLoad
+ 245 0014 08000BE5 		str	r0, [fp, #-8]
+  27:../StartStopApplication.c **** 	DebugPrint(7, "\r\nUsing GPIF:%s", CyFxGpifConfigName);
+ 246              		.loc 1 27 0
+ 247 0018 6C309FE5 		ldr	r3, .L3+4
+ 248 001c 003093E5 		ldr	r3, [r3]
+ 249 0020 0700A0E3 		mov	r0, #7
+ 250 0024 64109FE5 		ldr	r1, .L3+8
+ 251 0028 0320A0E1 		mov	r2, r3
+ 252 002c FEFFFFEB 		bl	CyU3PDebugPrint
+  28:../StartStopApplication.c **** 	CheckStatus("GpifLoad", Status);
+ 253              		.loc 1 28 0
+ 254 0030 5C009FE5 		ldr	r0, .L3+12
+ 255 0034 08101BE5 		ldr	r1, [fp, #-8]
+ 256 0038 FEFFFFEB 		bl	CheckStatus
+  29:../StartStopApplication.c **** 	Status = CyU3PGpifSocketConfigure(0, GPIF_PRODUCER_SOCKET, 4, CyFalse, 1);
+ 257              		.loc 1 29 0
+ 258 003c 0130A0E3 		mov	r3, #1
+ 259 0040 00308DE5 		str	r3, [sp]
+ 260 0044 0000A0E3 		mov	r0, #0
+ 261 0048 011CA0E3 		mov	r1, #256
+ 262 004c 0420A0E3 		mov	r2, #4
+ 263 0050 0030A0E3 		mov	r3, #0
+ 264 0054 FEFFFFEB 		bl	CyU3PGpifSocketConfigure
+ 265 0058 08000BE5 		str	r0, [fp, #-8]
+  30:../StartStopApplication.c **** 	CheckStatus("SetWatermark", Status);
+ 266              		.loc 1 30 0
+ 267 005c 34009FE5 		ldr	r0, .L3+16
+ 268 0060 08101BE5 		ldr	r1, [fp, #-8]
+ 269 0064 FEFFFFEB 		bl	CheckStatus
+  31:../StartStopApplication.c **** 	Status = CyU3PGpifSMStart(START, ALPHA_START);
+ 270              		.loc 1 31 0
+ 271 0068 0000A0E3 		mov	r0, #0
+ 272 006c 0010A0E3 		mov	r1, #0
+ 273 0070 FEFFFFEB 		bl	CyU3PGpifSMStart
+ 274 0074 08000BE5 		str	r0, [fp, #-8]
+  32:../StartStopApplication.c **** 	return Status;
+ 275              		.loc 1 32 0
+ 276 0078 08301BE5 		ldr	r3, [fp, #-8]
+  33:../StartStopApplication.c **** }
+ 277              		.loc 1 33 0
+ 278 007c 0300A0E1 		mov	r0, r3
+ 279 0080 04D04BE2 		sub	sp, fp, #4
+ 280              		@ sp needed
+ 281 0084 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 282              	.L4:
+ 283              		.align	2
+ 284              	.L3:
+ 285 0088 00000000 		.word	CyFxGpifConfig
+ 286 008c 00000000 		.word	CyFxGpifConfigName
+ 287 0090 38000000 		.word	.LC5
+ 288 0094 48000000 		.word	.LC6
+ 289 0098 54000000 		.word	.LC7
+ 290              		.cfi_endproc
+ 291              	.LFE0:
+ 293              		.section	.rodata
+ 294 0061 000000   		.align	2
+ 295              	.LC8:
+ 296 0064 0D0A4053 		.ascii	"\015\012@StartApplication, running at %sSpeed\000"
+ 296      74617274 
+ 296      4170706C 
+ 296      69636174 
+ 296      696F6E2C 
+ 297              		.align	2
+ 298              	.LC9:
+ 299 008c 53746172 		.ascii	"Start GPIF Clock\000"
+ 299      74204750 
+ 299      49462043 
+ 299      6C6F636B 
+ 299      00
+ 300              		.global	__aeabi_uidiv
+ 301 009d 000000   		.align	2
+ 302              	.LC10:
+ 303 00a0 0D0A4750 		.ascii	"\015\012GPIF Clock = %d MHz = %d MB/s\000"
+ 303      49462043 
+ 303      6C6F636B 
+ 303      203D2025 
+ 303      64204D48 
+ 304              		.align	2
+ 305              	.LC11:
+ 306 00c0 53657475 		.ascii	"Setup USB_CONSUMER_ENDPOINT\000"
+ 306      70205553 
+ 306      425F434F 
+ 306      4E53554D 
+ 306      45525F45 
+ 307              		.align	2
+ 308              	.LC12:
+ 309 00dc 47504946 		.ascii	"GPIF2USB DmaChannelCreate\000"
+ 309      32555342 
+ 309      20446D61 
+ 309      4368616E 
+ 309      6E656C43 
+ 310 00f6 0000     		.align	2
+ 311              	.LC13:
+ 312 00f8 466C7573 		.ascii	"Flush USB_CONSUMER_ENDPOINT\000"
+ 312      68205553 
+ 312      425F434F 
+ 312      4E53554D 
+ 312      45525F45 
+ 313              		.align	2
+ 314              	.LC14:
+ 315 0114 47504946 		.ascii	"GPIF2USB DmaChannelStart\000"
+ 315      32555342 
+ 315      20446D61 
+ 315      4368616E 
+ 315      6E656C53 
+ 316 012d 000000   		.align	2
+ 317              	.LC15:
+ 318 0130 47706966 		.ascii	"GpifStart\000"
+ 318      53746172 
+ 318      7400
+ 319              		.section	.text.StartApplication,"ax",%progbits
+ 320              		.align	2
+ 321              		.global	StartApplication
+ 323              	StartApplication:
+ 324              	.LFB1:
+  34:../StartStopApplication.c **** 
+  35:../StartStopApplication.c **** void StartApplication(void)
+  36:../StartStopApplication.c **** // USB has been enumerated, time to start the application running
+  37:../StartStopApplication.c **** {
+ 325              		.loc 1 37 0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 64
+ 328              		@ frame_needed = 1, uses_anonymous_args = 0
+ 329 0000 10482DE9 		stmfd	sp!, {r4, fp, lr}
+ 330              	.LCFI2:
+ 331              		.cfi_def_cfa_offset 12
+ 332              		.cfi_offset 4, -12
+ 333              		.cfi_offset 11, -8
+ 334              		.cfi_offset 14, -4
+ 335 0004 08B08DE2 		add	fp, sp, #8
+ 336              	.LCFI3:
+ 337              		.cfi_def_cfa 11, 4
+ 338 0008 44D04DE2 		sub	sp, sp, #68
+  38:../StartStopApplication.c **** 	CyU3PEpConfig_t epConfig;
+  39:../StartStopApplication.c **** 	CyU3PDmaChannelConfig_t dmaConfig;
+  40:../StartStopApplication.c **** 	CyU3PReturnStatus_t Status;
+  41:../StartStopApplication.c ****     CyU3PPibClock_t pibClock;
+  42:../StartStopApplication.c **** 
+  43:../StartStopApplication.c ****     CyU3PUSBSpeed_t usbSpeed = CyU3PUsbGetSpeed();
+ 339              		.loc 1 43 0
+ 340 000c FEFFFFEB 		bl	CyU3PUsbGetSpeed
+ 341 0010 0030A0E1 		mov	r3, r0
+ 342 0014 0D304BE5 		strb	r3, [fp, #-13]
+  44:../StartStopApplication.c ****     // Display the enumerated device bus speed
+  45:../StartStopApplication.c ****     DebugPrint(4, "\r\n@StartApplication, running at %sSpeed", BusSpeed[usbSpeed]);
+ 343              		.loc 1 45 0
+ 344 0018 0D205BE5 		ldrb	r2, [fp, #-13]	@ zero_extendqisi2
+ 345 001c E0319FE5 		ldr	r3, .L8
+ 346 0020 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 347 0024 0400A0E3 		mov	r0, #4
+ 348 0028 D8119FE5 		ldr	r1, .L8+4
+ 349 002c 0320A0E1 		mov	r2, r3
+ 350 0030 FEFFFFEB 		bl	CyU3PDebugPrint
+  46:../StartStopApplication.c **** 
+  47:../StartStopApplication.c ****     // Start GPIF clocks, they need to be running before we attach a DMA channel to GPIF
+  48:../StartStopApplication.c ****     pibClock.clkDiv = ClockValue>>1;
+ 351              		.loc 1 48 0
+ 352 0034 D0319FE5 		ldr	r3, .L8+8
+ 353 0038 003093E5 		ldr	r3, [r3]
+ 354 003c A330A0E1 		mov	r3, r3, lsr #1
+ 355 0040 0338A0E1 		mov	r3, r3, asl #16
+ 356 0044 2338A0E1 		mov	r3, r3, lsr #16
+ 357 0048 BC344BE1 		strh	r3, [fp, #-76]	@ movhi
+  49:../StartStopApplication.c ****     pibClock.clkSrc = CY_U3P_SYS_CLK;
+ 358              		.loc 1 49 0
+ 359 004c 0330A0E3 		mov	r3, #3
+ 360 0050 40304BE5 		strb	r3, [fp, #-64]
+  50:../StartStopApplication.c ****     pibClock.isHalfDiv = (ClockValue & 1);
+ 361              		.loc 1 50 0
+ 362 0054 B0319FE5 		ldr	r3, .L8+8
+ 363 0058 003093E5 		ldr	r3, [r3]
+ 364 005c 013003E2 		and	r3, r3, #1
+ 365 0060 48300BE5 		str	r3, [fp, #-72]
+  51:../StartStopApplication.c ****     pibClock.isDllEnable = CyFalse;		// Disable Dll since this application is synchronous
+ 366              		.loc 1 51 0
+ 367 0064 0030A0E3 		mov	r3, #0
+ 368 0068 44300BE5 		str	r3, [fp, #-68]
+  52:../StartStopApplication.c ****     Status = CyU3PPibInit(CyTrue, &pibClock);
+ 369              		.loc 1 52 0
+ 370 006c 4C304BE2 		sub	r3, fp, #76
+ 371 0070 0100A0E3 		mov	r0, #1
+ 372 0074 0310A0E1 		mov	r1, r3
+ 373 0078 FEFFFFEB 		bl	CyU3PPibInit
+ 374 007c 14000BE5 		str	r0, [fp, #-20]
+  53:../StartStopApplication.c ****  	CheckStatus("Start GPIF Clock", Status);
+ 375              		.loc 1 53 0
+ 376 0080 88019FE5 		ldr	r0, .L8+12
+ 377 0084 14101BE5 		ldr	r1, [fp, #-20]
+ 378 0088 FEFFFFEB 		bl	CheckStatus
+  54:../StartStopApplication.c ****  	DebugPrint(4, "\r\nGPIF Clock = %d MHz = %d MB/s", 800/ClockValue, 3200/ClockValue);
+ 379              		.loc 1 54 0
+ 380 008c 78319FE5 		ldr	r3, .L8+8
+ 381 0090 003093E5 		ldr	r3, [r3]
+ 382 0094 320EA0E3 		mov	r0, #800
+ 383 0098 0310A0E1 		mov	r1, r3
+ 384 009c FEFFFFEB 		bl	__aeabi_uidiv
+ 385 00a0 0030A0E1 		mov	r3, r0
+ 386 00a4 0340A0E1 		mov	r4, r3
+ 387 00a8 5C319FE5 		ldr	r3, .L8+8
+ 388 00ac 003093E5 		ldr	r3, [r3]
+ 389 00b0 320DA0E3 		mov	r0, #3200
+ 390 00b4 0310A0E1 		mov	r1, r3
+ 391 00b8 FEFFFFEB 		bl	__aeabi_uidiv
+ 392 00bc 0030A0E1 		mov	r3, r0
+ 393 00c0 0400A0E3 		mov	r0, #4
+ 394 00c4 48119FE5 		ldr	r1, .L8+16
+ 395 00c8 0420A0E1 		mov	r2, r4
+ 396 00cc FEFFFFEB 		bl	CyU3PDebugPrint
+  55:../StartStopApplication.c **** 
+  56:../StartStopApplication.c ****     // Based on the Bus Speed configure the endpoint packet size
+  57:../StartStopApplication.c **** 	CyU3PMemSet((uint8_t *)&epConfig, 0, sizeof(epConfig));
+ 397              		.loc 1 57 0
+ 398 00d0 20304BE2 		sub	r3, fp, #32
+ 399 00d4 0300A0E1 		mov	r0, r3
+ 400 00d8 0010A0E3 		mov	r1, #0
+ 401 00dc 0C20A0E3 		mov	r2, #12
+ 402 00e0 FEFFFFEB 		bl	CyU3PMemSet
+  58:../StartStopApplication.c **** 	epConfig.enable = CyTrue;
+ 403              		.loc 1 58 0
+ 404 00e4 0130A0E3 		mov	r3, #1
+ 405 00e8 20300BE5 		str	r3, [fp, #-32]
+  59:../StartStopApplication.c **** 	epConfig.epType = CY_U3P_USB_EP_BULK;
+ 406              		.loc 1 59 0
+ 407 00ec 0230A0E3 		mov	r3, #2
+ 408 00f0 1C304BE5 		strb	r3, [fp, #-28]
+  60:../StartStopApplication.c **** 	epConfig.burstLen = (usbSpeed == CY_U3P_SUPER_SPEED) ? (ENDPOINT_BURST_LENGTH) : 1;
+ 409              		.loc 1 60 0
+ 410 00f4 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 411 00f8 030053E3 		cmp	r3, #3
+ 412 00fc 0100001A 		bne	.L6
+ 413              		.loc 1 60 0 is_stmt 0 discriminator 1
+ 414 0100 1030A0E3 		mov	r3, #16
+ 415 0104 000000EA 		b	.L7
+ 416              	.L6:
+ 417              		.loc 1 60 0 discriminator 2
+ 418 0108 0130A0E3 		mov	r3, #1
+ 419              	.L7:
+ 420              		.loc 1 60 0 discriminator 3
+ 421 010c 16304BE5 		strb	r3, [fp, #-22]
+  61:../StartStopApplication.c **** 	epConfig.pcktSize = EpSize[usbSpeed];
+ 422              		.loc 1 61 0 is_stmt 1 discriminator 3
+ 423 0110 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 424 0114 FC209FE5 		ldr	r2, .L8+20
+ 425 0118 8330A0E1 		mov	r3, r3, asl #1
+ 426 011c 033082E0 		add	r3, r2, r3
+ 427 0120 B030D3E1 		ldrh	r3, [r3]
+ 428 0124 B8314BE1 		strh	r3, [fp, #-24]	@ movhi
+  62:../StartStopApplication.c **** 
+  63:../StartStopApplication.c **** 	// Setup and flush the consumer endpoint
+  64:../StartStopApplication.c **** 	Status = CyU3PSetEpConfig(USB_CONSUMER_ENDPOINT, &epConfig);
+ 429              		.loc 1 64 0 discriminator 3
+ 430 0128 20304BE2 		sub	r3, fp, #32
+ 431 012c 8100A0E3 		mov	r0, #129
+ 432 0130 0310A0E1 		mov	r1, r3
+ 433 0134 FEFFFFEB 		bl	CyU3PSetEpConfig
+ 434 0138 14000BE5 		str	r0, [fp, #-20]
+  65:../StartStopApplication.c **** 	CheckStatus("Setup USB_CONSUMER_ENDPOINT", Status);
+ 435              		.loc 1 65 0 discriminator 3
+ 436 013c D8009FE5 		ldr	r0, .L8+24
+ 437 0140 14101BE5 		ldr	r1, [fp, #-20]
+ 438 0144 FEFFFFEB 		bl	CheckStatus
+  66:../StartStopApplication.c **** 
+  67:../StartStopApplication.c **** 	// Create a AUTO channel for the GPIF to USB transfer, GPIF detects and COMMITs the last short pac
+  68:../StartStopApplication.c **** 	CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 439              		.loc 1 68 0 discriminator 3
+ 440 0148 3C304BE2 		sub	r3, fp, #60
+ 441 014c 0300A0E1 		mov	r0, r3
+ 442 0150 0010A0E3 		mov	r1, #0
+ 443 0154 1C20A0E3 		mov	r2, #28
+ 444 0158 FEFFFFEB 		bl	CyU3PMemSet
+  69:../StartStopApplication.c **** 	dmaConfig.size           = DMA_BUFFER_SIZE;			// Use same size buffers for all USB Speeds
+ 445              		.loc 1 69 0 discriminator 3
+ 446 015c 0139A0E3 		mov	r3, #16384
+ 447 0160 BC334BE1 		strh	r3, [fp, #-60]	@ movhi
+  70:../StartStopApplication.c **** 	dmaConfig.count          = DMA_BUFFER_COUNT;
+ 448              		.loc 1 70 0 discriminator 3
+ 449 0164 0430A0E3 		mov	r3, #4
+ 450 0168 BA334BE1 		strh	r3, [fp, #-58]	@ movhi
+  71:../StartStopApplication.c **** 	dmaConfig.prodSckId		 = GPIF_PRODUCER_SOCKET;
+ 451              		.loc 1 71 0 discriminator 3
+ 452 016c 013CA0E3 		mov	r3, #256
+ 453 0170 B8334BE1 		strh	r3, [fp, #-56]	@ movhi
+  72:../StartStopApplication.c **** 	dmaConfig.consSckId		 = USB_CONSUMER_ENDPOINT_SOCKET;
+ 454              		.loc 1 72 0 discriminator 3
+ 455 0174 A4309FE5 		ldr	r3, .L8+28
+ 456 0178 B6334BE1 		strh	r3, [fp, #-54]	@ movhi
+  73:../StartStopApplication.c **** 	dmaConfig.dmaMode        = CY_U3P_DMA_MODE_BYTE;
+ 457              		.loc 1 73 0 discriminator 3
+ 458 017c 0030A0E3 		mov	r3, #0
+ 459 0180 2C304BE5 		strb	r3, [fp, #-44]
+  74:../StartStopApplication.c **** 	Status = CyU3PDmaChannelCreate(&GPIF2USB_Handle, CY_U3P_DMA_TYPE_AUTO, &dmaConfig);
+ 460              		.loc 1 74 0 discriminator 3
+ 461 0184 3C304BE2 		sub	r3, fp, #60
+ 462 0188 94009FE5 		ldr	r0, .L8+32
+ 463 018c 0010A0E3 		mov	r1, #0
+ 464 0190 0320A0E1 		mov	r2, r3
+ 465 0194 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 466 0198 14000BE5 		str	r0, [fp, #-20]
+  75:../StartStopApplication.c **** 	CheckStatus("GPIF2USB DmaChannelCreate", Status);
+ 467              		.loc 1 75 0 discriminator 3
+ 468 019c 84009FE5 		ldr	r0, .L8+36
+ 469 01a0 14101BE5 		ldr	r1, [fp, #-20]
+ 470 01a4 FEFFFFEB 		bl	CheckStatus
+  76:../StartStopApplication.c **** 
+  77:../StartStopApplication.c **** 	Status = CyU3PUsbFlushEp(USB_CONSUMER_ENDPOINT);
+ 471              		.loc 1 77 0 discriminator 3
+ 472 01a8 8100A0E3 		mov	r0, #129
+ 473 01ac FEFFFFEB 		bl	CyU3PUsbFlushEp
+ 474 01b0 14000BE5 		str	r0, [fp, #-20]
+  78:../StartStopApplication.c **** 	CheckStatus("Flush USB_CONSUMER_ENDPOINT", Status);
+ 475              		.loc 1 78 0 discriminator 3
+ 476 01b4 70009FE5 		ldr	r0, .L8+40
+ 477 01b8 14101BE5 		ldr	r1, [fp, #-20]
+ 478 01bc FEFFFFEB 		bl	CheckStatus
+  79:../StartStopApplication.c **** 
+  80:../StartStopApplication.c **** 	// Start the DMA Channel with transfer size to Infinite
+  81:../StartStopApplication.c **** 	Status = CyU3PDmaChannelSetXfer(&GPIF2USB_Handle, 0);
+ 479              		.loc 1 81 0 discriminator 3
+ 480 01c0 5C009FE5 		ldr	r0, .L8+32
+ 481 01c4 0010A0E3 		mov	r1, #0
+ 482 01c8 FEFFFFEB 		bl	CyU3PDmaChannelSetXfer
+ 483 01cc 14000BE5 		str	r0, [fp, #-20]
+  82:../StartStopApplication.c **** 	CheckStatus("GPIF2USB DmaChannelStart", Status);
+ 484              		.loc 1 82 0 discriminator 3
+ 485 01d0 58009FE5 		ldr	r0, .L8+44
+ 486 01d4 14101BE5 		ldr	r1, [fp, #-20]
+ 487 01d8 FEFFFFEB 		bl	CheckStatus
+  83:../StartStopApplication.c **** 
+  84:../StartStopApplication.c **** 	// Load, configure and start the GPIF state machine
+  85:../StartStopApplication.c ****     Status = StartGPIF();
+ 488              		.loc 1 85 0 discriminator 3
+ 489 01dc FEFFFFEB 		bl	StartGPIF
+ 490 01e0 14000BE5 		str	r0, [fp, #-20]
+  86:../StartStopApplication.c **** 	CheckStatus("GpifStart", Status);
+ 491              		.loc 1 86 0 discriminator 3
+ 492 01e4 48009FE5 		ldr	r0, .L8+48
+ 493 01e8 14101BE5 		ldr	r1, [fp, #-20]
+ 494 01ec FEFFFFEB 		bl	CheckStatus
+  87:../StartStopApplication.c **** 
+  88:../StartStopApplication.c ****     // OK, Application can now run
+  89:../StartStopApplication.c ****     glIsApplicationActive = CyTrue;
+ 495              		.loc 1 89 0 discriminator 3
+ 496 01f0 40309FE5 		ldr	r3, .L8+52
+ 497 01f4 0120A0E3 		mov	r2, #1
+ 498 01f8 002083E5 		str	r2, [r3]
+  90:../StartStopApplication.c **** }
+ 499              		.loc 1 90 0 discriminator 3
+ 500 01fc 08D04BE2 		sub	sp, fp, #8
+ 501              		@ sp needed
+ 502 0200 1088BDE8 		ldmfd	sp!, {r4, fp, pc}
+ 503              	.L9:
+ 504              		.align	2
+ 505              	.L8:
+ 506 0204 00000000 		.word	BusSpeed
+ 507 0208 64000000 		.word	.LC8
+ 508 020c 00000000 		.word	ClockValue
+ 509 0210 8C000000 		.word	.LC9
+ 510 0214 A0000000 		.word	.LC10
+ 511 0218 00000000 		.word	EpSize
+ 512 021c C0000000 		.word	.LC11
+ 513 0220 01030000 		.word	769
+ 514 0224 00000000 		.word	GPIF2USB_Handle
+ 515 0228 DC000000 		.word	.LC12
+ 516 022c F8000000 		.word	.LC13
+ 517 0230 14010000 		.word	.LC14
+ 518 0234 30010000 		.word	.LC15
+ 519 0238 00000000 		.word	glIsApplicationActive
+ 520              		.cfi_endproc
+ 521              	.LFE1:
+ 523              		.section	.rodata
+ 524 013a 0000     		.align	2
+ 525              	.LC16:
+ 526 013c 53746F70 		.ascii	"Stop GPIF Block\000"
+ 526      20475049 
+ 526      4620426C 
+ 526      6F636B00 
+ 527              		.align	2
+ 528              	.LC17:
+ 529 014c 47504946 		.ascii	"GPIF2USB DmaChannelDestroy\000"
+ 529      32555342 
+ 529      20446D61 
+ 529      4368616E 
+ 529      6E656C44 
+ 530 0167 00       		.align	2
+ 531              	.LC18:
+ 532 0168 44697361 		.ascii	"Disable USB_CONSUMER_ENDPOINT\000"
+ 532      626C6520 
+ 532      5553425F 
+ 532      434F4E53 
+ 532      554D4552 
+ 533 0186 0000     		.section	.text.StopApplication,"ax",%progbits
+ 534              		.align	2
+ 535              		.global	StopApplication
+ 537              	StopApplication:
+ 538              	.LFB2:
+  91:../StartStopApplication.c **** 
+  92:../StartStopApplication.c **** void StopApplication(void)
+  93:../StartStopApplication.c **** // USB connection has been lost, time to stop the application running
+  94:../StartStopApplication.c **** {
+ 539              		.loc 1 94 0
+ 540              		.cfi_startproc
+ 541              		@ args = 0, pretend = 0, frame = 16
+ 542              		@ frame_needed = 1, uses_anonymous_args = 0
+ 543 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 544              	.LCFI4:
+ 545              		.cfi_def_cfa_offset 8
+ 546              		.cfi_offset 11, -8
+ 547              		.cfi_offset 14, -4
+ 548 0004 04B08DE2 		add	fp, sp, #4
+ 549              	.LCFI5:
+ 550              		.cfi_def_cfa 11, 4
+ 551 0008 10D04DE2 		sub	sp, sp, #16
+  95:../StartStopApplication.c ****     CyU3PEpConfig_t epConfig;
+  96:../StartStopApplication.c ****     CyU3PReturnStatus_t Status;
+  97:../StartStopApplication.c **** 
+  98:../StartStopApplication.c ****     // Disable GPIF, close the DMA channels, flush and disable the endpoints
+  99:../StartStopApplication.c ****     CyU3PGpifDisable(CyTrue);
+ 552              		.loc 1 99 0
+ 553 000c 0100A0E3 		mov	r0, #1
+ 554 0010 FEFFFFEB 		bl	CyU3PGpifDisable
+ 100:../StartStopApplication.c ****     Status = CyU3PPibDeInit();
+ 555              		.loc 1 100 0
+ 556 0014 FEFFFFEB 		bl	CyU3PPibDeInit
+ 557 0018 08000BE5 		str	r0, [fp, #-8]
+ 101:../StartStopApplication.c ****     CheckStatus("Stop GPIF Block", Status);
+ 558              		.loc 1 101 0
+ 559 001c 7C009FE5 		ldr	r0, .L11
+ 560 0020 08101BE5 		ldr	r1, [fp, #-8]
+ 561 0024 FEFFFFEB 		bl	CheckStatus
+ 102:../StartStopApplication.c ****     Status = CyU3PDmaChannelDestroy(&GPIF2USB_Handle);
+ 562              		.loc 1 102 0
+ 563 0028 74009FE5 		ldr	r0, .L11+4
+ 564 002c FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+ 565 0030 08000BE5 		str	r0, [fp, #-8]
+ 103:../StartStopApplication.c ****     CheckStatus("GPIF2USB DmaChannelDestroy", Status);
+ 566              		.loc 1 103 0
+ 567 0034 6C009FE5 		ldr	r0, .L11+8
+ 568 0038 08101BE5 		ldr	r1, [fp, #-8]
+ 569 003c FEFFFFEB 		bl	CheckStatus
+ 104:../StartStopApplication.c ****     Status = CyU3PUsbFlushEp(USB_CONSUMER_ENDPOINT);
+ 570              		.loc 1 104 0
+ 571 0040 8100A0E3 		mov	r0, #129
+ 572 0044 FEFFFFEB 		bl	CyU3PUsbFlushEp
+ 573 0048 08000BE5 		str	r0, [fp, #-8]
+ 105:../StartStopApplication.c ****     CheckStatus("Flush USB_CONSUMER_ENDPOINT", Status);
+ 574              		.loc 1 105 0
+ 575 004c 58009FE5 		ldr	r0, .L11+12
+ 576 0050 08101BE5 		ldr	r1, [fp, #-8]
+ 577 0054 FEFFFFEB 		bl	CheckStatus
+ 106:../StartStopApplication.c **** 	CyU3PMemSet((uint8_t *)&epConfig, 0, sizeof(&epConfig));
+ 578              		.loc 1 106 0
+ 579 0058 14304BE2 		sub	r3, fp, #20
+ 580 005c 0300A0E1 		mov	r0, r3
+ 581 0060 0010A0E3 		mov	r1, #0
+ 582 0064 0420A0E3 		mov	r2, #4
+ 583 0068 FEFFFFEB 		bl	CyU3PMemSet
+ 107:../StartStopApplication.c ****     Status = CyU3PSetEpConfig(USB_CONSUMER_ENDPOINT, &epConfig);
+ 584              		.loc 1 107 0
+ 585 006c 14304BE2 		sub	r3, fp, #20
+ 586 0070 8100A0E3 		mov	r0, #129
+ 587 0074 0310A0E1 		mov	r1, r3
+ 588 0078 FEFFFFEB 		bl	CyU3PSetEpConfig
+ 589 007c 08000BE5 		str	r0, [fp, #-8]
+ 108:../StartStopApplication.c **** 	CheckStatus("Disable USB_CONSUMER_ENDPOINT", Status);
+ 590              		.loc 1 108 0
+ 591 0080 28009FE5 		ldr	r0, .L11+16
+ 592 0084 08101BE5 		ldr	r1, [fp, #-8]
+ 593 0088 FEFFFFEB 		bl	CheckStatus
+ 109:../StartStopApplication.c **** 
+ 110:../StartStopApplication.c ****     // OK, Application is now stopped
+ 111:../StartStopApplication.c ****     glIsApplicationActive = CyFalse;
+ 594              		.loc 1 111 0
+ 595 008c 20309FE5 		ldr	r3, .L11+20
+ 596 0090 0020A0E3 		mov	r2, #0
+ 597 0094 002083E5 		str	r2, [r3]
+ 112:../StartStopApplication.c **** }
+ 598              		.loc 1 112 0
+ 599 0098 04D04BE2 		sub	sp, fp, #4
+ 600              		@ sp needed
+ 601 009c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 602              	.L12:
+ 603              		.align	2
+ 604              	.L11:
+ 605 00a0 3C010000 		.word	.LC16
+ 606 00a4 00000000 		.word	GPIF2USB_Handle
+ 607 00a8 4C010000 		.word	.LC17
+ 608 00ac F8000000 		.word	.LC13
+ 609 00b0 68010000 		.word	.LC18
+ 610 00b4 00000000 		.word	glIsApplicationActive
+ 611              		.cfi_endproc
+ 612              	.LFE2:
+ 614              		.text
+ 615              	.Letext0:
+ 616              		.file 2 "c:\\program files (x86)\\cypress\\ez-usb fx3 sdk\\1.3\\arm gcc\\arm-none-eabi\\include\\s
+ 617              		.file 3 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3typ
+ 618              		.file 4 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_port
+ 619              		.file 5 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/tx_api.
+ 620              		.file 6 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3dma
+ 621              		.file 7 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3sys
+ 622              		.file 8 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3pib
+ 623              		.file 9 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3gpi
+ 624              		.file 10 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3us
+ 625              		.file 11 "C:\\Program Files (x86)\\Cypress\\EZ-USB FX3 SDK\\1.3\\/firmware/u3p_firmware/inc/cyu3us
+ 626              		.file 12 "../SlaveFifoRead.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 StartStopApplication.c
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:21     .data.CyFxGpifTransition:00000000 CyFxGpifTransition
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:18     .data.CyFxGpifTransition:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:32     .data.CyFxGpifWavedata:00000000 CyFxGpifWavedata
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:29     .data.CyFxGpifWavedata:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:62     .data.CyFxGpifWavedataPosition:00000000 CyFxGpifWavedataPosition
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:59     .data.CyFxGpifWavedataPosition:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:73     .data.CyFxGpifRegValue:00000000 CyFxGpifRegValue
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:70     .data.CyFxGpifRegValue:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:155    .rodata.CyFxGpifConfig:00000000 CyFxGpifConfig
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:152    .rodata.CyFxGpifConfig:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:175    .data.CyFxGpifConfigName:00000000 CyFxGpifConfigName
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:168    .rodata:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:172    .data.CyFxGpifConfigName:00000000 $d
+                            *COM*:000000ac GPIF2USB_Handle
+                            *COM*:000000ac USB2GPIF_Handle
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:197    .data.BusSpeed:00000000 BusSpeed
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:194    .data.BusSpeed:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:207    .rodata.EpSize:00000000 EpSize
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:204    .rodata.EpSize:00000000 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:223    .text.StartGPIF:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:226    .text.StartGPIF:00000000 StartGPIF
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:285    .text.StartGPIF:00000088 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:320    .text.StartApplication:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:323    .text.StartApplication:00000000 StartApplication
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:506    .text.StartApplication:00000204 $d
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:534    .text.StopApplication:00000000 $a
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:537    .text.StopApplication:00000000 StopApplication
+C:\Users\dbir\AppData\Local\Temp\ccQ8agyA.s:605    .text.StopApplication:000000a0 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PGpifLoad
+CyU3PDebugPrint
+CheckStatus
+CyU3PGpifSocketConfigure
+CyU3PGpifSMStart
+__aeabi_uidiv
+CyU3PUsbGetSpeed
+CyU3PPibInit
+CyU3PMemSet
+CyU3PSetEpConfig
+CyU3PDmaChannelCreate
+CyU3PUsbFlushEp
+CyU3PDmaChannelSetXfer
+ClockValue
+glIsApplicationActive
+CyU3PGpifDisable
+CyU3PPibDeInit
+CyU3PDmaChannelDestroy

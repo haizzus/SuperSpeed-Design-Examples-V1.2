@@ -1,0 +1,28 @@
+xst -intstyle ise -ifn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.xst" -ofn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-6 "top.ngc" top.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-6 "top.ngc" top.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-6 "top.ngc" top.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-6 "top.ngc" top.ngd  
+cpldfit -intstyle ise -p xc2c128-6-VQ100 -ofmt vhdl -optimize density -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 28 -unused pullup -terminate pullup -iostd LVCMOS18 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+taengine -intstyle ise -f top -w --format html1 -l top_html/tim/timing_report.htm 
+hprep6 -s IEEE1149 -i top 
+xst -intstyle ise -ifn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.xst" -ofn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-6 "top.ngc" top.ngd  
+cpldfit -intstyle ise -p xc2c128-6-VQ100 -ofmt vhdl -optimize density -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 28 -unused pullup -terminate pullup -iostd LVCMOS18 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+hprep6 -s IEEE1149 -i top 
+xst -intstyle ise -ifn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.xst" -ofn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-6 "top.ngc" top.ngd  
+cpldfit -intstyle ise -p xc2c128-6-VQ100 -ofmt vhdl -optimize density -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 28 -unused pullup -terminate pullup -iostd LVCMOS18 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+hprep6 -s IEEE1149 -i top 
+xst -intstyle ise -ifn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.xst" -ofn "C:/Users/savj/Desktop/CPLD Projects/SPI_I2C/top.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-6 "top.ngc" top.ngd  
+cpldfit -intstyle ise -p xc2c128-6-VQ100 -ofmt vhdl -optimize density -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 28 -unused pullup -terminate pullup -iostd LVCMOS18 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+hprep6 -s IEEE1149 -i top 

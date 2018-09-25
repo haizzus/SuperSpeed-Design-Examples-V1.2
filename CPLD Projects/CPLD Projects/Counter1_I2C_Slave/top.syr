@@ -1,0 +1,316 @@
+Release 14.1 - xst P.15xf (nt64)
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.09 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.09 secs
+ 
+--> Reading design: top.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "top.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "top"
+Output Format                      : NGC
+Target Device                      : CoolRunner2 CPLDs
+
+---- Source Options
+Top Module Name                    : top
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+
+---- Target Options
+Add IO Buffers                     : YES
+MACRO Preserve                     : YES
+XOR Preserve                       : YES
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : Yes
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Verilog 2001                       : YES
+
+---- Other Options
+Clock Enable                       : YES
+wysiwyg                            : NO
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "i2c_module.v" in library work
+Compiling verilog file "Counter_Module.v" in library work
+Module <i2c_module> compiled
+Compiling verilog file "top.v" in library work
+Module <Counter1_Module> compiled
+Module <top> compiled
+No errors in compilation
+Analysis of file <"top.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <top> in library <work>.
+
+Analyzing hierarchy for module <Counter1_Module> in library <work>.
+
+Analyzing hierarchy for module <i2c_module> in library <work> with parameters.
+	addr_comp = "01"
+	my_i2c_addr = "1010110"
+	read_state = "11"
+	start_state = "00"
+	write_state = "10"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <top>.
+Module <top> is correct for synthesis.
+ 
+Analyzing module <Counter1_Module> in library <work>.
+Module <Counter1_Module> is correct for synthesis.
+ 
+Analyzing module <i2c_module> in library <work>.
+	addr_comp = 2'b01
+	my_i2c_addr = 7'b1010110
+	read_state = 2'b11
+	start_state = 2'b00
+	write_state = 2'b10
+"i2c_module.v" line 160: Found Parallel Case directive in module <i2c_module>.
+Module <i2c_module> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <Counter1_Module>.
+    Related source file is "Counter_Module.v".
+    Found 1-bit register for signal <WR_n>.
+    Found 32-bit up counter for signal <Counter>.
+    Summary:
+	inferred   1 Counter(s).
+	inferred   1 D-type flip-flop(s).
+Unit <Counter1_Module> synthesized.
+
+
+Synthesizing Unit <i2c_module>.
+    Related source file is "i2c_module.v".
+    Found finite state machine <FSM_0> for signal <present_state>.
+    -----------------------------------------------------------------------
+    | States             | 4                                              |
+    | Transitions        | 15                                             |
+    | Inputs             | 7                                              |
+    | Outputs            | 7                                              |
+    | Clock              | scl                       (falling_edge)       |
+    | Reset              | i2c_rst                   (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | 00                                             |
+    | Encoding           | automatic                                      |
+    | Implementation     | automatic                                      |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <out_en>.
+    Found 1-bit register for signal <ack_out>.
+    Found 1-bit register for signal <sda_out>.
+    Found 8-bit register for signal <data_in>.
+    Found 8-bit register for signal <gpio_input>.
+    Found 8-bit register for signal <gpio_output>.
+    Found 4-bit up counter for signal <index>.
+    Found 2-bit comparator not equal for signal <index$cmp_ne0000> created at line 136.
+    Found 1-bit register for signal <latch_data_in>.
+    Found 1-bit register for signal <latch_data_out>.
+    Found 4-bit comparator lessequal for signal <present_state$cmp_le0000> created at line 170.
+    Found 4-bit comparator lessequal for signal <present_state$cmp_le0001> created at line 184.
+    Found 1-bit register for signal <shift_data_in>.
+    Found 1-bit register for signal <start>.
+    Found 1-bit register for signal <start_rst>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 Counter(s).
+	inferred   8 D-type flip-flop(s).
+	inferred   3 Comparator(s).
+Unit <i2c_module> synthesized.
+
+
+Synthesizing Unit <top>.
+    Related source file is "top.v".
+WARNING:Xst:1306 - Output <GPIO45_n> is never assigned.
+WARNING:Xst:647 - Input <TP_2> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <TP_n> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 1-bit tristate buffer for signal <I2C_SDA>.
+    Found 1-bit tristate buffer for signal <TX_MISO>.
+    Summary:
+	inferred   2 Tristate(s).
+Unit <top> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Counters                                             : 2
+ 32-bit up counter                                     : 1
+ 4-bit up counter                                      : 1
+# Registers                                            : 12
+ 1-bit register                                        : 9
+ 8-bit register                                        : 3
+# Comparators                                          : 3
+ 2-bit comparator not equal                            : 1
+ 4-bit comparator lessequal                            : 2
+# Multiplexers                                         : 1
+ 1-bit 8-to-1 multiplexer                              : 1
+# Tristates                                            : 2
+ 1-bit tristate buffer                                 : 2
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <i2c_slave/present_state/FSM> on signal <present_state[1:2]> with user encoding.
+-------------------
+ State | Encoding
+-------------------
+ 00    | 00
+ 01    | 01
+ 10    | 10
+ 11    | 11
+-------------------
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 1
+# Counters                                             : 2
+ 32-bit up counter                                     : 1
+ 4-bit up counter                                      : 1
+# Registers                                            : 9
+ Flip-Flops                                            : 9
+# Multiplexers                                         : 1
+ 1-bit 8-to-1 multiplexer                              : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <top> ...
+
+Optimizing unit <Counter1_Module> ...
+
+Optimizing unit <i2c_module> ...
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : top.ngr
+Top Level Output File Name         : top
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : Yes
+Target Technology                  : CoolRunner2 CPLDs
+Macro Preserve                     : YES
+XOR Preserve                       : YES
+Clock Enable                       : YES
+wysiwyg                            : NO
+
+Design Statistics
+# IOs                              : 80
+
+Cell Usage :
+# BELS                             : 286
+#      AND2                        : 99
+#      AND3                        : 14
+#      AND4                        : 6
+#      AND7                        : 2
+#      AND8                        : 1
+#      GND                         : 2
+#      INV                         : 96
+#      OR2                         : 29
+#      OR3                         : 2
+#      VCC                         : 1
+#      XOR2                        : 34
+# FlipFlops/Latches                : 71
+#      FD                          : 1
+#      FDC                         : 41
+#      FDCE                        : 22
+#      FDP                         : 2
+#      FDPE                        : 5
+# IO Buffers                       : 56
+#      IBUF                        : 11
+#      IOBUFE                      : 1
+#      OBUF                        : 43
+#      OBUFE                       : 1
+# Others                           : 1
+#      PULLUP                      : 1
+=========================================================================
+
+
+Total REAL time to Xst completion: 5.00 secs
+Total CPU time to Xst completion: 5.38 secs
+ 
+--> 
+
+Total memory usage is 254732 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    3 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+

@@ -1,0 +1,17 @@
+!SESSION 2014-08-04 15:04:05.157 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0_55
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\fx3_dvk\HelloWorldi2c
+
+!ENTRY org.eclipse.ui.workbench 2 0 2014-08-04 15:04:08.782
+!MESSAGE A handler conflict occurred.  This may disable some commands.
+!SUBENTRY 1 org.eclipse.ui.workbench 2 0 2014-08-04 15:04:08.782
+!MESSAGE Conflict for 'com.cypress.fx3.ui.commands.controlCenterCommand':
+HandlerActivation(commandId=com.cypress.fx3.ui.commands.controlCenterCommand,
+	handler=ActionDelegateHandlerProxy(null,com.cypress.fx3.ui.handlers.OpenControlCenterAction),
+	expression=AndExpression(ActionSetExpression(com.cypress.fx3.ui.fx3ActionSet,org.eclipse.ui.internal.WorkbenchWindow@1904a5c),WorkbenchWindowExpression(org.eclipse.ui.internal.WorkbenchWindow@1904a5c)),sourcePriority=16640)
+HandlerActivation(commandId=com.cypress.fx3.ui.commands.controlCenterCommand,
+	handler=ActionDelegateHandlerProxy(null,com.cypress.fx3.ui.handlers.OpenControlCenterAction),
+	expression=AndExpression(ActionSetExpression(com.cypress.fx3.ui.fx3ActionSet,org.eclipse.ui.internal.WorkbenchWindow@1904a5c),WorkbenchWindowExpression(org.eclipse.ui.internal.WorkbenchWindow@1904a5c)),sourcePriority=16640)

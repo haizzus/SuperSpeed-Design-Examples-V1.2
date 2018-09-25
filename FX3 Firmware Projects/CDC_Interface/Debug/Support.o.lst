@@ -1,0 +1,1450 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Support.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	DisplayEvent,60,4
+  22              		.global	EventName
+  23              		.section	.rodata
+  24              		.align	2
+  25              	.LC0:
+  26 0000 434F4E4E 		.ascii	"CONNECT\000"
+  26      45435400 
+  27              		.align	2
+  28              	.LC1:
+  29 0008 44495343 		.ascii	"DISCONNECT\000"
+  29      4F4E4E45 
+  29      435400
+  30 0013 00       		.align	2
+  31              	.LC2:
+  32 0014 53555350 		.ascii	"SUSPEND\000"
+  32      454E4400 
+  33              		.align	2
+  34              	.LC3:
+  35 001c 52455355 		.ascii	"RESUME\000"
+  35      4D4500
+  36 0023 00       		.align	2
+  37              	.LC4:
+  38 0024 52455345 		.ascii	"RESET\000"
+  38      5400
+  39 002a 0000     		.align	2
+  40              	.LC5:
+  41 002c 5345545F 		.ascii	"SET_CONFIGURATION\000"
+  41      434F4E46 
+  41      49475552 
+  41      4154494F 
+  41      4E00
+  42 003e 0000     		.align	2
+  43              	.LC6:
+  44 0040 4348414E 		.ascii	"CHANGE_SPEED\000"
+  44      47455F53 
+  44      50454544 
+  44      00
+  45 004d 000000   		.align	2
+  46              	.LC7:
+  47 0050 5345545F 		.ascii	"SET_INTERFACE\000"
+  47      494E5445 
+  47      52464143 
+  47      4500
+  48 005e 0000     		.align	2
+  49              	.LC8:
+  50 0060 5345545F 		.ascii	"SET_EXIT_LATENCY\000"
+  50      45584954 
+  50      5F4C4154 
+  50      454E4359 
+  50      00
+  51 0071 000000   		.align	2
+  52              	.LC9:
+  53 0074 534F465F 		.ascii	"SOF_ITP\000"
+  53      49545000 
+  54              		.align	2
+  55              	.LC10:
+  56 007c 55534552 		.ascii	"USER_EP0_XFER_COMPLETE\000"
+  56      5F455030 
+  56      5F584645 
+  56      525F434F 
+  56      4D504C45 
+  57 0093 00       		.align	2
+  58              	.LC11:
+  59 0094 56425553 		.ascii	"VBUS_VALID\000"
+  59      5F56414C 
+  59      494400
+  60 009f 00       		.align	2
+  61              	.LC12:
+  62 00a0 56425553 		.ascii	"VBUS_REMOVED\000"
+  62      5F52454D 
+  62      4F564544 
+  62      00
+  63 00ad 000000   		.align	2
+  64              	.LC13:
+  65 00b0 484F5354 		.ascii	"HOSTMODE_CONNECT\000"
+  65      4D4F4445 
+  65      5F434F4E 
+  65      4E454354 
+  65      00
+  66 00c1 000000   		.align	2
+  67              	.LC14:
+  68 00c4 484F5354 		.ascii	"HOSTMODE_DISCONNECT\000"
+  68      4D4F4445 
+  68      5F444953 
+  68      434F4E4E 
+  68      45435400 
+  69              		.align	2
+  70              	.LC15:
+  71 00d8 4F54475F 		.ascii	"OTG_CHANGE\000"
+  71      4348414E 
+  71      474500
+  72 00e3 00       		.align	2
+  73              	.LC16:
+  74 00e4 4F54475F 		.ascii	"OTG_VBUS_CHG\000"
+  74      56425553 
+  74      5F434847 
+  74      00
+  75 00f1 000000   		.align	2
+  76              	.LC17:
+  77 00f4 4F54475F 		.ascii	"OTG_SRP\000"
+  77      53525000 
+  78              		.align	2
+  79              	.LC18:
+  80 00fc 45505F55 		.ascii	"EP_UNDERRUN\000"
+  80      4E444552 
+  80      52554E00 
+  81              		.align	2
+  82              	.LC19:
+  83 0108 4C494E4B 		.ascii	"LINK_RECOVERY\000"
+  83      5F524543 
+  83      4F564552 
+  83      5900
+  84 0116 0000     		.align	2
+  85              	.LC20:
+  86 0118 55534233 		.ascii	"USB3_LINKFAIL\000"
+  86      5F4C494E 
+  86      4B464149 
+  86      4C00
+  87 0126 0000     		.align	2
+  88              	.LC21:
+  89 0128 53535F43 		.ascii	"SS_COMP_ENTRY\000"
+  89      4F4D505F 
+  89      454E5452 
+  89      5900
+  90 0136 0000     		.align	2
+  91              	.LC22:
+  92 0138 53535F43 		.ascii	"SS_COMP_EXIT\000"
+  92      4F4D505F 
+  92      45584954 
+  92      00
+  93 0145 000000   		.align	2
+  94              	.LC23:
+  95 0148 323300   		.ascii	"23\000"
+  96 014b 00       		.align	2
+  97              	.LC24:
+  98 014c 323400   		.ascii	"24\000"
+  99 014f 00       		.align	2
+ 100              	.LC25:
+ 101 0150 323500   		.ascii	"25\000"
+ 102 0153 00       		.align	2
+ 103              	.LC26:
+ 104 0154 323600   		.ascii	"26\000"
+ 105 0157 00       		.align	2
+ 106              	.LC27:
+ 107 0158 476F7420 		.ascii	"Got chars from USB\000"
+ 107      63686172 
+ 107      73206672 
+ 107      6F6D2055 
+ 107      534200
+ 108 016b 00       		.align	2
+ 109              	.LC28:
+ 110 016c 53657420 		.ascii	"Set Control Line State\000"
+ 110      436F6E74 
+ 110      726F6C20 
+ 110      4C696E65 
+ 110      20537461 
+ 111 0183 00       		.align	2
+ 112              	.LC29:
+ 113 0184 47657420 		.ascii	"Get Line Coding\000"
+ 113      4C696E65 
+ 113      20436F64 
+ 113      696E6700 
+ 114              		.align	2
+ 115              	.LC30:
+ 116 0194 53657420 		.ascii	"Set Line Coding\000"
+ 116      4C696E65 
+ 116      20436F64 
+ 116      696E6700 
+ 117              		.align	2
+ 118              	.LC31:
+ 119 01a4 4F757420 		.ascii	"Out of Range\000"
+ 119      6F662052 
+ 119      616E6765 
+ 119      00
+ 120              		.section	.data.EventName,"aw",%progbits
+ 121              		.align	2
+ 124              	EventName:
+ 125 0000 00000000 		.word	.LC0
+ 126 0004 08000000 		.word	.LC1
+ 127 0008 14000000 		.word	.LC2
+ 128 000c 1C000000 		.word	.LC3
+ 129 0010 24000000 		.word	.LC4
+ 130 0014 2C000000 		.word	.LC5
+ 131 0018 40000000 		.word	.LC6
+ 132 001c 50000000 		.word	.LC7
+ 133 0020 60000000 		.word	.LC8
+ 134 0024 74000000 		.word	.LC9
+ 135 0028 7C000000 		.word	.LC10
+ 136 002c 94000000 		.word	.LC11
+ 137 0030 A0000000 		.word	.LC12
+ 138 0034 B0000000 		.word	.LC13
+ 139 0038 C4000000 		.word	.LC14
+ 140 003c D8000000 		.word	.LC15
+ 141 0040 E4000000 		.word	.LC16
+ 142 0044 F4000000 		.word	.LC17
+ 143 0048 FC000000 		.word	.LC18
+ 144 004c 08010000 		.word	.LC19
+ 145 0050 18010000 		.word	.LC20
+ 146 0054 28010000 		.word	.LC21
+ 147 0058 38010000 		.word	.LC22
+ 148 005c 48010000 		.word	.LC23
+ 149 0060 4C010000 		.word	.LC24
+ 150 0064 50010000 		.word	.LC25
+ 151 0068 54010000 		.word	.LC26
+ 152 006c 58010000 		.word	.LC27
+ 153 0070 6C010000 		.word	.LC28
+ 154 0074 84010000 		.word	.LC29
+ 155 0078 94010000 		.word	.LC30
+ 156 007c A4010000 		.word	.LC31
+ 157              		.global	ErrorCodeTextLookupTable
+ 158              		.section	.rodata
+ 159 01b1 000000   		.align	2
+ 160              	.LC32:
+ 161 01b4 53554343 		.ascii	"SUCCESS\000"
+ 161      45535300 
+ 162              		.align	2
+ 163              	.LC33:
+ 164 01bc 44454C45 		.ascii	"DELETED\000"
+ 164      54454400 
+ 165              		.align	2
+ 166              	.LC34:
+ 167 01c4 4241445F 		.ascii	"BAD_POOL\000"
+ 167      504F4F4C 
+ 167      00
+ 168 01cd 000000   		.align	2
+ 169              	.LC35:
+ 170 01d0 4241445F 		.ascii	"BAD_POINTER\000"
+ 170      504F494E 
+ 170      54455200 
+ 171              		.align	2
+ 172              	.LC36:
+ 173 01dc 494E5641 		.ascii	"INVALID_WAIT\000"
+ 173      4C49445F 
+ 173      57414954 
+ 173      00
+ 174 01e9 000000   		.align	2
+ 175              	.LC37:
+ 176 01ec 4241445F 		.ascii	"BAD_SIZE\000"
+ 176      53495A45 
+ 176      00
+ 177 01f5 000000   		.align	2
+ 178              	.LC38:
+ 179 01f8 4241445F 		.ascii	"BAD_EVENT_GROUP\000"
+ 179      4556454E 
+ 179      545F4752 
+ 179      4F555000 
+ 180              		.align	2
+ 181              	.LC39:
+ 182 0208 4E4F5F45 		.ascii	"NO_EVENTS\000"
+ 182      56454E54 
+ 182      5300
+ 183 0212 0000     		.align	2
+ 184              	.LC40:
+ 185 0214 4241445F 		.ascii	"BAD_OPTION\000"
+ 185      4F505449 
+ 185      4F4E00
+ 186 021f 00       		.align	2
+ 187              	.LC41:
+ 188 0220 4241445F 		.ascii	"BAD_QUEUE\000"
+ 188      51554555 
+ 188      4500
+ 189 022a 0000     		.align	2
+ 190              	.LC42:
+ 191 022c 51554555 		.ascii	"QUEUE_EMPTY\000"
+ 191      455F454D 
+ 191      50545900 
+ 192              		.align	2
+ 193              	.LC43:
+ 194 0238 51554555 		.ascii	"QUEUE_FULL\000"
+ 194      455F4655 
+ 194      4C4C00
+ 195 0243 00       		.align	2
+ 196              	.LC44:
+ 197 0244 4241445F 		.ascii	"BAD_SEMAPHORE\000"
+ 197      53454D41 
+ 197      50484F52 
+ 197      4500
+ 198 0252 0000     		.align	2
+ 199              	.LC45:
+ 200 0254 4745545F 		.ascii	"GET_SEMAPHORE_FAIL\000"
+ 200      53454D41 
+ 200      50484F52 
+ 200      455F4641 
+ 200      494C00
+ 201 0267 00       		.align	2
+ 202              	.LC46:
+ 203 0268 4241445F 		.ascii	"BAD_THREAD\000"
+ 203      54485245 
+ 203      414400
+ 204 0273 00       		.align	2
+ 205              	.LC47:
+ 206 0274 4241445F 		.ascii	"BAD_PRIORITY\000"
+ 206      5052494F 
+ 206      52495459 
+ 206      00
+ 207 0281 000000   		.align	2
+ 208              	.LC48:
+ 209 0284 4D454D4F 		.ascii	"MEMORY_ERROR\000"
+ 209      52595F45 
+ 209      52524F52 
+ 209      00
+ 210 0291 000000   		.align	2
+ 211              	.LC49:
+ 212 0294 44454C45 		.ascii	"DELETE_FAILED\000"
+ 212      54455F46 
+ 212      41494C45 
+ 212      4400
+ 213 02a2 0000     		.align	2
+ 214              	.LC50:
+ 215 02a4 52455355 		.ascii	"RESUME_FAILED\000"
+ 215      4D455F46 
+ 215      41494C45 
+ 215      4400
+ 216 02b2 0000     		.align	2
+ 217              	.LC51:
+ 218 02b4 494E5641 		.ascii	"INVALID_CALLER\000"
+ 218      4C49445F 
+ 218      43414C4C 
+ 218      455200
+ 219 02c3 00       		.align	2
+ 220              	.LC52:
+ 221 02c4 53555350 		.ascii	"SUSPEND_FAILED\000"
+ 221      454E445F 
+ 221      4641494C 
+ 221      454400
+ 222 02d3 00       		.align	2
+ 223              	.LC53:
+ 224 02d4 4241445F 		.ascii	"BAD_TIMER\000"
+ 224      54494D45 
+ 224      5200
+ 225 02de 0000     		.align	2
+ 226              	.LC54:
+ 227 02e0 4241445F 		.ascii	"BAD_TICK\000"
+ 227      5449434B 
+ 227      00
+ 228 02e9 000000   		.align	2
+ 229              	.LC55:
+ 230 02ec 41435449 		.ascii	"ACTIVATE_FAILED\000"
+ 230      56415445 
+ 230      5F464149 
+ 230      4C454400 
+ 231              		.align	2
+ 232              	.LC56:
+ 233 02fc 4241445F 		.ascii	"BAD_THRESHOLD\000"
+ 233      54485245 
+ 233      53484F4C 
+ 233      4400
+ 234 030a 0000     		.align	2
+ 235              	.LC57:
+ 236 030c 53555350 		.ascii	"SUSPEND_LIFTED\000"
+ 236      454E445F 
+ 236      4C494654 
+ 236      454400
+ 237 031b 00       		.align	2
+ 238              	.LC58:
+ 239 031c 57414954 		.ascii	"WAIT_ABORTED\000"
+ 239      5F41424F 
+ 239      52544544 
+ 239      00
+ 240 0329 000000   		.align	2
+ 241              	.LC59:
+ 242 032c 57414954 		.ascii	"WAIT_ABORT_FAILED\000"
+ 242      5F41424F 
+ 242      52545F46 
+ 242      41494C45 
+ 242      4400
+ 243 033e 0000     		.align	2
+ 244              	.LC60:
+ 245 0340 4241445F 		.ascii	"BAD_MUTEX\000"
+ 245      4D555445 
+ 245      5800
+ 246 034a 0000     		.align	2
+ 247              	.LC61:
+ 248 034c 4D555445 		.ascii	"MUTEX_FAILURE\000"
+ 248      585F4641 
+ 248      494C5552 
+ 248      4500
+ 249 035a 0000     		.align	2
+ 250              	.LC62:
+ 251 035c 4D555445 		.ascii	"MUTEX_PUT_FAILED\000"
+ 251      585F5055 
+ 251      545F4641 
+ 251      494C4544 
+ 251      00
+ 252 036d 000000   		.align	2
+ 253              	.LC63:
+ 254 0370 494E4845 		.ascii	"INHERIT_FAILED\000"
+ 254      5249545F 
+ 254      4641494C 
+ 254      454400
+ 255 037f 00       		.align	2
+ 256              	.LC64:
+ 257 0380 4E4F545F 		.ascii	"NOT_IDLE\000"
+ 257      49444C45 
+ 257      00
+ 258 0389 000000   		.align	2
+ 259              	.LC65:
+ 260 038c 4241445F 		.ascii	"BAD_ARGUMENT\000"
+ 260      41524755 
+ 260      4D454E54 
+ 260      00
+ 261 0399 000000   		.align	2
+ 262              	.LC66:
+ 263 039c 4E554C4C 		.ascii	"NULL_POINTER\000"
+ 263      5F504F49 
+ 263      4E544552 
+ 263      00
+ 264 03a9 000000   		.align	2
+ 265              	.LC67:
+ 266 03ac 4E4F545F 		.ascii	"NOT_STARTED\000"
+ 266      53544152 
+ 266      54454400 
+ 267              		.align	2
+ 268              	.LC68:
+ 269 03b8 414C5245 		.ascii	"ALREADY_STARTED\000"
+ 269      4144595F 
+ 269      53544152 
+ 269      54454400 
+ 270              		.align	2
+ 271              	.LC69:
+ 272 03c8 4E4F545F 		.ascii	"NOT_CONFIGURED\000"
+ 272      434F4E46 
+ 272      49475552 
+ 272      454400
+ 273 03d7 00       		.align	2
+ 274              	.LC70:
+ 275 03d8 54494D45 		.ascii	"TIMEOUT\000"
+ 275      4F555400 
+ 276              		.align	2
+ 277              	.LC71:
+ 278 03e0 4E4F545F 		.ascii	"NOT_SUPPORTED\000"
+ 278      53555050 
+ 278      4F525445 
+ 278      4400
+ 279 03ee 0000     		.align	2
+ 280              	.LC72:
+ 281 03f0 494E5641 		.ascii	"INVALID_SEQUENCE\000"
+ 281      4C49445F 
+ 281      53455155 
+ 281      454E4345 
+ 281      00
+ 282 0401 000000   		.align	2
+ 283              	.LC73:
+ 284 0404 41424F52 		.ascii	"ABORTED\000"
+ 284      54454400 
+ 285              		.align	2
+ 286              	.LC74:
+ 287 040c 444D415F 		.ascii	"DMA_FAILURE\000"
+ 287      4641494C 
+ 287      55524500 
+ 288              		.align	2
+ 289              	.LC75:
+ 290 0418 4641494C 		.ascii	"FAILURE\000"
+ 290      55524500 
+ 291              		.align	2
+ 292              	.LC76:
+ 293 0420 4241445F 		.ascii	"BAD_INDEX\000"
+ 293      494E4445 
+ 293      5800
+ 294 042a 0000     		.align	2
+ 295              	.LC77:
+ 296 042c 4241445F 		.ascii	"BAD_ENUM_METHOD\000"
+ 296      454E554D 
+ 296      5F4D4554 
+ 296      484F4400 
+ 297              		.align	2
+ 298              	.LC78:
+ 299 043c 494E5641 		.ascii	"INVALID_CONFIGURATION\000"
+ 299      4C49445F 
+ 299      434F4E46 
+ 299      49475552 
+ 299      4154494F 
+ 300 0452 0000     		.align	2
+ 301              	.LC79:
+ 302 0454 4348414E 		.ascii	"CHANNEL_CREATE_FAILED\000"
+ 302      4E454C5F 
+ 302      43524541 
+ 302      54455F46 
+ 302      41494C45 
+ 303 046a 0000     		.align	2
+ 304              	.LC80:
+ 305 046c 4348414E 		.ascii	"CHANNEL_DESTROY_FAILED\000"
+ 305      4E454C5F 
+ 305      44455354 
+ 305      524F595F 
+ 305      4641494C 
+ 306 0483 00       		.align	2
+ 307              	.LC81:
+ 308 0484 4241445F 		.ascii	"BAD_DESCRIPTOR_TYPE\000"
+ 308      44455343 
+ 308      52495054 
+ 308      4F525F54 
+ 308      59504500 
+ 309              		.align	2
+ 310              	.LC82:
+ 311 0498 58464552 		.ascii	"XFER_CANCELLED\000"
+ 311      5F43414E 
+ 311      43454C4C 
+ 311      454400
+ 312 04a7 00       		.align	2
+ 313              	.LC83:
+ 314 04a8 46454154 		.ascii	"FEATURE_NOT_ENABLED\000"
+ 314      5552455F 
+ 314      4E4F545F 
+ 314      454E4142 
+ 314      4C454400 
+ 315              		.align	2
+ 316              	.LC84:
+ 317 04bc 5354414C 		.ascii	"STALLED\000"
+ 317      4C454400 
+ 318              		.align	2
+ 319              	.LC85:
+ 320 04c4 424C4F43 		.ascii	"BLOCK_FAILURE\000"
+ 320      4B5F4641 
+ 320      494C5552 
+ 320      4500
+ 321 04d2 0000     		.align	2
+ 322              	.LC86:
+ 323 04d4 4C4F5354 		.ascii	"LOST_ARBITRATION\000"
+ 323      5F415242 
+ 323      49545241 
+ 323      54494F4E 
+ 323      00
+ 324 04e5 000000   		.align	2
+ 325              	.LC87:
+ 326 04e8 5354414E 		.ascii	"STANDBY_FAILED\000"
+ 326      4442595F 
+ 326      4641494C 
+ 326      454400
+ 327 04f7 00       		.align	2
+ 328              	.LC88:
+ 329 04f8 494E5641 		.ascii	"INVALID_VOLTAGE_RANGE\000"
+ 329      4C49445F 
+ 329      564F4C54 
+ 329      4147455F 
+ 329      52414E47 
+ 330 050e 0000     		.align	2
+ 331              	.LC89:
+ 332 0510 43415244 		.ascii	"CARD_WRONG_RESPONSE\000"
+ 332      5F57524F 
+ 332      4E475F52 
+ 332      4553504F 
+ 332      4E534500 
+ 333              		.align	2
+ 334              	.LC90:
+ 335 0524 554E5355 		.ascii	"UNSUPPORTED_CARD\000"
+ 335      50504F52 
+ 335      5445445F 
+ 335      43415244 
+ 335      00
+ 336 0535 000000   		.align	2
+ 337              	.LC91:
+ 338 0538 43415244 		.ascii	"CARD_WRONG_STATE\000"
+ 338      5F57524F 
+ 338      4E475F53 
+ 338      54415445 
+ 338      00
+ 339 0549 000000   		.align	2
+ 340              	.LC92:
+ 341 054c 434D445F 		.ascii	"CMD_NOT_SUPPORTED\000"
+ 341      4E4F545F 
+ 341      53555050 
+ 341      4F525445 
+ 341      4400
+ 342 055e 0000     		.align	2
+ 343              	.LC93:
+ 344 0560 43524300 		.ascii	"CRC\000"
+ 345              		.align	2
+ 346              	.LC94:
+ 347 0564 494E5641 		.ascii	"INVALID_ADDR\000"
+ 347      4C49445F 
+ 347      41444452 
+ 347      00
+ 348 0571 000000   		.align	2
+ 349              	.LC95:
+ 350 0574 494E5641 		.ascii	"INVALID_UNIT\000"
+ 350      4C49445F 
+ 350      554E4954 
+ 350      00
+ 351 0581 000000   		.align	2
+ 352              	.LC96:
+ 353 0584 494E5641 		.ascii	"INVALID_DEV\000"
+ 353      4C49445F 
+ 353      44455600 
+ 354              		.align	2
+ 355              	.LC97:
+ 356 0590 414C5245 		.ascii	"ALREADY_PARTITIONED\000"
+ 356      4144595F 
+ 356      50415254 
+ 356      4954494F 
+ 356      4E454400 
+ 357              		.align	2
+ 358              	.LC98:
+ 359 05a4 4E4F545F 		.ascii	"NOT_PARTITIONED\000"
+ 359      50415254 
+ 359      4954494F 
+ 359      4E454400 
+ 360              		.align	2
+ 361              	.LC99:
+ 362 05b4 4241445F 		.ascii	"BAD_PARTITION\000"
+ 362      50415254 
+ 362      4954494F 
+ 362      4E00
+ 363 05c2 0000     		.align	2
+ 364              	.LC100:
+ 365 05c4 52454144 		.ascii	"READ_WRITE_ABORTED\000"
+ 365      5F575249 
+ 365      54455F41 
+ 365      424F5254 
+ 365      454400
+ 366 05d7 00       		.align	2
+ 367              	.LC101:
+ 368 05d8 57524954 		.ascii	"WRITE_PROTECTED\000"
+ 368      455F5052 
+ 368      4F544543 
+ 368      54454400 
+ 369              		.align	2
+ 370              	.LC102:
+ 371 05e8 5349425F 		.ascii	"SIB_INIT\000"
+ 371      494E4954 
+ 371      00
+ 372 05f1 000000   		.align	2
+ 373              	.LC103:
+ 374 05f4 43415244 		.ascii	"CARD_LOCKED\000"
+ 374      5F4C4F43 
+ 374      4B454400 
+ 375              		.align	2
+ 376              	.LC104:
+ 377 0600 43415244 		.ascii	"CARD_LOCK_FAILURE\000"
+ 377      5F4C4F43 
+ 377      4B5F4641 
+ 377      494C5552 
+ 377      4500
+ 378 0612 0000     		.align	2
+ 379              	.LC105:
+ 380 0614 43415244 		.ascii	"CARD_FORCE_ERASE\000"
+ 380      5F464F52 
+ 380      43455F45 
+ 380      52415345 
+ 380      00
+ 381 0625 000000   		.align	2
+ 382              	.LC106:
+ 383 0628 494E5641 		.ascii	"INVALID_BLOCKSIZE\000"
+ 383      4C49445F 
+ 383      424C4F43 
+ 383      4B53495A 
+ 383      4500
+ 384 063a 0000     		.align	2
+ 385              	.LC107:
+ 386 063c 494E5641 		.ascii	"INVALID_FUNCTION\000"
+ 386      4C49445F 
+ 386      46554E43 
+ 386      54494F4E 
+ 386      00
+ 387 064d 000000   		.align	2
+ 388              	.LC108:
+ 389 0650 5455504C 		.ascii	"TUPLE_NOT_FOUND\000"
+ 389      455F4E4F 
+ 389      545F464F 
+ 389      554E4400 
+ 390              		.align	2
+ 391              	.LC109:
+ 392 0660 494F5F41 		.ascii	"IO_ABORTED\000"
+ 392      424F5254 
+ 392      454400
+ 393 066b 00       		.align	2
+ 394              	.LC110:
+ 395 066c 494F5F53 		.ascii	"IO_SUSPENDED\000"
+ 395      55535045 
+ 395      4E444544 
+ 395      00
+ 396 0679 000000   		.align	2
+ 397              	.LC111:
+ 398 067c 494C4C45 		.ascii	"ILLEGAL_CMD\000"
+ 398      47414C5F 
+ 398      434D4400 
+ 399              		.align	2
+ 400              	.LC112:
+ 401 0688 5344494F 		.ascii	"SDIO_UNKNOWN\000"
+ 401      5F554E4B 
+ 401      4E4F574E 
+ 401      00
+ 402 0695 000000   		.align	2
+ 403              	.LC113:
+ 404 0698 4241445F 		.ascii	"BAD_CMD_ARG\000"
+ 404      434D445F 
+ 404      41524700 
+ 405              		.align	2
+ 406              	.LC114:
+ 407 06a4 554E494E 		.ascii	"UNINITIALIZED_FUNCTION\000"
+ 407      49544941 
+ 407      4C495A45 
+ 407      445F4655 
+ 407      4E435449 
+ 408 06bb 00       		.align	2
+ 409              	.LC115:
+ 410 06bc 43415244 		.ascii	"CARD_NOT_ACTIVE\000"
+ 410      5F4E4F54 
+ 410      5F414354 
+ 410      49564500 
+ 411              		.align	2
+ 412              	.LC116:
+ 413 06cc 44455649 		.ascii	"DEVICE_BUSY\000"
+ 413      43455F42 
+ 413      55535900 
+ 414              		.align	2
+ 415              	.LC117:
+ 416 06d8 4E4F5F4D 		.ascii	"NO_METADATA\000"
+ 416      45544144 
+ 416      41544100 
+ 417              		.align	2
+ 418              	.LC118:
+ 419 06e4 43415244 		.ascii	"CARD_UNHEALTHY\000"
+ 419      5F554E48 
+ 419      45414C54 
+ 419      485900
+ 420 06f3 00       		.align	2
+ 421              	.LC119:
+ 422 06f4 4D454449 		.ascii	"MEDIA_FAILURE\000"
+ 422      415F4641 
+ 422      494C5552 
+ 422      4500
+ 423              		.section	.data.ErrorCodeTextLookupTable,"aw",%progbits
+ 424              		.align	2
+ 427              	ErrorCodeTextLookupTable:
+ 428 0000 B4010000 		.word	.LC32
+ 429 0004 BC010000 		.word	.LC33
+ 430 0008 C4010000 		.word	.LC34
+ 431 000c D0010000 		.word	.LC35
+ 432 0010 DC010000 		.word	.LC36
+ 433 0014 EC010000 		.word	.LC37
+ 434 0018 F8010000 		.word	.LC38
+ 435 001c 08020000 		.word	.LC39
+ 436 0020 14020000 		.word	.LC40
+ 437 0024 20020000 		.word	.LC41
+ 438 0028 2C020000 		.word	.LC42
+ 439 002c 38020000 		.word	.LC43
+ 440 0030 44020000 		.word	.LC44
+ 441 0034 54020000 		.word	.LC45
+ 442 0038 68020000 		.word	.LC46
+ 443 003c 74020000 		.word	.LC47
+ 444 0040 84020000 		.word	.LC48
+ 445 0044 94020000 		.word	.LC49
+ 446 0048 A4020000 		.word	.LC50
+ 447 004c B4020000 		.word	.LC51
+ 448 0050 C4020000 		.word	.LC52
+ 449 0054 D4020000 		.word	.LC53
+ 450 0058 E0020000 		.word	.LC54
+ 451 005c EC020000 		.word	.LC55
+ 452 0060 FC020000 		.word	.LC56
+ 453 0064 0C030000 		.word	.LC57
+ 454 0068 1C030000 		.word	.LC58
+ 455 006c 2C030000 		.word	.LC59
+ 456 0070 40030000 		.word	.LC60
+ 457 0074 4C030000 		.word	.LC61
+ 458 0078 5C030000 		.word	.LC62
+ 459 007c 70030000 		.word	.LC63
+ 460 0080 80030000 		.word	.LC64
+ 461 0084 00000000 		.word	0
+ 462 0088 00000000 		.word	0
+ 463 008c 00000000 		.word	0
+ 464 0090 00000000 		.word	0
+ 465 0094 00000000 		.word	0
+ 466 0098 00000000 		.word	0
+ 467 009c 00000000 		.word	0
+ 468 00a0 00000000 		.word	0
+ 469 00a4 00000000 		.word	0
+ 470 00a8 00000000 		.word	0
+ 471 00ac 00000000 		.word	0
+ 472 00b0 00000000 		.word	0
+ 473 00b4 00000000 		.word	0
+ 474 00b8 00000000 		.word	0
+ 475 00bc 00000000 		.word	0
+ 476 00c0 00000000 		.word	0
+ 477 00c4 00000000 		.word	0
+ 478 00c8 00000000 		.word	0
+ 479 00cc 00000000 		.word	0
+ 480 00d0 00000000 		.word	0
+ 481 00d4 00000000 		.word	0
+ 482 00d8 00000000 		.word	0
+ 483 00dc 00000000 		.word	0
+ 484 00e0 00000000 		.word	0
+ 485 00e4 00000000 		.word	0
+ 486 00e8 00000000 		.word	0
+ 487 00ec 00000000 		.word	0
+ 488 00f0 00000000 		.word	0
+ 489 00f4 00000000 		.word	0
+ 490 00f8 00000000 		.word	0
+ 491 00fc 00000000 		.word	0
+ 492 0100 8C030000 		.word	.LC65
+ 493 0104 9C030000 		.word	.LC66
+ 494 0108 AC030000 		.word	.LC67
+ 495 010c B8030000 		.word	.LC68
+ 496 0110 C8030000 		.word	.LC69
+ 497 0114 D8030000 		.word	.LC70
+ 498 0118 E0030000 		.word	.LC71
+ 499 011c F0030000 		.word	.LC72
+ 500 0120 04040000 		.word	.LC73
+ 501 0124 0C040000 		.word	.LC74
+ 502 0128 18040000 		.word	.LC75
+ 503 012c 20040000 		.word	.LC76
+ 504 0130 2C040000 		.word	.LC77
+ 505 0134 3C040000 		.word	.LC78
+ 506 0138 54040000 		.word	.LC79
+ 507 013c 6C040000 		.word	.LC80
+ 508 0140 84040000 		.word	.LC81
+ 509 0144 98040000 		.word	.LC82
+ 510 0148 A8040000 		.word	.LC83
+ 511 014c BC040000 		.word	.LC84
+ 512 0150 C4040000 		.word	.LC85
+ 513 0154 D4040000 		.word	.LC86
+ 514 0158 E8040000 		.word	.LC87
+ 515 015c 00000000 		.word	0
+ 516 0160 00000000 		.word	0
+ 517 0164 00000000 		.word	0
+ 518 0168 00000000 		.word	0
+ 519 016c 00000000 		.word	0
+ 520 0170 00000000 		.word	0
+ 521 0174 00000000 		.word	0
+ 522 0178 00000000 		.word	0
+ 523 017c 00000000 		.word	0
+ 524 0180 F8040000 		.word	.LC88
+ 525 0184 10050000 		.word	.LC89
+ 526 0188 24050000 		.word	.LC90
+ 527 018c 38050000 		.word	.LC91
+ 528 0190 4C050000 		.word	.LC92
+ 529 0194 60050000 		.word	.LC93
+ 530 0198 64050000 		.word	.LC94
+ 531 019c 74050000 		.word	.LC95
+ 532 01a0 84050000 		.word	.LC96
+ 533 01a4 90050000 		.word	.LC97
+ 534 01a8 A4050000 		.word	.LC98
+ 535 01ac B4050000 		.word	.LC99
+ 536 01b0 C4050000 		.word	.LC100
+ 537 01b4 D8050000 		.word	.LC101
+ 538 01b8 E8050000 		.word	.LC102
+ 539 01bc F4050000 		.word	.LC103
+ 540 01c0 00060000 		.word	.LC104
+ 541 01c4 14060000 		.word	.LC105
+ 542 01c8 28060000 		.word	.LC106
+ 543 01cc 3C060000 		.word	.LC107
+ 544 01d0 50060000 		.word	.LC108
+ 545 01d4 60060000 		.word	.LC109
+ 546 01d8 6C060000 		.word	.LC110
+ 547 01dc 7C060000 		.word	.LC111
+ 548 01e0 88060000 		.word	.LC112
+ 549 01e4 98060000 		.word	.LC113
+ 550 01e8 A4060000 		.word	.LC114
+ 551 01ec BC060000 		.word	.LC115
+ 552 01f0 CC060000 		.word	.LC116
+ 553 01f4 D8060000 		.word	.LC117
+ 554 01f8 E4060000 		.word	.LC118
+ 555 01fc F4060000 		.word	.LC119
+ 556              		.section	.rodata
+ 557 0702 0000     		.align	2
+ 558              	.LC120:
+ 559 0704 4F504552 		.ascii	"OPERATION_DISABLED\000"
+ 559      4154494F 
+ 559      4E5F4449 
+ 559      5341424C 
+ 559      454400
+ 560 0717 00       		.align	2
+ 561              	.LC121:
+ 562 0718 4E4F5F52 		.ascii	"NO_REENUM_REQUIRED\000"
+ 562      45454E55 
+ 562      4D5F5245 
+ 562      51554952 
+ 562      454400
+ 563 072b 00       		.align	2
+ 564              	.LC122:
+ 565 072c 494E5641 		.ascii	"INVALID_ERROR_CODE\000"
+ 565      4C49445F 
+ 565      4552524F 
+ 565      525F434F 
+ 565      444500
+ 566              		.section	.text.ErrorCodeText,"ax",%progbits
+ 567              		.align	2
+ 568              		.global	ErrorCodeText
+ 570              	ErrorCodeText:
+ 571              	.LFB0:
+ 572              		.file 1 "../Support.c"
+   1:../Support.c  **** /*
+   2:../Support.c  ****  * Support.c - this module contains useful routines
+   3:../Support.c  ****  *
+   4:../Support.c  ****  *      Author: john@USB-By-Example.com
+   5:../Support.c  ****  */
+   6:../Support.c  **** 
+   7:../Support.c  **** #include "Application.h"
+   8:../Support.c  **** 
+   9:../Support.c  **** 
+  10:../Support.c  **** extern CyBool_t glDebugTxEnabled;
+  11:../Support.c  **** 
+  12:../Support.c  **** CyU3PEvent DisplayEvent;				// Used to display events in the background
+  13:../Support.c  **** 
+  14:../Support.c  **** // For Debug and education display the name of the Event
+  15:../Support.c  **** const char* EventName[] = {
+  16:../Support.c  **** // First 23 are from typedef enum CyU3PUsbEventType_t in cyu3usb.h
+  17:../Support.c  **** 	"CONNECT",					// 0
+  18:../Support.c  **** 	"DISCONNECT",				// 1
+  19:../Support.c  **** 	"SUSPEND",					// 2
+  20:../Support.c  **** 	"RESUME",					// 3
+  21:../Support.c  **** 	"RESET",					// 4
+  22:../Support.c  **** 	"SET_CONFIGURATION",		// 5
+  23:../Support.c  **** 	"CHANGE_SPEED",				// 6
+  24:../Support.c  **** 	"SET_INTERFACE",			// 7
+  25:../Support.c  **** 	"SET_EXIT_LATENCY",			// 8
+  26:../Support.c  **** 	"SOF_ITP",					// 9
+  27:../Support.c  **** 	"USER_EP0_XFER_COMPLETE",	// 10
+  28:../Support.c  **** 	"VBUS_VALID",				// 11
+  29:../Support.c  **** 	"VBUS_REMOVED",				// 12
+  30:../Support.c  **** 	"HOSTMODE_CONNECT",			// 13
+  31:../Support.c  **** 	"HOSTMODE_DISCONNECT",		// 14
+  32:../Support.c  **** 	"OTG_CHANGE",				// 15
+  33:../Support.c  **** 	"OTG_VBUS_CHG",				// 16
+  34:../Support.c  **** 	"OTG_SRP",					// 17
+  35:../Support.c  **** 	"EP_UNDERRUN",				// 18
+  36:../Support.c  **** 	"LINK_RECOVERY",			// 19
+  37:../Support.c  **** 	"USB3_LINKFAIL",			// 20
+  38:../Support.c  **** 	"SS_COMP_ENTRY",			// 21
+  39:../Support.c  **** 	"SS_COMP_EXIT",				// 22
+  40:../Support.c  **** 	"23",						// 23
+  41:../Support.c  **** 	"24",						// 24
+  42:../Support.c  **** 	"25",						// 25
+  43:../Support.c  **** 	"26",						// 26
+  44:../Support.c  **** 	"Got chars from USB",		// 27
+  45:../Support.c  **** 	"Set Control Line State",	// 28
+  46:../Support.c  **** 	"Get Line Coding",			// 29
+  47:../Support.c  **** 	"Set Line Coding",			// 30
+  48:../Support.c  **** 	"Out of Range"				// 31
+  49:../Support.c  **** };
+  50:../Support.c  **** 
+  51:../Support.c  **** const char* ErrorCodeTextLookupTable[] = {
+  52:../Support.c  **** 	"SUCCESS",				// 0
+  53:../Support.c  **** 	"DELETED",				// 1
+  54:../Support.c  **** 	"BAD_POOL",				// 2
+  55:../Support.c  **** 	"BAD_POINTER",			// 3
+  56:../Support.c  **** 	"INVALID_WAIT",			// 4
+  57:../Support.c  **** 	"BAD_SIZE",				// 5
+  58:../Support.c  **** 	"BAD_EVENT_GROUP",		// 6
+  59:../Support.c  **** 	"NO_EVENTS",			// 7
+  60:../Support.c  **** 	"BAD_OPTION",			// 8
+  61:../Support.c  **** 	"BAD_QUEUE",			// 9
+  62:../Support.c  **** 	"QUEUE_EMPTY",			// 10
+  63:../Support.c  **** 	"QUEUE_FULL",			// 11
+  64:../Support.c  **** 	"BAD_SEMAPHORE",		// 12
+  65:../Support.c  **** 	"GET_SEMAPHORE_FAIL",	// 13
+  66:../Support.c  **** 	"BAD_THREAD",			// 14
+  67:../Support.c  **** 	"BAD_PRIORITY",			// 15
+  68:../Support.c  **** 	"MEMORY_ERROR",			// 16
+  69:../Support.c  **** 	"DELETE_FAILED",		// 17
+  70:../Support.c  **** 	"RESUME_FAILED",		// 18
+  71:../Support.c  **** 	"INVALID_CALLER",		// 19
+  72:../Support.c  **** 	"SUSPEND_FAILED",		// 20
+  73:../Support.c  **** 	"BAD_TIMER",			// 21
+  74:../Support.c  **** 	"BAD_TICK",				// 22
+  75:../Support.c  **** 	"ACTIVATE_FAILED",		// 23
+  76:../Support.c  **** 	"BAD_THRESHOLD",		// 24
+  77:../Support.c  **** 	"SUSPEND_LIFTED",		// 25
+  78:../Support.c  **** 	"WAIT_ABORTED",			// 26
+  79:../Support.c  **** 	"WAIT_ABORT_FAILED",	// 27
+  80:../Support.c  **** 	"BAD_MUTEX",			// 28
+  81:../Support.c  **** 	"MUTEX_FAILURE",		// 29
+  82:../Support.c  **** 	"MUTEX_PUT_FAILED",		// 30
+  83:../Support.c  **** 	"INHERIT_FAILED",		// 31
+  84:../Support.c  **** 	"NOT_IDLE",				// 32
+  85:../Support.c  **** 	0,0,0,0,0,0,0,0,		// 33-40
+  86:../Support.c  **** 	0,0,0,0,0,0,0,0,		// 41-48
+  87:../Support.c  **** 	0,0,0,0,0,0,0,0,		// 49-56
+  88:../Support.c  **** 	0,0,0,0,0,0,0,			// 57-63
+  89:../Support.c  **** 	"BAD_ARGUMENT",				// 64 = 0x40
+  90:../Support.c  **** 	"NULL_POINTER",				// 65
+  91:../Support.c  **** 	"NOT_STARTED",				// 66
+  92:../Support.c  **** 	"ALREADY_STARTED",			// 67
+  93:../Support.c  **** 	"NOT_CONFIGURED",			// 68
+  94:../Support.c  **** 	"TIMEOUT",					// 69
+  95:../Support.c  **** 	"NOT_SUPPORTED",			// 70
+  96:../Support.c  **** 	"INVALID_SEQUENCE",			// 71
+  97:../Support.c  **** 	"ABORTED",					// 72
+  98:../Support.c  **** 	"DMA_FAILURE",				// 73
+  99:../Support.c  **** 	"FAILURE",					// 74
+ 100:../Support.c  **** 	"BAD_INDEX",				// 75
+ 101:../Support.c  **** 	"BAD_ENUM_METHOD",			// 76
+ 102:../Support.c  **** 	"INVALID_CONFIGURATION",	// 77
+ 103:../Support.c  **** 	"CHANNEL_CREATE_FAILED",	// 78
+ 104:../Support.c  **** 	"CHANNEL_DESTROY_FAILED",	// 79
+ 105:../Support.c  **** 	"BAD_DESCRIPTOR_TYPE",		// 80
+ 106:../Support.c  **** 	"XFER_CANCELLED",			// 81
+ 107:../Support.c  **** 	"FEATURE_NOT_ENABLED",		// 82
+ 108:../Support.c  **** 	"STALLED",					// 83
+ 109:../Support.c  **** 	"BLOCK_FAILURE",			// 84
+ 110:../Support.c  **** 	"LOST_ARBITRATION",			// 85
+ 111:../Support.c  **** 	"STANDBY_FAILED",			// 86
+ 112:../Support.c  **** 	0,0,0,0,0,0,0,0,			// 87-94
+ 113:../Support.c  **** 	0,							// 95
+ 114:../Support.c  **** 	"INVALID_VOLTAGE_RANGE",	// 96 = 0x60
+ 115:../Support.c  **** 	"CARD_WRONG_RESPONSE",		// 97
+ 116:../Support.c  **** 	"UNSUPPORTED_CARD",			// 98
+ 117:../Support.c  **** 	"CARD_WRONG_STATE",			// 99
+ 118:../Support.c  **** 	"CMD_NOT_SUPPORTED",		// 100
+ 119:../Support.c  **** 	"CRC",						// 101
+ 120:../Support.c  **** 	"INVALID_ADDR",				// 102
+ 121:../Support.c  **** 	"INVALID_UNIT",				// 103
+ 122:../Support.c  **** 	"INVALID_DEV",				// 104
+ 123:../Support.c  **** 	"ALREADY_PARTITIONED",		// 105
+ 124:../Support.c  **** 	"NOT_PARTITIONED",			// 106
+ 125:../Support.c  **** 	"BAD_PARTITION",			// 107
+ 126:../Support.c  **** 	"READ_WRITE_ABORTED",		// 108
+ 127:../Support.c  **** 	"WRITE_PROTECTED",			// 109
+ 128:../Support.c  **** 	"SIB_INIT",					// 110
+ 129:../Support.c  **** 	"CARD_LOCKED",				// 111
+ 130:../Support.c  **** 	"CARD_LOCK_FAILURE",		// 112
+ 131:../Support.c  **** 	"CARD_FORCE_ERASE",			// 113
+ 132:../Support.c  **** 	"INVALID_BLOCKSIZE",		// 114
+ 133:../Support.c  **** 	"INVALID_FUNCTION",			// 115
+ 134:../Support.c  **** 	"TUPLE_NOT_FOUND",			// 116
+ 135:../Support.c  **** 	"IO_ABORTED",				// 117
+ 136:../Support.c  **** 	"IO_SUSPENDED",				// 118
+ 137:../Support.c  **** 	"ILLEGAL_CMD",				// 119
+ 138:../Support.c  **** 	"SDIO_UNKNOWN",				// 120
+ 139:../Support.c  **** 	"BAD_CMD_ARG",				// 121
+ 140:../Support.c  **** 	"UNINITIALIZED_FUNCTION",	// 122
+ 141:../Support.c  **** 	"CARD_NOT_ACTIVE",			// 123
+ 142:../Support.c  **** 	"DEVICE_BUSY",				// 124
+ 143:../Support.c  **** 	"NO_METADATA",				// 125
+ 144:../Support.c  **** 	"CARD_UNHEALTHY",			// 126
+ 145:../Support.c  **** 	"MEDIA_FAILURE",			// 127
+ 146:../Support.c  **** };
+ 147:../Support.c  **** 
+ 148:../Support.c  **** char* ErrorCodeText(CyU3PReturnStatus_t Status)
+ 149:../Support.c  **** {
+ 573              		.loc 1 149 0
+ 574              		.cfi_startproc
+ 575              		@ args = 0, pretend = 0, frame = 16
+ 576              		@ frame_needed = 1, uses_anonymous_args = 0
+ 577              		@ link register save eliminated.
+ 578 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 579              	.LCFI0:
+ 580              		.cfi_def_cfa_offset 4
+ 581 0004 00B08DE2 		add	fp, sp, #0
+ 582              		.cfi_offset 11, -4
+ 583              	.LCFI1:
+ 584              		.cfi_def_cfa_register 11
+ 585 0008 14D04DE2 		sub	sp, sp, #20
+ 586 000c 10000BE5 		str	r0, [fp, #-16]
+ 150:../Support.c  **** 	char* TextPtr;
+ 151:../Support.c  **** 	// Handle exceptions first
+ 152:../Support.c  **** 	if (Status == 0xFF) return "OPERATION_DISABLED";
+ 587              		.loc 1 152 0
+ 588 0010 10301BE5 		ldr	r3, [fp, #-16]
+ 589 0014 FF0053E3 		cmp	r3, #255
+ 590 0018 0100001A 		bne	.L2
+ 591              		.loc 1 152 0 is_stmt 0 discriminator 1
+ 592 001c 60309FE5 		ldr	r3, .L7
+ 593 0020 130000EA 		b	.L3
+ 594              	.L2:
+ 153:../Support.c  **** 	if (Status == 0xFE) return "NO_REENUM_REQUIRED";
+ 595              		.loc 1 153 0 is_stmt 1
+ 596 0024 10301BE5 		ldr	r3, [fp, #-16]
+ 597 0028 FE0053E3 		cmp	r3, #254
+ 598 002c 0100001A 		bne	.L4
+ 599              		.loc 1 153 0 is_stmt 0 discriminator 1
+ 600 0030 50309FE5 		ldr	r3, .L7+4
+ 601 0034 0E0000EA 		b	.L3
+ 602              	.L4:
+ 154:../Support.c  **** 	if (Status > 127) return "INVALID_ERROR_CODE";
+ 603              		.loc 1 154 0 is_stmt 1
+ 604 0038 10301BE5 		ldr	r3, [fp, #-16]
+ 605 003c 7F0053E3 		cmp	r3, #127
+ 606 0040 0100009A 		bls	.L5
+ 607              		.loc 1 154 0 is_stmt 0 discriminator 1
+ 608 0044 40309FE5 		ldr	r3, .L7+8
+ 609 0048 090000EA 		b	.L3
+ 610              	.L5:
+ 155:../Support.c  **** 	// This BIG text array is in Support.c
+ 156:../Support.c  **** 	TextPtr = (char*)ErrorCodeTextLookupTable[Status];
+ 611              		.loc 1 156 0 is_stmt 1
+ 612 004c 3C309FE5 		ldr	r3, .L7+12
+ 613 0050 10201BE5 		ldr	r2, [fp, #-16]
+ 614 0054 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 615 0058 08300BE5 		str	r3, [fp, #-8]
+ 157:../Support.c  **** 	if (TextPtr) return TextPtr;
+ 616              		.loc 1 157 0
+ 617 005c 08301BE5 		ldr	r3, [fp, #-8]
+ 618 0060 000053E3 		cmp	r3, #0
+ 619 0064 0100000A 		beq	.L6
+ 620              		.loc 1 157 0 is_stmt 0 discriminator 1
+ 621 0068 08301BE5 		ldr	r3, [fp, #-8]
+ 622 006c 000000EA 		b	.L3
+ 623              	.L6:
+ 158:../Support.c  **** 	return "INVALID_ERROR_CODE";
+ 624              		.loc 1 158 0 is_stmt 1
+ 625 0070 14309FE5 		ldr	r3, .L7+8
+ 626              	.L3:
+ 159:../Support.c  **** }
+ 627              		.loc 1 159 0
+ 628 0074 0300A0E1 		mov	r0, r3
+ 629 0078 00D08BE2 		add	sp, fp, #0
+ 630 007c 04B09DE4 		ldmfd	sp!, {fp}
+ 631 0080 1EFF2FE1 		bx	lr
+ 632              	.L8:
+ 633              		.align	2
+ 634              	.L7:
+ 635 0084 04070000 		.word	.LC120
+ 636 0088 18070000 		.word	.LC121
+ 637 008c 2C070000 		.word	.LC122
+ 638 0090 00000000 		.word	ErrorCodeTextLookupTable
+ 639              		.cfi_endproc
+ 640              	.LFE0:
+ 642              		.section	.rodata
+ 643 073f 00       		.align	2
+ 644              	.LC123:
+ 645 0740 0A257320 		.ascii	"\012%s Successful\000"
+ 645      53756363 
+ 645      65737366 
+ 645      756C00
+ 646 074f 00       		.align	2
+ 647              	.LC124:
+ 648 0750 0A257320 		.ascii	"\012%s failed, %d = CY_U3P_ERROR_%s\012\000"
+ 648      6661696C 
+ 648      65642C20 
+ 648      2564203D 
+ 648      2043595F 
+ 649 0772 0000     		.align	2
+ 650              	.LC125:
+ 651 0774 3F00     		.ascii	"?\000"
+ 652              		.section	.text.CheckStatus,"ax",%progbits
+ 653              		.align	2
+ 654              		.global	CheckStatus
+ 656              	CheckStatus:
+ 657              	.LFB1:
+ 160:../Support.c  **** 
+ 161:../Support.c  **** void CheckStatus(char* StringPtr, CyU3PReturnStatus_t Status)
+ 162:../Support.c  **** // In this initial debugging stage I stall on an un-successful system call, else I display progress
+ 163:../Support.c  **** {
+ 658              		.loc 1 163 0
+ 659              		.cfi_startproc
+ 660              		@ args = 0, pretend = 0, frame = 8
+ 661              		@ frame_needed = 1, uses_anonymous_args = 0
+ 662 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 663              	.LCFI2:
+ 664              		.cfi_def_cfa_offset 8
+ 665 0004 04B08DE2 		add	fp, sp, #4
+ 666              		.cfi_offset 14, -4
+ 667              		.cfi_offset 11, -8
+ 668              	.LCFI3:
+ 669              		.cfi_def_cfa 11, 4
+ 670 0008 10D04DE2 		sub	sp, sp, #16
+ 671 000c 08000BE5 		str	r0, [fp, #-8]
+ 672 0010 0C100BE5 		str	r1, [fp, #-12]
+ 164:../Support.c  **** 	if (glDebugTxEnabled)				// Need to wait until ConsoleOut is enabled
+ 673              		.loc 1 164 0
+ 674 0014 70309FE5 		ldr	r3, .L13
+ 675 0018 003093E5 		ldr	r3, [r3, #0]
+ 676 001c 000053E3 		cmp	r3, #0
+ 677 0020 1700000A 		beq	.L9
+ 165:../Support.c  **** 	{
+ 166:../Support.c  **** 		if (Status == CY_U3P_SUCCESS)
+ 678              		.loc 1 166 0
+ 679 0024 0C301BE5 		ldr	r3, [fp, #-12]
+ 680 0028 000053E3 		cmp	r3, #0
+ 681 002c 0500001A 		bne	.L11
+ 167:../Support.c  **** 		{
+ 168:../Support.c  **** 			DebugPrint(7, "\n%s Successful", StringPtr);
+ 682              		.loc 1 168 0
+ 683 0030 0700A0E3 		mov	r0, #7
+ 684 0034 54109FE5 		ldr	r1, .L13+4
+ 685 0038 08201BE5 		ldr	r2, [fp, #-8]
+ 686 003c FEFFFFEB 		bl	CyU3PDebugPrint
+ 169:../Support.c  **** 			return;
+ 687              		.loc 1 169 0
+ 688 0040 0000A0E1 		mov	r0, r0	@ nop
+ 689 0044 0E0000EA 		b	.L9
+ 690              	.L11:
+ 170:../Support.c  **** 		}
+ 171:../Support.c  **** 		// else hang here
+ 172:../Support.c  **** 		DebugPrint(4, "\n%s failed, %d = CY_U3P_ERROR_%s\n", StringPtr, Status, ErrorCodeText(Status));
+ 691              		.loc 1 172 0
+ 692 0048 0C001BE5 		ldr	r0, [fp, #-12]
+ 693 004c FEFFFFEB 		bl	ErrorCodeText
+ 694 0050 0030A0E1 		mov	r3, r0
+ 695 0054 00308DE5 		str	r3, [sp, #0]
+ 696 0058 0400A0E3 		mov	r0, #4
+ 697 005c 30109FE5 		ldr	r1, .L13+8
+ 698 0060 08201BE5 		ldr	r2, [fp, #-8]
+ 699 0064 0C301BE5 		ldr	r3, [fp, #-12]
+ 700 0068 FEFFFFEB 		bl	CyU3PDebugPrint
+ 701              	.L12:
+ 173:../Support.c  **** 		while (1)
+ 174:../Support.c  **** 		{
+ 175:../Support.c  **** 			DebugPrint(4, "?");
+ 702              		.loc 1 175 0 discriminator 1
+ 703 006c 0400A0E3 		mov	r0, #4
+ 704 0070 20109FE5 		ldr	r1, .L13+12
+ 705 0074 FEFFFFEB 		bl	CyU3PDebugPrint
+ 176:../Support.c  **** 			CyU3PThreadSleep(1000);
+ 706              		.loc 1 176 0 discriminator 1
+ 707 0078 FA0FA0E3 		mov	r0, #1000
+ 708 007c FEFFFFEB 		bl	_tx_thread_sleep
+ 177:../Support.c  **** 		}
+ 709              		.loc 1 177 0 discriminator 1
+ 710 0080 F9FFFFEA 		b	.L12
+ 711              	.L9:
+ 178:../Support.c  **** 	}
+ 179:../Support.c  **** }
+ 712              		.loc 1 179 0
+ 713 0084 04D04BE2 		sub	sp, fp, #4
+ 714 0088 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 715              	.L14:
+ 716              		.align	2
+ 717              	.L13:
+ 718 008c 00000000 		.word	glDebugTxEnabled
+ 719 0090 40070000 		.word	.LC123
+ 720 0094 50070000 		.word	.LC124
+ 721 0098 74070000 		.word	.LC125
+ 722              		.cfi_endproc
+ 723              	.LFE1:
+ 725              		.section	.text.BitPosition,"ax",%progbits
+ 726              		.align	2
+ 727              		.global	BitPosition
+ 729              	BitPosition:
+ 730              	.LFB2:
+ 180:../Support.c  **** 
+ 181:../Support.c  **** uint32_t BitPosition(uint32_t Value)
+ 182:../Support.c  **** {
+ 731              		.loc 1 182 0
+ 732              		.cfi_startproc
+ 733              		@ args = 0, pretend = 0, frame = 8
+ 734              		@ frame_needed = 1, uses_anonymous_args = 0
+ 735              		@ link register save eliminated.
+ 736 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 737              	.LCFI4:
+ 738              		.cfi_def_cfa_offset 4
+ 739 0004 00B08DE2 		add	fp, sp, #0
+ 740              		.cfi_offset 11, -4
+ 741              	.LCFI5:
+ 742              		.cfi_def_cfa_register 11
+ 743 0008 0CD04DE2 		sub	sp, sp, #12
+ 744 000c 08000BE5 		str	r0, [fp, #-8]
+ 183:../Support.c  **** 	if (Value > 32) return 31;
+ 745              		.loc 1 183 0
+ 746 0010 08301BE5 		ldr	r3, [fp, #-8]
+ 747 0014 200053E3 		cmp	r3, #32
+ 748 0018 0100009A 		bls	.L16
+ 749              		.loc 1 183 0 is_stmt 0 discriminator 1
+ 750 001c 1F30A0E3 		mov	r3, #31
+ 751 0020 020000EA 		b	.L17
+ 752              	.L16:
+ 184:../Support.c  **** 	else return (1<<Value);
+ 753              		.loc 1 184 0 is_stmt 1
+ 754 0024 08301BE5 		ldr	r3, [fp, #-8]
+ 755 0028 0120A0E3 		mov	r2, #1
+ 756 002c 1233A0E1 		mov	r3, r2, asl r3
+ 757              	.L17:
+ 185:../Support.c  **** }
+ 758              		.loc 1 185 0
+ 759 0030 0300A0E1 		mov	r0, r3
+ 760 0034 00D08BE2 		add	sp, fp, #0
+ 761 0038 04B09DE4 		ldmfd	sp!, {fp}
+ 762 003c 1EFF2FE1 		bx	lr
+ 763              		.cfi_endproc
+ 764              	.LFE2:
+ 766              		.section	.rodata
+ 767 0776 0000     		.align	2
+ 768              	.LC126:
+ 769 0778 0A457665 		.ascii	"\012Event(%d) received = '%s' \000"
+ 769      6E742825 
+ 769      64292072 
+ 769      65636569 
+ 769      76656420 
+ 770              		.section	.text.BackgroundPrint,"ax",%progbits
+ 771              		.align	2
+ 772              		.global	BackgroundPrint
+ 774              	BackgroundPrint:
+ 775              	.LFB3:
+ 186:../Support.c  **** 
+ 187:../Support.c  **** void BackgroundPrint(uint32_t TimeToWait)
+ 188:../Support.c  **** {
+ 776              		.loc 1 188 0
+ 777              		.cfi_startproc
+ 778              		@ args = 0, pretend = 0, frame = 32
+ 779              		@ frame_needed = 1, uses_anonymous_args = 0
+ 780 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 781              	.LCFI6:
+ 782              		.cfi_def_cfa_offset 8
+ 783 0004 04B08DE2 		add	fp, sp, #4
+ 784              		.cfi_offset 14, -4
+ 785              		.cfi_offset 11, -8
+ 786              	.LCFI7:
+ 787              		.cfi_def_cfa 11, 4
+ 788 0008 28D04DE2 		sub	sp, sp, #40
+ 789 000c 20000BE5 		str	r0, [fp, #-32]
+ 189:../Support.c  **** 	uint32_t ActualEvents, i, Count, Limit;
+ 190:../Support.c  **** 	CyU3PReturnStatus_t Status;
+ 191:../Support.c  **** 	if (TimeToWait > 10)
+ 790              		.loc 1 191 0
+ 791 0010 20301BE5 		ldr	r3, [fp, #-32]
+ 792 0014 0A0053E3 		cmp	r3, #10
+ 793 0018 0700009A 		bls	.L19
+ 192:../Support.c  **** 	{
+ 193:../Support.c  **** 		// Check more often so that the events are better displayed in the order that they appeared
+ 194:../Support.c  **** 		Limit = TimeToWait/10;
+ 794              		.loc 1 194 0
+ 795 001c 20201BE5 		ldr	r2, [fp, #-32]
+ 796 0020 E0309FE5 		ldr	r3, .L27
+ 797 0024 921383E0 		umull	r1, r3, r2, r3
+ 798 0028 A331A0E1 		mov	r3, r3, lsr #3
+ 799 002c 10300BE5 		str	r3, [fp, #-16]
+ 195:../Support.c  **** 		TimeToWait = 10;
+ 800              		.loc 1 195 0
+ 801 0030 0A30A0E3 		mov	r3, #10
+ 802 0034 20300BE5 		str	r3, [fp, #-32]
+ 803 0038 010000EA 		b	.L20
+ 804              	.L19:
+ 196:../Support.c  **** 	}
+ 197:../Support.c  **** 	else Limit = 1;
+ 805              		.loc 1 197 0
+ 806 003c 0130A0E3 		mov	r3, #1
+ 807 0040 10300BE5 		str	r3, [fp, #-16]
+ 808              	.L20:
+ 198:../Support.c  **** 	// Check to see if any Events posted and, if they did, display them
+ 199:../Support.c  **** 	for (Count = 0; Count < Limit; Count++)
+ 809              		.loc 1 199 0
+ 810 0044 0030A0E3 		mov	r3, #0
+ 811 0048 0C300BE5 		str	r3, [fp, #-12]
+ 812 004c 270000EA 		b	.L21
+ 813              	.L26:
+ 200:../Support.c  **** 		{
+ 201:../Support.c  **** 		ActualEvents = 0;
+ 814              		.loc 1 201 0
+ 815 0050 0030A0E3 		mov	r3, #0
+ 816 0054 18300BE5 		str	r3, [fp, #-24]
+ 202:../Support.c  **** 		Status = CyU3PEventGet(&DisplayEvent, 0xFFFF, TX_OR_CLEAR, &ActualEvents, TimeToWait);
+ 817              		.loc 1 202 0
+ 818 0058 18304BE2 		sub	r3, fp, #24
+ 819 005c 20201BE5 		ldr	r2, [fp, #-32]
+ 820 0060 00208DE5 		str	r2, [sp, #0]
+ 821 0064 A0009FE5 		ldr	r0, .L27+4
+ 822 0068 A0109FE5 		ldr	r1, .L27+8
+ 823 006c 0120A0E3 		mov	r2, #1
+ 824 0070 FEFFFFEB 		bl	_txe_event_flags_get
+ 825 0074 14000BE5 		str	r0, [fp, #-20]
+ 203:../Support.c  **** 		if (Status != TX_NO_EVENTS)
+ 826              		.loc 1 203 0
+ 827 0078 14301BE5 		ldr	r3, [fp, #-20]
+ 828 007c 070053E3 		cmp	r3, #7
+ 829 0080 1700000A 		beq	.L22
+ 204:../Support.c  **** 		{
+ 205:../Support.c  **** 			for (i = 0; i<32; i++) if ((ActualEvents & (1<<i)) != 0) DebugPrint(4, "\nEvent(%d) received = '
+ 830              		.loc 1 205 0
+ 831 0084 0030A0E3 		mov	r3, #0
+ 832 0088 08300BE5 		str	r3, [fp, #-8]
+ 833 008c 110000EA 		b	.L23
+ 834              	.L25:
+ 835              		.loc 1 205 0 is_stmt 0 discriminator 2
+ 836 0090 08301BE5 		ldr	r3, [fp, #-8]
+ 837 0094 0120A0E3 		mov	r2, #1
+ 838 0098 1233A0E1 		mov	r3, r2, asl r3
+ 839 009c 0320A0E1 		mov	r2, r3
+ 840 00a0 18301BE5 		ldr	r3, [fp, #-24]
+ 841 00a4 033002E0 		and	r3, r2, r3
+ 842 00a8 000053E3 		cmp	r3, #0
+ 843 00ac 0600000A 		beq	.L24
+ 844              		.loc 1 205 0 discriminator 1
+ 845 00b0 5C309FE5 		ldr	r3, .L27+12
+ 846 00b4 08201BE5 		ldr	r2, [fp, #-8]
+ 847 00b8 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 848 00bc 0400A0E3 		mov	r0, #4
+ 849 00c0 50109FE5 		ldr	r1, .L27+16
+ 850 00c4 08201BE5 		ldr	r2, [fp, #-8]
+ 851 00c8 FEFFFFEB 		bl	CyU3PDebugPrint
+ 852              	.L24:
+ 853              		.loc 1 205 0 discriminator 2
+ 854 00cc 08301BE5 		ldr	r3, [fp, #-8]
+ 855 00d0 013083E2 		add	r3, r3, #1
+ 856 00d4 08300BE5 		str	r3, [fp, #-8]
+ 857              	.L23:
+ 858              		.loc 1 205 0 discriminator 1
+ 859 00d8 08301BE5 		ldr	r3, [fp, #-8]
+ 860 00dc 1F0053E3 		cmp	r3, #31
+ 861 00e0 EAFFFF9A 		bls	.L25
+ 862              	.L22:
+ 199:../Support.c  **** 	for (Count = 0; Count < Limit; Count++)
+ 863              		.loc 1 199 0 is_stmt 1
+ 864 00e4 0C301BE5 		ldr	r3, [fp, #-12]
+ 865 00e8 013083E2 		add	r3, r3, #1
+ 866 00ec 0C300BE5 		str	r3, [fp, #-12]
+ 867              	.L21:
+ 199:../Support.c  **** 	for (Count = 0; Count < Limit; Count++)
+ 868              		.loc 1 199 0 is_stmt 0 discriminator 1
+ 869 00f0 0C201BE5 		ldr	r2, [fp, #-12]
+ 870 00f4 10301BE5 		ldr	r3, [fp, #-16]
+ 871 00f8 030052E1 		cmp	r2, r3
+ 872 00fc D3FFFF3A 		bcc	.L26
+ 206:../Support.c  **** 		}
+ 207:../Support.c  **** 	}
+ 208:../Support.c  **** }
+ 873              		.loc 1 208 0 is_stmt 1
+ 874 0100 04D04BE2 		sub	sp, fp, #4
+ 875 0104 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 876              	.L28:
+ 877              		.align	2
+ 878              	.L27:
+ 879 0108 CDCCCCCC 		.word	-858993459
+ 880 010c 00000000 		.word	DisplayEvent
+ 881 0110 FFFF0000 		.word	65535
+ 882 0114 00000000 		.word	EventName
+ 883 0118 78070000 		.word	.LC126
+ 884              		.cfi_endproc
+ 885              	.LFE3:
+ 887              		.text
+ 888              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Support.c
+                            *COM*:0000003c DisplayEvent
+C:\Users\John\AppData\Local\Temp\cccqQore.s:124    .data.EventName:00000000 EventName
+C:\Users\John\AppData\Local\Temp\cccqQore.s:24     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\cccqQore.s:121    .data.EventName:00000000 $d
+C:\Users\John\AppData\Local\Temp\cccqQore.s:427    .data.ErrorCodeTextLookupTable:00000000 ErrorCodeTextLookupTable
+C:\Users\John\AppData\Local\Temp\cccqQore.s:424    .data.ErrorCodeTextLookupTable:00000000 $d
+C:\Users\John\AppData\Local\Temp\cccqQore.s:567    .text.ErrorCodeText:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccqQore.s:570    .text.ErrorCodeText:00000000 ErrorCodeText
+C:\Users\John\AppData\Local\Temp\cccqQore.s:635    .text.ErrorCodeText:00000084 $d
+C:\Users\John\AppData\Local\Temp\cccqQore.s:653    .text.CheckStatus:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccqQore.s:656    .text.CheckStatus:00000000 CheckStatus
+C:\Users\John\AppData\Local\Temp\cccqQore.s:718    .text.CheckStatus:0000008c $d
+C:\Users\John\AppData\Local\Temp\cccqQore.s:726    .text.BitPosition:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccqQore.s:729    .text.BitPosition:00000000 BitPosition
+C:\Users\John\AppData\Local\Temp\cccqQore.s:771    .text.BackgroundPrint:00000000 $a
+C:\Users\John\AppData\Local\Temp\cccqQore.s:774    .text.BackgroundPrint:00000000 BackgroundPrint
+C:\Users\John\AppData\Local\Temp\cccqQore.s:879    .text.BackgroundPrint:00000108 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+_tx_thread_sleep
+glDebugTxEnabled
+_txe_event_flags_get

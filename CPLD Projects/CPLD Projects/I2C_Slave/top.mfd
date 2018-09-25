@@ -1,0 +1,621 @@
+MDF Database:  version 1.0
+MDF_INFO | top | XC2C128-6-VQ100
+MACROCELL | 4 | 12 | FlashCS_n_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 1 | 
+   !FlashCS_n = Gnd;	// (0 pt, 0 inp)
+
+MACROCELL | 2 | 3 | INT_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 1 | 
+   INT = Gnd;	// (0 pt, 0 inp)
+
+MACROCELL | 6 | 5 | LED<0>_MC
+ATTRIBUTES | 159646530 | 0
+INPUTS | 2 | i2c_module_0/data_in<0>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 3 | 3 | 0 | 5
+LCT | 2 | 1 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<0> := i2c_module_0/data_in<0>;	// (1 pt, 1 inp)
+    LED<0>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<0>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<0>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+
+MACROCELL | 3 | 3 | i2c_module_0/data_in<0>_MC
+ATTRIBUTES | 3397649218 | 6
+OUTPUTMC | 6 | 0 | 3 | 0 | 15 | 0 | 14 | 6 | 5 | 0 | 12 | 0 | 10
+INPUTS | 4 | i2c_module_0/shift_data_in  | out_en  | ack_out  | sda_out
+INPUTMC | 4 | 0 | 14 | 0 | 12 | 0 | 11 | 0 | 4
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 7 | 
+   I2C_SDA =  !out_en & !ack_out
+	# !ack_out & sda_out;	// Open Drain	// (2 pt, 3 inp)
+// Direct Input Register
+i2c_module_0/data_in<0> := I2C_SDA.PIN;	// (0 pt, 0 inp)
+    i2c_module_0/data_in<0>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<0>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<0>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 14 | i2c_module_0/shift_data_in_MC
+ATTRIBUTES | 2319450880 | 0
+OUTPUTMC | 9 | 0 | 3 | 0 | 2 | 0 | 0 | 1 | 11 | 1 | 9 | 1 | 8 | 1 | 7 | 0 | 14 | 3 | 3
+INPUTS | 16 | i2c_module_0/shift_data_in  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/start  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/index<2>  | i2c_module_0/index<0>  | i2c_module_0/index<1>  | i2c_module_0/index<3>  | i2c_module_0/data_in<0>  | i2c_module_0/data_in<1>  | i2c_module_0/data_in<2>  | i2c_module_0/data_in<3>  | i2c_module_0/data_in<4>  | i2c_module_0/data_in<5>  | i2c_module_0/data_in<6>  | i2c_module_0/data_in<7>
+INPUTMC | 16 | 0 | 14 | 0 | 1 | 3 | 4 | 0 | 15 | 0 | 7 | 0 | 9 | 0 | 8 | 0 | 6 | 3 | 3 | 0 | 3 | 0 | 2 | 0 | 0 | 1 | 11 | 1 | 9 | 1 | 8 | 1 | 7
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 24 | 
+   i2c_module_0/shift_data_in.T := !i2c_module_0/shift_data_in & 
+	i2c_module_0/present_state_FSM_FFd1 & i2c_module_0/start
+	# !i2c_module_0/shift_data_in & 
+	!i2c_module_0/present_state_FSM_FFd2 & i2c_module_0/start
+	# i2c_module_0/shift_data_in & 
+	!i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/start
+	# i2c_module_0/shift_data_in & 
+	!i2c_module_0/index<2> & !i2c_module_0/present_state_FSM_FFd1 & 
+	!i2c_module_0/index<0> & i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/index<1> & i2c_module_0/index<3>
+	# i2c_module_0/shift_data_in & 
+	!i2c_module_0/index<2> & !i2c_module_0/index<0> & 
+	!i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/index<1> & !i2c_module_0/start & 
+	i2c_module_0/index<3>
+	# !i2c_module_0/data_in<0> & 
+	!i2c_module_0/shift_data_in & !i2c_module_0/index<2> & 
+	!i2c_module_0/present_state_FSM_FFd1 & i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/data_in<1> & i2c_module_0/data_in<2> & 
+	i2c_module_0/data_in<3> & !i2c_module_0/data_in<4> & i2c_module_0/data_in<5> & 
+	!i2c_module_0/data_in<6> & i2c_module_0/data_in<7> & !i2c_module_0/index<1> & 
+	!i2c_module_0/start & i2c_module_0/index<3>;	// (6 pt, 16 inp)
+    i2c_module_0/shift_data_in.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/shift_data_in.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 7 | i2c_module_0/index<2>_MC
+ATTRIBUTES | 2319450880 | 0
+OUTPUTMC | 10 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 7 | 0 | 14 | 0 | 5 | 0 | 12 | 0 | 11 | 0 | 10 | 0 | 4
+INPUTS | 7 | i2c_module_0/index<2>  | i2c_module_0/start  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/index<3>  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/index<0>  | i2c_module_0/index<1>
+INPUTMC | 7 | 0 | 7 | 3 | 4 | 0 | 1 | 0 | 6 | 0 | 15 | 0 | 9 | 0 | 8
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 12 | 
+   i2c_module_0/index<2>.T := i2c_module_0/index<2> & i2c_module_0/start
+	# i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd1 & i2c_module_0/index<3>
+	# i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd2 & i2c_module_0/index<3>
+	# i2c_module_0/index<0> & i2c_module_0/index<1> & 
+	!i2c_module_0/start & !i2c_module_0/index<3>
+	# !i2c_module_0/present_state_FSM_FFd1 & 
+	i2c_module_0/index<0> & !i2c_module_0/present_state_FSM_FFd2 & 
+	i2c_module_0/index<1> & !i2c_module_0/start;	// (5 pt, 7 inp)
+    i2c_module_0/index<2>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/index<2>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 1 | i2c_module_0/present_state_FSM_FFd1_MC
+ATTRIBUTES | 2323645184 | 0
+OUTPUTMC | 11 | 0 | 6 | 0 | 8 | 0 | 15 | 0 | 9 | 0 | 1 | 0 | 7 | 0 | 14 | 0 | 5 | 0 | 12 | 0 | 11 | 0 | 10
+INPUTS | 14 | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/start  | i2c_module_0/index<3>  | i2c_module_0/index<2>  | i2c_module_0/index<0>  | i2c_module_0/index<1>  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/data_in<1>  | i2c_module_0/data_in<2>  | i2c_module_0/data_in<3>  | i2c_module_0/data_in<4>  | i2c_module_0/data_in<5>  | i2c_module_0/data_in<6>  | i2c_module_0/data_in<7>
+INPUTMC | 14 | 0 | 1 | 3 | 4 | 0 | 6 | 0 | 7 | 0 | 9 | 0 | 8 | 0 | 15 | 0 | 3 | 0 | 2 | 0 | 0 | 1 | 11 | 1 | 9 | 1 | 8 | 1 | 7
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 13 | 
+   i2c_module_0/present_state_FSM_FFd1 := i2c_module_0/present_state_FSM_FFd1 & 
+	!i2c_module_0/start & !i2c_module_0/index<3>
+	# !i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/index<0> & !i2c_module_0/index<1> & 
+	!i2c_module_0/start
+	# !i2c_module_0/index<2> & 
+	!i2c_module_0/present_state_FSM_FFd1 & i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/data_in<1> & i2c_module_0/data_in<2> & 
+	i2c_module_0/data_in<3> & !i2c_module_0/data_in<4> & i2c_module_0/data_in<5> & 
+	!i2c_module_0/data_in<6> & i2c_module_0/data_in<7> & !i2c_module_0/index<1> & 
+	!i2c_module_0/start & i2c_module_0/index<3>;	// (3 pt, 14 inp)
+    i2c_module_0/present_state_FSM_FFd1.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/present_state_FSM_FFd1.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 9 | i2c_module_0/index<0>_MC
+ATTRIBUTES | 2306867968 | 0
+OUTPUTMC | 12 | 0 | 6 | 0 | 8 | 0 | 15 | 0 | 9 | 0 | 1 | 0 | 7 | 0 | 14 | 0 | 5 | 0 | 12 | 0 | 11 | 0 | 10 | 0 | 4
+INPUTS | 5 | i2c_module_0/index<0>  | i2c_module_0/start  | i2c_module_0/index<3>  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/present_state_FSM_FFd2
+INPUTMC | 5 | 0 | 9 | 3 | 4 | 0 | 6 | 0 | 1 | 0 | 15
+LCT | 2 | 1 | Internal_Name | 2 | Internal_Name
+EQ | 7 | 
+   !i2c_module_0/index<0> := i2c_module_0/index<0> & !i2c_module_0/start & 
+	!i2c_module_0/index<3>
+	# !i2c_module_0/present_state_FSM_FFd1 & 
+	i2c_module_0/index<0> & !i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/start;	// (2 pt, 5 inp)
+    i2c_module_0/index<0>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/index<0>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+
+MACROCELL | 0 | 15 | i2c_module_0/present_state_FSM_FFd2_MC
+ATTRIBUTES | 2323645184 | 0
+OUTPUTMC | 11 | 0 | 6 | 0 | 8 | 0 | 15 | 0 | 9 | 0 | 1 | 0 | 7 | 0 | 14 | 0 | 5 | 0 | 12 | 0 | 11 | 0 | 10
+INPUTS | 15 | i2c_module_0/start  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/index<3>  | i2c_module_0/index<2>  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/index<0>  | i2c_module_0/index<1>  | i2c_module_0/data_in<1>  | i2c_module_0/data_in<2>  | i2c_module_0/data_in<3>  | i2c_module_0/data_in<4>  | i2c_module_0/data_in<5>  | i2c_module_0/data_in<6>  | i2c_module_0/data_in<7>  | i2c_module_0/data_in<0>
+INPUTMC | 15 | 3 | 4 | 0 | 15 | 0 | 6 | 0 | 7 | 0 | 1 | 0 | 9 | 0 | 8 | 0 | 3 | 0 | 2 | 0 | 0 | 1 | 11 | 1 | 9 | 1 | 8 | 1 | 7 | 3 | 3
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 17 | 
+   i2c_module_0/present_state_FSM_FFd2 := i2c_module_0/start
+	# i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/index<3>
+	# !i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/index<1>
+	# !i2c_module_0/index<2> & !i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/data_in<1> & i2c_module_0/data_in<2> & 
+	i2c_module_0/data_in<3> & !i2c_module_0/data_in<4> & i2c_module_0/data_in<5> & 
+	!i2c_module_0/data_in<6> & i2c_module_0/data_in<7> & !i2c_module_0/index<1>
+	# i2c_module_0/data_in<0> & !i2c_module_0/index<2> & 
+	!i2c_module_0/present_state_FSM_FFd1 & i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/data_in<1> & i2c_module_0/data_in<2> & i2c_module_0/data_in<3> & 
+	!i2c_module_0/data_in<4> & i2c_module_0/data_in<5> & !i2c_module_0/data_in<6> & 
+	i2c_module_0/data_in<7> & !i2c_module_0/index<1>;	// (5 pt, 15 inp)
+    i2c_module_0/present_state_FSM_FFd2.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/present_state_FSM_FFd2.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 3 | i2c_module_0/data_in<1>_MC
+ATTRIBUTES | 2323645248 | 0
+OUTPUTMC | 8 | 0 | 2 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 14 | 6 | 10 | 0 | 12 | 0 | 11
+INPUTS | 2 | i2c_module_0/data_in<0>  | i2c_module_0/shift_data_in
+INPUTMC | 2 | 3 | 3 | 0 | 14
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   i2c_module_0/data_in<1> := i2c_module_0/data_in<0>;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<1>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<1>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<1>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 2 | i2c_module_0/data_in<2>_MC
+ATTRIBUTES | 2323645248 | 0
+OUTPUTMC | 8 | 0 | 0 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 14 | 6 | 12 | 0 | 12 | 0 | 11
+INPUTS | 2 | i2c_module_0/data_in<1>  | i2c_module_0/shift_data_in
+INPUTMC | 2 | 0 | 3 | 0 | 14
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   i2c_module_0/data_in<2> := i2c_module_0/data_in<1>;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<2>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<2>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<2>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 0 | i2c_module_0/data_in<3>_MC
+ATTRIBUTES | 2323645248 | 0
+OUTPUTMC | 8 | 1 | 11 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 14 | 6 | 13 | 0 | 12 | 0 | 11
+INPUTS | 2 | i2c_module_0/data_in<2>  | i2c_module_0/shift_data_in
+INPUTMC | 2 | 0 | 2 | 0 | 14
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   i2c_module_0/data_in<3> := i2c_module_0/data_in<2>;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<3>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<3>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<3>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 1 | 11 | i2c_module_0/data_in<4>_MC
+ATTRIBUTES | 2323645248 | 0
+OUTPUTMC | 8 | 1 | 9 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 14 | 6 | 14 | 0 | 12 | 0 | 11
+INPUTS | 2 | i2c_module_0/data_in<3>  | i2c_module_0/shift_data_in
+INPUTMC | 2 | 0 | 0 | 0 | 14
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   i2c_module_0/data_in<4> := i2c_module_0/data_in<3>;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<4>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<4>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<4>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 1 | 9 | i2c_module_0/data_in<5>_MC
+ATTRIBUTES | 2323645248 | 0
+OUTPUTMC | 8 | 1 | 8 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 14 | 6 | 15 | 0 | 12 | 0 | 11
+INPUTS | 2 | i2c_module_0/data_in<4>  | i2c_module_0/shift_data_in
+INPUTMC | 2 | 1 | 11 | 0 | 14
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   i2c_module_0/data_in<5> := i2c_module_0/data_in<4>;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<5>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<5>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<5>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 1 | 8 | i2c_module_0/data_in<6>_MC
+ATTRIBUTES | 2323645248 | 0
+OUTPUTMC | 8 | 1 | 7 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 14 | 2 | 15 | 0 | 12 | 0 | 11
+INPUTS | 2 | i2c_module_0/data_in<5>  | i2c_module_0/shift_data_in
+INPUTMC | 2 | 1 | 9 | 0 | 14
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   i2c_module_0/data_in<6> := i2c_module_0/data_in<5>;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<6>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<6>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<6>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 1 | 7 | i2c_module_0/data_in<7>_MC
+ATTRIBUTES | 2323645248 | 0
+OUTPUTMC | 7 | 0 | 6 | 0 | 15 | 0 | 1 | 0 | 14 | 2 | 14 | 0 | 12 | 0 | 11
+INPUTS | 2 | i2c_module_0/data_in<6>  | i2c_module_0/shift_data_in
+INPUTMC | 2 | 1 | 8 | 0 | 14
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   i2c_module_0/data_in<7> := i2c_module_0/data_in<6>;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<7>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/data_in<7>.CE = i2c_module_0/shift_data_in;	// (1 pt, 1 inp)
+    i2c_module_0/data_in<7>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 8 | i2c_module_0/index<1>_MC
+ATTRIBUTES | 2323645184 | 0
+OUTPUTMC | 11 | 0 | 6 | 0 | 8 | 0 | 15 | 0 | 1 | 0 | 7 | 0 | 14 | 0 | 5 | 0 | 12 | 0 | 11 | 0 | 10 | 0 | 4
+INPUTS | 6 | i2c_module_0/index<0>  | i2c_module_0/index<1>  | i2c_module_0/start  | i2c_module_0/index<3>  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/present_state_FSM_FFd2
+INPUTMC | 6 | 0 | 9 | 0 | 8 | 3 | 4 | 0 | 6 | 0 | 1 | 0 | 15
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 12 | 
+   i2c_module_0/index<1> := i2c_module_0/index<0> & !i2c_module_0/index<1> & 
+	!i2c_module_0/start & !i2c_module_0/index<3>
+	# !i2c_module_0/index<0> & i2c_module_0/index<1> & 
+	!i2c_module_0/start & !i2c_module_0/index<3>
+	# !i2c_module_0/present_state_FSM_FFd1 & 
+	i2c_module_0/index<0> & !i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/index<1> & !i2c_module_0/start
+	# !i2c_module_0/present_state_FSM_FFd1 & 
+	!i2c_module_0/index<0> & !i2c_module_0/present_state_FSM_FFd2 & 
+	i2c_module_0/index<1> & !i2c_module_0/start;	// (4 pt, 6 inp)
+    i2c_module_0/index<1>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/index<1>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 3 | 4 | i2c_module_0/start_MC
+ATTRIBUTES | 2155872304 | 4
+OUTPUTMC | 9 | 0 | 13 | 0 | 6 | 0 | 8 | 0 | 15 | 0 | 9 | 0 | 1 | 0 | 7 | 0 | 14 | 0 | 12
+INPUTS | 2 | I2C_SDA.PIN  | i2c_module_0/start_rst
+INPUTMC | 1 | 0 | 13
+INPUTP | 1 | 37
+EQ | 5 | 
+   
+// Direct Input Register
+i2c_module_0/start := I2C_SCL;	// (0 pt, 0 inp)
+    i2c_module_0/start.CLK = !(I2C_SDA.PIN);	// PTC	(1 pt, 1 inp)
+    i2c_module_0/start.AR = i2c_module_0/start_rst;	// PTA	(1 pt, 1 inp)
+
+MACROCELL | 0 | 13 | i2c_module_0/start_rst_MC
+ATTRIBUTES | 2290090752 | 0
+OUTPUTMC | 1 | 3 | 4
+INPUTS | 1 | i2c_module_0/start
+INPUTMC | 1 | 3 | 4
+LCT | 1 | 2 | Internal_Name
+EQ | 2 | 
+   i2c_module_0/start_rst := i2c_module_0/start;	// (1 pt, 1 inp)
+    i2c_module_0/start_rst.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+
+MACROCELL | 0 | 6 | i2c_module_0/index<3>_MC
+ATTRIBUTES | 2323645184 | 0
+OUTPUTMC | 11 | 0 | 6 | 0 | 8 | 0 | 15 | 0 | 9 | 0 | 1 | 0 | 7 | 0 | 14 | 0 | 5 | 0 | 12 | 0 | 11 | 0 | 10
+INPUTS | 14 | i2c_module_0/index<2>  | i2c_module_0/index<0>  | i2c_module_0/index<1>  | i2c_module_0/start  | i2c_module_0/index<3>  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/data_in<1>  | i2c_module_0/data_in<2>  | i2c_module_0/data_in<3>  | i2c_module_0/data_in<4>  | i2c_module_0/data_in<5>  | i2c_module_0/data_in<6>  | i2c_module_0/data_in<7>
+INPUTMC | 14 | 0 | 7 | 0 | 9 | 0 | 8 | 3 | 4 | 0 | 6 | 0 | 1 | 0 | 15 | 0 | 3 | 0 | 2 | 0 | 0 | 1 | 11 | 1 | 9 | 1 | 8 | 1 | 7
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 21 | 
+   i2c_module_0/index<3> := i2c_module_0/index<2> & i2c_module_0/index<0> & 
+	i2c_module_0/index<1> & !i2c_module_0/start & !i2c_module_0/index<3>
+	# !i2c_module_0/index<2> & 
+	!i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/start & i2c_module_0/index<3>
+	# !i2c_module_0/present_state_FSM_FFd1 & 
+	!i2c_module_0/index<0> & !i2c_module_0/present_state_FSM_FFd2 & 
+	!i2c_module_0/start & i2c_module_0/index<3>
+	# !i2c_module_0/present_state_FSM_FFd1 & 
+	!i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/index<1> & !i2c_module_0/start & 
+	i2c_module_0/index<3>
+	# !i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/index<0> & !i2c_module_0/index<1> & 
+	!i2c_module_0/start & i2c_module_0/index<3>
+	# !i2c_module_0/index<2> & !i2c_module_0/index<0> & 
+	!i2c_module_0/data_in<1> & i2c_module_0/data_in<2> & i2c_module_0/data_in<3> & 
+	!i2c_module_0/data_in<4> & i2c_module_0/data_in<5> & !i2c_module_0/data_in<6> & 
+	i2c_module_0/data_in<7> & !i2c_module_0/index<1> & !i2c_module_0/start & 
+	i2c_module_0/index<3>;	// (6 pt, 14 inp)
+    i2c_module_0/index<3>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/index<3>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 5 | i2c_module_0/latch_data_in_MC
+ATTRIBUTES | 2323645184 | 0
+OUTPUTMC | 8 | 6 | 5 | 6 | 10 | 6 | 12 | 6 | 13 | 6 | 14 | 6 | 15 | 2 | 15 | 2 | 14
+INPUTS | 6 | i2c_module_0/index<2>  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/index<0>  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/index<1>  | i2c_module_0/index<3>
+INPUTMC | 6 | 0 | 7 | 0 | 1 | 0 | 9 | 0 | 15 | 0 | 8 | 0 | 6
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 5 | 
+   i2c_module_0/latch_data_in := i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd1 & i2c_module_0/index<0> & 
+	!i2c_module_0/present_state_FSM_FFd2 & i2c_module_0/index<1> & !i2c_module_0/index<3>;	// (1 pt, 6 inp)
+    i2c_module_0/latch_data_in.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/latch_data_in.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 6 | 10 | LED<1>_MC
+ATTRIBUTES | 176423746 | 0
+INPUTS | 2 | i2c_module_0/data_in<1>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 0 | 3 | 0 | 5
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<1> := i2c_module_0/data_in<1>;	// (1 pt, 1 inp)
+    LED<1>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<1>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<1>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 6 | 12 | LED<2>_MC
+ATTRIBUTES | 159646530 | 0
+INPUTS | 2 | i2c_module_0/data_in<2>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 0 | 2 | 0 | 5
+LCT | 2 | 1 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<2> := i2c_module_0/data_in<2>;	// (1 pt, 1 inp)
+    LED<2>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<2>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<2>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+
+MACROCELL | 6 | 13 | LED<3>_MC
+ATTRIBUTES | 176423746 | 0
+INPUTS | 2 | i2c_module_0/data_in<3>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 0 | 0 | 0 | 5
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<3> := i2c_module_0/data_in<3>;	// (1 pt, 1 inp)
+    LED<3>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<3>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<3>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 6 | 14 | LED<4>_MC
+ATTRIBUTES | 176423746 | 0
+INPUTS | 2 | i2c_module_0/data_in<4>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 1 | 11 | 0 | 5
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<4> := i2c_module_0/data_in<4>;	// (1 pt, 1 inp)
+    LED<4>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<4>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<4>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 6 | 15 | LED<5>_MC
+ATTRIBUTES | 159646530 | 0
+INPUTS | 2 | i2c_module_0/data_in<5>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 1 | 9 | 0 | 5
+LCT | 2 | 1 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<5> := i2c_module_0/data_in<5>;	// (1 pt, 1 inp)
+    LED<5>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<5>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<5>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+
+MACROCELL | 2 | 15 | LED<6>_MC
+ATTRIBUTES | 176423746 | 0
+INPUTS | 2 | i2c_module_0/data_in<6>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 1 | 8 | 0 | 5
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<6> := i2c_module_0/data_in<6>;	// (1 pt, 1 inp)
+    LED<6>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<6>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<6>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 2 | 14 | LED<7>_MC
+ATTRIBUTES | 159646530 | 0
+INPUTS | 2 | i2c_module_0/data_in<7>  | i2c_module_0/latch_data_in
+INPUTMC | 2 | 1 | 7 | 0 | 5
+LCT | 2 | 1 | Internal_Name | 2 | Internal_Name
+EQ | 4 | 
+   LED<7> := i2c_module_0/data_in<7>;	// (1 pt, 1 inp)
+    LED<7>.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    LED<7>.CE = i2c_module_0/latch_data_in;	// (1 pt, 1 inp)
+    LED<7>.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+
+MACROCELL | 6 | 0 | TX_MISO_MC
+ATTRIBUTES | 1074004738 | 0
+INPUTS | 0
+EQ | 2 | 
+   TX_MISO = Gnd;	// (0 pt, 0 inp)
+    TX_MISO.OE = Gnd;	// PTB	(1 pt, 1 inp)
+
+MACROCELL | 0 | 12 | out_en_MC
+ATTRIBUTES | 2319450880 | 0
+OUTPUTMC | 3 | 0 | 12 | 0 | 4 | 3 | 3
+INPUTS | 16 | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/present_state_FSM_FFd2  | out_en  | i2c_module_0/index<2>  | i2c_module_0/index<0>  | i2c_module_0/index<1>  | i2c_module_0/index<3>  | i2c_module_0/data_in<0>  | i2c_module_0/data_in<1>  | i2c_module_0/data_in<2>  | i2c_module_0/data_in<3>  | i2c_module_0/data_in<4>  | i2c_module_0/data_in<5>  | i2c_module_0/data_in<6>  | i2c_module_0/data_in<7>  | i2c_module_0/start
+INPUTMC | 16 | 0 | 1 | 0 | 15 | 0 | 12 | 0 | 7 | 0 | 9 | 0 | 8 | 0 | 6 | 3 | 3 | 0 | 3 | 0 | 2 | 0 | 0 | 1 | 11 | 1 | 9 | 1 | 8 | 1 | 7 | 3 | 4
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 14 | 
+   out_en.T := !i2c_module_0/present_state_FSM_FFd1 & 
+	!i2c_module_0/present_state_FSM_FFd2 & out_en
+	# !i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/index<1> & i2c_module_0/index<3> & 
+	out_en
+	# i2c_module_0/data_in<0> & !i2c_module_0/index<2> & 
+	!i2c_module_0/present_state_FSM_FFd1 & i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/data_in<1> & i2c_module_0/data_in<2> & 
+	i2c_module_0/data_in<3> & !i2c_module_0/data_in<4> & i2c_module_0/data_in<5> & 
+	!i2c_module_0/data_in<6> & i2c_module_0/data_in<7> & !i2c_module_0/index<1> & 
+	!i2c_module_0/start & i2c_module_0/index<3> & !out_en;	// (3 pt, 16 inp)
+    out_en.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    out_en.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 11 | ack_out_MC
+ATTRIBUTES | 2323645184 | 0
+OUTPUTMC | 1 | 3 | 3
+INPUTS | 13 | i2c_module_0/index<2>  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/index<0>  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/index<1>  | i2c_module_0/index<3>  | i2c_module_0/data_in<1>  | i2c_module_0/data_in<2>  | i2c_module_0/data_in<3>  | i2c_module_0/data_in<4>  | i2c_module_0/data_in<5>  | i2c_module_0/data_in<6>  | i2c_module_0/data_in<7>
+INPUTMC | 13 | 0 | 7 | 0 | 1 | 0 | 9 | 0 | 15 | 0 | 8 | 0 | 6 | 0 | 3 | 0 | 2 | 0 | 0 | 1 | 11 | 1 | 9 | 1 | 8 | 1 | 7
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 11 | 
+   ack_out := !i2c_module_0/index<2> & 
+	i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/index<0> & 
+	!i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/index<1> & i2c_module_0/index<3>
+	# !i2c_module_0/index<2> & 
+	!i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/data_in<1> & i2c_module_0/data_in<2> & 
+	i2c_module_0/data_in<3> & !i2c_module_0/data_in<4> & i2c_module_0/data_in<5> & 
+	!i2c_module_0/data_in<6> & i2c_module_0/data_in<7> & !i2c_module_0/index<1> & 
+	i2c_module_0/index<3>;	// (2 pt, 13 inp)
+    ack_out.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    ack_out.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 4 | sda_out_MC
+ATTRIBUTES | 2306867968 | 0
+OUTPUTMC | 2 | 0 | 4 | 3 | 3
+INPUTS | 13 | out_en  | sda_out  | i2c_module_0/index<2>  | i2c_module_0/index<0>  | i2c_module_0/index<1>  | i2c_module_0/gpio_input<0>  | i2c_module_0/gpio_input<2>  | i2c_module_0/gpio_input<1>  | i2c_module_0/gpio_input<3>  | i2c_module_0/gpio_input<4>  | i2c_module_0/gpio_input<6>  | i2c_module_0/gpio_input<5>  | i2c_module_0/gpio_input<7>
+INPUTMC | 13 | 0 | 12 | 0 | 4 | 0 | 7 | 0 | 9 | 0 | 8 | 4 | 11 | 4 | 6 | 4 | 10 | 4 | 4 | 4 | 2 | 4 | 0 | 4 | 1 | 5 | 0
+LCT | 2 | 1 | Internal_Name | 2 | Internal_Name
+EQ | 19 | 
+   sda_out := !out_en & sda_out
+	# i2c_module_0/index<2> & i2c_module_0/index<0> & 
+	i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<0>
+	# i2c_module_0/index<2> & i2c_module_0/index<0> & 
+	!i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<2>
+	# i2c_module_0/index<2> & !i2c_module_0/index<0> & 
+	i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<1>
+	# i2c_module_0/index<2> & !i2c_module_0/index<0> & 
+	!i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<3>
+	# !i2c_module_0/index<2> & i2c_module_0/index<0> & 
+	i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<4>
+	# !i2c_module_0/index<2> & i2c_module_0/index<0> & 
+	!i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<6>
+	# !i2c_module_0/index<2> & !i2c_module_0/index<0> & 
+	i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<5>
+	# !i2c_module_0/index<2> & !i2c_module_0/index<0> & 
+	!i2c_module_0/index<1> & out_en & i2c_module_0/gpio_input<7>;	// (9 pt, 13 inp)
+    sda_out.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    sda_out.AP = CTRL<10>;	// CTS	(1 pt, 1 inp)
+
+MACROCELL | 4 | 11 | i2c_module_0/gpio_input<0>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<0> := Button<0>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<0>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<0>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<0>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 0 | 10 | i2c_module_0/latch_data_out_MC
+ATTRIBUTES | 2323645184 | 0
+OUTPUTMC | 8 | 4 | 11 | 4 | 2 | 4 | 10 | 4 | 1 | 4 | 6 | 4 | 0 | 4 | 4 | 5 | 0
+INPUTS | 7 | i2c_module_0/data_in<0>  | i2c_module_0/index<2>  | i2c_module_0/present_state_FSM_FFd1  | i2c_module_0/index<0>  | i2c_module_0/present_state_FSM_FFd2  | i2c_module_0/index<1>  | i2c_module_0/index<3>
+INPUTMC | 7 | 3 | 3 | 0 | 7 | 0 | 1 | 0 | 9 | 0 | 15 | 0 | 8 | 0 | 6
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 5 | 
+   i2c_module_0/latch_data_out := i2c_module_0/data_in<0> & !i2c_module_0/index<2> & 
+	!i2c_module_0/present_state_FSM_FFd1 & !i2c_module_0/index<0> & 
+	i2c_module_0/present_state_FSM_FFd2 & !i2c_module_0/index<1> & i2c_module_0/index<3>;	// (1 pt, 7 inp)
+    i2c_module_0/latch_data_out.CLK = !(I2C_SCL);	// CTC	(1 pt, 1 inp)
+    i2c_module_0/latch_data_out.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 4 | 2 | i2c_module_0/gpio_input<4>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<4> := Button<4>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<4>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<4>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<4>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 4 | 10 | i2c_module_0/gpio_input<1>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<1> := Button<1>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<1>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<1>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<1>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 4 | 1 | i2c_module_0/gpio_input<5>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<5> := Button<5>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<5>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<5>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<5>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 4 | 6 | i2c_module_0/gpio_input<2>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<2> := Button<2>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<2>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<2>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<2>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 4 | 0 | i2c_module_0/gpio_input<6>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<6> := Button<6>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<6>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<6>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<6>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 4 | 4 | i2c_module_0/gpio_input<3>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<3> := Button<3>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<3>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<3>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<3>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+MACROCELL | 5 | 0 | i2c_module_0/gpio_input<7>_MC
+ATTRIBUTES | 2323644480 | 4
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 1 | i2c_module_0/latch_data_out
+INPUTMC | 1 | 0 | 10
+LCT | 2 | 4 | Internal_Name | 2 | Internal_Name
+EQ | 6 | 
+   
+// Direct Input Register
+i2c_module_0/gpio_input<7> := Button<7>;	// (0 pt, 0 inp)
+    i2c_module_0/gpio_input<7>.CLK = I2C_SCL;	// CTC	(1 pt, 1 inp)
+    i2c_module_0/gpio_input<7>.CE = i2c_module_0/latch_data_out;	// (1 pt, 1 inp)
+    i2c_module_0/gpio_input<7>.AR = CTRL<10>;	// CTR	(1 pt, 1 inp)
+
+PIN | CTRL<10> | 64 | 64 | LVCMOS33 | 9 | 0
+PIN | I2C_SCL | 64 | 0 | LVCMOS33 | 38 | 1 | 3 | 4
+PIN | Button<0> | 64 | 64 | LVCMOS33 | 92 | 1 | 4 | 11
+PIN | Button<1> | 64 | 64 | LVCMOS33 | 91 | 1 | 4 | 10
+PIN | Button<2> | 64 | 64 | LVCMOS33 | 90 | 1 | 4 | 6
+PIN | Button<3> | 64 | 64 | LVCMOS33 | 87 | 1 | 4 | 4
+PIN | Button<4> | 64 | 64 | LVCMOS33 | 85 | 1 | 4 | 2
+PIN | Button<5> | 64 | 64 | LVCMOS33 | 84 | 1 | 4 | 1
+PIN | Button<6> | 64 | 64 | LVCMOS33 | 83 | 1 | 4 | 0
+PIN | Button<7> | 64 | 64 | LVCMOS33 | 81 | 1 | 5 | 0
+PIN | FlashCS_n | 536871040 | 0 | LVCMOS33 | 93
+PIN | INT | 536871040 | 0 | LVCMOS33 | 125
+PIN | LED<0> | 536871040 | 0 | LVCMOS33 | 104
+PIN | LED<1> | 536871040 | 0 | LVCMOS33 | 106
+PIN | LED<2> | 536871040 | 0 | LVCMOS33 | 110
+PIN | LED<3> | 536871040 | 0 | LVCMOS33 | 111
+PIN | LED<4> | 536871040 | 0 | LVCMOS33 | 112
+PIN | LED<5> | 536871040 | 0 | LVCMOS33 | 114
+PIN | LED<6> | 536871040 | 0 | LVCMOS33 | 115
+PIN | LED<7> | 536871040 | 0 | LVCMOS33 | 116
+PIN | TX_MISO | 536871040 | 0 | LVCMOS33 | 99
+PIN | I2C_SDA | 536870976 | 0 | LVCMOS33 | 37 | 2 | 3 | 4 | 3 | 3

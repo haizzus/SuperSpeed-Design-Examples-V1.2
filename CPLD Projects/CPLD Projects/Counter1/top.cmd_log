@@ -1,0 +1,22 @@
+xst -intstyle ise -ifn "C:/Users/John/Documents/CPLD Projects/Counter1/top.xst" -ofn "C:/Users/John/Documents/CPLD Projects/Counter1/top.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/John/Documents/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-7 "top.ngc" top.ngd  
+cpldfit -intstyle ise -p xc2c128-7-VQ100 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 36 -unused ground -terminate pullup -iostd LVCMOS33 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+taengine -intstyle ise -f top -w --format html1 -l top_html/tim/timing_report.htm 
+hprep6 -s IEEE1149 -i top 
+xst -intstyle ise -ifn "C:/Users/savj/Desktop/CPLD Projects/Counter1/top.xst" -ofn "C:/Users/savj/Desktop/CPLD Projects/Counter1/top.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-7 "top.ngc" top.ngd  
+cpldfit -intstyle ise -p xc2c128-7-VQ100 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 36 -unused ground -terminate pullup -iostd LVCMOS33 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+hprep6 -s IEEE1149 -i top 
+cpldfit -intstyle ise -p xc2c128-7-VQ100 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 36 -unused ground -terminate pullup -iostd LVCMOS33 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+hprep6 -s IEEE1149 -i top 
+ngdbuild -intstyle ise -dd _ngo -uc "C:/Users/savj/Desktop/CPLD Projects/CPLDBoard.ucf" -p xc2c128-VQ100-7 "top.ngc" top.ngd  
+cpldfit -intstyle ise -p xc2c128-7-VQ100 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 32 -pterms 36 -unused ground -terminate pullup -iostd LVCMOS33 top.ngd 
+XSLTProcess top_build.xml 
+tsim -intstyle ise top top.nga 
+hprep6 -s IEEE1149 -i top 

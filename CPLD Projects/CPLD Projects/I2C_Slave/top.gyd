@@ -1,0 +1,56 @@
+Pin Freeze File:  version P.15xf
+
+2C128100 XC2C128-6-VQ100
+Button<0> S:PIN72
+Button<1> S:PIN71
+Button<2> S:PIN70
+Button<3> S:PIN68
+Button<4> S:PIN67
+Button<5> S:PIN66
+Button<6> S:PIN65
+Button<7> S:PIN64
+CTRL<10> S:PIN6
+I2C_SCL S:PIN30
+FlashCS_n S:PIN73
+INT S:PIN99
+LED<0> S:PIN81
+LED<1> S:PIN82
+LED<2> S:PIN85
+LED<3> S:PIN86
+LED<4> S:PIN87
+LED<5> S:PIN89
+LED<6> S:PIN90
+LED<7> S:PIN91
+TX_MISO S:PIN77
+I2C_SDA S:PIN29
+
+
+;The remaining section of the .gyd file is for documentation purposes only.
+;It shows where your internal equations were placed in the last successful fit.
+
+PARTITION FB1_1 i2c_module_0/data_in<3> i2c_module_0/present_state_FSM_FFd1 i2c_module_0/data_in<2> i2c_module_0/data_in<1>
+		 sda_out i2c_module_0/latch_data_in i2c_module_0/index<3> i2c_module_0/index<2>
+		 i2c_module_0/index<1> i2c_module_0/index<0> i2c_module_0/latch_data_out ack_out
+		 out_en i2c_module_0/start_rst i2c_module_0/shift_data_in i2c_module_0/present_state_FSM_FFd2
+		
+PARTITION FB2_8 i2c_module_0/data_in<7> i2c_module_0/data_in<6> i2c_module_0/data_in<5>
+PARTITION FB2_12 i2c_module_0/data_in<4>
+
+PARTITION FB3_4 INT
+PARTITION FB3_15 LED<7> LED<6>
+PARTITION FB4_4 i2c_module_0/data_in<0> i2c_module_0/start
+
+PARTITION FB5_1 i2c_module_0/gpio_input<6> i2c_module_0/gpio_input<5> i2c_module_0/gpio_input<4>
+PARTITION FB5_5 i2c_module_0/gpio_input<3>
+PARTITION FB5_7 i2c_module_0/gpio_input<2>
+PARTITION FB5_11 i2c_module_0/gpio_input<1> i2c_module_0/gpio_input<0> FlashCS_n
+
+PARTITION FB6_1 i2c_module_0/gpio_input<7>
+
+PARTITION FB7_1 TX_MISO
+PARTITION FB7_6 LED<0>
+PARTITION FB7_11 LED<1>
+PARTITION FB7_13 LED<2> LED<3> LED<4> LED<5>
+		
+
+

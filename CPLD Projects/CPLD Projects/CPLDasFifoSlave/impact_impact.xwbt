@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Users\John\Documents\CPLD Projects\CPLDasFifoSlave\impact.xsl
+OUTFILE=C:\Users\John\Documents\CPLD Projects\CPLDasFifoSlave\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Users\John\Documents\CPLD Projects\CPLDasFifoSlave
+LICENSE=iMPACT
+USER_INFO=iMPACT

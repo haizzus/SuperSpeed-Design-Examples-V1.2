@@ -1,0 +1,1916 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"cyfxusbi2cregmode.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.comm	appThread,168,4
+  22              		.comm	glDebugConsoleInThread,168,4
+  23              		.global	glIsApplnActive
+  24              		.section	.bss.glIsApplnActive,"aw",%nobits
+  25              		.align	2
+  28              	glIsApplnActive:
+  29 0000 00000000 		.space	4
+  30              		.comm	glDebugConsoleInHandle,160,4
+  31              		.comm	glDebugConsoleInBuf_p,12,4
+  32              		.comm	ConsoleInBuffer,16,4
+  33              		.comm	ConsoleInIndex,4,4
+  34              		.section	.rodata
+  35              		.align	2
+  36              	.LC0:
+  37 0000 0A526567 		.ascii	"\012Reg[%x]\000"
+  37      5B25785D 
+  37      00
+  38 0009 000000   		.align	2
+  39              	.LC1:
+  40 000c 0A436861 		.ascii	"\012Char[%x]\000"
+  40      725B2578 
+  40      5D00
+  41 0016 0000     		.align	2
+  42              	.LC2:
+  43 0018 0A496E70 		.ascii	"\012Input: %s\000"
+  43      75743A20 
+  43      257300
+  44              		.section	.text.UartCallback,"ax",%progbits
+  45              		.align	2
+  46              		.global	UartCallback
+  48              	UartCallback:
+  49              	.LFB0:
+  50              		.file 1 "../cyfxusbi2cregmode.c"
+   1:../cyfxusbi2cregmode.c **** // BasicI2C access using Register Mode
+   2:../cyfxusbi2cregmode.c **** //
+   3:../cyfxusbi2cregmode.c **** // john@usb-by-example.com
+   4:../cyfxusbi2cregmode.c **** //
+   5:../cyfxusbi2cregmode.c **** // Derived from Cypress example:
+   6:../cyfxusbi2cregmode.c **** //
+   7:../cyfxusbi2cregmode.c **** /*
+   8:../cyfxusbi2cregmode.c **** ## Cypress USB 3.0 Platform source file (cyfxusbi2cregmode.c)
+   9:../cyfxusbi2cregmode.c **** ## ===========================
+  10:../cyfxusbi2cregmode.c **** ##
+  11:../cyfxusbi2cregmode.c **** ##  Copyright Cypress Semiconductor Corporation, 2010-2011,
+  12:../cyfxusbi2cregmode.c **** ##  All Rights Reserved
+  13:../cyfxusbi2cregmode.c **** ##  UNPUBLISHED, LICENSED SOFTWARE.
+  14:../cyfxusbi2cregmode.c **** ##
+  15:../cyfxusbi2cregmode.c **** ##  CONFIDENTIAL AND PROPRIETARY INFORMATION
+  16:../cyfxusbi2cregmode.c **** ##  WHICH IS THE PROPERTY OF CYPRESS.
+  17:../cyfxusbi2cregmode.c **** ##
+  18:../cyfxusbi2cregmode.c **** ##  Use of this file is governed
+  19:../cyfxusbi2cregmode.c **** ##  by the license agreement included in the file
+  20:../cyfxusbi2cregmode.c **** ##
+  21:../cyfxusbi2cregmode.c **** ##     <install>/license/license.txt
+  22:../cyfxusbi2cregmode.c **** ##
+  23:../cyfxusbi2cregmode.c **** ##  where <install> is the Cypress software
+  24:../cyfxusbi2cregmode.c **** ##  installation root directory path.
+  25:../cyfxusbi2cregmode.c **** ##
+  26:../cyfxusbi2cregmode.c **** ## ===========================
+  27:../cyfxusbi2cregmode.c **** */
+  28:../cyfxusbi2cregmode.c **** 
+  29:../cyfxusbi2cregmode.c **** 
+  30:../cyfxusbi2cregmode.c **** #include "cyu3system.h"
+  31:../cyfxusbi2cregmode.c **** #include "cyu3os.h"
+  32:../cyfxusbi2cregmode.c **** #include "cyu3dma.h"
+  33:../cyfxusbi2cregmode.c **** #include "cyu3error.h"
+  34:../cyfxusbi2cregmode.c **** #include "cyu3socket.h"		// JH Add
+  35:../cyfxusbi2cregmode.c **** #include "cyu3usb.h"
+  36:../cyfxusbi2cregmode.c **** #include "cyu3i2c.h"
+  37:../cyfxusbi2cregmode.c **** #include "cyu3spi.h"
+  38:../cyfxusbi2cregmode.c **** #include "cyu3uart.h"
+  39:../cyfxusbi2cregmode.c **** #include "cyfxusbi2cregmode.h"
+  40:../cyfxusbi2cregmode.c **** 
+  41:../cyfxusbi2cregmode.c **** CyU3PThread appThread, glDebugConsoleInThread;
+  42:../cyfxusbi2cregmode.c **** CyBool_t glIsApplnActive = CyFalse;
+  43:../cyfxusbi2cregmode.c **** CyU3PDmaChannel glDebugConsoleInHandle;
+  44:../cyfxusbi2cregmode.c **** CyU3PDmaBuffer_t glDebugConsoleInBuf_p;
+  45:../cyfxusbi2cregmode.c **** 
+  46:../cyfxusbi2cregmode.c **** uint8_t ConsoleInBuffer[16];
+  47:../cyfxusbi2cregmode.c **** uint32_t ConsoleInIndex;
+  48:../cyfxusbi2cregmode.c **** 
+  49:../cyfxusbi2cregmode.c **** void UartCallback(CyU3PUartEvt_t EventType, CyU3PUartError_t Error)
+  50:../cyfxusbi2cregmode.c **** {
+  51              		.loc 1 50 0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 24
+  54              		@ frame_needed = 1, uses_anonymous_args = 0
+  55 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58 0004 04B08DE2 		add	fp, sp, #4
+  59              		.cfi_offset 14, -4
+  60              		.cfi_offset 11, -8
+  61              	.LCFI1:
+  62              		.cfi_def_cfa 11, 4
+  63 0008 18D04DE2 		sub	sp, sp, #24
+  64 000c 0020A0E1 		mov	r2, r0
+  65 0010 0130A0E1 		mov	r3, r1
+  66 0014 15204BE5 		strb	r2, [fp, #-21]
+  67 0018 16304BE5 		strb	r3, [fp, #-22]
+  51:../cyfxusbi2cregmode.c **** 	CyU3PReturnStatus_t Status;
+  52:../cyfxusbi2cregmode.c **** 	uint32_t InputRegister = 0x42424242;
+  68              		.loc 1 52 0
+  69 001c E0309FE5 		ldr	r3, .L4
+  70 0020 08300BE5 		str	r3, [fp, #-8]
+  53:../cyfxusbi2cregmode.c **** 	uint8_t InputCharacter = 0x42;
+  71              		.loc 1 53 0
+  72 0024 4230A0E3 		mov	r3, #66
+  73 0028 09304BE5 		strb	r3, [fp, #-9]
+  54:../cyfxusbi2cregmode.c **** //	CyU3PDebugPrint (7, "\nIn UartCallback with EventType = %d and Error = %d", EventType, Error);
+  55:../cyfxusbi2cregmode.c **** 	if (EventType == CY_U3P_UART_EVENT_RX_DONE)
+  74              		.loc 1 55 0
+  75 002c 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+  76 0030 000053E3 		cmp	r3, #0
+  77 0034 3000001A 		bne	.L1
+  78              	.LBB2:
+  56:../cyfxusbi2cregmode.c **** 	{
+  57:../cyfxusbi2cregmode.c **** //		uint32_t Count = CyU3PUartReceiveBytes (&InputCharacter, 1, &Status);
+  58:../cyfxusbi2cregmode.c **** //		if (Status != CY_U3P_SUCCESS) CyU3PDebugPrint (7, "\nCyU3PUartReceiveBytes returned %d", Status
+  59:../cyfxusbi2cregmode.c **** 		uint32_t *UART_INGRESS_DATA = 0x0E0000814;
+  79              		.loc 1 59 0
+  80 0038 C8309FE5 		ldr	r3, .L4+4
+  81 003c 10300BE5 		str	r3, [fp, #-16]
+  60:../cyfxusbi2cregmode.c **** 		InputRegister = *UART_INGRESS_DATA;
+  82              		.loc 1 60 0
+  83 0040 10301BE5 		ldr	r3, [fp, #-16]
+  84 0044 003093E5 		ldr	r3, [r3, #0]
+  85 0048 08300BE5 		str	r3, [fp, #-8]
+  61:../cyfxusbi2cregmode.c **** 		CyU3PDebugPrint (7, "\nReg[%x]", InputRegister);
+  86              		.loc 1 61 0
+  87 004c 0700A0E3 		mov	r0, #7
+  88 0050 B4109FE5 		ldr	r1, .L4+8
+  89 0054 08201BE5 		ldr	r2, [fp, #-8]
+  90 0058 FEFFFFEB 		bl	CyU3PDebugPrint
+  62:../cyfxusbi2cregmode.c **** 		InputCharacter = InputRegister & 0xFF;
+  91              		.loc 1 62 0
+  92 005c 08301BE5 		ldr	r3, [fp, #-8]
+  93 0060 09304BE5 		strb	r3, [fp, #-9]
+  63:../cyfxusbi2cregmode.c **** 		CyU3PDebugPrint (7, "\nChar[%x]", InputCharacter);
+  94              		.loc 1 63 0
+  95 0064 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+  96 0068 0700A0E3 		mov	r0, #7
+  97 006c 9C109FE5 		ldr	r1, .L4+12
+  98 0070 0320A0E1 		mov	r2, r3
+  99 0074 FEFFFFEB 		bl	CyU3PDebugPrint
+  64:../cyfxusbi2cregmode.c **** 		ConsoleInBuffer[ConsoleInIndex] = InputCharacter;
+ 100              		.loc 1 64 0
+ 101 0078 94309FE5 		ldr	r3, .L4+16
+ 102 007c 003093E5 		ldr	r3, [r3, #0]
+ 103 0080 90209FE5 		ldr	r2, .L4+20
+ 104 0084 09105BE5 		ldrb	r1, [fp, #-9]
+ 105 0088 0310C2E7 		strb	r1, [r2, r3]
+  65:../cyfxusbi2cregmode.c **** 		if (ConsoleInIndex++ >= sizeof(ConsoleInBuffer)) ConsoleInIndex--;
+ 106              		.loc 1 65 0
+ 107 008c 80309FE5 		ldr	r3, .L4+16
+ 108 0090 003093E5 		ldr	r3, [r3, #0]
+ 109 0094 0F0053E3 		cmp	r3, #15
+ 110 0098 0020A093 		movls	r2, #0
+ 111 009c 0120A083 		movhi	r2, #1
+ 112 00a0 FF2002E2 		and	r2, r2, #255
+ 113 00a4 011083E2 		add	r1, r3, #1
+ 114 00a8 64309FE5 		ldr	r3, .L4+16
+ 115 00ac 001083E5 		str	r1, [r3, #0]
+ 116 00b0 000052E3 		cmp	r2, #0
+ 117 00b4 0400000A 		beq	.L3
+ 118              		.loc 1 65 0 is_stmt 0 discriminator 1
+ 119 00b8 54309FE5 		ldr	r3, .L4+16
+ 120 00bc 003093E5 		ldr	r3, [r3, #0]
+ 121 00c0 012043E2 		sub	r2, r3, #1
+ 122 00c4 48309FE5 		ldr	r3, .L4+16
+ 123 00c8 002083E5 		str	r2, [r3, #0]
+ 124              	.L3:
+  66:../cyfxusbi2cregmode.c **** 		if (InputCharacter == 0x0D)
+ 125              		.loc 1 66 0 is_stmt 1
+ 126 00cc 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 127 00d0 0D0053E3 		cmp	r3, #13
+ 128 00d4 0800001A 		bne	.L1
+  67:../cyfxusbi2cregmode.c **** 		{
+  68:../cyfxusbi2cregmode.c **** 			ConsoleInBuffer[ConsoleInIndex] = 0;
+ 129              		.loc 1 68 0
+ 130 00d8 34309FE5 		ldr	r3, .L4+16
+ 131 00dc 003093E5 		ldr	r3, [r3, #0]
+ 132 00e0 30209FE5 		ldr	r2, .L4+20
+ 133 00e4 0010A0E3 		mov	r1, #0
+ 134 00e8 0310C2E7 		strb	r1, [r2, r3]
+  69:../cyfxusbi2cregmode.c **** 			CyU3PDebugPrint (7, "\nInput: %s", ConsoleInBuffer);
+ 135              		.loc 1 69 0
+ 136 00ec 0700A0E3 		mov	r0, #7
+ 137 00f0 24109FE5 		ldr	r1, .L4+24
+ 138 00f4 1C209FE5 		ldr	r2, .L4+20
+ 139 00f8 FEFFFFEB 		bl	CyU3PDebugPrint
+ 140              	.L1:
+ 141              	.LBE2:
+  70:../cyfxusbi2cregmode.c **** 		}
+  71:../cyfxusbi2cregmode.c **** 	}
+  72:../cyfxusbi2cregmode.c **** }
+ 142              		.loc 1 72 0
+ 143 00fc 04D04BE2 		sub	sp, fp, #4
+ 144 0100 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 145              	.L5:
+ 146              		.align	2
+ 147              	.L4:
+ 148 0104 42424242 		.word	1111638594
+ 149 0108 140800E0 		.word	-536868844
+ 150 010c 00000000 		.word	.LC0
+ 151 0110 0C000000 		.word	.LC1
+ 152 0114 00000000 		.word	ConsoleInIndex
+ 153 0118 00000000 		.word	ConsoleInBuffer
+ 154 011c 18000000 		.word	.LC2
+ 155              		.cfi_endproc
+ 156              	.LFE0:
+ 158              		.section	.rodata
+ 159 0023 00       		.align	2
+ 160              	.LC3:
+ 161 0024 0A496E20 		.ascii	"\012In ConsoleInDmaCallback with Channel = %d\000"
+ 161      436F6E73 
+ 161      6F6C6549 
+ 161      6E446D61 
+ 161      43616C6C 
+ 162 004f 00       		.align	2
+ 163              	.LC4:
+ 164 0050 0A437955 		.ascii	"\012CyU3PDmaCbType_t = %d\012\000"
+ 164      3350446D 
+ 164      61436254 
+ 164      7970655F 
+ 164      74203D20 
+ 165              		.section	.text.ConsoleInDmaCallback,"ax",%progbits
+ 166              		.align	2
+ 167              		.global	ConsoleInDmaCallback
+ 169              	ConsoleInDmaCallback:
+ 170              	.LFB1:
+  73:../cyfxusbi2cregmode.c **** 
+  74:../cyfxusbi2cregmode.c **** void ConsoleInDmaCallback (CyU3PDmaChannel *chHandle, CyU3PDmaCbType_t type, CyU3PDmaCBInput_t *inp
+  75:../cyfxusbi2cregmode.c **** // This gets called when characters arrive from ConsoleInput
+  76:../cyfxusbi2cregmode.c **** {
+ 171              		.loc 1 76 0
+ 172              		.cfi_startproc
+ 173              		@ args = 0, pretend = 0, frame = 16
+ 174              		@ frame_needed = 1, uses_anonymous_args = 0
+ 175 0000 10482DE9 		stmfd	sp!, {r4, fp, lr}
+ 176              	.LCFI2:
+ 177              		.cfi_def_cfa_offset 12
+ 178 0004 08B08DE2 		add	fp, sp, #8
+ 179              		.cfi_offset 14, -4
+ 180              		.cfi_offset 11, -8
+ 181              		.cfi_offset 4, -12
+ 182              	.LCFI3:
+ 183              		.cfi_def_cfa 11, 4
+ 184 0008 ACD04DE2 		sub	sp, sp, #172
+ 185 000c 10000BE5 		str	r0, [fp, #-16]
+ 186 0010 0130A0E1 		mov	r3, r1
+ 187 0014 18200BE5 		str	r2, [fp, #-24]
+ 188 0018 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+  77:../cyfxusbi2cregmode.c **** 	CyU3PDebugPrint (7, "\nIn ConsoleInDmaCallback with Channel = %d", *chHandle);
+ 189              		.loc 1 77 0
+ 190 001c 10401BE5 		ldr	r4, [fp, #-16]
+ 191 0020 0D10A0E1 		mov	r1, sp
+ 192 0024 082084E2 		add	r2, r4, #8
+ 193 0028 9830A0E3 		mov	r3, #152
+ 194 002c 0100A0E1 		mov	r0, r1
+ 195 0030 0210A0E1 		mov	r1, r2
+ 196 0034 0320A0E1 		mov	r2, r3
+ 197 0038 FEFFFFEB 		bl	memcpy
+ 198 003c 0C0094E8 		ldmia	r4, {r2, r3}
+ 199 0040 0700A0E3 		mov	r0, #7
+ 200 0044 1C109FE5 		ldr	r1, .L7
+ 201 0048 FEFFFFEB 		bl	CyU3PDebugPrint
+  78:../cyfxusbi2cregmode.c **** 	// Check that I'm in the right place
+  79:../cyfxusbi2cregmode.c **** //	if (chHandle == glDebugConsoleInHandle)
+  80:../cyfxusbi2cregmode.c **** 	{
+  81:../cyfxusbi2cregmode.c **** 		CyU3PDebugPrint (7, "\nCyU3PDmaCbType_t = %d\n", type);
+ 202              		.loc 1 81 0
+ 203 004c B2315BE1 		ldrh	r3, [fp, #-18]
+ 204 0050 0700A0E3 		mov	r0, #7
+ 205 0054 10109FE5 		ldr	r1, .L7+4
+ 206 0058 0320A0E1 		mov	r2, r3
+ 207 005c FEFFFFEB 		bl	CyU3PDebugPrint
+  82:../cyfxusbi2cregmode.c **** 		//    CyU3PDmaChannelGetBuffer()
+  83:../cyfxusbi2cregmode.c **** 
+  84:../cyfxusbi2cregmode.c **** 	}
+  85:../cyfxusbi2cregmode.c **** }
+ 208              		.loc 1 85 0
+ 209 0060 08D04BE2 		sub	sp, fp, #8
+ 210 0064 1088BDE8 		ldmfd	sp!, {r4, fp, pc}
+ 211              	.L8:
+ 212              		.align	2
+ 213              	.L7:
+ 214 0068 24000000 		.word	.LC3
+ 215 006c 50000000 		.word	.LC4
+ 216              		.cfi_endproc
+ 217              	.LFE1:
+ 219              		.section	.rodata
+ 220              		.align	2
+ 221              	.LC5:
+ 222 0068 0A437955 		.ascii	"\012CyU3PDmaSocketIsValidProducer = %d\000"
+ 222      3350446D 
+ 222      61536F63 
+ 222      6B657449 
+ 222      7356616C 
+ 223              		.align	2
+ 224              	.LC6:
+ 225 008c 0A437955 		.ascii	"\012CyU3PUartRxSetBlockXfer = %d\000"
+ 225      33505561 
+ 225      72745278 
+ 225      53657442 
+ 225      6C6F636B 
+ 226 00aa 0000     		.align	2
+ 227              	.LC7:
+ 228 00ac 0A437955 		.ascii	"\012CyU3PDmaChannelCreate = %d\000"
+ 228      3350446D 
+ 228      61436861 
+ 228      6E6E656C 
+ 228      43726561 
+ 229              		.align	2
+ 230              	.LC8:
+ 231 00c8 0A436F6E 		.ascii	"\012ConsoleIn DMA channel created\000"
+ 231      736F6C65 
+ 231      496E2044 
+ 231      4D412063 
+ 231      68616E6E 
+ 232 00e7 00       		.align	2
+ 233              	.LC9:
+ 234 00e8 0A437955 		.ascii	"\012CyU3PDmaChannelCacheControl = %d\000"
+ 234      3350446D 
+ 234      61436861 
+ 234      6E6E656C 
+ 234      43616368 
+ 235 010a 0000     		.align	2
+ 236              	.LC10:
+ 237 010c 0A446562 		.ascii	"\012DebugConsoleInHandle = %d\000"
+ 237      7567436F 
+ 237      6E736F6C 
+ 237      65496E48 
+ 237      616E646C 
+ 238 0127 00       		.align	2
+ 239              	.LC11:
+ 240 0128 0A437955 		.ascii	"\012CyU3PDmaChannelSetXfer = %d\000"
+ 240      3350446D 
+ 240      61436861 
+ 240      6E6E656C 
+ 240      53657458 
+ 241 0145 000000   		.align	2
+ 242              	.LC12:
+ 243 0148 0A436F6E 		.ascii	"\012ConsoleIn DMA channel enabled\000"
+ 243      736F6C65 
+ 243      496E2044 
+ 243      4D412063 
+ 243      68616E6E 
+ 244              		.section	.text.SetupConsoleIn,"ax",%progbits
+ 245              		.align	2
+ 246              		.global	SetupConsoleIn
+ 248              	SetupConsoleIn:
+ 249              	.LFB2:
+  86:../cyfxusbi2cregmode.c **** 
+  87:../cyfxusbi2cregmode.c **** CyU3PReturnStatus_t SetupConsoleIn(CyU3PDmaSocketId_t sourceSckId)
+  88:../cyfxusbi2cregmode.c **** {
+ 250              		.loc 1 88 0
+ 251              		.cfi_startproc
+ 252              		@ args = 0, pretend = 0, frame = 48
+ 253              		@ frame_needed = 1, uses_anonymous_args = 0
+ 254 0000 10482DE9 		stmfd	sp!, {r4, fp, lr}
+ 255              	.LCFI4:
+ 256              		.cfi_def_cfa_offset 12
+ 257 0004 08B08DE2 		add	fp, sp, #8
+ 258              		.cfi_offset 14, -4
+ 259              		.cfi_offset 11, -8
+ 260              		.cfi_offset 4, -12
+ 261              	.LCFI5:
+ 262              		.cfi_def_cfa 11, 4
+ 263 0008 CCD04DE2 		sub	sp, sp, #204
+ 264 000c 0030A0E1 		mov	r3, r0
+ 265 0010 B6334BE1 		strh	r3, [fp, #-54]	@ movhi
+  89:../cyfxusbi2cregmode.c **** 	// Derived from source code of cyu3debug.c
+  90:../cyfxusbi2cregmode.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 266              		.loc 1 90 0
+ 267 0014 0030A0E3 		mov	r3, #0
+ 268 0018 10300BE5 		str	r3, [fp, #-16]
+  91:../cyfxusbi2cregmode.c ****     CyBool_t Success;
+  92:../cyfxusbi2cregmode.c ****     CyU3PDmaChannelConfig_t dmaConfig;
+  93:../cyfxusbi2cregmode.c **** 
+  94:../cyfxusbi2cregmode.c ****     Success = CyU3PDmaSocketIsValidProducer (sourceSckId);
+ 269              		.loc 1 94 0
+ 270 001c B6335BE1 		ldrh	r3, [fp, #-54]
+ 271 0020 0300A0E1 		mov	r0, r3
+ 272 0024 FEFFFFEB 		bl	CyU3PDmaSocketIsValidProducer
+ 273 0028 14000BE5 		str	r0, [fp, #-20]
+  95:../cyfxusbi2cregmode.c ****     CyU3PDebugPrint (7, "\nCyU3PDmaSocketIsValidProducer = %d", Success);
+ 274              		.loc 1 95 0
+ 275 002c 0700A0E3 		mov	r0, #7
+ 276 0030 88119FE5 		ldr	r1, .L16
+ 277 0034 14201BE5 		ldr	r2, [fp, #-20]
+ 278 0038 FEFFFFEB 		bl	CyU3PDebugPrint
+  96:../cyfxusbi2cregmode.c ****     if (!Success) return CY_U3P_ERROR_BAD_ARGUMENT;
+ 279              		.loc 1 96 0
+ 280 003c 14301BE5 		ldr	r3, [fp, #-20]
+ 281 0040 000053E3 		cmp	r3, #0
+ 282 0044 0100001A 		bne	.L10
+ 283              		.loc 1 96 0 is_stmt 0 discriminator 1
+ 284 0048 4030A0E3 		mov	r3, #64
+ 285 004c 580000EA 		b	.L11
+ 286              	.L10:
+  97:../cyfxusbi2cregmode.c **** 
+  98:../cyfxusbi2cregmode.c ****     status = CyU3PUartRxSetBlockXfer(1);
+ 287              		.loc 1 98 0 is_stmt 1
+ 288 0050 0100A0E3 		mov	r0, #1
+ 289 0054 FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 290 0058 10000BE5 		str	r0, [fp, #-16]
+  99:../cyfxusbi2cregmode.c ****     CyU3PDebugPrint (7, "\nCyU3PUartRxSetBlockXfer = %d", status);
+ 291              		.loc 1 99 0
+ 292 005c 0700A0E3 		mov	r0, #7
+ 293 0060 5C119FE5 		ldr	r1, .L16+4
+ 294 0064 10201BE5 		ldr	r2, [fp, #-16]
+ 295 0068 FEFFFFEB 		bl	CyU3PDebugPrint
+ 100:../cyfxusbi2cregmode.c **** 
+ 101:../cyfxusbi2cregmode.c ****     // Create a MANUAL_IN DMA channel to collected characters for the CPU to process
+ 102:../cyfxusbi2cregmode.c ****     CyU3PMemSet((uint8_t *)&dmaConfig, 0, sizeof(dmaConfig));
+ 296              		.loc 1 102 0
+ 297 006c 30304BE2 		sub	r3, fp, #48
+ 298 0070 0300A0E1 		mov	r0, r3
+ 299 0074 0010A0E3 		mov	r1, #0
+ 300 0078 1C20A0E3 		mov	r2, #28
+ 301 007c FEFFFFEB 		bl	CyU3PMemSet
+ 103:../cyfxusbi2cregmode.c ****     dmaConfig.size = 16;
+ 302              		.loc 1 103 0
+ 303 0080 1030A0E3 		mov	r3, #16
+ 304 0084 B0334BE1 		strh	r3, [fp, #-48]	@ movhi
+ 104:../cyfxusbi2cregmode.c ****     dmaConfig.count = 8;
+ 305              		.loc 1 104 0
+ 306 0088 0830A0E3 		mov	r3, #8
+ 307 008c BE324BE1 		strh	r3, [fp, #-46]	@ movhi
+ 105:../cyfxusbi2cregmode.c **** //    dmaConfig.prodAvailCount = 0;
+ 106:../cyfxusbi2cregmode.c ****     dmaConfig.prodSckId = sourceSckId;
+ 308              		.loc 1 106 0
+ 309 0090 B6335BE1 		ldrh	r3, [fp, #-54]	@ movhi
+ 310 0094 BC324BE1 		strh	r3, [fp, #-44]	@ movhi
+ 107:../cyfxusbi2cregmode.c ****     dmaConfig.consSckId = CY_U3P_CPU_SOCKET_CONS;
+ 311              		.loc 1 107 0
+ 312 0098 3F3CA0E3 		mov	r3, #16128
+ 313 009c BA324BE1 		strh	r3, [fp, #-42]	@ movhi
+ 108:../cyfxusbi2cregmode.c ****     dmaConfig.dmaMode = CY_U3P_DMA_MODE_BYTE;
+ 314              		.loc 1 108 0
+ 315 00a0 0030A0E3 		mov	r3, #0
+ 316 00a4 20304BE5 		strb	r3, [fp, #-32]
+ 109:../cyfxusbi2cregmode.c **** //    dmaConfig.prodHeader = 0;
+ 110:../cyfxusbi2cregmode.c **** //    dmaConfig.prodFooter = 0;
+ 111:../cyfxusbi2cregmode.c **** //    dmaConfig.consHeader = 0;
+ 112:../cyfxusbi2cregmode.c ****     dmaConfig.notification = 0x1FF;		// All for now
+ 317              		.loc 1 112 0
+ 318 00a8 18319FE5 		ldr	r3, .L16+8
+ 319 00ac 1C300BE5 		str	r3, [fp, #-28]
+ 113:../cyfxusbi2cregmode.c ****     dmaConfig.cb = ConsoleInDmaCallback;
+ 320              		.loc 1 113 0
+ 321 00b0 14319FE5 		ldr	r3, .L16+12
+ 322 00b4 18300BE5 		str	r3, [fp, #-24]
+ 114:../cyfxusbi2cregmode.c ****     status = CyU3PDmaChannelCreate (&glDebugConsoleInHandle, CY_U3P_DMA_TYPE_MANUAL_IN, &dmaConfig)
+ 323              		.loc 1 114 0
+ 324 00b8 30304BE2 		sub	r3, fp, #48
+ 325 00bc 0C019FE5 		ldr	r0, .L16+16
+ 326 00c0 0310A0E3 		mov	r1, #3
+ 327 00c4 0320A0E1 		mov	r2, r3
+ 328 00c8 FEFFFFEB 		bl	CyU3PDmaChannelCreate
+ 329 00cc 10000BE5 		str	r0, [fp, #-16]
+ 115:../cyfxusbi2cregmode.c ****     CyU3PDebugPrint (7, "\nCyU3PDmaChannelCreate = %d", status);
+ 330              		.loc 1 115 0
+ 331 00d0 0700A0E3 		mov	r0, #7
+ 332 00d4 F8109FE5 		ldr	r1, .L16+20
+ 333 00d8 10201BE5 		ldr	r2, [fp, #-16]
+ 334 00dc FEFFFFEB 		bl	CyU3PDebugPrint
+ 116:../cyfxusbi2cregmode.c ****     if (status == CY_U3P_SUCCESS)
+ 335              		.loc 1 116 0
+ 336 00e0 10301BE5 		ldr	r3, [fp, #-16]
+ 337 00e4 000053E3 		cmp	r3, #0
+ 338 00e8 0E00001A 		bne	.L12
+ 117:../cyfxusbi2cregmode.c ****     {
+ 118:../cyfxusbi2cregmode.c ****     	CyU3PDebugPrint (7, "\nConsoleIn DMA channel created");
+ 339              		.loc 1 118 0
+ 340 00ec 0700A0E3 		mov	r0, #7
+ 341 00f0 E0109FE5 		ldr	r1, .L16+24
+ 342 00f4 FEFFFFEB 		bl	CyU3PDebugPrint
+ 119:../cyfxusbi2cregmode.c ****         if (glIsDCacheEnabled)		/* The cache control for this channel has to be done internally. JH
+ 343              		.loc 1 119 0
+ 344 00f8 DC309FE5 		ldr	r3, .L16+28
+ 345 00fc 003093E5 		ldr	r3, [r3, #0]
+ 346 0100 000053E3 		cmp	r3, #0
+ 347 0104 0700000A 		beq	.L12
+ 120:../cyfxusbi2cregmode.c ****         {
+ 121:../cyfxusbi2cregmode.c ****         	status = CyU3PDmaChannelCacheControl (&glDebugConsoleInHandle, CyTrue);
+ 348              		.loc 1 121 0
+ 349 0108 C0009FE5 		ldr	r0, .L16+16
+ 350 010c 0110A0E3 		mov	r1, #1
+ 351 0110 FEFFFFEB 		bl	CyU3PDmaChannelCacheControl
+ 352 0114 10000BE5 		str	r0, [fp, #-16]
+ 122:../cyfxusbi2cregmode.c ****         	CyU3PDebugPrint (7, "\nCyU3PDmaChannelCacheControl = %d", status);
+ 353              		.loc 1 122 0
+ 354 0118 0700A0E3 		mov	r0, #7
+ 355 011c BC109FE5 		ldr	r1, .L16+32
+ 356 0120 10201BE5 		ldr	r2, [fp, #-16]
+ 357 0124 FEFFFFEB 		bl	CyU3PDebugPrint
+ 358              	.L12:
+ 123:../cyfxusbi2cregmode.c ****         }
+ 124:../cyfxusbi2cregmode.c ****     }
+ 125:../cyfxusbi2cregmode.c **** 
+ 126:../cyfxusbi2cregmode.c ****     if (status == CY_U3P_SUCCESS)
+ 359              		.loc 1 126 0
+ 360 0128 10301BE5 		ldr	r3, [fp, #-16]
+ 361 012c 000053E3 		cmp	r3, #0
+ 362 0130 1300001A 		bne	.L13
+ 127:../cyfxusbi2cregmode.c ****     {
+ 128:../cyfxusbi2cregmode.c ****     	CyU3PDebugPrint (7, "\nDebugConsoleInHandle = %d", glDebugConsoleInHandle);
+ 363              		.loc 1 128 0
+ 364 0134 94409FE5 		ldr	r4, .L16+16
+ 365 0138 0D10A0E1 		mov	r1, sp
+ 366 013c 082084E2 		add	r2, r4, #8
+ 367 0140 9830A0E3 		mov	r3, #152
+ 368 0144 0100A0E1 		mov	r0, r1
+ 369 0148 0210A0E1 		mov	r1, r2
+ 370 014c 0320A0E1 		mov	r2, r3
+ 371 0150 FEFFFFEB 		bl	memcpy
+ 372 0154 0C0094E8 		ldmia	r4, {r2, r3}
+ 373 0158 0700A0E3 		mov	r0, #7
+ 374 015c 80109FE5 		ldr	r1, .L16+36
+ 375 0160 FEFFFFEB 		bl	CyU3PDebugPrint
+ 129:../cyfxusbi2cregmode.c ****    	// DMA Channels are disabled when created, enable it now
+ 130:../cyfxusbi2cregmode.c ****     	status = CyU3PDmaChannelSetXfer (&glDebugConsoleInHandle, 1);
+ 376              		.loc 1 130 0
+ 377 0164 64009FE5 		ldr	r0, .L16+16
+ 378 0168 0110A0E3 		mov	r1, #1
+ 379 016c FEFFFFEB 		bl	CyU3PDmaChannelSetXfer
+ 380 0170 10000BE5 		str	r0, [fp, #-16]
+ 131:../cyfxusbi2cregmode.c ****     	CyU3PDebugPrint (7, "\nCyU3PDmaChannelSetXfer = %d", status);
+ 381              		.loc 1 131 0
+ 382 0174 0700A0E3 		mov	r0, #7
+ 383 0178 68109FE5 		ldr	r1, .L16+40
+ 384 017c 10201BE5 		ldr	r2, [fp, #-16]
+ 385 0180 FEFFFFEB 		bl	CyU3PDebugPrint
+ 386              	.L13:
+ 132:../cyfxusbi2cregmode.c ****     }
+ 133:../cyfxusbi2cregmode.c **** 
+ 134:../cyfxusbi2cregmode.c ****     if (status == CY_U3P_SUCCESS)
+ 387              		.loc 1 134 0
+ 388 0184 10301BE5 		ldr	r3, [fp, #-16]
+ 389 0188 000053E3 		cmp	r3, #0
+ 390 018c 0200001A 		bne	.L14
+ 135:../cyfxusbi2cregmode.c ****     {
+ 136:../cyfxusbi2cregmode.c ****     	CyU3PDebugPrint (7, "\nConsoleIn DMA channel enabled");
+ 391              		.loc 1 136 0
+ 392 0190 0700A0E3 		mov	r0, #7
+ 393 0194 50109FE5 		ldr	r1, .L16+44
+ 394 0198 FEFFFFEB 		bl	CyU3PDebugPrint
+ 395              	.L14:
+ 137:../cyfxusbi2cregmode.c ****     	// Get a data buffer for this channel
+ 138:../cyfxusbi2cregmode.c **** //    	status = CyU3PDmaChannelGetBuffer (&glDebugConsoleInHandle, &glDebugConsoleInBuf_p, CYU3P_WA
+ 139:../cyfxusbi2cregmode.c **** //    	CyU3PDebugPrint (7, "\nCyU3PDmaChannelGetBuffer = %d", status);
+ 140:../cyfxusbi2cregmode.c ****     }
+ 141:../cyfxusbi2cregmode.c **** 
+ 142:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 396              		.loc 1 142 0
+ 397 019c 10301BE5 		ldr	r3, [fp, #-16]
+ 398 01a0 000053E3 		cmp	r3, #0
+ 399 01a4 0100000A 		beq	.L15
+ 143:../cyfxusbi2cregmode.c ****     {
+ 144:../cyfxusbi2cregmode.c ****         CyU3PDmaChannelDestroy (&glDebugConsoleInHandle);
+ 400              		.loc 1 144 0
+ 401 01a8 20009FE5 		ldr	r0, .L16+16
+ 402 01ac FEFFFFEB 		bl	CyU3PDmaChannelDestroy
+ 403              	.L15:
+ 145:../cyfxusbi2cregmode.c ****     }
+ 146:../cyfxusbi2cregmode.c ****     return status;
+ 404              		.loc 1 146 0
+ 405 01b0 10301BE5 		ldr	r3, [fp, #-16]
+ 406              	.L11:
+ 147:../cyfxusbi2cregmode.c **** }
+ 407              		.loc 1 147 0
+ 408 01b4 0300A0E1 		mov	r0, r3
+ 409 01b8 08D04BE2 		sub	sp, fp, #8
+ 410 01bc 1088BDE8 		ldmfd	sp!, {r4, fp, pc}
+ 411              	.L17:
+ 412              		.align	2
+ 413              	.L16:
+ 414 01c0 68000000 		.word	.LC5
+ 415 01c4 8C000000 		.word	.LC6
+ 416 01c8 FF010000 		.word	511
+ 417 01cc 00000000 		.word	ConsoleInDmaCallback
+ 418 01d0 00000000 		.word	glDebugConsoleInHandle
+ 419 01d4 AC000000 		.word	.LC7
+ 420 01d8 C8000000 		.word	.LC8
+ 421 01dc 00000000 		.word	glIsDCacheEnabled
+ 422 01e0 E8000000 		.word	.LC9
+ 423 01e4 0C010000 		.word	.LC10
+ 424 01e8 28010000 		.word	.LC11
+ 425 01ec 48010000 		.word	.LC12
+ 426              		.cfi_endproc
+ 427              	.LFE2:
+ 429              		.section	.rodata
+ 430 0167 00       		.align	2
+ 431              	.LC13:
+ 432 0168 0A437955 		.ascii	"\012CyU3PUartRxSetBlockXfer_0 = %d\000"
+ 432      33505561 
+ 432      72745278 
+ 432      53657442 
+ 432      6C6F636B 
+ 433              		.align	2
+ 434              	.LC14:
+ 435 0188 0A446562 		.ascii	"\012Debug ConsoleOut started\000"
+ 435      75672043 
+ 435      6F6E736F 
+ 435      6C654F75 
+ 435      74207374 
+ 436 01a2 0000     		.align	2
+ 437              	.LC15:
+ 438 01a4 0A446562 		.ascii	"\012Debug ConsoleIn started\000"
+ 438      75672043 
+ 438      6F6E736F 
+ 438      6C65496E 
+ 438      20737461 
+ 439              		.section	.text.CyFxDebugInit,"ax",%progbits
+ 440              		.align	2
+ 441              		.global	CyFxDebugInit
+ 443              	CyFxDebugInit:
+ 444              	.LFB3:
+ 148:../cyfxusbi2cregmode.c **** 
+ 149:../cyfxusbi2cregmode.c **** 
+ 150:../cyfxusbi2cregmode.c **** // Spin up the DEBUG Console
+ 151:../cyfxusbi2cregmode.c **** CyU3PReturnStatus_t CyFxDebugInit (void)
+ 152:../cyfxusbi2cregmode.c **** {
+ 445              		.loc 1 152 0
+ 446              		.cfi_startproc
+ 447              		@ args = 0, pretend = 0, frame = 32
+ 448              		@ frame_needed = 1, uses_anonymous_args = 0
+ 449 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 450              	.LCFI6:
+ 451              		.cfi_def_cfa_offset 8
+ 452 0004 04B08DE2 		add	fp, sp, #4
+ 453              		.cfi_offset 14, -4
+ 454              		.cfi_offset 11, -8
+ 455              	.LCFI7:
+ 456              		.cfi_def_cfa 11, 4
+ 457 0008 20D04DE2 		sub	sp, sp, #32
+ 153:../cyfxusbi2cregmode.c ****     CyU3PUartConfig_t uartConfig;
+ 154:../cyfxusbi2cregmode.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 458              		.loc 1 154 0
+ 459 000c 0030A0E3 		mov	r3, #0
+ 460 0010 08300BE5 		str	r3, [fp, #-8]
+ 155:../cyfxusbi2cregmode.c **** 
+ 156:../cyfxusbi2cregmode.c ****     status = CyU3PUartInit ();												// Start the UART driver
+ 461              		.loc 1 156 0
+ 462 0014 FEFFFFEB 		bl	CyU3PUartInit
+ 463 0018 08000BE5 		str	r0, [fp, #-8]
+ 157:../cyfxusbi2cregmode.c ****     if (status == CY_U3P_SUCCESS)
+ 464              		.loc 1 157 0
+ 465 001c 08301BE5 		ldr	r3, [fp, #-8]
+ 466 0020 000053E3 		cmp	r3, #0
+ 467 0024 3900001A 		bne	.L19
+ 158:../cyfxusbi2cregmode.c ****     {
+ 159:../cyfxusbi2cregmode.c **** 
+ 160:../cyfxusbi2cregmode.c **** 		CyU3PMemSet ((uint8_t *)&uartConfig, 0, sizeof (uartConfig));
+ 468              		.loc 1 160 0
+ 469 0028 20304BE2 		sub	r3, fp, #32
+ 470 002c 0300A0E1 		mov	r0, r3
+ 471 0030 0010A0E3 		mov	r1, #0
+ 472 0034 1820A0E3 		mov	r2, #24
+ 473 0038 FEFFFFEB 		bl	CyU3PMemSet
+ 161:../cyfxusbi2cregmode.c **** 		uartConfig.baudRate = CY_U3P_UART_BAUDRATE_115200;
+ 474              		.loc 1 161 0
+ 475 003c DC309FE5 		ldr	r3, .L20
+ 476 0040 10300BE5 		str	r3, [fp, #-16]
+ 162:../cyfxusbi2cregmode.c **** 		uartConfig.stopBit  = CY_U3P_UART_ONE_STOP_BIT;
+ 477              		.loc 1 162 0
+ 478 0044 0130A0E3 		mov	r3, #1
+ 479 0048 0C304BE5 		strb	r3, [fp, #-12]
+ 163:../cyfxusbi2cregmode.c **** 		uartConfig.parity   = CY_U3P_UART_NO_PARITY;
+ 480              		.loc 1 163 0
+ 481 004c 0030A0E3 		mov	r3, #0
+ 482 0050 0B304BE5 		strb	r3, [fp, #-11]
+ 164:../cyfxusbi2cregmode.c **** 		uartConfig.txEnable = CyTrue;
+ 483              		.loc 1 164 0
+ 484 0054 0130A0E3 		mov	r3, #1
+ 485 0058 20300BE5 		str	r3, [fp, #-32]
+ 165:../cyfxusbi2cregmode.c **** 		uartConfig.rxEnable = CyTrue;
+ 486              		.loc 1 165 0
+ 487 005c 0130A0E3 		mov	r3, #1
+ 488 0060 1C300BE5 		str	r3, [fp, #-28]
+ 166:../cyfxusbi2cregmode.c **** 		uartConfig.flowCtrl = CyFalse;
+ 489              		.loc 1 166 0
+ 490 0064 0030A0E3 		mov	r3, #0
+ 491 0068 18300BE5 		str	r3, [fp, #-24]
+ 167:../cyfxusbi2cregmode.c **** 		uartConfig.isDma    = CyTrue;
+ 492              		.loc 1 167 0
+ 493 006c 0130A0E3 		mov	r3, #1
+ 494 0070 14300BE5 		str	r3, [fp, #-20]
+ 168:../cyfxusbi2cregmode.c **** 		status = CyU3PUartSetConfig (&uartConfig, UartCallback);			// Configure the UART hardware
+ 495              		.loc 1 168 0
+ 496 0074 20304BE2 		sub	r3, fp, #32
+ 497 0078 0300A0E1 		mov	r0, r3
+ 498 007c A0109FE5 		ldr	r1, .L20+4
+ 499 0080 FEFFFFEB 		bl	CyU3PUartSetConfig
+ 500 0084 08000BE5 		str	r0, [fp, #-8]
+ 169:../cyfxusbi2cregmode.c **** 		if (status == CY_U3P_SUCCESS)
+ 501              		.loc 1 169 0
+ 502 0088 08301BE5 		ldr	r3, [fp, #-8]
+ 503 008c 000053E3 		cmp	r3, #0
+ 504 0090 1E00001A 		bne	.L19
+ 170:../cyfxusbi2cregmode.c **** 		{
+ 171:../cyfxusbi2cregmode.c **** 			status = CyU3PUartTxSetBlockXfer (0xFFFFFFFF);					// Send as much data as I need to
+ 505              		.loc 1 171 0
+ 506 0094 0000E0E3 		mvn	r0, #0
+ 507 0098 FEFFFFEB 		bl	CyU3PUartTxSetBlockXfer
+ 508 009c 08000BE5 		str	r0, [fp, #-8]
+ 172:../cyfxusbi2cregmode.c **** 			if (status == CY_U3P_SUCCESS)
+ 509              		.loc 1 172 0
+ 510 00a0 08301BE5 		ldr	r3, [fp, #-8]
+ 511 00a4 000053E3 		cmp	r3, #0
+ 512 00a8 1800001A 		bne	.L19
+ 173:../cyfxusbi2cregmode.c **** 			{
+ 174:../cyfxusbi2cregmode.c **** 			    status = CyU3PUartRxSetBlockXfer(1);
+ 513              		.loc 1 174 0
+ 514 00ac 0100A0E3 		mov	r0, #1
+ 515 00b0 FEFFFFEB 		bl	CyU3PUartRxSetBlockXfer
+ 516 00b4 08000BE5 		str	r0, [fp, #-8]
+ 175:../cyfxusbi2cregmode.c **** 			    CyU3PDebugPrint (7, "\nCyU3PUartRxSetBlockXfer_0 = %d", status);
+ 517              		.loc 1 175 0
+ 518 00b8 0700A0E3 		mov	r0, #7
+ 519 00bc 64109FE5 		ldr	r1, .L20+8
+ 520 00c0 08201BE5 		ldr	r2, [fp, #-8]
+ 521 00c4 FEFFFFEB 		bl	CyU3PDebugPrint
+ 176:../cyfxusbi2cregmode.c **** 
+ 177:../cyfxusbi2cregmode.c **** 				status = CyU3PDebugInit (CY_U3P_LPP_SOCKET_UART_CONS, 8);	// Attach the Debug driver above the 
+ 522              		.loc 1 177 0
+ 523 00c8 0300A0E3 		mov	r0, #3
+ 524 00cc 0810A0E3 		mov	r1, #8
+ 525 00d0 FEFFFFEB 		bl	CyU3PDebugInit
+ 526 00d4 08000BE5 		str	r0, [fp, #-8]
+ 178:../cyfxusbi2cregmode.c **** 				if (status == CY_U3P_SUCCESS)
+ 527              		.loc 1 178 0
+ 528 00d8 08301BE5 		ldr	r3, [fp, #-8]
+ 529 00dc 000053E3 		cmp	r3, #0
+ 530 00e0 0A00001A 		bne	.L19
+ 179:../cyfxusbi2cregmode.c **** 				{
+ 180:../cyfxusbi2cregmode.c **** 					CyU3PDebugPreamble (CyFalse);							// Skip preamble, debug info is targeted at real time deve
+ 531              		.loc 1 180 0
+ 532 00e4 0000A0E3 		mov	r0, #0
+ 533 00e8 FEFFFFEB 		bl	CyU3PDebugPreamble
+ 181:../cyfxusbi2cregmode.c **** 					CyU3PDebugPrint (4, "\nDebug ConsoleOut started");
+ 534              		.loc 1 181 0
+ 535 00ec 0400A0E3 		mov	r0, #4
+ 536 00f0 34109FE5 		ldr	r1, .L20+12
+ 537 00f4 FEFFFFEB 		bl	CyU3PDebugPrint
+ 182:../cyfxusbi2cregmode.c **** //					status = SetupConsoleIn(CY_U3P_LPP_SOCKET_UART_PROD);
+ 183:../cyfxusbi2cregmode.c **** 					if (status == CY_U3P_SUCCESS) CyU3PDebugPrint (4, "\nDebug ConsoleIn started");
+ 538              		.loc 1 183 0
+ 539 00f8 08301BE5 		ldr	r3, [fp, #-8]
+ 540 00fc 000053E3 		cmp	r3, #0
+ 541 0100 0200001A 		bne	.L19
+ 542              		.loc 1 183 0 is_stmt 0 discriminator 1
+ 543 0104 0400A0E3 		mov	r0, #4
+ 544 0108 20109FE5 		ldr	r1, .L20+16
+ 545 010c FEFFFFEB 		bl	CyU3PDebugPrint
+ 546              	.L19:
+ 184:../cyfxusbi2cregmode.c **** 				}
+ 185:../cyfxusbi2cregmode.c **** 			}
+ 186:../cyfxusbi2cregmode.c **** 		}
+ 187:../cyfxusbi2cregmode.c ****     }
+ 188:../cyfxusbi2cregmode.c ****     return status;
+ 547              		.loc 1 188 0 is_stmt 1
+ 548 0110 08301BE5 		ldr	r3, [fp, #-8]
+ 189:../cyfxusbi2cregmode.c **** }
+ 549              		.loc 1 189 0
+ 550 0114 0300A0E1 		mov	r0, r3
+ 551 0118 04D04BE2 		sub	sp, fp, #4
+ 552 011c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 553              	.L21:
+ 554              		.align	2
+ 555              	.L20:
+ 556 0120 00C20100 		.word	115200
+ 557 0124 00000000 		.word	UartCallback
+ 558 0128 68010000 		.word	.LC13
+ 559 012c 88010000 		.word	.LC14
+ 560 0130 A4010000 		.word	.LC15
+ 561              		.cfi_endproc
+ 562              	.LFE3:
+ 564              		.section	.rodata
+ 565 01bd 000000   		.align	2
+ 566              	.LC16:
+ 567 01c0 0A493243 		.ascii	"\012I2C Driver started\000"
+ 567      20447269 
+ 567      76657220 
+ 567      73746172 
+ 567      74656400 
+ 568              		.section	.text.CyFxI2cInit,"ax",%progbits
+ 569              		.align	2
+ 570              		.global	CyFxI2cInit
+ 572              	CyFxI2cInit:
+ 573              	.LFB4:
+ 190:../cyfxusbi2cregmode.c **** 
+ 191:../cyfxusbi2cregmode.c **** CyU3PReturnStatus_t CyFxI2cInit (uint16_t pageLen)
+ 192:../cyfxusbi2cregmode.c **** {
+ 574              		.loc 1 192 0
+ 575              		.cfi_startproc
+ 576              		@ args = 0, pretend = 0, frame = 32
+ 577              		@ frame_needed = 1, uses_anonymous_args = 0
+ 578 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 579              	.LCFI8:
+ 580              		.cfi_def_cfa_offset 8
+ 581 0004 04B08DE2 		add	fp, sp, #4
+ 582              		.cfi_offset 14, -4
+ 583              		.cfi_offset 11, -8
+ 584              	.LCFI9:
+ 585              		.cfi_def_cfa 11, 4
+ 586 0008 20D04DE2 		sub	sp, sp, #32
+ 587 000c 0030A0E1 		mov	r3, r0
+ 588 0010 BE314BE1 		strh	r3, [fp, #-30]	@ movhi
+ 193:../cyfxusbi2cregmode.c ****     CyU3PI2cConfig_t i2cConfig;
+ 194:../cyfxusbi2cregmode.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 589              		.loc 1 194 0
+ 590 0014 0030A0E3 		mov	r3, #0
+ 591 0018 08300BE5 		str	r3, [fp, #-8]
+ 195:../cyfxusbi2cregmode.c **** 
+ 196:../cyfxusbi2cregmode.c ****     status = CyU3PI2cInit ();												// Start the I2C driver
+ 592              		.loc 1 196 0
+ 593 001c FEFFFFEB 		bl	CyU3PI2cInit
+ 594 0020 08000BE5 		str	r0, [fp, #-8]
+ 197:../cyfxusbi2cregmode.c ****     if (status == CY_U3P_SUCCESS)
+ 595              		.loc 1 197 0
+ 596 0024 08301BE5 		ldr	r3, [fp, #-8]
+ 597 0028 000053E3 		cmp	r3, #0
+ 598 002c 1100001A 		bne	.L23
+ 198:../cyfxusbi2cregmode.c ****     {
+ 199:../cyfxusbi2cregmode.c **** 		CyU3PMemSet ((uint8_t *)&i2cConfig, 0, sizeof(i2cConfig));
+ 599              		.loc 1 199 0
+ 600 0030 18304BE2 		sub	r3, fp, #24
+ 601 0034 0300A0E1 		mov	r0, r3
+ 602 0038 0010A0E3 		mov	r1, #0
+ 603 003c 1020A0E3 		mov	r2, #16
+ 604 0040 FEFFFFEB 		bl	CyU3PMemSet
+ 200:../cyfxusbi2cregmode.c **** 		i2cConfig.bitRate    = CY_FX_USBI2C_I2C_BITRATE;
+ 605              		.loc 1 200 0
+ 606 0044 54309FE5 		ldr	r3, .L25
+ 607 0048 18300BE5 		str	r3, [fp, #-24]
+ 201:../cyfxusbi2cregmode.c **** 		i2cConfig.busTimeout = 0xFFFFFFFF;
+ 608              		.loc 1 201 0
+ 609 004c 0030E0E3 		mvn	r3, #0
+ 610 0050 10300BE5 		str	r3, [fp, #-16]
+ 202:../cyfxusbi2cregmode.c **** 		i2cConfig.dmaTimeout = 0xFFFF;
+ 611              		.loc 1 202 0
+ 612 0054 0030E0E3 		mvn	r3, #0
+ 613 0058 BC304BE1 		strh	r3, [fp, #-12]	@ movhi
+ 203:../cyfxusbi2cregmode.c **** 		i2cConfig.isDma      = CyFalse;
+ 614              		.loc 1 203 0
+ 615 005c 0030A0E3 		mov	r3, #0
+ 616 0060 14300BE5 		str	r3, [fp, #-20]
+ 204:../cyfxusbi2cregmode.c **** 		status = CyU3PI2cSetConfig (&i2cConfig, NULL);						// Configure the I2C Hardware
+ 617              		.loc 1 204 0
+ 618 0064 18304BE2 		sub	r3, fp, #24
+ 619 0068 0300A0E1 		mov	r0, r3
+ 620 006c 0010A0E3 		mov	r1, #0
+ 621 0070 FEFFFFEB 		bl	CyU3PI2cSetConfig
+ 622 0074 08000BE5 		str	r0, [fp, #-8]
+ 623              	.L23:
+ 205:../cyfxusbi2cregmode.c ****     }
+ 206:../cyfxusbi2cregmode.c **** 	if (status == CY_U3P_SUCCESS) CyU3PDebugPrint (4, "\nI2C Driver started");
+ 624              		.loc 1 206 0
+ 625 0078 08301BE5 		ldr	r3, [fp, #-8]
+ 626 007c 000053E3 		cmp	r3, #0
+ 627 0080 0200001A 		bne	.L24
+ 628              		.loc 1 206 0 is_stmt 0 discriminator 1
+ 629 0084 0400A0E3 		mov	r0, #4
+ 630 0088 14109FE5 		ldr	r1, .L25+4
+ 631 008c FEFFFFEB 		bl	CyU3PDebugPrint
+ 632              	.L24:
+ 207:../cyfxusbi2cregmode.c ****     return status;
+ 633              		.loc 1 207 0 is_stmt 1
+ 634 0090 08301BE5 		ldr	r3, [fp, #-8]
+ 208:../cyfxusbi2cregmode.c **** }
+ 635              		.loc 1 208 0
+ 636 0094 0300A0E1 		mov	r0, r3
+ 637 0098 04D04BE2 		sub	sp, fp, #4
+ 638 009c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 639              	.L26:
+ 640              		.align	2
+ 641              	.L25:
+ 642 00a0 A0860100 		.word	100000
+ 643 00a4 C0010000 		.word	.LC16
+ 644              		.cfi_endproc
+ 645              	.LFE4:
+ 647              		.section	.text.CyFxUSBSetupCB,"ax",%progbits
+ 648              		.align	2
+ 649              		.global	CyFxUSBSetupCB
+ 651              	CyFxUSBSetupCB:
+ 652              	.LFB5:
+ 209:../cyfxusbi2cregmode.c **** 
+ 210:../cyfxusbi2cregmode.c **** 
+ 211:../cyfxusbi2cregmode.c **** CyBool_t CyFxUSBSetupCB (uint32_t setupdat0, uint32_t setupdat1)
+ 212:../cyfxusbi2cregmode.c **** {
+ 653              		.loc 1 212 0
+ 654              		.cfi_startproc
+ 655              		@ args = 0, pretend = 0, frame = 32
+ 656              		@ frame_needed = 1, uses_anonymous_args = 0
+ 657 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 658              	.LCFI10:
+ 659              		.cfi_def_cfa_offset 8
+ 660 0004 04B08DE2 		add	fp, sp, #4
+ 661              		.cfi_offset 14, -4
+ 662              		.cfi_offset 11, -8
+ 663              	.LCFI11:
+ 664              		.cfi_def_cfa 11, 4
+ 665 0008 20D04DE2 		sub	sp, sp, #32
+ 666 000c 20000BE5 		str	r0, [fp, #-32]
+ 667 0010 24100BE5 		str	r1, [fp, #-36]
+ 213:../cyfxusbi2cregmode.c ****     /* Fast enumeration is used. Only requests addressed to the interface, class,
+ 214:../cyfxusbi2cregmode.c ****      * vendor and unknown control requests are received by this function. */
+ 215:../cyfxusbi2cregmode.c **** 
+ 216:../cyfxusbi2cregmode.c ****     uint8_t  i2cAddr;
+ 217:../cyfxusbi2cregmode.c ****     uint8_t  bRequest, bReqType;
+ 218:../cyfxusbi2cregmode.c ****     uint8_t  bType, bTarget;
+ 219:../cyfxusbi2cregmode.c ****     uint16_t wValue, wIndex, wLength;
+ 220:../cyfxusbi2cregmode.c ****     CyBool_t isHandled = CyFalse;
+ 668              		.loc 1 220 0
+ 669 0014 0030A0E3 		mov	r3, #0
+ 670 0018 08300BE5 		str	r3, [fp, #-8]
+ 221:../cyfxusbi2cregmode.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 671              		.loc 1 221 0
+ 672 001c 0030A0E3 		mov	r3, #0
+ 673 0020 0C300BE5 		str	r3, [fp, #-12]
+ 222:../cyfxusbi2cregmode.c **** 
+ 223:../cyfxusbi2cregmode.c ****     /* Decode the fields from the setup request. */
+ 224:../cyfxusbi2cregmode.c ****     bReqType = (setupdat0 & CY_U3P_USB_REQUEST_TYPE_MASK);
+ 674              		.loc 1 224 0
+ 675 0024 20301BE5 		ldr	r3, [fp, #-32]
+ 676 0028 0D304BE5 		strb	r3, [fp, #-13]
+ 225:../cyfxusbi2cregmode.c ****     bType    = (bReqType & CY_U3P_USB_TYPE_MASK);
+ 677              		.loc 1 225 0
+ 678 002c 0D305BE5 		ldrb	r3, [fp, #-13]
+ 679 0030 603003E2 		and	r3, r3, #96
+ 680 0034 0E304BE5 		strb	r3, [fp, #-14]
+ 226:../cyfxusbi2cregmode.c ****     bTarget  = (bReqType & CY_U3P_USB_TARGET_MASK);
+ 681              		.loc 1 226 0
+ 682 0038 0D305BE5 		ldrb	r3, [fp, #-13]
+ 683 003c 033003E2 		and	r3, r3, #3
+ 684 0040 0F304BE5 		strb	r3, [fp, #-15]
+ 227:../cyfxusbi2cregmode.c ****     bRequest = ((setupdat0 & CY_U3P_USB_REQUEST_MASK) >> CY_U3P_USB_REQUEST_POS);
+ 685              		.loc 1 227 0
+ 686 0044 20301BE5 		ldr	r3, [fp, #-32]
+ 687 0048 FF3C03E2 		and	r3, r3, #65280
+ 688 004c 2334A0E1 		mov	r3, r3, lsr #8
+ 689 0050 10304BE5 		strb	r3, [fp, #-16]
+ 228:../cyfxusbi2cregmode.c ****     wValue   = ((setupdat0 & CY_U3P_USB_VALUE_MASK)   >> CY_U3P_USB_VALUE_POS);
+ 690              		.loc 1 228 0
+ 691 0054 20301BE5 		ldr	r3, [fp, #-32]
+ 692 0058 2338A0E1 		mov	r3, r3, lsr #16
+ 693 005c B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+ 229:../cyfxusbi2cregmode.c ****     wIndex   = ((setupdat1 & CY_U3P_USB_INDEX_MASK)   >> CY_U3P_USB_INDEX_POS);
+ 694              		.loc 1 229 0
+ 695 0060 24301BE5 		ldr	r3, [fp, #-36]
+ 696 0064 B4314BE1 		strh	r3, [fp, #-20]	@ movhi
+ 230:../cyfxusbi2cregmode.c ****     wLength   = ((setupdat1 & CY_U3P_USB_LENGTH_MASK)   >> CY_U3P_USB_LENGTH_POS);
+ 697              		.loc 1 230 0
+ 698 0068 24301BE5 		ldr	r3, [fp, #-36]
+ 699 006c 2338A0E1 		mov	r3, r3, lsr #16
+ 700 0070 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+ 231:../cyfxusbi2cregmode.c **** 
+ 232:../cyfxusbi2cregmode.c ****     if (bType == CY_U3P_USB_STANDARD_RQT)
+ 701              		.loc 1 232 0
+ 702 0074 0E305BE5 		ldrb	r3, [fp, #-14]	@ zero_extendqisi2
+ 703 0078 000053E3 		cmp	r3, #0
+ 704 007c 1700001A 		bne	.L28
+ 233:../cyfxusbi2cregmode.c ****     {
+ 234:../cyfxusbi2cregmode.c ****         /* Handle SET_FEATURE(FUNCTION_SUSPEND) and CLEAR_FEATURE(FUNCTION_SUSPEND)
+ 235:../cyfxusbi2cregmode.c ****          * requests here. It should be allowed to pass if the device is in configured
+ 236:../cyfxusbi2cregmode.c ****          * state and failed otherwise. */
+ 237:../cyfxusbi2cregmode.c ****         if ((bTarget == CY_U3P_USB_TARGET_INTF) && ((bRequest == CY_U3P_USB_SC_SET_FEATURE)
+ 705              		.loc 1 237 0
+ 706 0080 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 707 0084 010053E3 		cmp	r3, #1
+ 708 0088 1400001A 		bne	.L28
+ 709              		.loc 1 237 0 is_stmt 0 discriminator 1
+ 710 008c 10305BE5 		ldrb	r3, [fp, #-16]	@ zero_extendqisi2
+ 711 0090 030053E3 		cmp	r3, #3
+ 712 0094 0200000A 		beq	.L29
+ 238:../cyfxusbi2cregmode.c ****                     || (bRequest == CY_U3P_USB_SC_CLEAR_FEATURE)) && (wValue == 0))
+ 713              		.loc 1 238 0 is_stmt 1
+ 714 0098 10305BE5 		ldrb	r3, [fp, #-16]	@ zero_extendqisi2
+ 715 009c 010053E3 		cmp	r3, #1
+ 716 00a0 0E00001A 		bne	.L28
+ 717              	.L29:
+ 718              		.loc 1 238 0 is_stmt 0 discriminator 1
+ 719 00a4 B2315BE1 		ldrh	r3, [fp, #-18]
+ 720 00a8 000053E3 		cmp	r3, #0
+ 721 00ac 0B00001A 		bne	.L28
+ 239:../cyfxusbi2cregmode.c ****         {
+ 240:../cyfxusbi2cregmode.c ****             if (glIsApplnActive)
+ 722              		.loc 1 240 0 is_stmt 1
+ 723 00b0 38309FE5 		ldr	r3, .L32
+ 724 00b4 003093E5 		ldr	r3, [r3, #0]
+ 725 00b8 000053E3 		cmp	r3, #0
+ 726 00bc 0100000A 		beq	.L30
+ 241:../cyfxusbi2cregmode.c ****                 CyU3PUsbAckSetup ();
+ 727              		.loc 1 241 0
+ 728 00c0 FEFFFFEB 		bl	CyU3PUsbAckSetup
+ 729 00c4 030000EA 		b	.L31
+ 730              	.L30:
+ 242:../cyfxusbi2cregmode.c ****             else
+ 243:../cyfxusbi2cregmode.c ****                 CyU3PUsbStall (0, CyTrue, CyFalse);
+ 731              		.loc 1 243 0
+ 732 00c8 0000A0E3 		mov	r0, #0
+ 733 00cc 0110A0E3 		mov	r1, #1
+ 734 00d0 0020A0E3 		mov	r2, #0
+ 735 00d4 FEFFFFEB 		bl	CyU3PUsbStall
+ 736              	.L31:
+ 244:../cyfxusbi2cregmode.c **** 
+ 245:../cyfxusbi2cregmode.c ****             isHandled = CyTrue;
+ 737              		.loc 1 245 0
+ 738 00d8 0130A0E3 		mov	r3, #1
+ 739 00dc 08300BE5 		str	r3, [fp, #-8]
+ 740              	.L28:
+ 246:../cyfxusbi2cregmode.c ****         }
+ 247:../cyfxusbi2cregmode.c ****     }
+ 248:../cyfxusbi2cregmode.c **** 
+ 249:../cyfxusbi2cregmode.c ****     /* Handle supported vendor requests. */
+ 250:../cyfxusbi2cregmode.c **** #if (0)		// Need to switch to using Interrupt endpoints and not EP0 Setup Commands
+ 251:../cyfxusbi2cregmode.c ****     if (bType == CY_U3P_USB_VENDOR_RQT)
+ 252:../cyfxusbi2cregmode.c ****     {
+ 253:../cyfxusbi2cregmode.c ****         isHandled = CyTrue;
+ 254:../cyfxusbi2cregmode.c **** 
+ 255:../cyfxusbi2cregmode.c ****         switch (bRequest)
+ 256:../cyfxusbi2cregmode.c ****         {
+ 257:../cyfxusbi2cregmode.c ****             case CY_FX_RQT_ID_CHECK:
+ 258:../cyfxusbi2cregmode.c ****                 CyU3PUsbSendEP0Data (8, (uint8_t *)glFirmwareID);
+ 259:../cyfxusbi2cregmode.c ****                 break;
+ 260:../cyfxusbi2cregmode.c **** 
+ 261:../cyfxusbi2cregmode.c ****             case CY_FX_RQT_I2C_EEPROM_WRITE:
+ 262:../cyfxusbi2cregmode.c ****                 i2cAddr = 0xA0 | ((wValue & 0x0007) << 1);
+ 263:../cyfxusbi2cregmode.c ****                 status  = CyU3PUsbGetEP0Data(((wLength + 15) & 0xFFF0), glEp0Buffer, NULL);
+ 264:../cyfxusbi2cregmode.c ****                 if (status == CY_U3P_SUCCESS)
+ 265:../cyfxusbi2cregmode.c ****                 {
+ 266:../cyfxusbi2cregmode.c ****                     CyFxUsbI2cTransfer (wIndex, i2cAddr, wLength,
+ 267:../cyfxusbi2cregmode.c ****                             glEp0Buffer, CyFalse);
+ 268:../cyfxusbi2cregmode.c ****                 }
+ 269:../cyfxusbi2cregmode.c ****                 break;
+ 270:../cyfxusbi2cregmode.c **** 
+ 271:../cyfxusbi2cregmode.c ****             case CY_FX_RQT_I2C_EEPROM_READ:
+ 272:../cyfxusbi2cregmode.c ****                 i2cAddr = 0xA0 | ((wValue & 0x0007) << 1);
+ 273:../cyfxusbi2cregmode.c ****                 CyU3PMemSet (glEp0Buffer, 0, sizeof (glEp0Buffer));
+ 274:../cyfxusbi2cregmode.c ****                 status = CyFxUsbI2cTransfer (wIndex, i2cAddr, wLength,
+ 275:../cyfxusbi2cregmode.c ****                         glEp0Buffer, CyTrue);
+ 276:../cyfxusbi2cregmode.c ****                 if (status == CY_U3P_SUCCESS)
+ 277:../cyfxusbi2cregmode.c ****                 {
+ 278:../cyfxusbi2cregmode.c ****                     status = CyU3PUsbSendEP0Data(wLength, glEp0Buffer);
+ 279:../cyfxusbi2cregmode.c ****                 }
+ 280:../cyfxusbi2cregmode.c ****                 break;
+ 281:../cyfxusbi2cregmode.c **** 
+ 282:../cyfxusbi2cregmode.c ****             default:
+ 283:../cyfxusbi2cregmode.c ****                 /* This is unknown request. */
+ 284:../cyfxusbi2cregmode.c ****                 isHandled = CyFalse;
+ 285:../cyfxusbi2cregmode.c ****                 break;
+ 286:../cyfxusbi2cregmode.c ****         }
+ 287:../cyfxusbi2cregmode.c ****         /* If there was any error, return not handled so that the library will
+ 288:../cyfxusbi2cregmode.c ****          * stall the request. Alternatively EP0 can be stalled here and return
+ 289:../cyfxusbi2cregmode.c ****          * CyTrue. */
+ 290:../cyfxusbi2cregmode.c ****         if (status != CY_U3P_SUCCESS)
+ 291:../cyfxusbi2cregmode.c ****         {
+ 292:../cyfxusbi2cregmode.c ****             isHandled = CyFalse;
+ 293:../cyfxusbi2cregmode.c ****         }
+ 294:../cyfxusbi2cregmode.c ****     }
+ 295:../cyfxusbi2cregmode.c **** #endif
+ 296:../cyfxusbi2cregmode.c **** 
+ 297:../cyfxusbi2cregmode.c ****     return isHandled;
+ 741              		.loc 1 297 0
+ 742 00e0 08301BE5 		ldr	r3, [fp, #-8]
+ 298:../cyfxusbi2cregmode.c **** }
+ 743              		.loc 1 298 0
+ 744 00e4 0300A0E1 		mov	r0, r3
+ 745 00e8 04D04BE2 		sub	sp, fp, #4
+ 746 00ec 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 747              	.L33:
+ 748              		.align	2
+ 749              	.L32:
+ 750 00f0 00000000 		.word	glIsApplnActive
+ 751              		.cfi_endproc
+ 752              	.LFE5:
+ 754              		.section	.text.CyFxUSBEventCB,"ax",%progbits
+ 755              		.align	2
+ 756              		.global	CyFxUSBEventCB
+ 758              	CyFxUSBEventCB:
+ 759              	.LFB6:
+ 299:../cyfxusbi2cregmode.c **** 
+ 300:../cyfxusbi2cregmode.c **** /* This is the callback function to handle the USB events. */
+ 301:../cyfxusbi2cregmode.c **** void CyFxUSBEventCB (CyU3PUsbEventType_t evtype, /* Event type */ uint16_t evdata  /* Event data */
+ 302:../cyfxusbi2cregmode.c **** {
+ 760              		.loc 1 302 0
+ 761              		.cfi_startproc
+ 762              		@ args = 0, pretend = 0, frame = 8
+ 763              		@ frame_needed = 1, uses_anonymous_args = 0
+ 764              		@ link register save eliminated.
+ 765 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 766              	.LCFI12:
+ 767              		.cfi_def_cfa_offset 4
+ 768 0004 00B08DE2 		add	fp, sp, #0
+ 769              		.cfi_offset 11, -4
+ 770              	.LCFI13:
+ 771              		.cfi_def_cfa_register 11
+ 772 0008 0CD04DE2 		sub	sp, sp, #12
+ 773 000c 0020A0E1 		mov	r2, r0
+ 774 0010 0130A0E1 		mov	r3, r1
+ 775 0014 05204BE5 		strb	r2, [fp, #-5]
+ 776 0018 B8304BE1 		strh	r3, [fp, #-8]	@ movhi
+ 303:../cyfxusbi2cregmode.c ****     switch (evtype)
+ 777              		.loc 1 303 0
+ 778 001c 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 779 0020 040053E3 		cmp	r3, #4
+ 780 0024 0800000A 		beq	.L36
+ 781 0028 050053E3 		cmp	r3, #5
+ 782 002c 0200000A 		beq	.L37
+ 783 0030 010053E3 		cmp	r3, #1
+ 784 0034 0400000A 		beq	.L36
+ 304:../cyfxusbi2cregmode.c ****     {
+ 305:../cyfxusbi2cregmode.c ****         case CY_U3P_USB_EVENT_SETCONF:
+ 306:../cyfxusbi2cregmode.c ****             glIsApplnActive = CyTrue;
+ 307:../cyfxusbi2cregmode.c ****             break;
+ 308:../cyfxusbi2cregmode.c **** 
+ 309:../cyfxusbi2cregmode.c ****         case CY_U3P_USB_EVENT_RESET:
+ 310:../cyfxusbi2cregmode.c ****         case CY_U3P_USB_EVENT_DISCONNECT:
+ 311:../cyfxusbi2cregmode.c ****             glIsApplnActive = CyFalse;
+ 312:../cyfxusbi2cregmode.c ****             break;
+ 313:../cyfxusbi2cregmode.c **** 
+ 314:../cyfxusbi2cregmode.c ****         default:
+ 315:../cyfxusbi2cregmode.c ****             break;
+ 785              		.loc 1 315 0
+ 786 0038 070000EA 		b	.L34
+ 787              	.L37:
+ 306:../cyfxusbi2cregmode.c ****             glIsApplnActive = CyTrue;
+ 788              		.loc 1 306 0
+ 789 003c 24309FE5 		ldr	r3, .L39
+ 790 0040 0120A0E3 		mov	r2, #1
+ 791 0044 002083E5 		str	r2, [r3, #0]
+ 307:../cyfxusbi2cregmode.c ****             break;
+ 792              		.loc 1 307 0
+ 793 0048 030000EA 		b	.L34
+ 794              	.L36:
+ 311:../cyfxusbi2cregmode.c ****             glIsApplnActive = CyFalse;
+ 795              		.loc 1 311 0
+ 796 004c 14309FE5 		ldr	r3, .L39
+ 797 0050 0020A0E3 		mov	r2, #0
+ 798 0054 002083E5 		str	r2, [r3, #0]
+ 312:../cyfxusbi2cregmode.c ****             break;
+ 799              		.loc 1 312 0
+ 800 0058 0000A0E1 		mov	r0, r0	@ nop
+ 801              	.L34:
+ 316:../cyfxusbi2cregmode.c ****     }
+ 317:../cyfxusbi2cregmode.c **** }
+ 802              		.loc 1 317 0
+ 803 005c 00D08BE2 		add	sp, fp, #0
+ 804 0060 04B09DE4 		ldmfd	sp!, {fp}
+ 805 0064 1EFF2FE1 		bx	lr
+ 806              	.L40:
+ 807              		.align	2
+ 808              	.L39:
+ 809 0068 00000000 		.word	glIsApplnActive
+ 810              		.cfi_endproc
+ 811              	.LFE6:
+ 813              		.section	.text.CyFxApplnLPMRqtCB,"ax",%progbits
+ 814              		.align	2
+ 815              		.global	CyFxApplnLPMRqtCB
+ 817              	CyFxApplnLPMRqtCB:
+ 818              	.LFB7:
+ 318:../cyfxusbi2cregmode.c **** 
+ 319:../cyfxusbi2cregmode.c **** /* Callback function to handle LPM requests from the USB 3.0 host. This function is invoked by the 
+ 320:../cyfxusbi2cregmode.c ****    whenever a state change from U0 -> U1 or U0 -> U2 happens. If we return CyTrue from this functio
+ 321:../cyfxusbi2cregmode.c ****    FX3 device is retained in the low power state. If we return CyFalse, the FX3 device immediately 
+ 322:../cyfxusbi2cregmode.c ****    to trigger an exit back to U0.
+ 323:../cyfxusbi2cregmode.c **** 
+ 324:../cyfxusbi2cregmode.c ****    This application does not have any state in which we should not allow U1/U2 transitions; and the
+ 325:../cyfxusbi2cregmode.c ****    the function always return CyTrue.
+ 326:../cyfxusbi2cregmode.c ****  */
+ 327:../cyfxusbi2cregmode.c **** CyBool_t CyFxApplnLPMRqtCB (CyU3PUsbLinkPowerMode link_mode)
+ 328:../cyfxusbi2cregmode.c **** {
+ 819              		.loc 1 328 0
+ 820              		.cfi_startproc
+ 821              		@ args = 0, pretend = 0, frame = 8
+ 822              		@ frame_needed = 1, uses_anonymous_args = 0
+ 823              		@ link register save eliminated.
+ 824 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 825              	.LCFI14:
+ 826              		.cfi_def_cfa_offset 4
+ 827 0004 00B08DE2 		add	fp, sp, #0
+ 828              		.cfi_offset 11, -4
+ 829              	.LCFI15:
+ 830              		.cfi_def_cfa_register 11
+ 831 0008 0CD04DE2 		sub	sp, sp, #12
+ 832 000c 0030A0E1 		mov	r3, r0
+ 833 0010 05304BE5 		strb	r3, [fp, #-5]
+ 329:../cyfxusbi2cregmode.c ****     return CyTrue;
+ 834              		.loc 1 329 0
+ 835 0014 0130A0E3 		mov	r3, #1
+ 330:../cyfxusbi2cregmode.c **** }
+ 836              		.loc 1 330 0
+ 837 0018 0300A0E1 		mov	r0, r3
+ 838 001c 00D08BE2 		add	sp, fp, #0
+ 839 0020 04B09DE4 		ldmfd	sp!, {fp}
+ 840 0024 1EFF2FE1 		bx	lr
+ 841              		.cfi_endproc
+ 842              	.LFE7:
+ 844              		.section	.text.CyFxUsbI2cInit,"ax",%progbits
+ 845              		.align	2
+ 846              		.global	CyFxUsbI2cInit
+ 848              	CyFxUsbI2cInit:
+ 849              	.LFB8:
+ 331:../cyfxusbi2cregmode.c **** 
+ 332:../cyfxusbi2cregmode.c **** /* Initialize all interfaces for the application. */
+ 333:../cyfxusbi2cregmode.c **** CyU3PReturnStatus_t CyFxUsbI2cInit (void)
+ 334:../cyfxusbi2cregmode.c **** {
+ 850              		.loc 1 334 0
+ 851              		.cfi_startproc
+ 852              		@ args = 0, pretend = 0, frame = 8
+ 853              		@ frame_needed = 1, uses_anonymous_args = 0
+ 854 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 855              	.LCFI16:
+ 856              		.cfi_def_cfa_offset 8
+ 857 0004 04B08DE2 		add	fp, sp, #4
+ 858              		.cfi_offset 14, -4
+ 859              		.cfi_offset 11, -8
+ 860              	.LCFI17:
+ 861              		.cfi_def_cfa 11, 4
+ 862 0008 08D04DE2 		sub	sp, sp, #8
+ 335:../cyfxusbi2cregmode.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 863              		.loc 1 335 0
+ 864 000c 0030A0E3 		mov	r3, #0
+ 865 0010 08300BE5 		str	r3, [fp, #-8]
+ 336:../cyfxusbi2cregmode.c **** 
+ 337:../cyfxusbi2cregmode.c ****     /* Initialize the I2C interface for the EEPROM of page size 64 bytes. */
+ 338:../cyfxusbi2cregmode.c ****     status = CyFxI2cInit (CY_FX_USBI2C_I2C_PAGE_SIZE);
+ 866              		.loc 1 338 0
+ 867 0014 4000A0E3 		mov	r0, #64
+ 868 0018 FEFFFFEB 		bl	CyFxI2cInit
+ 869 001c 08000BE5 		str	r0, [fp, #-8]
+ 339:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 870              		.loc 1 339 0
+ 871 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 872 0024 000053E3 		cmp	r3, #0
+ 873 0028 0100000A 		beq	.L43
+ 340:../cyfxusbi2cregmode.c ****     {
+ 341:../cyfxusbi2cregmode.c ****         return status;
+ 874              		.loc 1 341 0
+ 875 002c 08301BE5 		ldr	r3, [fp, #-8]
+ 876 0030 000000EA 		b	.L44
+ 877              	.L43:
+ 342:../cyfxusbi2cregmode.c ****     }
+ 343:../cyfxusbi2cregmode.c **** 
+ 344:../cyfxusbi2cregmode.c ****     return status;		// No USB yet
+ 878              		.loc 1 344 0
+ 879 0034 08301BE5 		ldr	r3, [fp, #-8]
+ 880              	.L44:
+ 345:../cyfxusbi2cregmode.c **** 
+ 346:../cyfxusbi2cregmode.c ****     /* Start the USB functionality. */
+ 347:../cyfxusbi2cregmode.c ****     status = CyU3PUsbStart();
+ 348:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 349:../cyfxusbi2cregmode.c ****     {
+ 350:../cyfxusbi2cregmode.c ****         return status;
+ 351:../cyfxusbi2cregmode.c ****     }
+ 352:../cyfxusbi2cregmode.c **** 
+ 353:../cyfxusbi2cregmode.c ****     /* The fast enumeration is the easiest way to setup a USB connection,
+ 354:../cyfxusbi2cregmode.c ****      * where all enumeration phase is handled by the library. Only the
+ 355:../cyfxusbi2cregmode.c ****      * class / vendor requests need to be handled by the application. */
+ 356:../cyfxusbi2cregmode.c ****     CyU3PUsbRegisterSetupCallback(CyFxUSBSetupCB, CyTrue);
+ 357:../cyfxusbi2cregmode.c **** 
+ 358:../cyfxusbi2cregmode.c ****     /* Setup the callback to handle the USB events. */
+ 359:../cyfxusbi2cregmode.c ****     CyU3PUsbRegisterEventCallback(CyFxUSBEventCB);
+ 360:../cyfxusbi2cregmode.c **** 
+ 361:../cyfxusbi2cregmode.c ****     /* Register a callback to handle LPM requests from the USB 3.0 host. */
+ 362:../cyfxusbi2cregmode.c ****     CyU3PUsbRegisterLPMRequestCallback(CyFxApplnLPMRqtCB);    
+ 363:../cyfxusbi2cregmode.c **** 
+ 364:../cyfxusbi2cregmode.c ****     /* Set the USB Enumeration descriptors */
+ 365:../cyfxusbi2cregmode.c **** 
+ 366:../cyfxusbi2cregmode.c ****     /* Super speed device descriptor. */
+ 367:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_DEVICE_DESCR, NULL, (uint8_t *)CyFxUSB30DeviceDscr);
+ 368:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 369:../cyfxusbi2cregmode.c ****     {
+ 370:../cyfxusbi2cregmode.c ****         return status;
+ 371:../cyfxusbi2cregmode.c ****     }
+ 372:../cyfxusbi2cregmode.c **** 
+ 373:../cyfxusbi2cregmode.c ****     /* High speed device descriptor. */
+ 374:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_HS_DEVICE_DESCR, NULL, (uint8_t *)CyFxUSB20DeviceDscr);
+ 375:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 376:../cyfxusbi2cregmode.c ****     {
+ 377:../cyfxusbi2cregmode.c ****         return status;
+ 378:../cyfxusbi2cregmode.c ****     }
+ 379:../cyfxusbi2cregmode.c **** 
+ 380:../cyfxusbi2cregmode.c ****     /* BOS descriptor */
+ 381:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_BOS_DESCR, NULL, (uint8_t *)CyFxUSBBOSDscr);
+ 382:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 383:../cyfxusbi2cregmode.c ****     {
+ 384:../cyfxusbi2cregmode.c ****         return status;
+ 385:../cyfxusbi2cregmode.c ****     }
+ 386:../cyfxusbi2cregmode.c **** 
+ 387:../cyfxusbi2cregmode.c ****     /* Device qualifier descriptor */
+ 388:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_DEVQUAL_DESCR, NULL, (uint8_t *)CyFxUSBDeviceQualDscr);
+ 389:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 390:../cyfxusbi2cregmode.c ****     {
+ 391:../cyfxusbi2cregmode.c ****         return status;
+ 392:../cyfxusbi2cregmode.c ****     }
+ 393:../cyfxusbi2cregmode.c **** 
+ 394:../cyfxusbi2cregmode.c ****     /* Super speed configuration descriptor */
+ 395:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_SS_CONFIG_DESCR, NULL, (uint8_t *)CyFxUSBSSConfigDscr);
+ 396:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 397:../cyfxusbi2cregmode.c ****     {
+ 398:../cyfxusbi2cregmode.c ****         return status;
+ 399:../cyfxusbi2cregmode.c ****     }
+ 400:../cyfxusbi2cregmode.c **** 
+ 401:../cyfxusbi2cregmode.c ****     /* High speed configuration descriptor */
+ 402:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_HS_CONFIG_DESCR, NULL, (uint8_t *)CyFxUSBHSConfigDscr);
+ 403:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 404:../cyfxusbi2cregmode.c ****     {
+ 405:../cyfxusbi2cregmode.c ****         return status;
+ 406:../cyfxusbi2cregmode.c ****     }
+ 407:../cyfxusbi2cregmode.c **** 
+ 408:../cyfxusbi2cregmode.c ****     /* Full speed configuration descriptor */
+ 409:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_FS_CONFIG_DESCR, NULL, (uint8_t *)CyFxUSBFSConfigDscr);
+ 410:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 411:../cyfxusbi2cregmode.c ****     {
+ 412:../cyfxusbi2cregmode.c ****         return status;
+ 413:../cyfxusbi2cregmode.c ****     }
+ 414:../cyfxusbi2cregmode.c **** 
+ 415:../cyfxusbi2cregmode.c ****     /* String descriptor 0 */
+ 416:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 0, (uint8_t *)CyFxUSBStringLangIDDscr);
+ 417:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 418:../cyfxusbi2cregmode.c ****     {
+ 419:../cyfxusbi2cregmode.c ****         return status;
+ 420:../cyfxusbi2cregmode.c ****     }
+ 421:../cyfxusbi2cregmode.c **** 
+ 422:../cyfxusbi2cregmode.c ****     /* String descriptor 1 */
+ 423:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 1, (uint8_t *)CyFxUSBManufactureDscr);
+ 424:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 425:../cyfxusbi2cregmode.c ****     {
+ 426:../cyfxusbi2cregmode.c ****         return status;
+ 427:../cyfxusbi2cregmode.c ****     }
+ 428:../cyfxusbi2cregmode.c **** 
+ 429:../cyfxusbi2cregmode.c ****     /* String descriptor 2 */
+ 430:../cyfxusbi2cregmode.c ****     status = CyU3PUsbSetDesc(CY_U3P_USB_SET_STRING_DESCR, 2, (uint8_t *)CyFxUSBProductDscr);
+ 431:../cyfxusbi2cregmode.c ****     if (status != CY_U3P_SUCCESS)
+ 432:../cyfxusbi2cregmode.c ****     {
+ 433:../cyfxusbi2cregmode.c ****         return status;
+ 434:../cyfxusbi2cregmode.c ****     }
+ 435:../cyfxusbi2cregmode.c **** 
+ 436:../cyfxusbi2cregmode.c ****     /* Connect the USB Pins with super speed operation enabled. */
+ 437:../cyfxusbi2cregmode.c ****     status = CyU3PConnectState(CyTrue, CyTrue);
+ 438:../cyfxusbi2cregmode.c **** 
+ 439:../cyfxusbi2cregmode.c ****     return status;
+ 440:../cyfxusbi2cregmode.c **** }
+ 881              		.loc 1 440 0
+ 882 0038 0300A0E1 		mov	r0, r3
+ 883 003c 04D04BE2 		sub	sp, fp, #4
+ 884 0040 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 885              		.cfi_endproc
+ 886              	.LFE8:
+ 888              		.section	.rodata
+ 889              		.align	2
+ 890              	.LC17:
+ 891 01d4 0A417070 		.ascii	"\012Application Started with %d.\012\000"
+ 891      6C696361 
+ 891      74696F6E 
+ 891      20537461 
+ 891      72746564 
+ 892 01f3 00       		.align	2
+ 893              	.LC18:
+ 894 01f4 25642C20 		.ascii	"%d, \000"
+ 894      00
+ 895 01f9 000000   		.align	2
+ 896              	.LC19:
+ 897 01fc 0A436F75 		.ascii	"\012Could not configure PCA9554 # 1, Error = %d.\012"
+ 897      6C64206E 
+ 897      6F742063 
+ 897      6F6E6669 
+ 897      67757265 
+ 898 022a 00       		.ascii	"\000"
+ 899 022b 00       		.align	2
+ 900              	.LC20:
+ 901 022c 0A417070 		.ascii	"\012Application failed to initialize. Error code: %"
+ 901      6C696361 
+ 901      74696F6E 
+ 901      20666169 
+ 901      6C656420 
+ 902 025c 642E0A00 		.ascii	"d.\012\000"
+ 903              		.section	.text.AppThread_Entry,"ax",%progbits
+ 904              		.align	2
+ 905              		.global	AppThread_Entry
+ 907              	AppThread_Entry:
+ 908              	.LFB9:
+ 441:../cyfxusbi2cregmode.c **** 
+ 442:../cyfxusbi2cregmode.c **** /*
+ 443:../cyfxusbi2cregmode.c ****  * Entry function for the application thread. This function performs
+ 444:../cyfxusbi2cregmode.c ****  * the initialization of the Debug, I2C, SPI and USB modules and then
+ 445:../cyfxusbi2cregmode.c ****  * executes in a loop printing out heartbeat messages through the UART.
+ 446:../cyfxusbi2cregmode.c ****  */
+ 447:../cyfxusbi2cregmode.c **** void AppThread_Entry (uint32_t input)
+ 448:../cyfxusbi2cregmode.c **** {
+ 909              		.loc 1 448 0
+ 910              		.cfi_startproc
+ 911              		@ args = 0, pretend = 0, frame = 32
+ 912              		@ frame_needed = 1, uses_anonymous_args = 0
+ 913 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 914              	.LCFI18:
+ 915              		.cfi_def_cfa_offset 8
+ 916 0004 04B08DE2 		add	fp, sp, #4
+ 917              		.cfi_offset 14, -4
+ 918              		.cfi_offset 11, -8
+ 919              	.LCFI19:
+ 920              		.cfi_def_cfa 11, 4
+ 921 0008 20D04DE2 		sub	sp, sp, #32
+ 922 000c 20000BE5 		str	r0, [fp, #-32]
+ 449:../cyfxusbi2cregmode.c ****     int32_t Seconds = 0;
+ 923              		.loc 1 449 0
+ 924 0010 0030A0E3 		mov	r3, #0
+ 925 0014 08300BE5 		str	r3, [fp, #-8]
+ 450:../cyfxusbi2cregmode.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 926              		.loc 1 450 0
+ 927 0018 0030A0E3 		mov	r3, #0
+ 928 001c 0C300BE5 		str	r3, [fp, #-12]
+ 451:../cyfxusbi2cregmode.c ****     CyU3PI2cPreamble_t preamble;
+ 452:../cyfxusbi2cregmode.c **** 
+ 453:../cyfxusbi2cregmode.c ****     /* Initialize the debug interface. */
+ 454:../cyfxusbi2cregmode.c ****     status = CyFxDebugInit ();
+ 929              		.loc 1 454 0
+ 930 0020 FEFFFFEB 		bl	CyFxDebugInit
+ 931 0024 0C000BE5 		str	r0, [fp, #-12]
+ 455:../cyfxusbi2cregmode.c ****     if (status == CY_U3P_SUCCESS)
+ 932              		.loc 1 455 0
+ 933 0028 0C301BE5 		ldr	r3, [fp, #-12]
+ 934 002c 000053E3 		cmp	r3, #0
+ 935 0030 3400001A 		bne	.L46
+ 456:../cyfxusbi2cregmode.c ****     {
+ 457:../cyfxusbi2cregmode.c **** 		/* Initialize the application. */
+ 458:../cyfxusbi2cregmode.c **** 		status = CyFxUsbI2cInit ();
+ 936              		.loc 1 458 0
+ 937 0034 FEFFFFEB 		bl	CyFxUsbI2cInit
+ 938 0038 0C000BE5 		str	r0, [fp, #-12]
+ 459:../cyfxusbi2cregmode.c **** 		if (status == CY_U3P_SUCCESS)
+ 939              		.loc 1 459 0
+ 940 003c 0C301BE5 		ldr	r3, [fp, #-12]
+ 941 0040 000053E3 		cmp	r3, #0
+ 942 0044 2F00001A 		bne	.L46
+ 460:../cyfxusbi2cregmode.c **** 		{
+ 461:../cyfxusbi2cregmode.c **** 			CyU3PDebugPrint (4, "\nApplication Started with %d.\n", input);
+ 943              		.loc 1 461 0
+ 944 0048 0400A0E3 		mov	r0, #4
+ 945 004c C8109FE5 		ldr	r1, .L50
+ 946 0050 20201BE5 		ldr	r2, [fp, #-32]
+ 947 0054 FEFFFFEB 		bl	CyU3PDebugPrint
+ 462:../cyfxusbi2cregmode.c **** 			// Setup the two PCA9554's that I have connected to the I2C bus
+ 463:../cyfxusbi2cregmode.c **** 			// PCA9554 #0 = 8 bit switches attached, PCA 9554 powers up as inputs so no configuration requir
+ 464:../cyfxusbi2cregmode.c **** 			// PCA9554 #1 = 8 LEDs attached, need to setup all 8 IOs as output = 0x00 to register 3
+ 465:../cyfxusbi2cregmode.c **** 			// I only need 1 byte of the preamble buffer, use some of it for my data storage
+ 466:../cyfxusbi2cregmode.c **** 			preamble.buffer[0] = 0x42;			// Write to device 0x21
+ 948              		.loc 1 466 0
+ 949 0058 4230A0E3 		mov	r3, #66
+ 950 005c 18304BE5 		strb	r3, [fp, #-24]
+ 467:../cyfxusbi2cregmode.c **** 			preamble.length = 1;				// Only writing one address byte
+ 951              		.loc 1 467 0
+ 952 0060 0130A0E3 		mov	r3, #1
+ 953 0064 10304BE5 		strb	r3, [fp, #-16]
+ 468:../cyfxusbi2cregmode.c **** 			preamble.ctrlMask = 0x0000;			// No additional start bits needed
+ 954              		.loc 1 468 0
+ 955 0068 0030A0E3 		mov	r3, #0
+ 956 006c BE304BE1 		strh	r3, [fp, #-14]	@ movhi
+ 469:../cyfxusbi2cregmode.c **** 			preamble.buffer[2] = 3;				// Register value for Configuration
+ 957              		.loc 1 469 0
+ 958 0070 0330A0E3 		mov	r3, #3
+ 959 0074 16304BE5 		strb	r3, [fp, #-22]
+ 470:../cyfxusbi2cregmode.c **** 			preamble.buffer[3] = 0;				// Used for data value
+ 960              		.loc 1 470 0
+ 961 0078 0030A0E3 		mov	r3, #0
+ 962 007c 15304BE5 		strb	r3, [fp, #-21]
+ 471:../cyfxusbi2cregmode.c **** //			status = CyU3PI2cTransmitBytes (&preamble, &preamble.buffer[2], 2, 3);
+ 472:../cyfxusbi2cregmode.c **** 			if (status == CY_U3P_SUCCESS)
+ 963              		.loc 1 472 0
+ 964 0080 0C301BE5 		ldr	r3, [fp, #-12]
+ 965 0084 000053E3 		cmp	r3, #0
+ 966 0088 1A00001A 		bne	.L47
+ 967              	.L48:
+ 473:../cyfxusbi2cregmode.c **** 			{
+ 474:../cyfxusbi2cregmode.c **** 				/* Now run forever */
+ 475:../cyfxusbi2cregmode.c **** 				while (1)
+ 476:../cyfxusbi2cregmode.c **** 				{
+ 477:../cyfxusbi2cregmode.c **** 					// Read the switches connected to PCA9554 #0, first set the command byte to 0
+ 478:../cyfxusbi2cregmode.c **** 					preamble.buffer[0] = 0x40;			// Write to device 0x20
+ 968              		.loc 1 478 0 discriminator 1
+ 969 008c 4030A0E3 		mov	r3, #64
+ 970 0090 18304BE5 		strb	r3, [fp, #-24]
+ 479:../cyfxusbi2cregmode.c **** //					preamble.length = 1;				// Only writing one address byte
+ 480:../cyfxusbi2cregmode.c **** //					preamble.ctrlMask = 0x0000;			// No additional start bits needed
+ 481:../cyfxusbi2cregmode.c **** 					preamble.buffer[2] = 0;				// Since CommandByte = 0 subsequent reads will be IO pins
+ 971              		.loc 1 481 0 discriminator 1
+ 972 0094 0030A0E3 		mov	r3, #0
+ 973 0098 16304BE5 		strb	r3, [fp, #-22]
+ 482:../cyfxusbi2cregmode.c **** 					preamble.buffer[3] = 0;
+ 974              		.loc 1 482 0 discriminator 1
+ 975 009c 0030A0E3 		mov	r3, #0
+ 976 00a0 15304BE5 		strb	r3, [fp, #-21]
+ 483:../cyfxusbi2cregmode.c **** //					status = CyU3PI2cTransmitBytes (&preamble, &preamble.buffer[2], 2, 3);
+ 484:../cyfxusbi2cregmode.c **** 					CyU3PThreadSleep (1);
+ 977              		.loc 1 484 0 discriminator 1
+ 978 00a4 0100A0E3 		mov	r0, #1
+ 979 00a8 FEFFFFEB 		bl	_tx_thread_sleep
+ 485:../cyfxusbi2cregmode.c **** 					// Now read the IO pins
+ 486:../cyfxusbi2cregmode.c **** 					preamble.buffer[0] = 0x41;			// Read of device 0x20
+ 980              		.loc 1 486 0 discriminator 1
+ 981 00ac 4130A0E3 		mov	r3, #65
+ 982 00b0 18304BE5 		strb	r3, [fp, #-24]
+ 487:../cyfxusbi2cregmode.c **** //					preamble.length = 1;				// Only writing one address byte
+ 488:../cyfxusbi2cregmode.c **** //					preamble.ctrlMask = 0x0000;			// No additional start bits needed
+ 489:../cyfxusbi2cregmode.c **** //					status = CyU3PI2cReceiveBytes(&preamble, &preamble.buffer[3], 1, 3);
+ 490:../cyfxusbi2cregmode.c **** 					CyU3PThreadSleep (1);
+ 983              		.loc 1 490 0 discriminator 1
+ 984 00b4 0100A0E3 		mov	r0, #1
+ 985 00b8 FEFFFFEB 		bl	_tx_thread_sleep
+ 491:../cyfxusbi2cregmode.c **** 					// Write the switches value to PCA9554 #1
+ 492:../cyfxusbi2cregmode.c **** 					preamble.buffer[0] = 0x42;			// Write of device 0x21
+ 986              		.loc 1 492 0 discriminator 1
+ 987 00bc 4230A0E3 		mov	r3, #66
+ 988 00c0 18304BE5 		strb	r3, [fp, #-24]
+ 493:../cyfxusbi2cregmode.c **** //					preamble.length = 1;				// Only writing one address byte
+ 494:../cyfxusbi2cregmode.c **** //					preamble.ctrlMask = 0x0000;			// No additional start bits needed
+ 495:../cyfxusbi2cregmode.c **** 					preamble.buffer[2] = 1;				// Register value for Output Data
+ 989              		.loc 1 495 0 discriminator 1
+ 990 00c4 0130A0E3 		mov	r3, #1
+ 991 00c8 16304BE5 		strb	r3, [fp, #-22]
+ 496:../cyfxusbi2cregmode.c **** //					status = CyU3PI2cTransmitBytes (&preamble, &preamble.buffer[2], 2, 3);
+ 497:../cyfxusbi2cregmode.c **** 					CyU3PThreadSleep (998);
+ 992              		.loc 1 497 0 discriminator 1
+ 993 00cc 4C009FE5 		ldr	r0, .L50+4
+ 994 00d0 FEFFFFEB 		bl	_tx_thread_sleep
+ 498:../cyfxusbi2cregmode.c **** 					CyU3PDebugPrint (4, "%d, ", Seconds++);
+ 995              		.loc 1 498 0 discriminator 1
+ 996 00d4 08301BE5 		ldr	r3, [fp, #-8]
+ 997 00d8 08201BE5 		ldr	r2, [fp, #-8]
+ 998 00dc 012082E2 		add	r2, r2, #1
+ 999 00e0 08200BE5 		str	r2, [fp, #-8]
+ 1000 00e4 0400A0E3 		mov	r0, #4
+ 1001 00e8 34109FE5 		ldr	r1, .L50+8
+ 1002 00ec 0320A0E1 		mov	r2, r3
+ 1003 00f0 FEFFFFEB 		bl	CyU3PDebugPrint
+ 499:../cyfxusbi2cregmode.c **** 				}
+ 1004              		.loc 1 499 0 discriminator 1
+ 1005 00f4 E4FFFFEA 		b	.L48
+ 1006              	.L47:
+ 500:../cyfxusbi2cregmode.c **** 			}
+ 501:../cyfxusbi2cregmode.c **** 			else CyU3PDebugPrint (4, "\nCould not configure PCA9554 # 1, Error = %d.\n", status);
+ 1007              		.loc 1 501 0
+ 1008 00f8 0400A0E3 		mov	r0, #4
+ 1009 00fc 24109FE5 		ldr	r1, .L50+12
+ 1010 0100 0C201BE5 		ldr	r2, [fp, #-12]
+ 1011 0104 FEFFFFEB 		bl	CyU3PDebugPrint
+ 1012              	.L46:
+ 502:../cyfxusbi2cregmode.c **** 		}
+ 503:../cyfxusbi2cregmode.c ****     }
+ 504:../cyfxusbi2cregmode.c **** 
+ 505:../cyfxusbi2cregmode.c **** handle_error:
+ 506:../cyfxusbi2cregmode.c ****     CyU3PDebugPrint (4, "\nApplication failed to initialize. Error code: %d.\n", status);
+ 1013              		.loc 1 506 0
+ 1014 0108 0400A0E3 		mov	r0, #4
+ 1015 010c 18109FE5 		ldr	r1, .L50+16
+ 1016 0110 0C201BE5 		ldr	r2, [fp, #-12]
+ 1017 0114 FEFFFFEB 		bl	CyU3PDebugPrint
+ 1018              	.L49:
+ 507:../cyfxusbi2cregmode.c ****     while (1);
+ 1019              		.loc 1 507 0 discriminator 1
+ 1020 0118 FEFFFFEA 		b	.L49
+ 1021              	.L51:
+ 1022              		.align	2
+ 1023              	.L50:
+ 1024 011c D4010000 		.word	.LC17
+ 1025 0120 E6030000 		.word	998
+ 1026 0124 F4010000 		.word	.LC18
+ 1027 0128 FC010000 		.word	.LC19
+ 1028 012c 2C020000 		.word	.LC20
+ 1029              		.cfi_endproc
+ 1030              	.LFE9:
+ 1032              		.section	.rodata
+ 1033              		.align	2
+ 1034              	.LC21:
+ 1035 0260 32313A42 		.ascii	"21:BasicI2C\000"
+ 1035      61736963 
+ 1035      49324300 
+ 1036              		.section	.text.CyFxApplicationDefine,"ax",%progbits
+ 1037              		.align	2
+ 1038              		.global	CyFxApplicationDefine
+ 1040              	CyFxApplicationDefine:
+ 1041              	.LFB10:
+ 508:../cyfxusbi2cregmode.c **** }
+ 509:../cyfxusbi2cregmode.c **** 
+ 510:../cyfxusbi2cregmode.c **** /* Application define function which creates the application threads. */
+ 511:../cyfxusbi2cregmode.c **** void CyFxApplicationDefine (void)
+ 512:../cyfxusbi2cregmode.c **** {
+ 1042              		.loc 1 512 0
+ 1043              		.cfi_startproc
+ 1044              		@ args = 0, pretend = 0, frame = 8
+ 1045              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1046 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 1047              	.LCFI20:
+ 1048              		.cfi_def_cfa_offset 8
+ 1049 0004 04B08DE2 		add	fp, sp, #4
+ 1050              		.cfi_offset 14, -4
+ 1051              		.cfi_offset 11, -8
+ 1052              	.LCFI21:
+ 1053              		.cfi_def_cfa 11, 4
+ 1054 0008 28D04DE2 		sub	sp, sp, #40
+ 513:../cyfxusbi2cregmode.c ****     void *ptr = NULL;
+ 1055              		.loc 1 513 0
+ 1056 000c 0030A0E3 		mov	r3, #0
+ 1057 0010 08300BE5 		str	r3, [fp, #-8]
+ 514:../cyfxusbi2cregmode.c ****     uint32_t Status = CY_U3P_SUCCESS;
+ 1058              		.loc 1 514 0
+ 1059 0014 0030A0E3 		mov	r3, #0
+ 1060 0018 0C300BE5 		str	r3, [fp, #-12]
+ 515:../cyfxusbi2cregmode.c **** 
+ 516:../cyfxusbi2cregmode.c ****     /* Allocate the memory for the threads and create threads */
+ 517:../cyfxusbi2cregmode.c ****     ptr = CyU3PMemAlloc (APPTHREAD_STACK);
+ 1061              		.loc 1 517 0
+ 1062 001c 020BA0E3 		mov	r0, #2048
+ 1063 0020 FEFFFFEB 		bl	CyU3PMemAlloc
+ 1064 0024 08000BE5 		str	r0, [fp, #-8]
+ 518:../cyfxusbi2cregmode.c ****     Status = CyU3PThreadCreate (&appThread, /* Thread structure. */
+ 1065              		.loc 1 518 0
+ 1066 0028 08301BE5 		ldr	r3, [fp, #-8]
+ 1067 002c 00308DE5 		str	r3, [sp, #0]
+ 1068 0030 023BA0E3 		mov	r3, #2048
+ 1069 0034 04308DE5 		str	r3, [sp, #4]
+ 1070 0038 0830A0E3 		mov	r3, #8
+ 1071 003c 08308DE5 		str	r3, [sp, #8]
+ 1072 0040 0830A0E3 		mov	r3, #8
+ 1073 0044 0C308DE5 		str	r3, [sp, #12]
+ 1074 0048 0030A0E3 		mov	r3, #0
+ 1075 004c 10308DE5 		str	r3, [sp, #16]
+ 1076 0050 0130A0E3 		mov	r3, #1
+ 1077 0054 14308DE5 		str	r3, [sp, #20]
+ 1078 0058 A830A0E3 		mov	r3, #168
+ 1079 005c 18308DE5 		str	r3, [sp, #24]
+ 1080 0060 28009FE5 		ldr	r0, .L55
+ 1081 0064 28109FE5 		ldr	r1, .L55+4
+ 1082 0068 28209FE5 		ldr	r2, .L55+8
+ 1083 006c 2A30A0E3 		mov	r3, #42
+ 1084 0070 FEFFFFEB 		bl	_txe_thread_create
+ 1085 0074 0C000BE5 		str	r0, [fp, #-12]
+ 519:../cyfxusbi2cregmode.c ****             "21:BasicI2C",                  /* Thread ID and name. */
+ 520:../cyfxusbi2cregmode.c ****             AppThread_Entry,                /* Thread entry function. */
+ 521:../cyfxusbi2cregmode.c ****             42,                             /* Thread input parameter. */
+ 522:../cyfxusbi2cregmode.c ****             ptr,                            /* Pointer to the allocated thread stack. */
+ 523:../cyfxusbi2cregmode.c ****             APPTHREAD_STACK,                /* Allocated thread stack size. */
+ 524:../cyfxusbi2cregmode.c ****             APPTHREAD_PRIORITY,             /* Thread priority. */
+ 525:../cyfxusbi2cregmode.c ****             APPTHREAD_PRIORITY,             /* Thread pre-emption threshold: No preemption. */
+ 526:../cyfxusbi2cregmode.c ****             CYU3P_NO_TIME_SLICE,            /* No time slice. */
+ 527:../cyfxusbi2cregmode.c ****             CYU3P_AUTO_START                /* Start the thread immediately. */
+ 528:../cyfxusbi2cregmode.c ****             );
+ 529:../cyfxusbi2cregmode.c **** 
+ 530:../cyfxusbi2cregmode.c ****     if (Status != CY_U3P_SUCCESS)
+ 1086              		.loc 1 530 0
+ 1087 0078 0C301BE5 		ldr	r3, [fp, #-12]
+ 1088 007c 000053E3 		cmp	r3, #0
+ 1089 0080 0000000A 		beq	.L52
+ 1090              	.L54:
+ 531:../cyfxusbi2cregmode.c ****     {
+ 532:../cyfxusbi2cregmode.c ****         /* Thread creation failed with the error code retThrdCreate */
+ 533:../cyfxusbi2cregmode.c **** 
+ 534:../cyfxusbi2cregmode.c ****         /* Add custom recovery or debug actions here */
+ 535:../cyfxusbi2cregmode.c **** 
+ 536:../cyfxusbi2cregmode.c ****         /* Application cannot continue. Loop indefinitely */
+ 537:../cyfxusbi2cregmode.c ****         while(1);
+ 1091              		.loc 1 537 0 discriminator 1
+ 1092 0084 FEFFFFEA 		b	.L54
+ 1093              	.L52:
+ 538:../cyfxusbi2cregmode.c ****     }
+ 539:../cyfxusbi2cregmode.c **** }
+ 1094              		.loc 1 539 0
+ 1095 0088 04D04BE2 		sub	sp, fp, #4
+ 1096 008c 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 1097              	.L56:
+ 1098              		.align	2
+ 1099              	.L55:
+ 1100 0090 00000000 		.word	appThread
+ 1101 0094 60020000 		.word	.LC21
+ 1102 0098 00000000 		.word	AppThread_Entry
+ 1103              		.cfi_endproc
+ 1104              	.LFE10:
+ 1106              		.section	.text.main,"ax",%progbits
+ 1107              		.align	2
+ 1108              		.global	main
+ 1110              	main:
+ 1111              	.LFB11:
+ 540:../cyfxusbi2cregmode.c **** 
+ 541:../cyfxusbi2cregmode.c **** /*
+ 542:../cyfxusbi2cregmode.c ****  * Main function
+ 543:../cyfxusbi2cregmode.c ****  */
+ 544:../cyfxusbi2cregmode.c **** int main (void)
+ 545:../cyfxusbi2cregmode.c **** {
+ 1112              		.loc 1 545 0
+ 1113              		.cfi_startproc
+ 1114              		@ args = 0, pretend = 0, frame = 48
+ 1115              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1116 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 1117              	.LCFI22:
+ 1118              		.cfi_def_cfa_offset 8
+ 1119 0004 04B08DE2 		add	fp, sp, #4
+ 1120              		.cfi_offset 14, -4
+ 1121              		.cfi_offset 11, -8
+ 1122              	.LCFI23:
+ 1123              		.cfi_def_cfa 11, 4
+ 1124 0008 30D04DE2 		sub	sp, sp, #48
+ 546:../cyfxusbi2cregmode.c ****     CyU3PIoMatrixConfig_t io_cfg;
+ 547:../cyfxusbi2cregmode.c ****     CyU3PReturnStatus_t status = CY_U3P_SUCCESS;
+ 1125              		.loc 1 547 0
+ 1126 000c 0030A0E3 		mov	r3, #0
+ 1127 0010 08300BE5 		str	r3, [fp, #-8]
+ 548:../cyfxusbi2cregmode.c **** 
+ 549:../cyfxusbi2cregmode.c ****     /* Initialize the device */
+ 550:../cyfxusbi2cregmode.c ****     status = CyU3PDeviceInit (NULL);
+ 1128              		.loc 1 550 0
+ 1129 0014 0000A0E3 		mov	r0, #0
+ 1130 0018 FEFFFFEB 		bl	CyU3PDeviceInit
+ 1131 001c 08000BE5 		str	r0, [fp, #-8]
+ 551:../cyfxusbi2cregmode.c ****     if (status == CY_U3P_SUCCESS)
+ 1132              		.loc 1 551 0
+ 1133 0020 08301BE5 		ldr	r3, [fp, #-8]
+ 1134 0024 000053E3 		cmp	r3, #0
+ 1135 0028 3000001A 		bne	.L58
+ 552:../cyfxusbi2cregmode.c ****     {
+ 553:../cyfxusbi2cregmode.c **** 
+ 554:../cyfxusbi2cregmode.c **** 		/* Initialize the caches. Enable both Instruction and Data Caches. */
+ 555:../cyfxusbi2cregmode.c **** 		status = CyU3PDeviceCacheControl (CyTrue, CyTrue, CyTrue);
+ 1136              		.loc 1 555 0
+ 1137 002c 0100A0E3 		mov	r0, #1
+ 1138 0030 0110A0E3 		mov	r1, #1
+ 1139 0034 0120A0E3 		mov	r2, #1
+ 1140 0038 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 1141 003c 08000BE5 		str	r0, [fp, #-8]
+ 556:../cyfxusbi2cregmode.c **** 		if (status == CY_U3P_SUCCESS)
+ 1142              		.loc 1 556 0
+ 1143 0040 08301BE5 		ldr	r3, [fp, #-8]
+ 1144 0044 000053E3 		cmp	r3, #0
+ 1145 0048 2800001A 		bne	.L58
+ 557:../cyfxusbi2cregmode.c **** 		{
+ 558:../cyfxusbi2cregmode.c **** 			CyU3PMemSet ((uint8_t *)&io_cfg, 0, sizeof(io_cfg));
+ 1146              		.loc 1 558 0
+ 1147 004c 30304BE2 		sub	r3, fp, #48
+ 1148 0050 0300A0E1 		mov	r0, r3
+ 1149 0054 0010A0E3 		mov	r1, #0
+ 1150 0058 2820A0E3 		mov	r2, #40
+ 1151 005c FEFFFFEB 		bl	CyU3PMemSet
+ 559:../cyfxusbi2cregmode.c **** 			io_cfg.isDQ32Bit = CyFalse;
+ 1152              		.loc 1 559 0
+ 1153 0060 0030A0E3 		mov	r3, #0
+ 1154 0064 30300BE5 		str	r3, [fp, #-48]
+ 560:../cyfxusbi2cregmode.c **** 			io_cfg.s0Mode = CY_U3P_SPORT_INACTIVE;
+ 1155              		.loc 1 560 0
+ 1156 0068 0030A0E3 		mov	r3, #0
+ 1157 006c 1C304BE5 		strb	r3, [fp, #-28]
+ 561:../cyfxusbi2cregmode.c **** 			io_cfg.s1Mode = CY_U3P_SPORT_INACTIVE;
+ 1158              		.loc 1 561 0
+ 1159 0070 0030A0E3 		mov	r3, #0
+ 1160 0074 1B304BE5 		strb	r3, [fp, #-27]
+ 562:../cyfxusbi2cregmode.c **** 			io_cfg.useUart   = CyTrue;
+ 1161              		.loc 1 562 0
+ 1162 0078 0130A0E3 		mov	r3, #1
+ 1163 007c 2C300BE5 		str	r3, [fp, #-44]
+ 563:../cyfxusbi2cregmode.c **** 			io_cfg.useI2C    = CyTrue;
+ 1164              		.loc 1 563 0
+ 1165 0080 0130A0E3 		mov	r3, #1
+ 1166 0084 28300BE5 		str	r3, [fp, #-40]
+ 564:../cyfxusbi2cregmode.c **** 			io_cfg.useI2S    = CyFalse;
+ 1167              		.loc 1 564 0
+ 1168 0088 0030A0E3 		mov	r3, #0
+ 1169 008c 24300BE5 		str	r3, [fp, #-36]
+ 565:../cyfxusbi2cregmode.c **** 			io_cfg.useSpi    = CyFalse;
+ 1170              		.loc 1 565 0
+ 1171 0090 0030A0E3 		mov	r3, #0
+ 1172 0094 20300BE5 		str	r3, [fp, #-32]
+ 566:../cyfxusbi2cregmode.c **** 			io_cfg.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;	// Note: I2C is always enabled
+ 1173              		.loc 1 566 0
+ 1174 0098 0130A0E3 		mov	r3, #1
+ 1175 009c 1A304BE5 		strb	r3, [fp, #-26]
+ 567:../cyfxusbi2cregmode.c **** 			/* No GPIOs are enabled. */
+ 568:../cyfxusbi2cregmode.c **** 			io_cfg.gpioSimpleEn[0]  = 0;
+ 1176              		.loc 1 568 0
+ 1177 00a0 0030A0E3 		mov	r3, #0
+ 1178 00a4 18300BE5 		str	r3, [fp, #-24]
+ 569:../cyfxusbi2cregmode.c **** 			io_cfg.gpioSimpleEn[1]  = 0;
+ 1179              		.loc 1 569 0
+ 1180 00a8 0030A0E3 		mov	r3, #0
+ 1181 00ac 14300BE5 		str	r3, [fp, #-20]
+ 570:../cyfxusbi2cregmode.c **** 			io_cfg.gpioComplexEn[0] = 0;
+ 1182              		.loc 1 570 0
+ 1183 00b0 0030A0E3 		mov	r3, #0
+ 1184 00b4 10300BE5 		str	r3, [fp, #-16]
+ 571:../cyfxusbi2cregmode.c **** 			io_cfg.gpioComplexEn[1] = 0;
+ 1185              		.loc 1 571 0
+ 1186 00b8 0030A0E3 		mov	r3, #0
+ 1187 00bc 0C300BE5 		str	r3, [fp, #-12]
+ 572:../cyfxusbi2cregmode.c **** 			status = CyU3PDeviceConfigureIOMatrix (&io_cfg);
+ 1188              		.loc 1 572 0
+ 1189 00c0 30304BE2 		sub	r3, fp, #48
+ 1190 00c4 0300A0E1 		mov	r0, r3
+ 1191 00c8 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 1192 00cc 08000BE5 		str	r0, [fp, #-8]
+ 573:../cyfxusbi2cregmode.c **** 			if (status == CY_U3P_SUCCESS)
+ 1193              		.loc 1 573 0
+ 1194 00d0 08301BE5 		ldr	r3, [fp, #-8]
+ 1195 00d4 000053E3 		cmp	r3, #0
+ 1196 00d8 0400001A 		bne	.L58
+ 574:../cyfxusbi2cregmode.c **** 			{
+ 575:../cyfxusbi2cregmode.c **** 				CyU3PKernelEntry();		// Start RTOS
+ 1197              		.loc 1 575 0
+ 1198 00dc FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 576:../cyfxusbi2cregmode.c **** 				return 0;				// Won't get here but compiler wants this!
+ 1199              		.loc 1 576 0
+ 1200 00e0 0030A0E3 		mov	r3, #0
+ 577:../cyfxusbi2cregmode.c **** 			}
+ 578:../cyfxusbi2cregmode.c **** 		}
+ 579:../cyfxusbi2cregmode.c **** 	}
+ 580:../cyfxusbi2cregmode.c ****     // Get here on a failure, can't recover, just hang here
+ 581:../cyfxusbi2cregmode.c ****     while (1);
+ 582:../cyfxusbi2cregmode.c **** }
+ 1201              		.loc 1 582 0
+ 1202 00e4 0300A0E1 		mov	r0, r3
+ 1203 00e8 04D04BE2 		sub	sp, fp, #4
+ 1204 00ec 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 1205              	.L58:
+ 581:../cyfxusbi2cregmode.c ****     while (1);
+ 1206              		.loc 1 581 0 discriminator 1
+ 1207 00f0 FEFFFFEA 		b	.L58
+ 1208              		.cfi_endproc
+ 1209              	.LFE11:
+ 1211              		.text
+ 1212              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 cyfxusbi2cregmode.c
+                            *COM*:000000a8 appThread
+                            *COM*:000000a8 glDebugConsoleInThread
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:28     .bss.glIsApplnActive:00000000 glIsApplnActive
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:25     .bss.glIsApplnActive:00000000 $d
+                            *COM*:000000a0 glDebugConsoleInHandle
+                            *COM*:0000000c glDebugConsoleInBuf_p
+                            *COM*:00000010 ConsoleInBuffer
+                            *COM*:00000004 ConsoleInIndex
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:35     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:45     .text.UartCallback:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:48     .text.UartCallback:00000000 UartCallback
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:148    .text.UartCallback:00000104 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:166    .text.ConsoleInDmaCallback:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:169    .text.ConsoleInDmaCallback:00000000 ConsoleInDmaCallback
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:214    .text.ConsoleInDmaCallback:00000068 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:245    .text.SetupConsoleIn:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:248    .text.SetupConsoleIn:00000000 SetupConsoleIn
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:414    .text.SetupConsoleIn:000001c0 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:440    .text.CyFxDebugInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:443    .text.CyFxDebugInit:00000000 CyFxDebugInit
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:556    .text.CyFxDebugInit:00000120 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:569    .text.CyFxI2cInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:572    .text.CyFxI2cInit:00000000 CyFxI2cInit
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:642    .text.CyFxI2cInit:000000a0 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:648    .text.CyFxUSBSetupCB:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:651    .text.CyFxUSBSetupCB:00000000 CyFxUSBSetupCB
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:750    .text.CyFxUSBSetupCB:000000f0 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:755    .text.CyFxUSBEventCB:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:758    .text.CyFxUSBEventCB:00000000 CyFxUSBEventCB
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:809    .text.CyFxUSBEventCB:00000068 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:814    .text.CyFxApplnLPMRqtCB:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:817    .text.CyFxApplnLPMRqtCB:00000000 CyFxApplnLPMRqtCB
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:845    .text.CyFxUsbI2cInit:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:848    .text.CyFxUsbI2cInit:00000000 CyFxUsbI2cInit
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:904    .text.AppThread_Entry:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:907    .text.AppThread_Entry:00000000 AppThread_Entry
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:1024   .text.AppThread_Entry:0000011c $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:1037   .text.CyFxApplicationDefine:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:1040   .text.CyFxApplicationDefine:00000000 CyFxApplicationDefine
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:1100   .text.CyFxApplicationDefine:00000090 $d
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:1107   .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccapo67e.s:1110   .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDebugPrint
+memcpy
+CyU3PDmaSocketIsValidProducer
+CyU3PUartRxSetBlockXfer
+CyU3PMemSet
+CyU3PDmaChannelCreate
+CyU3PDmaChannelCacheControl
+CyU3PDmaChannelSetXfer
+CyU3PDmaChannelDestroy
+glIsDCacheEnabled
+CyU3PUartInit
+CyU3PUartSetConfig
+CyU3PUartTxSetBlockXfer
+CyU3PDebugInit
+CyU3PDebugPreamble
+CyU3PI2cInit
+CyU3PI2cSetConfig
+CyU3PUsbAckSetup
+CyU3PUsbStall
+_tx_thread_sleep
+CyU3PMemAlloc
+_txe_thread_create
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

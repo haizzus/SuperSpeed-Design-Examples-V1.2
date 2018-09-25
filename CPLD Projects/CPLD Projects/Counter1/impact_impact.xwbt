@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Users\John\Documents\CPLD Projects\Counter1\impact.xsl
+OUTFILE=C:\Users\John\Documents\CPLD Projects\Counter1\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Users\John\Documents\CPLD Projects\Counter1
+LICENSE=iMPACT
+USER_INFO=iMPACT

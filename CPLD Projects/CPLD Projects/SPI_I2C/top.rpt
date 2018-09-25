@@ -1,0 +1,1173 @@
+ 
+cpldfit:  version P.15xf                            Xilinx Inc.
+                                  Fitter Report
+Design Name: top                                 Date: 10- 5-2015,  6:05PM
+Device Used: XC2C128-6-VQ100
+Fitting Status: Successful
+
+*************************  Mapped Resource Summary  **************************
+
+Macrocells     Product Terms    Function Block   Registers      Pins           
+Used/Tot       Used/Tot         Inps Used/Tot    Used/Tot       Used/Tot       
+66 /128 ( 52%) 184 /448  ( 41%) 144 /320  ( 45%) 55 /128 ( 43%) 35 /80  ( 44%)
+
+** Function Block Resources **
+
+Function Mcells   FB Inps  Pterms   IO       CTC      CTR      CTS      CTE     
+Block    Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot Used/Tot
+FB1      16/16*    32/40    37/56     2/10    1/1*     1/1*     0/1      0/1
+FB2      15/16     37/40    56/56*    6/10    1/1*     1/1*     1/1*     0/1
+FB3       9/16     34/40    35/56     3/11    1/1*     1/1*     1/1*     0/1
+FB4       9/16     15/40    21/56     1/11    1/1*     1/1*     0/1      0/1
+FB5       8/16      6/40    10/56     1/10    1/1*     1/1*     0/1      0/1
+FB6       1/16      3/40     3/56     0/ 9    1/1*     1/1*     0/1      0/1
+FB7       8/16     17/40    22/56     7/10    1/1*     1/1*     1/1*     1/1*
+FB8       0/16      0/40     0/56     0/ 9    0/1      0/1      0/1      0/1
+         -----    -------  -------   -----    ---      ---      ---      ---
+Total    66/128   144/320  184/448   20/80    7/8      7/8      3/8      1/8 
+
+CTC - Control Term Clock
+CTR - Control Term Reset
+CTS - Control Term Set
+CTE - Control Term Output Enable
+
+* - Resource is exhausted
+
+** Global Control Resources **
+
+GCK         GSR         GTS         DGE         
+Used/Tot    Used/Tot    Used/Tot    Used/Tot    
+0/3         0/1         0/4         0/1
+
+
+** Pin Resources **
+
+Signal Type    Required     Mapped  |  Pin Type            Used    Total 
+------------------------------------|------------------------------------
+Input         :   15          15    |  I/O              :    34     70
+Output        :   19          19    |  GCK/IO           :     0      3
+Bidirectional :    1           1    |  GTS/IO           :     0      4
+GCK           :    0           0    |  GSR/IO           :     1      1
+GTS           :    0           0    |  CDR/IO           :     0      1
+GSR           :    0           0    |  DGE/IO           :     0      1
+                 ----        ----
+        Total     35          35
+
+End of Mapped Resource Summary
+**************************  Errors and Warnings  ***************************
+
+WARNING:Cpld - Unable to retrieve the path to the iSE Project Repository. Will
+   use the default filename of 'top.ise'.
+INFO:Cpld - Inferring BUFG constraint for signal 'DQ<10>' based upon the LOC
+   constraint 'P23'. It is recommended that you declare this BUFG explicitedly
+   in your design. Note that for certain device families the output of a BUFG
+   constraint can not drive a gated clock, and the BUFG constraint will be
+   ignored.
+INFO:Cpld - Inferring BUFG constraint for signal 'PCLK' based upon the LOC
+   constraint 'P22'. It is recommended that you declare this BUFG explicitedly
+   in your design. Note that for certain device families the output of a BUFG
+   constraint can not drive a gated clock, and the BUFG constraint will be
+   ignored.
+INFO:Cpld - Inferring BUFG constraint for signal 'CTRL<6>' based upon the LOC
+   constraint 'P27'. It is recommended that you declare this BUFG explicitedly
+   in your design. Note that for certain device families the output of a BUFG
+   constraint can not drive a gated clock, and the BUFG constraint will be
+   ignored.
+WARNING:Cpld:936 - The output buffer 'GPIO45_n_OBUF' is missing an input and
+   will be deleted.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<0>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<11>'.  The input(s) are
+   unused after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<12>'.  The input(s) are
+   unused after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<1>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<2>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<3>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<4>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<5>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<6>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CTRL<7>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<0>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<10>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<11>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<12>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<13>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<14>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<15>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<16>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<17>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<18>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<19>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<1>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<20>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<21>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<22>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<23>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<24>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<25>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<26>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<27>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<28>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<29>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<2>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<30>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<31>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<3>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<4>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<5>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<6>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<7>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<8>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'DQ<9>'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'PCLK'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'TP_2'.  The input(s) are unused
+   after optimization. Please verify functionality via simulation.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<7>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<6>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<5>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<4>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<3>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<2>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<1>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'User<0>' is
+   ignored.
+WARNING:Cpld:968 - PULLUP specified for non tristated output 'INT' is ignored.
+*************************  Summary of Mapped Logic  ************************
+
+** 20 Outputs **
+
+Signal                            Total Total Bank Loc     Pin   Pin       Pin     I/O      I/O       Slew Reg     Reg Init
+Name                              Pts   Inps               No.   Type      Use     STD      Style     Rate Use     State
+User<1>                           1     3     2    FB1_1   13    I/O       O       LVCMOS18           FAST         
+User<0>                           5     8     2    FB1_3   12    I/O       O       LVCMOS18           FAST DFF     RESET
+User<2>                           1     3     1    FB2_2   14    I/O       O       LVCMOS18           FAST         
+User<3>                           1     2     1    FB2_3   15    I/O       O       LVCMOS18           FAST         
+User<4>                           1     8     1    FB2_4   16    I/O       O       LVCMOS18           FAST         
+User<5>                           2     4     1    FB2_5   17    I/O       O       LVCMOS18           FAST         
+User<6>                           1     3     1    FB2_6   18    I/O       O       LVCMOS18           FAST         
+User<7>                           1     2     1    FB2_11  19    I/O       O       LVCMOS18           FAST         
+INT                               0     0     2    FB3_4   99    GSR/I/O   O       LVCMOS18           FAST         
+LED<7>                            4     4     2    FB3_15  91    I/O       O       LVCMOS18           FAST DEFF    RESET
+LED<6>                            4     4     2    FB3_16  90    I/O       O       LVCMOS18           FAST DEFF    RESET
+I2C_SDA                           5     6     1    FB4_4   29    I/O       I/O     LVCMOS18 PU/OD     FAST DEFF    RESET
+FlashCS_n                         1     3     2    FB5_13  73    I/O       O       LVCMOS18           FAST         
+TX_MISO                           6     8     2    FB7_1   77    I/O       O       LVCMOS18 PU        FAST DFF     RESET
+LED<0>                            4     4     2    FB7_6   81    I/O       O       LVCMOS18           FAST DEFF    RESET
+LED<1>                            4     4     2    FB7_11  82    I/O       O       LVCMOS18           FAST DEFF    RESET
+LED<2>                            4     4     2    FB7_13  85    I/O       O       LVCMOS18           FAST DEFF    RESET
+LED<3>                            4     4     2    FB7_14  86    I/O       O       LVCMOS18           FAST DEFF    RESET
+LED<4>                            4     4     2    FB7_15  87    I/O       O       LVCMOS18           FAST DEFF    RESET
+LED<5>                            4     4     2    FB7_16  89    I/O       O       LVCMOS18           FAST DEFF    RESET
+
+** 46 Buried Nodes **
+
+Signal                            Total Total Loc     Reg     Reg Init
+Name                              Pts   Inps          Use     State
+spi_slave/miso_r<0>               3     4     FB1_2   DFF     RESET
+spi_slave/mosi_r<7>               4     4     FB1_4   DEFF    RESET
+spi_slave/mosi_r<6>               4     4     FB1_5   DEFF    RESET
+spi_slave/mosi_r<5>               4     4     FB1_6   DEFF    RESET
+spi_slave/miso_r<6>               5     8     FB1_7   DFF     RESET
+spi_slave/miso_r<5>               5     8     FB1_8   DFF     RESET
+spi_slave/miso_r<3>               5     8     FB1_9   DFF     RESET
+spi_slave/miso_r<4>               5     7     FB1_10  DFF     RESET
+spi_slave/mosi_r<4>               4     4     FB1_11  DEFF    RESET
+spi_slave/mosi_r<3>               4     4     FB1_12  DEFF    RESET
+spi_slave/mosi_r<2>               4     4     FB1_13  DEFF    RESET
+spi_slave/miso_r<2>               5     7     FB1_14  DFF     RESET
+spi_slave/mosi_r<1>               4     4     FB1_15  DEFF    RESET
+spi_slave/miso_r<1>               4     6     FB1_16  DFF     RESET
+i2c_slave/index<0>                6     17    FB2_1   TFF     RESET
+i2c_slave/index<3>                19    17    FB2_7   TFF     RESET
+i2c_slave/index<1>                8     17    FB2_8   DFF     RESET
+i2c_slave/index<2>                8     10    FB2_9   DFF     RESET
+i2c_slave/start_rst               2     2     FB2_10  DFF     RESET
+spi_slave/mosi_r<8>               4     4     FB2_12  DEFF    RESET
+i2c_slave/out_en_not0001          3     15    FB2_14          
+i2c_slave/present_state_FSM_FFd2  6     16    FB2_15  DFF     RESET
+out_en                            4     19    FB2_16  DFF     RESET
+i2c_slave/shift_data_in_not0001   4     16    FB3_1           
+ack_out                           4     15    FB3_8   DFF     RESET
+i2c_slave/present_state_FSM_FFd1  5     16    FB3_9   DFF     RESET
+i2c_slave/shift_data_in           6     19    FB3_10  DFF     RESET
+i2c_slave/latch_data_out          3     9     FB3_12  DFF     RESET
+sda_out                           11    15    FB3_14  DFF     RESET
+i2c_slave/data_in<5>              4     4     FB4_2   DEFF    RESET
+i2c_slave/data_in<4>              4     4     FB4_3   DEFF    RESET
+i2c_slave/start                   2     2     FB4_5   DFF     RESET
+i2c_slave/data_in<3>              4     4     FB4_8   DEFF    RESET
+i2c_slave/data_in<2>              4     4     FB4_9   DEFF    RESET
+i2c_slave/data_in<1>              4     4     FB4_10  DEFF    RESET
+i2c_slave/data_in<7>              4     4     FB4_15  DEFF    RESET
+i2c_slave/data_in<6>              4     4     FB4_16  DEFF    RESET
+i2c_slave/gpio_input<6>           3     3     FB5_1   DEFF    RESET
+i2c_slave/gpio_input<5>           3     3     FB5_2   DEFF    RESET
+i2c_slave/gpio_input<4>           3     3     FB5_3   DEFF    RESET
+
+Signal                            Total Total Loc     Reg     Reg Init
+Name                              Pts   Inps          Use     State
+i2c_slave/gpio_input<3>           3     3     FB5_5   DEFF    RESET
+i2c_slave/gpio_input<2>           3     3     FB5_7   DEFF    RESET
+i2c_slave/gpio_input<1>           3     3     FB5_11  DEFF    RESET
+i2c_slave/gpio_input<0>           3     3     FB5_12  DEFF    RESET
+i2c_slave/gpio_input<7>           3     3     FB6_1   DEFF    RESET
+spi_slave/mosi_r<0>               3     3     FB7_2   DEFF    RESET
+
+** 16 Inputs **
+
+Signal                            Bank Loc     Pin   Pin       Pin     I/O      I/O
+Name                                           No.   Type      Use     STD      Style
+CTRL<8>                           2    FB1_5   10    I/O       I       LVCMOS18 PU
+CTRL<9>                           2    FB1_11  8     I/O       I       LVCMOS18 PU
+CTRL<10>                          2    FB1_13  6     I/O       I       LVCMOS18 PU
+I2C_SDA                           1    FB4_4   29    I/O       I/O     LVCMOS18 PU
+I2C_SCL                           1    FB4_5   30    I/O       I       LVCMOS18 PU
+Button<6>                         2    FB5_1   65    I/O       I       LVCMOS18 PU
+Button<5>                         2    FB5_2   66    I/O       I       LVCMOS18 PU
+Button<4>                         2    FB5_3   67    I/O       I       LVCMOS18 PU
+Button<3>                         2    FB5_5   68    I/O       I       LVCMOS18 PU
+Button<2>                         2    FB5_7   70    I/O       I       LVCMOS18 PU
+Button<1>                         2    FB5_11  71    I/O       I       LVCMOS18 PU
+Button<0>                         2    FB5_12  72    I/O       I       LVCMOS18 PU
+SPI_SSN                           2    FB5_14  74    I/O       I       LVCMOS18 PU
+SPI_SCK                           2    FB5_15  76    I/O       I       LVCMOS18 PU
+Button<7>                         1    FB6_1   64    I/O       I       LVCMOS18 PU
+RX_MOSI                           2    FB7_2   78    I/O       I       LVCMOS18 PU
+
+Legend:
+Pin No.   - ~     - User Assigned
+I/O Style - OD    - OpenDrain
+          - PU    - Pullup
+          - KPR   - Keeper
+          - S     - SchmittTrigger
+          - DG    - DataGate
+Reg Use   - LATCH - Transparent latch
+          - DFF   - D-flip-flop
+          - DEFF  - D-flip-flop with clock enable
+          - TFF   - T-flip-flop
+          - TDFF  - Dual-edge-triggered T-flip-flop
+          - DDFF  - Dual-edge-triggered flip-flop
+          - DDEFF - Dual-edge-triggered flip-flop with clock enable
+          /S (after any above flop/latch type) indicates initial state is Set
+**************************  Function Block Details  ************************
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+              VRF - Vref
+Pin No.      - ~  - User Assigned
+*********************************** FB1  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               32/8
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   37/19
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+User<1>                       1     FB1_1   13   I/O     O                 
+spi_slave/miso_r<0>           3     FB1_2        (b)     (b)    +   +      
+User<0>                       5     FB1_3   12   I/O     O      +   +      
+spi_slave/mosi_r<7>           4     FB1_4   11   I/O     (b)    +   +      
+spi_slave/mosi_r<6>           4     FB1_5   10   I/O     I      +   +      
+spi_slave/mosi_r<5>           4     FB1_6   9    I/O     (b)    +   +      
+spi_slave/miso_r<6>           5     FB1_7        (b)     (b)    +   +      
+spi_slave/miso_r<5>           5     FB1_8        (b)     (b)    +   +      
+spi_slave/miso_r<3>           5     FB1_9        (b)     (b)    +   +      
+spi_slave/miso_r<4>           5     FB1_10       (b)     (b)    +   +      
+spi_slave/mosi_r<4>           4     FB1_11  8    I/O     I      +   +      
+spi_slave/mosi_r<3>           4     FB1_12  7    I/O     (b)    +   +      
+spi_slave/mosi_r<2>           4     FB1_13  6    I/O     I      +   +      
+spi_slave/miso_r<2>           5     FB1_14       (b)     (b)    +   +      
+spi_slave/mosi_r<1>           4     FB1_15  4    GTS/I/O (b)    +   +      
+spi_slave/miso_r<1>           4     FB1_16  3    GTS/I/O (b)    +   +      
+
+Signals Used by Logic in Function Block
+  1: Button<1>         12: User<1>              23: spi_slave/miso_r<4> 
+  2: Button<2>         13: User<2>              24: spi_slave/miso_r<5> 
+  3: Button<3>         14: User<3>              25: spi_slave/miso_r<6> 
+  4: Button<4>         15: User<4>              26: spi_slave/mosi_r<0> 
+  5: Button<5>         16: User<5>              27: spi_slave/mosi_r<1> 
+  6: Button<6>         17: User<6>              28: spi_slave/mosi_r<2> 
+  7: Button<7>         18: User<7>              29: spi_slave/mosi_r<3> 
+  8: CTRL<8>           19: spi_slave/miso_r<0>  30: spi_slave/mosi_r<4> 
+  9: CTRL<9>           20: spi_slave/miso_r<1>  31: spi_slave/mosi_r<5> 
+ 10: SPI_SCK           21: spi_slave/miso_r<2>  32: spi_slave/mosi_r<6> 
+ 11: SPI_SSN           22: spi_slave/miso_r<3> 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+User<1>           .......XX.X............................. 3       
+spi_slave/miso_r<0> 
+                  .........XX...XX........................ 4       
+User<0>           ......X..XXXX.X..X......X............... 8       
+spi_slave/mosi_r<7> 
+                  .........XX..X.................X........ 4       
+spi_slave/mosi_r<6> 
+                  .........XX..X................X......... 4       
+spi_slave/mosi_r<5> 
+                  .........XX..X...............X.......... 4       
+spi_slave/miso_r<6> 
+                  .....X...XXXX.X.X......X................ 8       
+spi_slave/miso_r<5> 
+                  ....X....XXXX.XX......X................. 8       
+spi_slave/miso_r<3> 
+                  ..X......XXXXXX.....X................... 8       
+spi_slave/miso_r<4> 
+                  ...X.....XXXX.X......X.................. 7       
+spi_slave/mosi_r<4> 
+                  .........XX..X..............X........... 4       
+spi_slave/mosi_r<3> 
+                  .........XX..X.............X............ 4       
+spi_slave/mosi_r<2> 
+                  .........XX..X............X............. 4       
+spi_slave/miso_r<2> 
+                  .X.......XXXX.X....X.................... 7       
+spi_slave/mosi_r<1> 
+                  .........XX..X...........X.............. 4       
+spi_slave/miso_r<1> 
+                  X........XXX..X...X..................... 6       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB2  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               37/3
+Number of function block control terms used/remaining:        3/1
+Number of PLA product terms used/remaining:                   56/0
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+i2c_slave/index<0>            6     FB2_1        (b)     (b)            +  
+User<2>                       1     FB2_2   14   I/O     O                 
+User<3>                       1     FB2_3   15   I/O     O                 
+User<4>                       1     FB2_4   16   I/O     O                 
+User<5>                       2     FB2_5   17   I/O     O                 
+User<6>                       1     FB2_6   18   I/O     O                 
+i2c_slave/index<3>            19    FB2_7        (b)     (b)        +      
+i2c_slave/index<1>            8     FB2_8        (b)     (b)        +      
+i2c_slave/index<2>            8     FB2_9        (b)     (b)        +      
+i2c_slave/start_rst           2     FB2_10       (b)     (b)               
+User<7>                       1     FB2_11  19   I/O     O                 
+spi_slave/mosi_r<8>           4     FB2_12       (b)     (b)    +          
+(unused)                      0     FB2_13  22   GCK/I/O       
+i2c_slave/out_en_not0001      3     FB2_14  23   GCK/I/O (b)               
+i2c_slave/present_state_FSM_FFd2
+                              6     FB2_15  24   CDR/I/O (b)        +      
+out_en                        4     FB2_16  27   GCK/I/O (b)        +      
+
+Signals Used by Logic in Function Block
+  1: Button<0>         14: i2c_slave/data_in<1>      26: i2c_slave/present_state_FSM_FFd1 
+  2: CTRL<10>          15: i2c_slave/data_in<2>      27: i2c_slave/present_state_FSM_FFd2 
+  3: CTRL<8>           16: i2c_slave/data_in<3>      28: i2c_slave/start 
+  4: CTRL<9>           17: i2c_slave/data_in<4>      29: out_en 
+  5: I2C_SCL           18: i2c_slave/data_in<5>      30: spi_slave/mosi_r<1> 
+  6: I2C_SDA           19: i2c_slave/data_in<6>      31: spi_slave/mosi_r<2> 
+  7: SPI_SCK           20: i2c_slave/data_in<7>      32: spi_slave/mosi_r<3> 
+  8: SPI_SSN           21: i2c_slave/index<0>        33: spi_slave/mosi_r<4> 
+  9: User<0>           22: i2c_slave/index<1>        34: spi_slave/mosi_r<5> 
+ 10: User<1>           23: i2c_slave/index<2>        35: spi_slave/mosi_r<6> 
+ 11: User<2>           24: i2c_slave/index<3>        36: spi_slave/mosi_r<7> 
+ 12: User<3>           25: i2c_slave/out_en_not0001  37: spi_slave/mosi_r<8> 
+ 13: User<7>          
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+i2c_slave/index<0> 
+                  .X..X........XXXXXXXXXXXXXXX............ 17      
+User<2>           ..XX...X................................ 3       
+User<3>           ............X.......................X... 2       
+User<4>           .............................XXXXXXXX... 8       
+User<5>           X.......XXX............................. 4       
+User<6>           .........X.........................XX... 3       
+i2c_slave/index<3> 
+                  .X..X........XXXXXXXXXXXXXXX............ 17      
+i2c_slave/index<1> 
+                  .X..X........XXXXXXXXXXXXXXX............ 17      
+i2c_slave/index<2> 
+                  .X..X...............XXXXXXXX............ 10      
+i2c_slave/start_rst 
+                  ....X......................X............ 2       
+User<7>           .........XX............................. 2       
+spi_slave/mosi_r<8> 
+                  ......XX...X.......................X.... 4       
+i2c_slave/out_en_not0001 
+                  .....X.......XXXXXXXXXXX.XXX............ 15      
+i2c_slave/present_state_FSM_FFd2 
+                  .X..X........XXXXXXXXXXXX.XX............ 16      
+out_en            .X..XX.......XXXXXXXXXXXXXXXX........... 19      
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB3  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               34/6
+Number of function block control terms used/remaining:        3/1
+Number of PLA product terms used/remaining:                   35/21
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+i2c_slave/shift_data_in_not0001
+                              4     FB3_1        (b)     (b)               
+(unused)                      0     FB3_2   2    GTS/I/O       
+(unused)                      0     FB3_3   1    GTS/I/O       
+INT                           0     FB3_4   99   GSR/I/O O                 
+(unused)                      0     FB3_5   97   I/O           
+(unused)                      0     FB3_6   96   I/O           
+(unused)                      0     FB3_7   95   I/O           
+ack_out                       4     FB3_8        (b)     (b)        +      
+i2c_slave/present_state_FSM_FFd1
+                              5     FB3_9        (b)     (b)        +      
+i2c_slave/shift_data_in       6     FB3_10       (b)     (b)        +      
+(unused)                      0     FB3_11  94   I/O           
+i2c_slave/latch_data_out      3     FB3_12       (b)     (b)        +      
+(unused)                      0     FB3_13  93   I/O           
+sda_out                       11    FB3_14  92   I/O     (b)            +  
+LED<7>                        4     FB3_15  91   I/O     O      +   +      
+LED<6>                        4     FB3_16  90   I/O     O      +       +  
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>              13: i2c_slave/gpio_input<0>  24: i2c_slave/index<3> 
+  2: I2C_SCL               14: i2c_slave/gpio_input<1>  25: i2c_slave/out_en_not0001 
+  3: I2C_SDA               15: i2c_slave/gpio_input<2>  26: i2c_slave/present_state_FSM_FFd1 
+  4: SPI_SCK               16: i2c_slave/gpio_input<3>  27: i2c_slave/present_state_FSM_FFd2 
+  5: User<6>               17: i2c_slave/gpio_input<4>  28: i2c_slave/shift_data_in 
+  6: i2c_slave/data_in<1>  18: i2c_slave/gpio_input<5>  29: i2c_slave/shift_data_in_not0001 
+  7: i2c_slave/data_in<2>  19: i2c_slave/gpio_input<6>  30: i2c_slave/start 
+  8: i2c_slave/data_in<3>  20: i2c_slave/gpio_input<7>  31: out_en 
+  9: i2c_slave/data_in<4>  21: i2c_slave/index<0>       32: sda_out 
+ 10: i2c_slave/data_in<5>  22: i2c_slave/index<1>       33: spi_slave/mosi_r<5> 
+ 11: i2c_slave/data_in<6>  23: i2c_slave/index<2>       34: spi_slave/mosi_r<6> 
+ 12: i2c_slave/data_in<7> 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+i2c_slave/shift_data_in_not0001 
+                  ..X..XXXXXXX........XXXXXXX..X.......... 16      
+INT               ........................................ 0       
+ack_out           XX...XXXXXXX........XXXX.XX............. 15      
+i2c_slave/present_state_FSM_FFd1 
+                  XX...XXXXXXX........XXXX.XX..X.......... 16      
+i2c_slave/shift_data_in 
+                  XXX..XXXXXXX........XXXX.XXXXX.......... 19      
+i2c_slave/latch_data_out 
+                  XXX.................XXXX.XX............. 9       
+sda_out           XX..........XXXXXXXXXXX.......XX........ 15      
+LED<7>            X..XX............................X...... 4       
+LED<6>            X..XX...........................X....... 4       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB4  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               15/25
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   21/35
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+(unused)                      0     FB4_1   28   DGE/I/O       
+i2c_slave/data_in<5>          4     FB4_2        (b)     (b)    +   +      
+i2c_slave/data_in<4>          4     FB4_3        (b)     (b)    +   +      
+I2C_SDA                       5     FB4_4   29   I/O     I/O    +   +      
+i2c_slave/start               2     FB4_5   30   I/O     I                 
+(unused)                      0     FB4_6   32   I/O           
+(unused)                      0     FB4_7   33   I/O           
+i2c_slave/data_in<3>          4     FB4_8        (b)     (b)    +   +      
+i2c_slave/data_in<2>          4     FB4_9        (b)     (b)    +   +      
+i2c_slave/data_in<1>          4     FB4_10       (b)     (b)    +   +      
+(unused)                      0     FB4_11  34   I/O           
+(unused)                      0     FB4_12  35   I/O           
+(unused)                      0     FB4_13  36   I/O           
+(unused)                      0     FB4_14  37   I/O           
+i2c_slave/data_in<7>          4     FB4_15  39   I/O     (b)    +   +      
+i2c_slave/data_in<6>          4     FB4_16  40   I/O     (b)    +   +      
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           6: i2c_slave/data_in<1>  11: i2c_slave/data_in<6> 
+  2: I2C_SCL            7: i2c_slave/data_in<2>  12: i2c_slave/shift_data_in 
+  3: I2C_SDA            8: i2c_slave/data_in<3>  13: i2c_slave/start_rst 
+  4: I2C_SDA.PIN        9: i2c_slave/data_in<4>  14: out_en 
+  5: ack_out           10: i2c_slave/data_in<5>  15: sda_out 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+i2c_slave/data_in<5> 
+                  XX......X..X............................ 4       
+i2c_slave/data_in<4> 
+                  XX.....X...X............................ 4       
+I2C_SDA           XX..X......X.XX......................... 6       
+i2c_slave/data_in<3> 
+                  XX....X....X............................ 4       
+i2c_slave/data_in<2> 
+                  XX...X.....X............................ 4       
+i2c_slave/data_in<1> 
+                  XXX........X............................ 4       
+i2c_slave/data_in<7> 
+                  XX........XX............................ 4       
+i2c_slave/data_in<6> 
+                  XX.......X.X............................ 4       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB5  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               6/34
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   10/46
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+i2c_slave/gpio_input<6>       3     FB5_1   65   I/O     I      +   +      
+i2c_slave/gpio_input<5>       3     FB5_2   66   I/O     I      +   +      
+i2c_slave/gpio_input<4>       3     FB5_3   67   I/O     I      +   +      
+(unused)                      0     FB5_4        (b)           
+i2c_slave/gpio_input<3>       3     FB5_5   68   I/O     I      +   +      
+(unused)                      0     FB5_6        (b)           
+i2c_slave/gpio_input<2>       3     FB5_7   70   I/O     I      +   +      
+(unused)                      0     FB5_8        (b)           
+(unused)                      0     FB5_9        (b)           
+(unused)                      0     FB5_10       (b)           
+i2c_slave/gpio_input<1>       3     FB5_11  71   I/O     I      +   +      
+i2c_slave/gpio_input<0>       3     FB5_12  72   I/O     I      +   +      
+FlashCS_n                     1     FB5_13  73   I/O     O                 
+(unused)                      0     FB5_14  74   I/O     I     
+(unused)                      0     FB5_15  76   I/O     I     
+(unused)                      0     FB5_16       (b)           
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           3: CTRL<9>            5: SPI_SSN 
+  2: CTRL<8>            4: I2C_SCL            6: i2c_slave/latch_data_out 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+FlashCS_n         .XX.X................................... 3       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB6  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               3/37
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   3/53
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+i2c_slave/gpio_input<7>       3     FB6_1   64   I/O     I      +   +      
+(unused)                      0     FB6_2   63   I/O           
+(unused)                      0     FB6_3   61   I/O           
+(unused)                      0     FB6_4   60   I/O           
+(unused)                      0     FB6_5   59   I/O           
+(unused)                      0     FB6_6   58   I/O           
+(unused)                      0     FB6_7        (b)           
+(unused)                      0     FB6_8        (b)           
+(unused)                      0     FB6_9        (b)           
+(unused)                      0     FB6_10       (b)           
+(unused)                      0     FB6_11       (b)           
+(unused)                      0     FB6_12  56   I/O           
+(unused)                      0     FB6_13       (b)           
+(unused)                      0     FB6_14  55   I/O           
+(unused)                      0     FB6_15       (b)           
+(unused)                      0     FB6_16  54   I/O           
+
+Signals Used by Logic in Function Block
+  1: CTRL<10>           2: I2C_SCL            3: i2c_slave/latch_data_out 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB7  ***********************************
+This function block is part of I/O Bank number:               2
+Number of function block inputs used/remaining:               17/23
+Number of function block control terms used/remaining:        4/0
+Number of PLA product terms used/remaining:                   22/34
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+TX_MISO                       6     FB7_1   77   I/O     O      +           +  
+spi_slave/mosi_r<0>           3     FB7_2   78   I/O     I      +          
+(unused)                      0     FB7_3        (b)           
+(unused)                      0     FB7_4   79   I/O           
+(unused)                      0     FB7_5   80   I/O           
+LED<0>                        4     FB7_6   81   I/O     O      +       +  
+(unused)                      0     FB7_7        (b)           
+(unused)                      0     FB7_8        (b)           
+(unused)                      0     FB7_9        (b)           
+(unused)                      0     FB7_10       (b)           
+LED<1>                        4     FB7_11  82   I/O     O      +   +      
+(unused)                      0     FB7_12       (b)           
+LED<2>                        4     FB7_13  85   I/O     O      +       +  
+LED<3>                        4     FB7_14  86   I/O     O      +   +      
+LED<4>                        4     FB7_15  87   I/O     O      +       +  
+LED<5>                        4     FB7_16  89   I/O     O      +   +      
+
+Signals Used by Logic in Function Block
+  1: Button<7>          7: User<2>              13: spi_slave/mosi_r<0> 
+  2: CTRL<10>           8: User<3>              14: spi_slave/mosi_r<1> 
+  3: RX_MOSI            9: User<4>              15: spi_slave/mosi_r<2> 
+  4: SPI_SCK           10: User<6>              16: spi_slave/mosi_r<3> 
+  5: SPI_SSN           11: User<7>              17: spi_slave/mosi_r<4> 
+  6: User<1>           12: spi_slave/miso_r<6> 
+
+Signal                     1         2         3         4 FB      
+Name             0----+----0----+----0----+----0----+----0 Inputs  
+TX_MISO           X..XXXX.X.XX............................ 8       
+LED<0>            .XXX.....X.............................. 4       
+LED<1>            .X.X.....X..X........................... 4       
+LED<2>            .X.X.....X...X.......................... 4       
+LED<3>            .X.X.....X....X......................... 4       
+LED<4>            .X.X.....X.....X........................ 4       
+LED<5>            .X.X.....X......X....................... 4       
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+*********************************** FB8  ***********************************
+This function block is part of I/O Bank number:               1
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                        Total Loc     Pin  Pin     Pin   CTC CTR CTS CTE
+Name                          Pt            No.  Type    Use   
+(unused)                      0     FB8_1        (b)           
+(unused)                      0     FB8_2   53   I/O           
+(unused)                      0     FB8_3   52   I/O           
+(unused)                      0     FB8_4   50   I/O           
+(unused)                      0     FB8_5        (b)           
+(unused)                      0     FB8_6   49   I/O           
+(unused)                      0     FB8_7        (b)           
+(unused)                      0     FB8_8        (b)           
+(unused)                      0     FB8_9        (b)           
+(unused)                      0     FB8_10       (b)           
+(unused)                      0     FB8_11       (b)           
+(unused)                      0     FB8_12  46   I/O           
+(unused)                      0     FB8_13  44   I/O           
+(unused)                      0     FB8_14  43   I/O           
+(unused)                      0     FB8_15  42   I/O           
+(unused)                      0     FB8_16  41   I/O           
+*******************************  Equations  ********************************
+
+********** Mapped Logic **********
+
+
+FlashCS_n <= NOT ((NOT SPI_SSN AND NOT CTRL(8) AND NOT CTRL(9)));
+
+
+INT <= '0';
+
+FDCPE_LED0: FDCPE port map (LED(0),RX_MOSI,SPI_SCK,'0',CTRL(10),User(6));
+
+FDCPE_LED1: FDCPE port map (LED(1),spi_slave/mosi_r(0),SPI_SCK,CTRL(10),'0',User(6));
+
+FDCPE_LED2: FDCPE port map (LED(2),spi_slave/mosi_r(1),SPI_SCK,'0',CTRL(10),User(6));
+
+FDCPE_LED3: FDCPE port map (LED(3),spi_slave/mosi_r(2),SPI_SCK,CTRL(10),'0',User(6));
+
+FDCPE_LED4: FDCPE port map (LED(4),spi_slave/mosi_r(3),SPI_SCK,'0',CTRL(10),User(6));
+
+FDCPE_LED5: FDCPE port map (LED(5),spi_slave/mosi_r(4),SPI_SCK,CTRL(10),'0',User(6));
+
+FDCPE_LED6: FDCPE port map (LED(6),spi_slave/mosi_r(5),SPI_SCK,'0',CTRL(10),User(6));
+
+FDCPE_LED7: FDCPE port map (LED(7),spi_slave/mosi_r(6),SPI_SCK,CTRL(10),'0',User(6));
+
+FDCPE_TX_MISO: FDCPE port map (TX_MISO_I,TX_MISO,SPI_SCK,SPI_SSN,'0','1');
+TX_MISO <= ((spi_slave/miso_r(6) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(7))
+	OR (NOT User(1) AND User(2) AND User(7) AND User(4)));
+TX_MISO <= TX_MISO_I when TX_MISO_OE = '1' else 'Z';
+TX_MISO_OE <= User(7);
+
+FDCPE_User0: FDCPE port map (User(0),User_D(0),SPI_SCK,SPI_SSN,'0','1');
+User_D(0) <= ((spi_slave/miso_r(6) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(7))
+	OR (NOT User(1) AND User(2) AND User(7) AND User(4)));
+
+
+User(1) <= (NOT SPI_SSN AND CTRL(8) AND NOT CTRL(9));
+
+
+User(2) <= (NOT SPI_SSN AND NOT CTRL(8) AND CTRL(9));
+
+
+User(3) <= (NOT spi_slave/mosi_r(8) AND User(7));
+
+
+User(4) <= (NOT spi_slave/mosi_r(7) AND NOT spi_slave/mosi_r(6) AND 
+	NOT spi_slave/mosi_r(5) AND NOT spi_slave/mosi_r(4) AND NOT spi_slave/mosi_r(3) AND 
+	NOT spi_slave/mosi_r(2) AND spi_slave/mosi_r(1) AND NOT spi_slave/mosi_r(8));
+
+
+User(5) <= ((User(1) AND Button(0))
+	OR (NOT User(1) AND User(2) AND User(0)));
+
+
+User(6) <= (spi_slave/mosi_r(7) AND NOT spi_slave/mosi_r(8) AND 
+	User(1));
+
+
+User(7) <= NOT ((NOT User(1) AND NOT User(2)));
+
+FDCPE_ack_out: FDCPE port map (ack_out,ack_out_D,I2C_SCL,CTRL(10),'0','1');
+ack_out_D <= ((i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/index(1) AND NOT i2c_slave/present_state_FSM_FFd2)
+	OR (NOT i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2));
+
+
+I2C_SDA <= NOT (((ack_out)
+	OR (out_en AND NOT sda_out)));FDCPE_i2c_slave/data_in0: FDCPE port map (i2c_slave/data_in(0),I2C_SDA.PIN,I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in); -- Open Drain
+
+FDCPE_i2c_slave/data_in1: FDCPE port map (i2c_slave/data_in(1),i2c_slave/data_in(0),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+
+FDCPE_i2c_slave/data_in2: FDCPE port map (i2c_slave/data_in(2),i2c_slave/data_in(1),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+
+FDCPE_i2c_slave/data_in3: FDCPE port map (i2c_slave/data_in(3),i2c_slave/data_in(2),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+
+FDCPE_i2c_slave/data_in4: FDCPE port map (i2c_slave/data_in(4),i2c_slave/data_in(3),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+
+FDCPE_i2c_slave/data_in5: FDCPE port map (i2c_slave/data_in(5),i2c_slave/data_in(4),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+
+FDCPE_i2c_slave/data_in6: FDCPE port map (i2c_slave/data_in(6),i2c_slave/data_in(5),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+
+FDCPE_i2c_slave/data_in7: FDCPE port map (i2c_slave/data_in(7),i2c_slave/data_in(6),I2C_SCL,CTRL(10),'0',i2c_slave/shift_data_in);
+
+FDCPE_i2c_slave/gpio_input0: FDCPE port map (i2c_slave/gpio_input(0),Button(0),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FDCPE_i2c_slave/gpio_input1: FDCPE port map (i2c_slave/gpio_input(1),Button(1),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FDCPE_i2c_slave/gpio_input2: FDCPE port map (i2c_slave/gpio_input(2),Button(2),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FDCPE_i2c_slave/gpio_input3: FDCPE port map (i2c_slave/gpio_input(3),Button(3),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FDCPE_i2c_slave/gpio_input4: FDCPE port map (i2c_slave/gpio_input(4),Button(4),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FDCPE_i2c_slave/gpio_input5: FDCPE port map (i2c_slave/gpio_input(5),Button(5),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FDCPE_i2c_slave/gpio_input6: FDCPE port map (i2c_slave/gpio_input(6),Button(6),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FDCPE_i2c_slave/gpio_input7: FDCPE port map (i2c_slave/gpio_input(7),Button(7),I2C_SCL,CTRL(10),'0',i2c_slave/latch_data_out);
+
+FTCPE_i2c_slave/index0: FTCPE port map (i2c_slave/index(0),i2c_slave/index_T(0),I2C_SCL,'0',CTRL(10),'1');
+i2c_slave/index_T(0) <= NOT (((i2c_slave/index(0) AND i2c_slave/start)
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	i2c_slave/index(0) AND i2c_slave/index(3))
+	OR (i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2)));
+
+FDCPE_i2c_slave/index1: FDCPE port map (i2c_slave/index(1),i2c_slave/index_D(1),I2C_SCL,CTRL(10),'0','1');
+i2c_slave/index_D(1) <= NOT (((i2c_slave/start)
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	i2c_slave/index(3))
+	OR (i2c_slave/index(0) AND i2c_slave/index(1))
+	OR (NOT i2c_slave/index(0) AND NOT i2c_slave/index(1))
+	OR (i2c_slave/index(3) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2)));
+
+FDCPE_i2c_slave/index2: FDCPE port map (i2c_slave/index(2),i2c_slave/index_D(2),I2C_SCL,CTRL(10),'0','1');
+i2c_slave/index_D(2) <= NOT (((i2c_slave/start)
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	i2c_slave/index(3))
+	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0))
+	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(1))
+	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(1))
+	OR (i2c_slave/index(3) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)));
+
+FTCPE_i2c_slave/index3: FTCPE port map (i2c_slave/index(3),i2c_slave/index_T(3),I2C_SCL,CTRL(10),'0','1');
+i2c_slave/index_T(3) <= ((i2c_slave/present_state_FSM_FFd1 AND 
+	i2c_slave/index(0) AND i2c_slave/index(3))
+	OR (i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/start)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/start)
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3))
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/index(0) AND i2c_slave/index(3) AND i2c_slave/index(1))
+	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(1) AND NOT i2c_slave/start)
+	OR (i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/out_en_not0001)
+	OR (i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/index(1) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/data_in(1) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/data_in(2) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/data_in(3) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/data_in(4) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/data_in(5) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	i2c_slave/data_in(6) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/data_in(7) AND i2c_slave/present_state_FSM_FFd2 AND 
+	NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start));
+
+FDCPE_i2c_slave/latch_data_out: FDCPE port map (i2c_slave/latch_data_out,i2c_slave/latch_data_out_D,I2C_SCL,CTRL(10),'0','1');
+i2c_slave/latch_data_out_D <= (i2c_slave/data_in(0) AND 
+	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND 
+	i2c_slave/present_state_FSM_FFd2);
+
+
+i2c_slave/out_en_not0001 <= ((NOT i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/present_state_FSM_FFd2)
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/index(1) AND i2c_slave/present_state_FSM_FFd2)
+	OR (i2c_slave/data_in(0) AND 
+	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start));
+
+FDCPE_i2c_slave/present_state_FSM_FFd1: FDCPE port map (i2c_slave/present_state_FSM_FFd1,i2c_slave/present_state_FSM_FFd1_D,I2C_SCL,CTRL(10),'0','1');
+i2c_slave/present_state_FSM_FFd1_D <= ((i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/index(3) AND NOT i2c_slave/start)
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND NOT i2c_slave/index(1) AND 
+	NOT i2c_slave/start)
+	OR (NOT i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/index(2) AND i2c_slave/index(0) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start));
+
+FDCPE_i2c_slave/present_state_FSM_FFd2: FDCPE port map (i2c_slave/present_state_FSM_FFd2,i2c_slave/present_state_FSM_FFd2_D,I2C_SCL,CTRL(10),'0','1');
+i2c_slave/present_state_FSM_FFd2_D <= ((i2c_slave/start)
+	OR (NOT i2c_slave/index(3) AND 
+	i2c_slave/present_state_FSM_FFd2)
+	OR (i2c_slave/present_state_FSM_FFd2 AND 
+	i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2));
+
+FDCPE_i2c_slave/shift_data_in: FDCPE port map (i2c_slave/shift_data_in,i2c_slave/shift_data_in_D,I2C_SCL,CTRL(10),'0','1');
+i2c_slave/shift_data_in_D <= ((i2c_slave/shift_data_in AND 
+	NOT i2c_slave/shift_data_in_not0001)
+	OR (i2c_slave/present_state_FSM_FFd1 AND 
+	i2c_slave/start AND i2c_slave/shift_data_in_not0001)
+	OR (NOT i2c_slave/present_state_FSM_FFd2 AND 
+	i2c_slave/start AND i2c_slave/shift_data_in_not0001)
+	OR (NOT i2c_slave/data_in(0) AND 
+	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start AND i2c_slave/shift_data_in_not0001));
+
+
+i2c_slave/shift_data_in_not0001 <= ((i2c_slave/present_state_FSM_FFd1 AND 
+	i2c_slave/start)
+	OR (NOT i2c_slave/present_state_FSM_FFd1 AND 
+	NOT i2c_slave/present_state_FSM_FFd2)
+	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/out_en_not0001)
+	OR (NOT i2c_slave/data_in(0) AND 
+	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(3) AND 
+	NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND i2c_slave/data_in(2) AND 
+	i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND i2c_slave/data_in(5) AND 
+	NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND NOT i2c_slave/start));
+
+FDCPE_i2c_slave/start: FDCPE port map (i2c_slave/start,I2C_SCL,I2C_SDA.PIN,i2c_slave/start_rst,'0','1');
+
+FDCPE_i2c_slave/start_rst: FDCPE port map (i2c_slave/start_rst,i2c_slave/start,I2C_SCL,'0','0','1');
+
+FDCPE_out_en: FDCPE port map (out_en,out_en_D,I2C_SCL,CTRL(10),'0','1');
+out_en_D <= ((NOT i2c_slave/out_en_not0001 AND out_en)
+	OR (i2c_slave/data_in(0) AND 
+	NOT i2c_slave/present_state_FSM_FFd1 AND NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(3) AND NOT i2c_slave/index(1) AND NOT i2c_slave/data_in(1) AND 
+	i2c_slave/data_in(2) AND i2c_slave/data_in(3) AND NOT i2c_slave/data_in(4) AND 
+	i2c_slave/data_in(5) AND NOT i2c_slave/data_in(6) AND i2c_slave/data_in(7) AND 
+	i2c_slave/present_state_FSM_FFd2 AND NOT i2c_slave/start AND i2c_slave/out_en_not0001));
+
+FDCPE_sda_out: FDCPE port map (sda_out,sda_out_D,I2C_SCL,'0',CTRL(10),'1');
+sda_out_D <= ((NOT out_en AND sda_out)
+	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(0))
+	OR (i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(2))
+	OR (i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(1))
+	OR (i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(3))
+	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(4))
+	OR (NOT i2c_slave/index(2) AND i2c_slave/index(0) AND 
+	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(6))
+	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(5))
+	OR (NOT i2c_slave/index(2) AND NOT i2c_slave/index(0) AND 
+	NOT i2c_slave/index(1) AND out_en AND i2c_slave/gpio_input(7)));
+
+FDCPE_spi_slave/miso_r0: FDCPE port map (spi_slave/miso_r(0),spi_slave/miso_r_D(0),SPI_SCK,SPI_SSN,'0','1');
+spi_slave/miso_r_D(0) <= (User(4) AND User(5));
+
+FDCPE_spi_slave/miso_r1: FDCPE port map (spi_slave/miso_r(1),spi_slave/miso_r_D(1),SPI_SCK,SPI_SSN,'0','1');
+spi_slave/miso_r_D(1) <= ((spi_slave/miso_r(0) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(1)));
+
+FDCPE_spi_slave/miso_r2: FDCPE port map (spi_slave/miso_r(2),spi_slave/miso_r_D(2),SPI_SCK,SPI_SSN,'0','1');
+spi_slave/miso_r_D(2) <= ((spi_slave/miso_r(1) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(2))
+	OR (NOT User(1) AND User(2) AND User(4)));
+
+FDCPE_spi_slave/miso_r3: FDCPE port map (spi_slave/miso_r(3),spi_slave/miso_r_D(3),SPI_SCK,SPI_SSN,'0','1');
+spi_slave/miso_r_D(3) <= ((spi_slave/miso_r(2) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(3))
+	OR (User(3) AND NOT User(1) AND User(2) AND User(4)));
+
+FDCPE_spi_slave/miso_r4: FDCPE port map (spi_slave/miso_r(4),spi_slave/miso_r_D(4),SPI_SCK,SPI_SSN,'0','1');
+spi_slave/miso_r_D(4) <= ((spi_slave/miso_r(3) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(4))
+	OR (NOT User(1) AND User(2) AND User(4)));
+
+FDCPE_spi_slave/miso_r5: FDCPE port map (spi_slave/miso_r(5),spi_slave/miso_r_D(5),SPI_SCK,SPI_SSN,'0','1');
+spi_slave/miso_r_D(5) <= ((spi_slave/miso_r(4) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(5))
+	OR (NOT User(1) AND User(2) AND User(4) AND User(5)));
+
+FDCPE_spi_slave/miso_r6: FDCPE port map (spi_slave/miso_r(6),spi_slave/miso_r_D(6),SPI_SCK,SPI_SSN,'0','1');
+spi_slave/miso_r_D(6) <= ((spi_slave/miso_r(5) AND NOT User(4))
+	OR (User(1) AND User(4) AND Button(6))
+	OR (NOT User(1) AND User(2) AND User(6) AND User(4)));
+
+FDCPE_spi_slave/mosi_r0: FDCPE port map (spi_slave/mosi_r(0),RX_MOSI,SPI_SCK,'0',SPI_SSN,User(3));
+
+FDCPE_spi_slave/mosi_r1: FDCPE port map (spi_slave/mosi_r(1),spi_slave/mosi_r(0),SPI_SCK,SPI_SSN,'0',User(3));
+
+FDCPE_spi_slave/mosi_r2: FDCPE port map (spi_slave/mosi_r(2),spi_slave/mosi_r(1),SPI_SCK,SPI_SSN,'0',User(3));
+
+FDCPE_spi_slave/mosi_r3: FDCPE port map (spi_slave/mosi_r(3),spi_slave/mosi_r(2),SPI_SCK,SPI_SSN,'0',User(3));
+
+FDCPE_spi_slave/mosi_r4: FDCPE port map (spi_slave/mosi_r(4),spi_slave/mosi_r(3),SPI_SCK,SPI_SSN,'0',User(3));
+
+FDCPE_spi_slave/mosi_r5: FDCPE port map (spi_slave/mosi_r(5),spi_slave/mosi_r(4),SPI_SCK,SPI_SSN,'0',User(3));
+
+FDCPE_spi_slave/mosi_r6: FDCPE port map (spi_slave/mosi_r(6),spi_slave/mosi_r(5),SPI_SCK,SPI_SSN,'0',User(3));
+
+FDCPE_spi_slave/mosi_r7: FDCPE port map (spi_slave/mosi_r(7),spi_slave/mosi_r(6),SPI_SCK,SPI_SSN,'0',User(3));
+
+FDCPE_spi_slave/mosi_r8: FDCPE port map (spi_slave/mosi_r(8),spi_slave/mosi_r(7),SPI_SCK,SPI_SSN,'0',User(3));
+
+
+Register Legend:
+ FDCPE (Q,D,C,CLR,PRE,CE); 
+ FDDCPE (Q,D,C,CLR,PRE,CE); 
+ FTCPE (Q,D,C,CLR,PRE,CE); 
+ FTDCPE (Q,D,C,CLR,PRE,CE); 
+ LDCP  (Q,D,G,CLR,PRE); 
+
+******************************  Device Pin Out *****************************
+
+Device : XC2C128-6-VQ100
+
+
+   --------------------------------------------------  
+  /100 98  96  94  92  90  88  86  84  82  80  78  76  \
+ |   99  97  95  93  91  89  87  85  83  81  79  77    |
+ | 1                                               75  | 
+ | 2                                               74  | 
+ | 3                                               73  | 
+ | 4                                               72  | 
+ | 5                                               71  | 
+ | 6                                               70  | 
+ | 7                                               69  | 
+ | 8                                               68  | 
+ | 9                                               67  | 
+ | 10                                              66  | 
+ | 11                                              65  | 
+ | 12                                              64  | 
+ | 13                XC2C128-6-VQ100               63  | 
+ | 14                                              62  | 
+ | 15                                              61  | 
+ | 16                                              60  | 
+ | 17                                              59  | 
+ | 18                                              58  | 
+ | 19                                              57  | 
+ | 20                                              56  | 
+ | 21                                              55  | 
+ | 22                                              54  | 
+ | 23                                              53  | 
+ | 24                                              52  | 
+ | 25                                              51  | 
+ |   27  29  31  33  35  37  39  41  43  45  47  49    |
+  \26  28  30  32  34  36  38  40  42  44  46  48  50  /
+   --------------------------------------------------  
+
+
+Pin Signal                         Pin Signal                        
+No. Name                           No. Name                          
+  1 WPU                              51 VCCIO-1.8                     
+  2 WPU                              52 WPU                           
+  3 WPU                              53 WPU                           
+  4 WPU                              54 WPU                           
+  5 VCCAUX                           55 WPU                           
+  6 CTRL<10>                         56 WPU                           
+  7 WPU                              57 VCC                           
+  8 CTRL<9>                          58 WPU                           
+  9 WPU                              59 WPU                           
+ 10 CTRL<8>                          60 WPU                           
+ 11 WPU                              61 WPU                           
+ 12 User<0>                          62 GND                           
+ 13 User<1>                          63 WPU                           
+ 14 User<2>                          64 Button<7>                     
+ 15 User<3>                          65 Button<6>                     
+ 16 User<4>                          66 Button<5>                     
+ 17 User<5>                          67 Button<4>                     
+ 18 User<6>                          68 Button<3>                     
+ 19 User<7>                          69 GND                           
+ 20 VCCIO-1.8                        70 Button<2>                     
+ 21 GND                              71 Button<1>                     
+ 22 WPU                              72 Button<0>                     
+ 23 WPU                              73 FlashCS_n                     
+ 24 WPU                              74 SPI_SSN                       
+ 25 GND                              75 GND                           
+ 26 VCC                              76 SPI_SCK                       
+ 27 WPU                              77 TX_MISO                       
+ 28 WPU                              78 RX_MOSI                       
+ 29 I2C_SDA                          79 WPU                           
+ 30 I2C_SCL                          80 WPU                           
+ 31 GND                              81 LED<0>                        
+ 32 WPU                              82 LED<1>                        
+ 33 WPU                              83 TDO                           
+ 34 WPU                              84 GND                           
+ 35 WPU                              85 LED<2>                        
+ 36 WPU                              86 LED<3>                        
+ 37 WPU                              87 LED<4>                        
+ 38 VCCIO-1.8                        88 VCCIO-1.8                     
+ 39 WPU                              89 LED<5>                        
+ 40 WPU                              90 LED<6>                        
+ 41 WPU                              91 LED<7>                        
+ 42 WPU                              92 WPU                           
+ 43 WPU                              93 WPU                           
+ 44 WPU                              94 WPU                           
+ 45 TDI                              95 WPU                           
+ 46 WPU                              96 WPU                           
+ 47 TMS                              97 WPU                           
+ 48 TCK                              98 VCCIO-1.8                     
+ 49 WPU                              99 INT                           
+ 50 WPU                             100 GND                           
+
+
+Legend :  NC  = Not Connected, unbonded pin
+        PGND  = Unused I/O configured as additional Ground pin
+         KPR  = Unused I/O with weak keeper (leave unconnected)
+         WPU  = Unused I/O with weak pull up (leave unconnected)
+         TIE  = Unused I/O floating -- must tie to VCC, GND or other signal
+         VCC  = Dedicated Power Pin
+      VCCAUX  = Power supply for JTAG pins
+   VCCIO-3.3  = I/O supply voltage for LVTTL, LVCMOS33, SSTL3_I
+   VCCIO-2.5  = I/O supply voltage for LVCMOS25, SSTL2_I
+   VCCIO-1.8  = I/O supply voltage for LVCMOS18
+   VCCIO-1.5  = I/O supply voltage for LVCMOS15, HSTL_I
+        VREF  = Reference voltage for indicated input standard
+       *VREF  = Reference voltage pin selected by software
+         GND  = Dedicated Ground Pin
+         TDI  = Test Data In, JTAG pin
+         TDO  = Test Data Out, JTAG pin
+         TCK  = Test Clock, JTAG pin
+         TMS  = Test Mode Select, JTAG pin
+  PROHIBITED  = User reserved pin
+****************************  Compiler Options  ****************************
+
+Following is a list of all global compiler options used by the fitter run.
+
+Device(s) Specified                         : xc2c128-6-VQ100
+Optimization Method                         : DENSITY
+Multi-Level Logic Optimization              : ON
+Ignore Timing Specifications                : OFF
+Default Register Power Up Value             : LOW
+Keep User Location Constraints              : ON
+What-You-See-Is-What-You-Get                : OFF
+Exhaustive Fitting                          : OFF
+Keep Unused Inputs                          : OFF
+Slew Rate                                   : FAST
+Set Unused I/O Pin Termination              : PULLUP
+Global Clock Optimization                   : ON
+Global Set/Reset Optimization               : ON
+Global Ouput Enable Optimization            : ON
+Enable Input Registers                      : ON
+Function Block Fan-in Limit                 : 38
+Use DATA_GATE Attribute                     : ON
+Set Tristate Outputs to Termination Mode    : PULLUP
+Default Voltage Standard for All Outputs    : LVCMOS18
+Input Limit                                 : 32
+Pterm Limit                                 : 28

@@ -1,0 +1,246 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"StartUp.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.section	.text.IndicateError,"ax",%progbits
+  22              		.align	2
+  23              		.global	IndicateError
+  25              	IndicateError:
+  26              	.LFB0:
+  27              		.file 1 "../StartUp.c"
+   1:../StartUp.c  **** /*
+   2:../StartUp.c  ****  * StartUp.c	Setup the CPU environment and start RTOS
+   3:../StartUp.c  ****  *
+   4:../StartUp.c  ****  */
+   5:../StartUp.c  **** 
+   6:../StartUp.c  **** #include "Application.h"
+   7:../StartUp.c  **** 
+   8:../StartUp.c  **** void IndicateError(uint16_t ErrorCode)
+   9:../StartUp.c  **** {
+  28              		.loc 1 9 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 40
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35 0004 04B08DE2 		add	fp, sp, #4
+  36              		.cfi_offset 14, -4
+  37              		.cfi_offset 11, -8
+  38              	.LCFI1:
+  39              		.cfi_def_cfa 11, 4
+  40 0008 28D04DE2 		sub	sp, sp, #40
+  41 000c 0030A0E1 		mov	r3, r0
+  42 0010 B6324BE1 		strh	r3, [fp, #-38]	@ movhi
+  10:../StartUp.c  **** 	// Setup a PWM to blink the DVK's only user LED at an "error rate"
+  11:../StartUp.c  ****     CyU3PGpioComplexConfig_t gpioConfig;
+  12:../StartUp.c  **** 	// LED is on UART_CTS which is currently been assigned to the UART driver, claim it back
+  13:../StartUp.c  ****     CyU3PDeviceGpioOverride(UART_CTS, CyFalse);
+  43              		.loc 1 13 0
+  44 0014 3600A0E3 		mov	r0, #54
+  45 0018 0010A0E3 		mov	r1, #0
+  46 001c FEFFFFEB 		bl	CyU3PDeviceGpioOverride
+  14:../StartUp.c  ****     // Configure UART_CTS as PWM output
+  15:../StartUp.c  ****     CyU3PMemSet((uint8_t *)&gpioConfig, 0, sizeof(gpioConfig));
+  47              		.loc 1 15 0
+  48 0020 24304BE2 		sub	r3, fp, #36
+  49 0024 0300A0E1 		mov	r0, r3
+  50 0028 0010A0E3 		mov	r1, #0
+  51 002c 2020A0E3 		mov	r2, #32
+  52 0030 FEFFFFEB 		bl	CyU3PMemSet
+  16:../StartUp.c  **** 	gpioConfig.outValue = CyFalse;
+  53              		.loc 1 16 0
+  54 0034 0030A0E3 		mov	r3, #0
+  55 0038 24300BE5 		str	r3, [fp, #-36]
+  17:../StartUp.c  **** //r	gpioConfig.inputEn = CyFalse;
+  18:../StartUp.c  ****     gpioConfig.driveLowEn = CyTrue;
+  56              		.loc 1 18 0
+  57 003c 0130A0E3 		mov	r3, #1
+  58 0040 20300BE5 		str	r3, [fp, #-32]
+  19:../StartUp.c  ****     gpioConfig.driveHighEn = CyTrue;
+  59              		.loc 1 19 0
+  60 0044 0130A0E3 		mov	r3, #1
+  61 0048 1C300BE5 		str	r3, [fp, #-28]
+  20:../StartUp.c  ****     gpioConfig.pinMode = (ErrorCode == 0) ? CY_U3P_GPIO_MODE_STATIC : CY_U3P_GPIO_MODE_PWM;
+  62              		.loc 1 20 0
+  63 004c B6325BE1 		ldrh	r3, [fp, #-38]
+  64 0050 000053E3 		cmp	r3, #0
+  65 0054 0100001A 		bne	.L2
+  66              		.loc 1 20 0 is_stmt 0 discriminator 1
+  67 0058 0030A0E3 		mov	r3, #0
+  68 005c 000000EA 		b	.L3
+  69              	.L2:
+  70              		.loc 1 20 0 discriminator 2
+  71 0060 0530A0E3 		mov	r3, #5
+  72              	.L3:
+  73              		.loc 1 20 0 discriminator 3
+  74 0064 14304BE5 		strb	r3, [fp, #-20]
+  21:../StartUp.c  **** //r	gpioConfig.intrMode = CY_U3P_GPIO_NO_INTR;
+  22:../StartUp.c  ****     gpioConfig.timerMode = CY_U3P_GPIO_TIMER_HIGH_FREQ;
+  75              		.loc 1 22 0 is_stmt 1 discriminator 3
+  76 0068 0130A0E3 		mov	r3, #1
+  77 006c 12304BE5 		strb	r3, [fp, #-18]
+  23:../StartUp.c  **** //r	gpioConfig.timer = 0;
+  24:../StartUp.c  ****     gpioConfig.period = PWM_PERIOD << ErrorCode;
+  78              		.loc 1 24 0 discriminator 3
+  79 0070 B6325BE1 		ldrh	r3, [fp, #-38]
+  80 0074 2C209FE5 		ldr	r2, .L4
+  81 0078 1233A0E1 		mov	r3, r2, asl r3
+  82 007c 0C300BE5 		str	r3, [fp, #-12]
+  25:../StartUp.c  ****     gpioConfig.threshold = PWM_THRESHOLD << ErrorCode;
+  83              		.loc 1 25 0 discriminator 3
+  84 0080 B6325BE1 		ldrh	r3, [fp, #-38]
+  85 0084 20209FE5 		ldr	r2, .L4+4
+  86 0088 1233A0E1 		mov	r3, r2, asl r3
+  87 008c 08300BE5 		str	r3, [fp, #-8]
+  26:../StartUp.c  ****     CyU3PGpioSetComplexConfig(UART_CTS, &gpioConfig);
+  88              		.loc 1 26 0 discriminator 3
+  89 0090 24304BE2 		sub	r3, fp, #36
+  90 0094 3600A0E3 		mov	r0, #54
+  91 0098 0310A0E1 		mov	r1, r3
+  92 009c FEFFFFEB 		bl	CyU3PGpioSetComplexConfig
+  27:../StartUp.c  **** }
+  93              		.loc 1 27 0 discriminator 3
+  94 00a0 04D04BE2 		sub	sp, fp, #4
+  95 00a4 0088BDE8 		ldmfd	sp!, {fp, pc}
+  96              	.L5:
+  97              		.align	2
+  98              	.L4:
+  99 00a8 002D3101 		.word	20000000
+ 100 00ac 404B4C00 		.word	5000000
+ 101              		.cfi_endproc
+ 102              	.LFE0:
+ 104              		.section	.text.main,"ax",%progbits
+ 105              		.align	2
+ 106              		.global	main
+ 108              	main:
+ 109              	.LFB1:
+  28:../StartUp.c  **** 
+  29:../StartUp.c  **** 
+  30:../StartUp.c  **** // Main sets up the CPU environment the starts the RTOS
+  31:../StartUp.c  **** int main (void)
+  32:../StartUp.c  **** {
+ 110              		.loc 1 32 0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 48
+ 113              		@ frame_needed = 1, uses_anonymous_args = 0
+ 114 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 115              	.LCFI2:
+ 116              		.cfi_def_cfa_offset 8
+ 117 0004 04B08DE2 		add	fp, sp, #4
+ 118              		.cfi_offset 14, -4
+ 119              		.cfi_offset 11, -8
+ 120              	.LCFI3:
+ 121              		.cfi_def_cfa 11, 4
+ 122 0008 30D04DE2 		sub	sp, sp, #48
+  33:../StartUp.c  ****     CyU3PIoMatrixConfig_t io_cfg;
+  34:../StartUp.c  ****     CyU3PReturnStatus_t Status;
+  35:../StartUp.c  **** 
+  36:../StartUp.c  ****     Status = CyU3PDeviceInit(NULL);									// Setup with default clock parameters
+ 123              		.loc 1 36 0
+ 124 000c 0000A0E3 		mov	r0, #0
+ 125 0010 FEFFFFEB 		bl	CyU3PDeviceInit
+ 126 0014 08000BE5 		str	r0, [fp, #-8]
+  37:../StartUp.c  ****     if (Status == CY_U3P_SUCCESS)
+ 127              		.loc 1 37 0
+ 128 0018 08301BE5 		ldr	r3, [fp, #-8]
+ 129 001c 000053E3 		cmp	r3, #0
+ 130 0020 1A00001A 		bne	.L7
+  38:../StartUp.c  ****     {
+  39:../StartUp.c  **** 		Status = CyU3PDeviceCacheControl(CyTrue, CyTrue, CyTrue);	// Setup with both caches enabled
+ 131              		.loc 1 39 0
+ 132 0024 0100A0E3 		mov	r0, #1
+ 133 0028 0110A0E3 		mov	r1, #1
+ 134 002c 0120A0E3 		mov	r2, #1
+ 135 0030 FEFFFFEB 		bl	CyU3PDeviceCacheControl
+ 136 0034 08000BE5 		str	r0, [fp, #-8]
+  40:../StartUp.c  **** 		if (Status == CY_U3P_SUCCESS)
+ 137              		.loc 1 40 0
+ 138 0038 08301BE5 		ldr	r3, [fp, #-8]
+ 139 003c 000053E3 		cmp	r3, #0
+ 140 0040 1200001A 		bne	.L7
+  41:../StartUp.c  **** 		{
+  42:../StartUp.c  **** 			CyU3PMemSet((uint8_t *)&io_cfg, 0, sizeof(io_cfg));		// This clears the io_cfg structure
+ 141              		.loc 1 42 0
+ 142 0044 30304BE2 		sub	r3, fp, #48
+ 143 0048 0300A0E1 		mov	r0, r3
+ 144 004c 0010A0E3 		mov	r1, #0
+ 145 0050 2820A0E3 		mov	r2, #40
+ 146 0054 FEFFFFEB 		bl	CyU3PMemSet
+  43:../StartUp.c  **** //			io_cfg.isDQ32Bit = CyTrue;
+  44:../StartUp.c  **** //r			io_cfg.s0Mode 	 = CY_U3P_SPORT_INACTIVE;
+  45:../StartUp.c  **** //	//r means that this line is commented out since it is not required, but I left it in so that it 
+  46:../StartUp.c  **** //r			io_cfg.s1Mode	 = CY_U3P_SPORT_INACTIVE;
+  47:../StartUp.c  **** 			io_cfg.useUart   = CyTrue;
+ 147              		.loc 1 47 0
+ 148 0058 0130A0E3 		mov	r3, #1
+ 149 005c 2C300BE5 		str	r3, [fp, #-44]
+  48:../StartUp.c  **** //r			io_cfg.useI2C    = CyFalse;
+  49:../StartUp.c  **** //r			io_cfg.useI2S    = CyFalse;
+  50:../StartUp.c  **** //r			io_cfg.useSpi    = CyFalse;
+  51:../StartUp.c  **** 			io_cfg.lppMode   = CY_U3P_IO_MATRIX_LPP_UART_ONLY;		// This will be our debug console
+ 150              		.loc 1 51 0
+ 151 0060 0130A0E3 		mov	r3, #1
+ 152 0064 1A304BE5 		strb	r3, [fp, #-26]
+  52:../StartUp.c  **** //r			io_cfg.gpioSimpleEn[0]  = 0;							// Use I2S pins as JTAG output pins in this example
+  53:../StartUp.c  **** 			io_cfg.gpioSimpleEn[1]  = 0x021c0000;					// Allocate GPIO's 57,52,51 and 50
+ 153              		.loc 1 53 0
+ 154 0068 8737A0E3 		mov	r3, #35389440
+ 155 006c 14300BE5 		str	r3, [fp, #-20]
+  54:../StartUp.c  **** //r			io_cfg.gpioComplexEn[0] = 0;
+  55:../StartUp.c  **** //r			io_cfg.gpioComplexEn[1] = 0;
+  56:../StartUp.c  **** 			Status = CyU3PDeviceConfigureIOMatrix(&io_cfg);			// Setup IO to use UART only
+ 156              		.loc 1 56 0
+ 157 0070 30304BE2 		sub	r3, fp, #48
+ 158 0074 0300A0E1 		mov	r0, r3
+ 159 0078 FEFFFFEB 		bl	CyU3PDeviceConfigureIOMatrix
+ 160 007c 08000BE5 		str	r0, [fp, #-8]
+  57:../StartUp.c  **** 			if (Status == CY_U3P_SUCCESS) CyU3PKernelEntry();		// Start RTOS, this does not return
+ 161              		.loc 1 57 0
+ 162 0080 08301BE5 		ldr	r3, [fp, #-8]
+ 163 0084 000053E3 		cmp	r3, #0
+ 164 0088 0000001A 		bne	.L7
+ 165              		.loc 1 57 0 is_stmt 0 discriminator 1
+ 166 008c FEFFFFEB 		bl	_tx_initialize_kernel_enter
+ 167              	.L7:
+  58:../StartUp.c  **** 		}
+  59:../StartUp.c  **** 	}
+  60:../StartUp.c  ****     // Get here on a failure, can't recover, just hang here
+  61:../StartUp.c  ****     IndicateError(1);
+ 168              		.loc 1 61 0 is_stmt 1
+ 169 0090 0100A0E3 		mov	r0, #1
+ 170 0094 FEFFFFEB 		bl	IndicateError
+ 171              	.L8:
+  62:../StartUp.c  ****     while (1);
+ 172              		.loc 1 62 0 discriminator 1
+ 173 0098 FEFFFFEA 		b	.L8
+ 174              		.cfi_endproc
+ 175              	.LFE1:
+ 177              		.text
+ 178              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 StartUp.c
+C:\Users\John\AppData\Local\Temp\ccOkTYia.s:22     .text.IndicateError:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccOkTYia.s:25     .text.IndicateError:00000000 IndicateError
+C:\Users\John\AppData\Local\Temp\ccOkTYia.s:99     .text.IndicateError:000000a8 $d
+C:\Users\John\AppData\Local\Temp\ccOkTYia.s:105    .text.main:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccOkTYia.s:108    .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PDeviceGpioOverride
+CyU3PMemSet
+CyU3PGpioSetComplexConfig
+CyU3PDeviceInit
+CyU3PDeviceCacheControl
+CyU3PDeviceConfigureIOMatrix
+_tx_initialize_kernel_enter

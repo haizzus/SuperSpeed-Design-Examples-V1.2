@@ -1,0 +1,193 @@
+   1              		.cpu arm926ej-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"StartStopApplication.c"
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.global	BusSpeed
+  22              		.section	.rodata
+  23              		.align	2
+  24              	.LC0:
+  25 0000 4E6F7420 		.ascii	"Not Connected \000"
+  25      436F6E6E 
+  25      65637465 
+  25      642000
+  26 000f 00       		.align	2
+  27              	.LC1:
+  28 0010 46756C6C 		.ascii	"Full \000"
+  28      2000
+  29 0016 0000     		.align	2
+  30              	.LC2:
+  31 0018 48696768 		.ascii	"High \000"
+  31      2000
+  32 001e 0000     		.align	2
+  33              	.LC3:
+  34 0020 53757065 		.ascii	"Super\000"
+  34      7200
+  35              		.section	.data.BusSpeed,"aw",%progbits
+  36              		.align	2
+  39              	BusSpeed:
+  40 0000 00000000 		.word	.LC0
+  41 0004 10000000 		.word	.LC1
+  42 0008 18000000 		.word	.LC2
+  43 000c 20000000 		.word	.LC3
+  44              		.section	.rodata
+  45 0026 0000     		.align	2
+  46              	.LC4:
+  47 0028 0A52756E 		.ascii	"\012Running at %sSpeed\012\000"
+  47      6E696E67 
+  47      20617420 
+  47      25735370 
+  47      6565640A 
+  48              		.section	.text.StartApplication,"ax",%progbits
+  49              		.align	2
+  50              		.global	StartApplication
+  52              	StartApplication:
+  53              	.LFB0:
+  54              		.file 1 "../StartStopApplication.c"
+   1:../StartStopApplication.c **** /*
+   2:../StartStopApplication.c ****  * StartStopApplication.c - this is where resources such as Endpoints and DMA channels, required by
+   3:../StartStopApplication.c ****  * 							are created and deleted in response to events from USB
+   4:../StartStopApplication.c ****  *
+   5:../StartStopApplication.c ****  *  Created on: Feb 18, 2014
+   6:../StartStopApplication.c ****  *      Author: John
+   7:../StartStopApplication.c ****  */
+   8:../StartStopApplication.c **** 
+   9:../StartStopApplication.c **** #include "Application.h"
+  10:../StartStopApplication.c **** 
+  11:../StartStopApplication.c **** // Declare external data
+  12:../StartStopApplication.c **** extern CyU3PEvent glApplicationEvent;			// An Event to allow threads to communicate
+  13:../StartStopApplication.c **** 
+  14:../StartStopApplication.c **** 
+  15:../StartStopApplication.c **** const char* BusSpeed[] = { "Not Connected ", "Full ", "High ", "Super" };
+  16:../StartStopApplication.c **** 
+  17:../StartStopApplication.c **** 
+  18:../StartStopApplication.c **** void StartApplication(void)
+  19:../StartStopApplication.c **** // USB has been enumerated, time to start the application running
+  20:../StartStopApplication.c **** {
+  55              		.loc 1 20 0
+  56              		.cfi_startproc
+  57              		@ args = 0, pretend = 0, frame = 0
+  58              		@ frame_needed = 1, uses_anonymous_args = 0
+  59 0000 00482DE9 		stmfd	sp!, {fp, lr}
+  60              	.LCFI0:
+  61              		.cfi_def_cfa_offset 8
+  62 0004 04B08DE2 		add	fp, sp, #4
+  63              		.cfi_offset 14, -4
+  64              		.cfi_offset 11, -8
+  65              	.LCFI1:
+  66              		.cfi_def_cfa 11, 4
+  21:../StartStopApplication.c ****     // Display the enumerated device bus speed
+  22:../StartStopApplication.c ****     CyU3PDebugPrint(4, "\nRunning at %sSpeed\n", BusSpeed[CyU3PUsbGetSpeed()]);
+  67              		.loc 1 22 0
+  68 0008 FEFFFFEB 		bl	CyU3PUsbGetSpeed
+  69 000c 0030A0E1 		mov	r3, r0
+  70 0010 0320A0E1 		mov	r2, r3
+  71 0014 24309FE5 		ldr	r3, .L2
+  72 0018 023193E7 		ldr	r3, [r3, r2, asl #2]
+  73 001c 0400A0E3 		mov	r0, #4
+  74 0020 1C109FE5 		ldr	r1, .L2+4
+  75 0024 0320A0E1 		mov	r2, r3
+  76 0028 FEFFFFEB 		bl	CyU3PDebugPrint
+  23:../StartStopApplication.c **** 
+  24:../StartStopApplication.c ****     // This is where Endpoints are initialized and DMA channels are set up
+  25:../StartStopApplication.c **** 
+  26:../StartStopApplication.c ****     // Now signal the Application so that it can run
+  27:../StartStopApplication.c ****     CyU3PEventSet(&glApplicationEvent, USB_CONNECTION_ACTIVE, CYU3P_EVENT_OR);
+  77              		.loc 1 27 0
+  78 002c 14009FE5 		ldr	r0, .L2+8
+  79 0030 0110A0E3 		mov	r1, #1
+  80 0034 0020A0E3 		mov	r2, #0
+  81 0038 FEFFFFEB 		bl	_txe_event_flags_set
+  28:../StartStopApplication.c **** }
+  82              		.loc 1 28 0
+  83 003c 0088BDE8 		ldmfd	sp!, {fp, pc}
+  84              	.L3:
+  85              		.align	2
+  86              	.L2:
+  87 0040 00000000 		.word	BusSpeed
+  88 0044 28000000 		.word	.LC4
+  89 0048 00000000 		.word	glApplicationEvent
+  90              		.cfi_endproc
+  91              	.LFE0:
+  93              		.section	.rodata
+  94 003d 000000   		.align	2
+  95              	.LC5:
+  96 0040 0A53746F 		.ascii	"\012Stopping application\000"
+  96      7070696E 
+  96      67206170 
+  96      706C6963 
+  96      6174696F 
+  97 0056 0000     		.section	.text.StopApplication,"ax",%progbits
+  98              		.align	2
+  99              		.global	StopApplication
+ 101              	StopApplication:
+ 102              	.LFB1:
+  29:../StartStopApplication.c **** 
+  30:../StartStopApplication.c **** void StopApplication(void)
+  31:../StartStopApplication.c **** // USB connection has been lost, time to stop the application running
+  32:../StartStopApplication.c **** {
+ 103              		.loc 1 32 0
+ 104              		.cfi_startproc
+ 105              		@ args = 0, pretend = 0, frame = 0
+ 106              		@ frame_needed = 1, uses_anonymous_args = 0
+ 107 0000 00482DE9 		stmfd	sp!, {fp, lr}
+ 108              	.LCFI2:
+ 109              		.cfi_def_cfa_offset 8
+ 110 0004 04B08DE2 		add	fp, sp, #4
+ 111              		.cfi_offset 14, -4
+ 112              		.cfi_offset 11, -8
+ 113              	.LCFI3:
+ 114              		.cfi_def_cfa 11, 4
+  33:../StartStopApplication.c **** 	CyU3PDebugPrint(4, "\nStopping application");
+ 115              		.loc 1 33 0
+ 116 0008 0400A0E3 		mov	r0, #4
+ 117 000c 14109FE5 		ldr	r1, .L5
+ 118 0010 FEFFFFEB 		bl	CyU3PDebugPrint
+  34:../StartStopApplication.c **** 
+  35:../StartStopApplication.c ****     // Signal the Application so that it can stop
+  36:../StartStopApplication.c ****     CyU3PEventSet(&glApplicationEvent, ~USB_CONNECTION_ACTIVE, CYU3P_EVENT_AND);
+ 119              		.loc 1 36 0
+ 120 0014 10009FE5 		ldr	r0, .L5+4
+ 121 0018 0110E0E3 		mvn	r1, #1
+ 122 001c 0220A0E3 		mov	r2, #2
+ 123 0020 FEFFFFEB 		bl	_txe_event_flags_set
+  37:../StartStopApplication.c **** 
+  38:../StartStopApplication.c ****     // Close down and disable the endpoints then close the DMA channels
+  39:../StartStopApplication.c **** }
+ 124              		.loc 1 39 0
+ 125 0024 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 126              	.L6:
+ 127              		.align	2
+ 128              	.L5:
+ 129 0028 40000000 		.word	.LC5
+ 130 002c 00000000 		.word	glApplicationEvent
+ 131              		.cfi_endproc
+ 132              	.LFE1:
+ 134              		.text
+ 135              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 StartStopApplication.c
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:39     .data.BusSpeed:00000000 BusSpeed
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:23     .rodata:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:36     .data.BusSpeed:00000000 $d
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:49     .text.StartApplication:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:52     .text.StartApplication:00000000 StartApplication
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:87     .text.StartApplication:00000040 $d
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:98     .text.StopApplication:00000000 $a
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:101    .text.StopApplication:00000000 StopApplication
+C:\Users\John\AppData\Local\Temp\ccFLRHCA.s:129    .text.StopApplication:00000028 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CyU3PUsbGetSpeed
+CyU3PDebugPrint
+_txe_event_flags_set
+glApplicationEvent
