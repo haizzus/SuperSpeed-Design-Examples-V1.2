@@ -1,1 +1,0 @@
-C:\Projects\FX3 Issues\Benchmark\Benchmark\USBBarometer\bin\Release\USBBarometer.exe.config
